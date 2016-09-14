@@ -78,6 +78,7 @@ public class WorkflowDAO extends FrameworkSvnManager{
             unLock(clientManager, pathFluxo+"/"+nameFile, true);
         }
         
+        
     }
     
 }
