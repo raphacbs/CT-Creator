@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb5e4e46-025c-4ca8-93d5-4105b9c8ede7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="e6ddc800-02f6-44a7-9682-c084e8eff477"/>
+	<parameter name="NOME_PLANO" class="java.lang.String"/>
+	<parameter name="STI_PLANO" class="java.lang.String"/>
+	<parameter name="PLANO_SISTEMA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="dataPlanejada" class="java.util.Date">
+		<fieldDescription><![CDATA[dataPlanejada]]></fieldDescription>
+	</field>
+	<field name="numeroCenario" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroCenario]]></fieldDescription>
+	</field>
+	<field name="numeroCt" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroCt]]></fieldDescription>
+	</field>
+	<field name="testScriptDescription" class="java.lang.String">
+		<fieldDescription><![CDATA[testScriptDescription]]></fieldDescription>
+	</field>
+	<field name="day" class="java.lang.Integer">
+		<fieldDescription><![CDATA[dataPlanejada.day]]></fieldDescription>
+	</field>
+	<field name="month" class="java.lang.Integer">
+		<fieldDescription><![CDATA[dataPlanejada.month]]></fieldDescription>
+	</field>
+	<field name="year" class="java.lang.Integer">
+		<fieldDescription><![CDATA[dataPlanejada.year]]></fieldDescription>
+	</field>
+	<field name="listStep" class="java.util.List">
+		<fieldDescription><![CDATA[listStep]]></fieldDescription>
+	</field>
+	<field name="testScriptName" class="java.lang.String">
+		<fieldDescription><![CDATA[testScriptName]]></fieldDescription>
+	</field>
+	<field name="complexidade" class="java.lang.String">
+		<fieldDescription><![CDATA[complexidade]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="52" splitType="Stretch">
+			<staticText>
+				<reportElement x="121" y="0" width="310" height="33" uuid="9d34db25-d4be-4213-8f64-8d0231d57163"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE PLANO DE TS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="2" y="0" width="100" height="20" uuid="22db0f7b-c38d-41f1-8640-5fcd8c802f5d"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="321" y="0" width="183" height="20" uuid="9b16eef6-29f4-46aa-8207-73978576e3a0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="504" y="0" width="40" height="20" uuid="a3f8e0d5-264c-42f1-a9dd-ca97b1b6ad7f"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="20" width="319" height="20" uuid="b3c6c22b-fb97-4102-a187-a4e6cd80a4b5"/>
+				<textFieldExpression><![CDATA["Plano: "+$P{NOME_PLANO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="40" width="100" height="20" uuid="eac0f3ff-4fdb-4245-9bab-8cdb20f5c1cd"/>
+				<textFieldExpression><![CDATA["PRJ:" + $P{STI_PLANO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="40" width="100" height="20" uuid="2e1f828e-d9eb-4e7e-b21d-a29a1b1ef807"/>
+				<textFieldExpression><![CDATA["Sistema: "+$P{PLANO_SISTEMA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="83" height="20" uuid="0cde7958-f432-4f98-abae-732978c2db07"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CENÁRIO/CT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="168" y="0" width="186" height="20" uuid="1c23eaee-d2d5-473f-b47d-95dd0f0c8081"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME CT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="0" width="119" height="20" uuid="121d4b4f-3439-439b-bd43-9f5ccf177d39"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA PLANEJADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="0" width="77" height="20" uuid="ff6e2163-bf25-4eb2-8253-fe12fcb8d25a"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTD STEPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="0" width="57" height="20" uuid="1242fd08-2c73-4c58-bea5-f76963475852"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMP.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="-1" y="0" width="38" height="20" uuid="11420477-c2ab-4c5c-be3d-10db07237a0f"/>
+				<textFieldExpression><![CDATA[$F{numeroCenario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="0" width="37" height="20" uuid="133444a4-2772-49a2-ade1-1f7aefc19c9c"/>
+				<textFieldExpression><![CDATA[$F{numeroCt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="168" y="0" width="186" height="20" uuid="d133aaa8-4b0c-4f7d-8ec2-f3861b0fbff2"/>
+				<textFieldExpression><![CDATA[$F{testScriptName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="1d0f2476-9647-49ee-a93c-97425dc0bcf2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{dataPlanejada})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="354" y="0" width="77" height="20" uuid="787fe7aa-6588-4e3a-be1f-07ffcab66461"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{listStep}.size()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="0" width="57" height="20" uuid="1a514498-3352-4373-834f-024b485d75ed"/>
+				<textFieldExpression><![CDATA[$F{complexidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="8" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="451" y="0" width="104" height="20" uuid="d342a748-2548-433c-9ee9-a47391006d30"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Total de CTs: "+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
