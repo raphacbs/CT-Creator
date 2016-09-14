@@ -6,6 +6,7 @@
 package com.accenture.bean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -17,6 +18,7 @@ public class WorkflowBean {
     private String description;
     private Date registerDate; 
     private String system;
+    private List<String> testCases;
 
     public String getId() {
         return id;
@@ -48,6 +50,14 @@ public class WorkflowBean {
 
     public void setSystem(String system) {
         this.system = system;
+    }
+
+    public List<String> getTestCases() {
+        return testCases;
+    }
+
+    public void setTestCases(List<String> testCases) {
+        this.testCases = testCases;
     }
     
     
