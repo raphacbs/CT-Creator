@@ -565,15 +565,19 @@
         <Component class="javax.swing.JTable" name="tabelaInstancia">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="5" rowCount="0">
+              <Table columnCount="9" rowCount="0">
                 <Column editable="true" title="N&#xba; Cen&#xe1;rio" type="java.lang.String"/>
                 <Column editable="true" title="N&#xba; Caso de Teste" type="java.lang.String"/>
                 <Column editable="false" title="Test Script Name" type="java.lang.String"/>
                 <Column editable="false" title="hashCode" type="java.lang.Integer"/>
                 <Column editable="true" title="Data Planejada" type="java.lang.Object"/>
+                <Column editable="true" title="CTs Priorit&#xe1;rios" type="java.lang.Boolean"/>
+                <Column editable="true" title="Massa de Dados" type="java.lang.Boolean"/>
+                <Column editable="true" title="Pass&#xed;vel de Re-Trabalho" type="java.lang.Boolean"/>
+                <Column editable="true" title="Regress&#xe3;o" type="java.lang.Boolean"/>
               </Table>
             </Property>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());">
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());&#xa;tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){&#xa;   public void mouseMoved(MouseEvent e){&#xa;        Point p = e.getPoint(); &#xa;        int row = tabelaCt.rowAtPoint(p);&#xa;        int column = tabelaCt.columnAtPoint(p);&#xa;        tabelaCt.setToolTipText(String.valueOf(tabelaCt.getValueAt(row,column)));&#xa;    }//end MouseMoved&#xa;});">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
@@ -603,6 +607,26 @@
                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                     <Connection code="new JDateChooserRenderer()" type="code"/>
                   </Renderer>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
                 </Column>
               </TableColumnModel>
             </Property>

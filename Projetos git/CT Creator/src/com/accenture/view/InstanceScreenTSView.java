@@ -497,14 +497,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Nº Cenário", "Nº Caso de Teste", "Test Script Name", "hashCode", "Data Planejada"
+                "Nº Cenário", "Nº Caso de Teste", "Test Script Name", "hashCode", "Data Planejada", "CTs Prioritários", "Massa de Dados", "Passível de Re-Trabalho", "Regressão"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                true, true, false, false, true
+                true, true, false, false, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -570,6 +570,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         JTableHeader header = tabelaInstancia.getTableHeader();
         //header.addMouseListener(new ColumnHeaderListener());
+        tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){
+            public void mouseMoved(MouseEvent e){
+                Point p = e.getPoint();
+                int row = tabelaCt.rowAtPoint(p);
+                int column = tabelaCt.columnAtPoint(p);
+                tabelaCt.setToolTipText(String.valueOf(tabelaCt.getValueAt(row,column)));
+            }//end MouseMoved
+        });
 
         testPlanName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
