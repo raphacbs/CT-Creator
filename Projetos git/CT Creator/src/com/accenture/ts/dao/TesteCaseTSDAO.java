@@ -302,6 +302,11 @@ public class TesteCaseTSDAO {
         Cell complexidade = row.getCell(13);
         Cell automatizado = row.getCell(14);
         
+        Cell priority = row.getCell(15);
+        Cell data = row.getCell(16);
+        Cell rework = row.getCell(17);
+        Cell regression = row.getCell(18);
+        
         logger.info("Inserindo dados do plano");
         descriptionPlan.setCellValue(testPlan.getName());
         release.setCellValue(testPlan.getRelease());
@@ -324,6 +329,11 @@ public class TesteCaseTSDAO {
             qtdSteps = row.getCell(12);
             complexidade = row.getCell(13);
             automatizado = row.getCell(14);
+            
+            priority = row.getCell(15);
+            data = row.getCell(16);
+            rework = row.getCell(17);
+            regression = row.getCell(18);
 
             logger.info("Inserindo dados dos TCs");
             System.out.println("com.accenture.ts.dao.TesteCaseTSDAO.createSpreadsheetTS() - "+testPlan.getSti() + " - " + "row:"+linha );
@@ -338,6 +348,12 @@ public class TesteCaseTSDAO {
             dataPlanejada.setCellStyle(estilo);
             qtdSteps.setCellValue(testPlan.getTestCase().get(i).getListStep().size());
             complexidade.setCellValue(testPlan.getTestCase().get(i).getComplexidade());
+            
+            automatizado.setCellValue(yesOrNo(testPlan.getTestCase().get(i).isAutomatizado()));
+            priority.setCellValue(yesOrNo(testPlan.getTestCase().get(i).isPriority()));
+            data.setCellValue(yesOrNo(testPlan.getTestCase().get(i).isData()));
+            rework.setCellValue(yesOrNo(testPlan.getTestCase().get(i).isRework()));
+            regression.setCellValue(yesOrNo(testPlan.getTestCase().get(i).isRegression()));
            
 
             //set colors 
@@ -412,10 +428,10 @@ public class TesteCaseTSDAO {
             
         }
         
-        
+        if(testCasesAutomatizados.size()!=0){
         ExtraiPlanilha extraiPlanilha = new ExtraiPlanilha();
         extraiPlanilha.exportTStoTI(testCasesAutomatizados, sheetTI);
-       
+        }
        
         
         logger.info("Preparando para salvar planilha");
@@ -765,5 +781,11 @@ public class TesteCaseTSDAO {
         return dir.delete();
     }
     
-    
+    private String yesOrNo(boolean b){
+        if(b){
+            return "Sim";
+        }else{
+            return "Não";
+        }
+    }
 }

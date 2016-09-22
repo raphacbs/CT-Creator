@@ -35,7 +35,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -68,7 +67,6 @@ import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.JTable;
@@ -92,8 +90,6 @@ import java.io.FileNotFoundException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JDialog;
-import javax.swing.JTextArea;
 
 import org.tmatesoft.svn.core.SVNLock;
 
@@ -125,6 +121,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private TimerTask timerTask ;
     private org.apache.log4j.Logger logger;
     private SwingWorker task;
+    private final String NAME_ITEM_CTS_PRIORITARIOS = "CTs Prioritários";
+    private final String NAME_ITEM_MASSA_DADOS = "Massa de Dados";
+    private final String NAME_ITEM_RETRABALHO = "Passível de Re-Trabalho";
+    private final String NAME_ITEM_REGRESSAO = "Regressão";
     
 
     
@@ -555,6 +555,18 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             tabelaInstancia.getColumnModel().getColumn(4).setMaxWidth(100);
             tabelaInstancia.getColumnModel().getColumn(4).setCellEditor(new JDateChooserCellEditor());
             tabelaInstancia.getColumnModel().getColumn(4).setCellRenderer(new JDateChooserRenderer());
+            tabelaInstancia.getColumnModel().getColumn(5).setMinWidth(30);
+            tabelaInstancia.getColumnModel().getColumn(5).setPreferredWidth(70);
+            tabelaInstancia.getColumnModel().getColumn(5).setMaxWidth(100);
+            tabelaInstancia.getColumnModel().getColumn(6).setMinWidth(30);
+            tabelaInstancia.getColumnModel().getColumn(6).setPreferredWidth(70);
+            tabelaInstancia.getColumnModel().getColumn(6).setMaxWidth(100);
+            tabelaInstancia.getColumnModel().getColumn(7).setMinWidth(30);
+            tabelaInstancia.getColumnModel().getColumn(7).setPreferredWidth(70);
+            tabelaInstancia.getColumnModel().getColumn(7).setMaxWidth(100);
+            tabelaInstancia.getColumnModel().getColumn(8).setMinWidth(30);
+            tabelaInstancia.getColumnModel().getColumn(8).setPreferredWidth(70);
+            tabelaInstancia.getColumnModel().getColumn(8).setMaxWidth(100);
         }
         tabelaInstancia.setFocusable(false);
         jScrollPane4.setHorizontalScrollBar(new JScrollBar(0));
@@ -573,9 +585,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseMoved(MouseEvent e){
                 Point p = e.getPoint();
-                int row = tabelaCt.rowAtPoint(p);
-                int column = tabelaCt.columnAtPoint(p);
-                tabelaCt.setToolTipText(String.valueOf(tabelaCt.getValueAt(row,column)));
+                int row = tabelaInstancia.rowAtPoint(p);
+                int column = tabelaInstancia.columnAtPoint(p);
+                tabelaInstancia.setToolTipText(String.valueOf(tabelaInstancia.getValueAt(row,column)));
             }//end MouseMoved
         });
 
@@ -1096,6 +1108,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
           callViewParameter();  
        
        atualizaContagemLabelTabelaInstancia();
+       testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setPriority((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 5));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setData((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 6));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRework((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 7));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRegression((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 8));
     }//GEN-LAST:event_tabelaInstanciaMouseClicked
 
     private void bntExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportarActionPerformed
@@ -1362,10 +1378,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     tc.setParameters(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getParameters());
                     tc.setAutomatizado(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isAutomatizado());
                     tc.setHashCode(tc.hashCode());
+                    tc.setData(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isData());
+                    tc.setPriority(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isPriority());
+                    tc.setRegression(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRegression());
+                    tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
 
                     this.testPlan.getTestPlan().addTestCase(tc);
 
-                    model.addRow(new Object[]{tc.getNumeroCenario() + "", tc.getNumeroCt() + "", tc.getTestScriptName(), tc.getHashCode() + "", tc.getDataPlanejada()});
+                    model.addRow(new Object[]{tc.getNumeroCenario(), tc.getNumeroCt(), tc.getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(),tc.isRework(),tc.isRegression()});
 
                     atualizaContagemLabelTabelaInstancia();
                     progress(false);
@@ -1411,6 +1431,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         testPlan.getTestPlan().setSti(testPlanSTI.getText());
         testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
         testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+            
 //        testPlan.getTestPlan().setSti(testPlanSystem.getText());
         if(salvaPlanoFile(testPlan, false)){
              savePlan = true;
@@ -1498,6 +1519,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
     private void tabelaInstanciaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaInstanciaMouseReleased
        atualizaContagemLabelTabelaInstancia();
+        
     }//GEN-LAST:event_tabelaInstanciaMouseReleased
 
     private void menuItemExportarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExportarPlanoActionPerformed
@@ -2482,6 +2504,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             tc.setComplexidade(list.get(j).getComplexidade());
                             tc.setAutomatizado(list.get(j).isAutomatizado());
                             
+                            tc.setPriority(false);
+                            tc.setData(false);
+                            tc.setRework(false);
+                            tc.setRegression(false);
+                            
+                            
                              switch (list.get(j).getComplexidade()) {
 
                                 case "Muito Alta":
@@ -2523,7 +2551,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                    listTestCasePlan.add(tc);
 
 //                            model.addRow(new String[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode()+""});
-                            model.addRow(new Object[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode()+"", tc.getDataPlanejada()});
+                            model.addRow(new Object[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode(), tc.getDataPlanejada(),tc.isPriority(), tc.isData(),tc.isRework(), tc.isRegression()});
                             
 //                            model.setValueAt(tc.getDataPlanejada(), i, 4);
                             qtd++;
@@ -2740,551 +2768,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }
 
     private void loadFilePlan() throws IOException, IOException, ClassNotFoundException  {
-        TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());
-        
-//        for(int i = 0; i < temp.getTestPlan().getTestCase().size();i++){
-//            if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abertura de ordem - Correção - Macro I - Adesão DACC")){
-//                System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//            "2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//            "3 - Acessar a tela AWI, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF5.|\n" +
-//            "4 - Preencher os dados de \"pedido por\"  e  validar macro I preenchida sem permitir alterar e teclar ENTER|\n" +
-//            "5 - Selecionar ponto de venda <<<PDV_desejado>>> e PF4|\n" +
-//            "6 - Validar micro DACC marcado com I sem a possibilidade de ser desmarcado e teclar PF4|\n" +
-//            "7 - Preencher S para confirmar adesão, validar janela com informação de <<<com_sem_ben>>>,e teclar ENTER|\n" +
-//            "8 - Selecionar <<<banco>>>, informar agencia e conta (caso banco seja CEF informar também a operação) e teclar ENTER|\n" +
-//            "9 - Validar valor do serviço e teclar PF4|\n" +
-//            "10 - Validar janela com numero da OS gerada\n" +
-//            "");
-//                temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//            "2 - Será apresentado a tela do menu inicial|\n" +
-//            "3 - Será apresentado um pop-up para geração do protocolo de atendimento|\n" +
-//            "4 - Será apresentada nova tela para selecionar origem de cadastramento|\n" +
-//            "5 - Será apresentada nova tela de micro serviços|\n" +
-//            "6 - Sera apresentada janela informando adesão ao DACC|\n" +
-//            "7 - Será apresentada janela para confirmar se deseja aderir ao DACC|\n" +
-//            "8 - Será apresentada janela com valores do serviço|\n" +
-//            "9 - Será apresentada janela com numero da ordem|\n" +
-//            "10 - OS gerada nasce fechada");
-//            }
-//            
-//            if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Consultar ordem")){
-//                System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar tela <<<AA_AM_A8_ETC>>> e informar terminal e validar <<<OS_Ab_Fecha>>>|\n" +
-//"4 - Acessar tela ACH e informar terminal e ENTER|\n" +
-//"5 - Selecionar OS <<<Aberta_com_micro_etc>>> |\n" +
-//"6 - Na tela <<<Tela1>>> e <<<validar_selecionar>>>|\n" +
-//"7 - Acessar tela ACN e informar terminal e ENTER|\n" +
-//"8 - Validar <<<Micro>>>");
-//                temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial|\n" +
-//"3 - Será apresentada a tela com as informações do terminal|\n" +
-//"4 - Será apresentada lista de OS's do terminal|\n" +
-//"5 - Será apresentado detalhes da OS|\n" +
-//"6 - <<<Resultado>>>|\n" +
-//"7 - Serão exibidos micros instalados no terminal|\n" +
-//"8 - Micro(s) <<<Micro>>> validado(s)\n" +
-//"");
-//            }
-//            
-//            if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Teste OCS")){
-//                System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher SISRAFH*(Trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar tela 3405, preencher <<<Terminal_Circuito>>> e teclar ENTER. Para validar OCS|\n" +
-//"4 - Selecionar OCS's e teclar ENTER|\n" +
-//"5 - Acessar a aplicativo TESTEOCS e tecle ENTER e prosseguir até tela para informar dados para o processamento|\n" +
-//"6 - Preencha os dados para processamanto da OCS  validar a trilha de teste e tecle enter|\n" +
-//"7 - Apos a validação de todas as telas de submssão de processo volte ao menu inicial e selecione a aplicação 3001 e tecle enter |\n" +
-//"8 - preencha os campos codigo localidade e acesso ou contrato marque um \"X\" em <<<selecionar_servicos1>>> e tecle enter|\n" +
-//"9 - Na tela de detalhamento Marque um \"X\" para selecionar as informações a serem exibidas <<<selecionar_tarifario>>> e tecle enter\n" +
-//"");
-//                temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial |\n" +
-//"3 - Será apresentada tela com lista de OCS's|\n" +
-//"4 - OCS's validadas|\n" +
-//"5 - Será apresentado uma nova tela para informar dados para processamento de OCS|\n" +
-//"6 - Será apresentado uma tela com a confirmação do processo OCS submetido|\n" +
-//"7 - Será apresentado uma tela de pesquisa de cadastro de faturamento |\n" +
-//"8 - Será apresentado as telas de consulta de  de serviçoes de faturamento|\n" +
-//"9 - Será apresentado o detalhamento da consulta de serviçoes de faturamento. <<<Resultado_da_3001>>>");
-//            }
-//                         if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Inc-Sub Campanha - CORREÇÃO - Macro I - com adesão ao DACC")){
-//                             System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela A9, informar terminal  e teclar ENTER. Em seguida teclar PF6.|\n" +
-//"4 - O tipo de macro serviço virá preenchido automaticamente I preencher os campos pedido por, melhor horário e telefone de contato.|\n" +
-//"5 - Selecionar <<<PDV_desejado>>> e PF4|\n" +
-//"6 - Selecionar a opção para INCLUSAO/SUBSTITUICAO DE CAMPANHA|\n" +
-//"7 - Selecionar campanha que será incluída no terminal e acessar PF4 para confirmar|\n" +
-//"8 - Selecionar oferta que será incluída no terminal e acessar PF4 para confirmar|\n" +
-//"9 - Validar que o micro CAMP virá selecionado com I sem possibilidade de alterar e teclar PF4|\n" +
-//"10 - Informar S para aderir ao serviço de débito automático <<<com_sem_ben>>> e teclar ENTER |\n" +
-//"11 - Selecionar <<<banco>>>, agencia e conta corrente (caso seja selecionado CEF informar também operação) e teclar ENTER|\n" +
-//"12 - Informar N para não aderir ao serviço de conta sem papel e teclar ENTER|\n" +
-//"13 - Acessar PF4 para confirmar códigos tarifários selecionados automaticamente|\n" +
-//"14 - Acessar PF4 para confirmar serviços que serão incluídos no terminal");
-//                        temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentada tela para preenchimento de trilha|\n" +
-//"2 - Será apresentada tela do menu inicial |\n" +
-//"3 - Será apresentado um pop-up para informar como a solicitação chegou (carta ou internet)|\n" +
-//"4 - Será apresentada tela para selecionar o ponto de venda|\n" +
-//"5 - Será apresentada tela para selecionar qual ação será realizada inclusão/subistituição da campanha|\n" +
-//"6 - Será apresentada tela para selecionar a campanha a ser incluida no terminal|\n" +
-//"7 - Será apresentada tela para selecionar a oferta a ser incluída na campanha do terminal\n" +
-//"\n" +
-//"|\n" +
-//"8 - Será apresentada tela exibindo de micro serviços|\n" +
-//"9 - Será apresentada tela sobre aderir ao débito automático|\n" +
-//"10 - Será apresentada janela para informar dados bancarios|\n" +
-//"11 - Será apresentada tela sobre aderir ao conta sem papel|\n" +
-//"12 - Será apresentada tela com os códigos tarifários dos serviços que serão incluídos|\n" +
-//"13 - Será apresentada tela com os serviços que serão incluídos|\n" +
-//"14 - Será apresentado uma popup com a OS gerada\n" +
-//"");
-//                         }                 
-//                        System.out.println("ANTES = "+temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                        if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abrir ordem de MUDEND Macros E, F, G, J - AA-AM")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela <<<AA_ou_AM>>>, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6 . |\n" +
-//"4 - Preencha o tipo de macro serviço MACRO E e preencha os campos pedido por solicitados|\n" +
-//"5 - Preencha tipo <<<0>>> e tecle PF4 (Aparece caso o terminal tenha plano de bilhetagem de minutos)|\n" +
-//"6 - Preencha categoria <<<11>>> e tecle PF4 (Aparece caso o terminal tenha plano de bilhetagem de minutos)|\n" +
-//"7 - Preencha endereço para gerar <<<Macro_E_F_G_J>>> e tecle PF4|\n" +
-//"8 - Preencha chave serial e tecle PF4.|\n" +
-//"9 - Preencha <<<S_N>>> para mater numero e tecle ENTER.|\n" +
-//"10 - Preencha nova condição de terminal <<<nova_cond_terminal>>> e tecle PF4.|\n" +
-//"11 - Preencha origem de cadastramento <<<origem_cadastramento_PDV>>> e tecle F4|\n" +
-//"12 - Escolha a designação de número <<<designacao_numero>>> e tecle PF4|\n" +
-//"13 - Marque o serviços que serão mantidos <<<servicos_mantidos>>> e tecle PF4.|\n" +
-//"14 - <<<Valide_preencha>>> micro serviços <<<micro_servicos>>> e tecle PF4|\n" +
-//"15 - Preencha o endereço de cobrança e tecle PF4.|\n" +
-//"16 - Preencha o condicionamento <<<condicionada_S_ou_N>>> e tecle ENTER.|\n" +
-//"17 - Preencha <<<S_N_DACC>>> para adesão do DACC <<<com_sem_benef>>> e tecle ENTER.|\n" +
-//"18 - Selecione <<<banco>>>, informar numero da Agencia e da conta (caso seja selecionado CEF informar também a operação)|\n" +
-//"19 - Escolha se a instalação terá a OS aprazada <<<aprazada_S_N>>>, preencha os campos referentes a data promessa e tecle ENTER|\n" +
-//"20 - Confirme valor do serviço e assinatura teclando PF4");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha |\n" +
-//"2 - Será apresentado a tela do menu inicial  |\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento |\n" +
-//"4 - Será apresentado um pop-up para preenchimento do novo tipo do tipo do terminal|\n" +
-//"5 - Será apresentado nova tela para preenchimento da categoria|\n" +
-//"6 - Será apresentado nova tela para preenchimento do novo endereço|\n" +
-//"7 - Será apresentado nova tela para preenchimento da chave serial|\n" +
-//"8 - Será apresentado a tela para escolha de portabilidade|\n" +
-//"9 - Será apresentado a tela da nova condição de terminal|\n" +
-//"10 - Será apresentado a tela para designação de numero|\n" +
-//"11 - Será apresentado uma nova tela para preenchimento da origem de cadastramento|\n" +
-//"12 - Será apresentado uma nova tela para seleção dos serviços que serão mantidos|\n" +
-//"13 - Será apresentado a tela de micro serviços|\n" +
-//"14 - Será apresentado a tela do endereço de cobrança|\n" +
-//"15 - Será apresentado uma nova tela para preencher o condicionamento ou não da OS.|\n" +
-//"16 - Será apresentado uma nova tela para informar se vai aderir ao DACC|\n" +
-//"17 - Será apresentado uma nova tela para preenchimento dos dados do DACC caso seja selecionado DACC =S|\n" +
-//"18 - Será apresentado uma nova tela para preenchimento do aprazamento da OS|\n" +
-//"19 - Será apresentado uma nova tela contendo os serviços instalados|\n" +
-//"20 - Será apresentado uma popup com a OS gerado");
-//                        }
-//        
-//                         
-//        if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Tramitar OS de voz")){
-//            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Acessar STCH*(Trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar tela AA com terminal e teclar ENTER. Acesse a opção PF6|\n" +
-//"4 - Acessar tela IA com terminal e teclar ENTER|\n" +
-//"5 - Acessar tela AA com terminal e teclar ENTER.");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento da trilha.|\n" +
-//"2 - Será apresentado a tela inicial do menu.|\n" +
-//"3 - Validar OS aberta com sucesso.|\n" +
-//"4 - OS tramitada com sucesso ate o <<<posto_tramitacao>>>|\n" +
-//"5 - Validar <<<status_da_OS>>> com sucesso.");
-//        }
-//        
-//        if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Tramitar OS de voz")){
-//            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela AA, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6.|\n" +
-//"4 -  Preencha o tipo de macro serviço MACRO A e preencha os campos pedido por solicitados |\n" +
-//"5 -  selecione origem de cadastramento <<<origem_cadastramento_PDV>>> e tecle F4 |\n" +
-//"6 - Na tela de campanhas informar PF9 para seguir sem campanha|\n" +
-//"7 - Preencha S para seguir sem campanha|\n" +
-//"8 - <<<Selecionar_validar>>> micro(s) serviço(s) <<<Micro1_2_etc>>>|\n" +
-//"9 - Selecionar <<<Carac_do_micro>>>|\n" +
-//"10 - Selecionar S para DACC <<<Com_sem_benef>>>|\n" +
-//"11 - Selecionar <<<Banco>>> agencia e conta corrente (no caso de CEF informar também operação) e enter|\n" +
-//"12 - Selecionar <<<S_N_CTASPA>>> e enter|\n" +
-//"13 - Validar valores de serviço e assinatura dos micros <<<Micros_valores>>>|\n" +
-//"14 - Validar valores de assinatura e serviço e teclar PF4\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial|\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento|\n" +
-//"4 - Será apresentado uma nova tela para preenchimento da origem de cadastramento|\n" +
-//"5 - Será apresentado uma nova tela para selecionar nova campanha|\n" +
-//"6 - Será apresentada tela para confirmar seguir sem campanha|\n" +
-//"7 - Será apresentada tela para selecionar micro serviços|\n" +
-//"8 - Será apresentada tela para selecionar <<<Tela_carac_do_micro>>>|\n" +
-//"9 - Será apresentada tela para informar se haverá adesão ao DACC|\n" +
-//"10 - Será apresentada tela para informar dados bancarios|\n" +
-//"11 - Será apresentada tela para informar se haverá adesão ao CTASPA (conta sem papel)|\n" +
-//"12 - Será apresentada tela de valores de serviço e assinatura|\n" +
-//"13 - Será apresentada janela com valores totais de serviços e assinatura|\n" +
-//"14 - Será apresentada janela com o numero da OS\n" +
-//"\n" +
-//"");
-//                            
-//                            
-//                            
-//                            if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abertura de macro B - Sem velox - Sem camp")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela HOA, escolha o UF  e tecle ENTER. Informe os dados do cliente <<<tipo_cliente>>> e documento para pesquisa e tecle ENTER|\n" +
-//"4 - Teclar PF4 após validar dados do cliente |\n" +
-//"5 - Escolha o PDV desejado <<<PDV_desejado>>> e tecle PF4|\n" +
-//"6 - Preencha endereço e tecle PF4|\n" +
-//"7 - Preencher endereço de cobrança igual ao de instalação <<<End_cob_S_N>>> e teclar ENTER. |\n" +
-//"8 - Preencha a utilização do terminal e teclar PF4. Preencher qnt de terminais pretendido <<<qtd_terminal>>>, tipo Produto <<<RES_NRES_TRONCO_AICE>>>, Telefone contato, seriação, nome contato e teclar PF4|\n" +
-//"9 - Preencher <<<port_S_N>>> e preencher adesão do velox N e teclar ENTER. Preencher vencimento e teclar PF4. Preencher figuração em lista telefonica e teclar Enter.|\n" +
-//"10 - Preencha adesão DACC S e tecle ENTER|\n" +
-//"11 - Selecionar <<<banco>>>, informar agencia e conta (caso seja selecionado CEF informar também a operação) e tecle ENTER|\n" +
-//"12 - Selecionar N para CTASPA e teclar ENTER.|\n" +
-//"13 - Escolher processo automatico do registro S e Simule integração com TRANSACT|\n" +
-//"14 - Acesse a tela HOB, preencha a proposta e tecle ENTER\n" +
-//"Tecle PF4 após validar dados da proposta |\n" +
-//"15 - Preencha o tipo de assinante <<<tipo_assinante_2>>> e tecle ENTER. Preencher o contato , solicitante e tecler PF4|\n" +
-//"16 - Realize a designação do numero <<<designacao_numero_DT>>> e tecle PF4\n" +
-//"Escolho o opção de cobrança e tecle <<<PF4_OPCAO_COBRANCA>>>|\n" +
-//"17 - <<<Validar_escolher>>> o(s) micro(s) <<<micro_servicos_fixo_proposta>>> e tecle PF4|\n" +
-//"18 - Confirme o valor do serviços e  assinatura e teclar PF4. Confirme os valores serviços cobrandos eventuais e mensais e teclar.  Teclar para prosseguir PF4|\n" +
-//"19 - Informar matrícula do vendedor e teclar PF4\n" +
-//"\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial |\n" +
-//"3 - Será apresentado uma nova tela com os dados do cliente retornados|\n" +
-//"4 - Será apresentado uma nova tela para escolha do Ponto de venda (PDV)|\n" +
-//"5 - Será apresentado uma nova tela para escolha da campanha|\n" +
-//"6 - Será apresentado a tela para preenchimento do endereço de cobrança|\n" +
-//"7 - Será apresentado a tela para preenchimento da utilização do terminal |\n" +
-//"8 - Será apresentado a tela para escolha de portabilidade e adesão do velox|\n" +
-//"9 - Será apresentado uma nova tela se a solicitação chegou via carta  e internet |\n" +
-//"10 - Será apresentado uma nova tela<<<nova_tela_cadastro>>> de cadastro de demanda - emissão de contrato|\n" +
-//"11 - Será apresentada uma nova tela para informar adesão ao CTASPA|\n" +
-//"12 - Será apresentada tela para informar se será feito pelo processoa autimatico|\n" +
-//"13 - Será apresentado uma popup com o numero da proposta gerado|\n" +
-//"14 - Será apresentado uma nova tela<<<nova_tala_assinante>>> para informar o tipo de assinante|\n" +
-//"15 - Será apresentado uma nova tela de cadastro de demanda - emissão de contrato|\n" +
-//"16 - Será apresentado uma nova tela escolha dos micro serviços|\n" +
-//"17 - Será apresentado uma nova tela de valores de serviço|\n" +
-//"18 - Será apresentado a tela para preencher a matrícula do vendedor|\n" +
-//"19 - Será apresentado a tela com a OS gerada\n" +
-//"\n" +
-//"\n" +
-//"");
-//        }
-//        }
-//        
-//        if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abrir ordem de SUBNUM - AA-AM")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela <<<AA_ou_AM>>>, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6 . |\n" +
-//"4 - Preencha o tipo de macro serviço MACRO D e preencha os campos pedido por solicitados|\n" +
-//"5 - Seleciona motivo <<<Motivo_pedido>>> e PF4|\n" +
-//"6 - Informar nova condição do terminal como <<<Nova_cond>>> e PF4|\n" +
-//"7 - Preencha chave serial e tecle PF4.|\n" +
-//"8 - Escolha a designação de número <<<designacao_numero>>> e tecle PF4|\n" +
-//"9 - Selecionar ponto de venda <<<origem_cadastramento_PDV>>>|\n" +
-//"10 - <<<Valide_preencha>>> o(s) micros(s) <<<micro_servicos>>>|\n" +
-//"11 - Preencha <<<S_N_DACC>>> para adesão do DACC <<<com_sem_benef>>> e tecle ENTER.|\n" +
-//"12 - Selecione <<<banco>>>, informar numero da Agencia e da conta (caso seja selecionado CEF informar também a operação)|\n" +
-//"13 - Confirme valor do serviço e assinatura teclando PF4");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha |\n" +
-//"2 - Será apresentado a tela do menu inicial  |\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento |\n" +
-//"4 - Será apresentado uma janela para selecionar motivo|\n" +
-//"5 - Será apresentado nova janela para informar nova condição do terminal|\n" +
-//"6 - Será apresentado nova tela para preenchimento da chave serial|\n" +
-//"7 - Será apresentado a tela para designação de numero|\n" +
-//"8 - Para selecionar o ponto de venda|\n" +
-//"9 - Será apresentado a tela de micro serviços|\n" +
-//"10 - Será apresentado uma nova tela para informar se vai aderir ao DACC|\n" +
-//"11 - Será apresentado uma nova tela para preenchimento dos dados do DACC caso seja selecionado DACC =S|\n" +
-//"12 - Será apresentado uma nova tela para preenchimento do aprazamento da OS|\n" +
-//"13 - Será apresentado uma popup com a OS gerado");
-//        }     
-//        
-//        
-//        if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Consulta parametrização MPN-DACC, incompatibilidade e massa")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela ACN, informar terminal e tecle ENTER|\n" +
-//"4 - Validar que <<<Possui_micros>>>|\n" +
-//"5 - Acessar tela BLA, informar terminal, teclar enter e selecionar terminal atual|\n" +
-//"6 - Validar <<<Categoria_do_terminal>>>|\n" +
-//"7 - Acessar a tela 9ASNC, informar UF e tecle ENTER|\n" +
-//"8 - Informar canal de venda e teclar PF4|\n" +
-//"9 - Validar plano <<<que_existe>>> cadastrado na hierarquia <<<1_2_3_etc>>> para produto do terminal consultado|\n" +
-//"10 - Acessar a tela 9ASN3, informar plano e tipo de trafego da hierarquia <<<1_2_3_9ASN3>>> consultado tecle ENTER|\n" +
-//"11 - Validar que <<<possui_n_possui_pla>>> plano do terminal cadastrados como incompativel|\n" +
-//"12 - Acessar a tela 9ASN3, informar micro e tipo de trafego da hierarquia <<<1_2_3_9ASN3>>> consultado tecle ENTER|\n" +
-//"13 - Validar que <<<possui_n_possui_mic>>> micro do terminal cadastrados como  incompativel");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial|\n" +
-//"3 - Será apresentada lista de micro serviços vinculados ao terminal|\n" +
-//"4 - Micros validados|\n" +
-//"5 - Serão apresentados dados do contrato.|\n" +
-//"6 - Categoria validada|\n" +
-//"7 - Será apresentada tela de consulta|\n" +
-//"8 - Será apresentada tela com qtde meses de concessão, qtde meses carencia e serviços MPN cadastrados por produto com numero de hierarquia (prioridade)|\n" +
-//"9 - Validada lista de serviços MPN|\n" +
-//"10 - seerá apresentada tela com plano incompativeis|\n" +
-//"11 - Validados planos incompativeis|\n" +
-//"12 - seerá apresentada tela com micros incompativeis|\n" +
-//"13 - Validados micros incompativeis");
-//        }
-//		
-//		
-//	
-//		
-//				
-//if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abertura de ordem - Diversos - Macro A - Sem camp - com adesão ao DACC")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela <<<AA_ou_AM>>>, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6 . |\n" +
-//"4 - Preencha o tipo de macro serviço MACRO E e preencha os campos pedido por solicitados|\n" +
-//"5 - Preencha tipo <<<0>>> e tecle PF4 (Aparece caso o terminal tenha plano de bilhetagem de minutos)|\n" +
-//"6 - Preencha categoria <<<11>>> e tecle PF4 (Aparece caso o terminal tenha plano de bilhetagem de minutos)|\n" +
-//"7 - Preencha endereço para gerar <<<Macro_E_F_G_J>>> e tecle PF4|\n" +
-//"8 - Preencha chave serial e tecle PF4.|\n" +
-//"9 - Preencha <<<S_N>>> para mater numero e tecle ENTER.|\n" +
-//"10 - Preencha nova condição de terminal <<<nova_cond_terminal>>> e tecle PF4.|\n" +
-//"11 - Preencha origem de cadastramento <<<origem_cadastramento_PDV>>> e tecle F4|\n" +
-//"12 - Escolha a designação de número <<<designacao_numero>>> e tecle PF4|\n" +
-//"13 - Marque o serviços que serão mantidos <<<servicos_mantidos>>> e tecle PF4.|\n" +
-//"14 - <<<Valide_preencha>>> micro serviços <<<micro_servicos>>> e tecle PF4|\n" +
-//"15 - Preencha o endereço de cobrança e tecle PF4.|\n" +
-//"16 - Preencha o condicionamento <<<condicionada_S_ou_N>>> e tecle ENTER.|\n" +
-//"17 - Preencha <<<S_N_DACC>>> para adesão do DACC <<<com_sem_benef>>> e tecle ENTER.|\n" +
-//"18 - Selecione <<<banco>>>, informar numero da Agencia e da conta (caso seja selecionado CEF informar também a operação)|\n" +
-//"19 - Escolha se a instalação terá a OS aprazada <<<aprazada_S_N>>>, preencha os campos referentes a data promessa e tecle ENTER|\n" +
-//"20 - Confirme valor do serviço e assinatura teclando PF4\n" +
-//"\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha |\n" +
-//"2 - Será apresentado a tela do menu inicial  |\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento |\n" +
-//"4 - Será apresentado um pop-up para preenchimento do novo tipo do tipo do terminal|\n" +
-//"5 - Será apresentado nova tela para preenchimento da categoria|\n" +
-//"6 - Será apresentado nova tela para preenchimento do novo endereço|\n" +
-//"7 - Será apresentado nova tela para preenchimento da chave serial|\n" +
-//"8 - Será apresentado a tela para escolha de portabilidade|\n" +
-//"9 - Será apresentado a tela da nova condição de terminal|\n" +
-//"10 - Será apresentado a tela para designação de numero|\n" +
-//"11 - Será apresentado uma nova tela para preenchimento da origem de cadastramento|\n" +
-//"12 - Será apresentado uma nova tela para seleção dos serviços que serão mantidos|\n" +
-//"13 - Será apresentado a tela de micro serviços|\n" +
-//"14 - Será apresentado a tela do endereço de cobrança|\n" +
-//"15 - Será apresentado uma nova tela para preencher o condicionamento ou não da OS.|\n" +
-//"16 - Será apresentado uma nova tela para informar se vai aderir ao DACC|\n" +
-//"17 - Será apresentado uma nova tela para preenchimento dos dados do DACC caso seja selecionado DACC =S|\n" +
-//"18 - Será apresentado uma nova tela para preenchimento do aprazamento da OS|\n" +
-//"19 - Será apresentado uma nova tela contendo os serviços instalados|\n" +
-//"20 - Será apresentado uma popup com a OS gerado\n" +
-//"\n" +
-//"\n" +
-//"");
-//        }		
-//		
-//		
-//	if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abertura de macro B - Sem velox - Sem camp")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela HOA, escolha o UF  e tecle ENTER. Informe os dados do cliente <<<tipo_cliente>>> e documento para pesquisa e tecle ENTER|\n" +
-//"4 - Teclar PF4 após validar dados do cliente |\n" +
-//"5 - Escolha o PDV desejado <<<PDV_desejado>>> e tecle PF4|\n" +
-//"6 - Preencha endereço e tecle PF4|\n" +
-//"7 - Preencher endereço de cobrança igual ao de instalação <<<End_cob_S_N>>> e teclar ENTER. |\n" +
-//"8 - Preencha a utilização do terminal e teclar PF4. Preencher qnt de terminais pretendido <<<qtd_terminal>>>, tipo Produto <<<RES_NRES_TRONCO_AICE>>>, Telefone contato, seriação, nome contato e teclar PF4|\n" +
-//"9 - Preencher <<<port_S_N>>> e preencher adesão do velox N e teclar ENTER. Preencher vencimento e teclar PF4. Preencher figuração em lista telefonica e teclar Enter.|\n" +
-//"10 - Preencha adesão DACC S e tecle ENTER|\n" +
-//"11 - Selecionar <<<banco>>>, informar agencia e conta (caso seja selecionado CEF informar também a operação) e tecle ENTER|\n" +
-//"12 - Selecionar N para CTASPA e teclar ENTER.|\n" +
-//"13 - Escolher processo automatico do registro S e Simule integração com TRANSACT|\n" +
-//"14 - Acesse a tela HOB, preencha a proposta e tecle ENTER\n" +
-//"Tecle PF4 após validar dados da proposta |\n" +
-//"15 - Preencha o tipo de assinante <<<tipo_assinante_2>>> e tecle ENTER. Preencher o contato , solicitante e tecler PF4|\n" +
-//"16 - Realize a designação do numero <<<designacao_numero_DT>>> e tecle PF4\n" +
-//"Escolho o opção de cobrança e tecle <<<PF4_OPCAO_COBRANCA>>>|\n" +
-//"17 - <<<Validar_escolher>>> o(s) micro(s) <<<micro_servicos_fixo_proposta>>> e tecle PF4|\n" +
-//"18 - Confirme o valor do serviços e  assinatura e teclar PF4. Confirme os valores serviços cobrandos eventuais e mensais e teclar.  Teclar para prosseguir PF4|\n" +
-//"19 - Informar matrícula do vendedor e teclar PF4\n" +
-//"\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial |\n" +
-//"3 - Será apresentado uma nova tela com os dados do cliente retornados|\n" +
-//"4 - Será apresentado uma nova tela para escolha do Ponto de venda (PDV)|\n" +
-//"5 - Será apresentado uma nova tela para escolha da campanha|\n" +
-//"6 - Será apresentado a tela para preenchimento do endereço de cobrança|\n" +
-//"7 - Será apresentado a tela para preenchimento da utilização do terminal |\n" +
-//"8 - Será apresentado a tela para escolha de portabilidade e adesão do velox|\n" +
-//"9 - Será apresentado uma nova tela se a solicitação chegou via carta  e internet |\n" +
-//"10 - Será apresentado uma nova tela<<<nova_tela_cadastro>>> de cadastro de demanda - emissão de contrato|\n" +
-//"11 - Será apresentada uma nova tela para informar adesão ao CTASPA|\n" +
-//"12 - Será apresentada tela para informar se será feito pelo processoa autimatico|\n" +
-//"13 - Será apresentado uma popup com o numero da proposta gerado|\n" +
-//"14 - Será apresentado uma nova tela<<<nova_tala_assinante>>> para informar o tipo de assinante|\n" +
-//"15 - Será apresentado uma nova tela de cadastro de demanda - emissão de contrato|\n" +
-//"16 - Será apresentado uma nova tela escolha dos micro serviços|\n" +
-//"17 - Será apresentado uma nova tela de valores de serviço|\n" +
-//"18 - Será apresentado a tela para preencher a matrícula do vendedor|\n" +
-//"19 - Será apresentado a tela com a OS gerada\n" +
-//"\n" +
-//"\n" +
-//"");
-//        }		
-//		
-//		
-//		if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abrir ordem de SUBNUM - AA-AM")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste CDCS|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela <<<AA_ou_AM>>>, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6 . |\n" +
-//"4 - Preencha o tipo de macro serviço MACRO D e preencha os campos pedido por solicitados|\n" +
-//"5 - Seleciona motivo <<<Motivo_pedido>>> e PF4|\n" +
-//"6 - Informar nova condição do terminal como <<<Nova_cond>>> e PF4|\n" +
-//"7 - Preencha chave serial e tecle PF4.|\n" +
-//"8 - Escolha a designação de número <<<designacao_numero>>> e tecle PF4|\n" +
-//"9 - Selecionar ponto de venda <<<origem_cadastramento_PDV>>>|\n" +
-//"10 - <<<Valide_preencha>>> o(s) micros(s) <<<micro_servicos>>>|\n" +
-//"11 - Preencha <<<S_N_DACC>>> para adesão do DACC <<<com_sem_benef>>> e tecle ENTER.|\n" +
-//"12 - Selecione <<<banco>>>, informar numero da Agencia e da conta (caso seja selecionado CEF informar também a operação)|\n" +
-//"13 - Confirme valor do serviço e assinatura teclando PF4\n" +
-//"\n" +
-//"\n" +
-//"\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha |\n" +
-//"2 - Será apresentado a tela do menu inicial  |\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento |\n" +
-//"4 - Será apresentado uma janela para selecionar motivo|\n" +
-//"5 - Será apresentado nova janela para informar nova condição do terminal|\n" +
-//"6 - Será apresentado nova tela para preenchimento da chave serial|\n" +
-//"7 - Será apresentado a tela para designação de numero|\n" +
-//"8 - Para selecionar o ponto de venda|\n" +
-//"9 - Será apresentado a tela de micro serviços|\n" +
-//"10 - Será apresentado uma nova tela para informar se vai aderir ao DACC|\n" +
-//"11 - Será apresentado uma nova tela para preenchimento dos dados do DACC caso seja selecionado DACC =S|\n" +
-//"12 - Será apresentado uma nova tela para preenchimento do aprazamento da OS|\n" +
-//"13 - Será apresentado uma popup com a OS gerado\n" +
-//"\n" +
-//"\n" +
-//"\n" +
-//"\n" +
-//"");
-//        }
-//		
-//				if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Consulta parametrização MPN-DACC, incompatibilidade e massa - Carencia")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar tela ACH, informar terminal teclar e enter|\n" +
-//"4 - Selecionar OS de serviço com micro RETMPNDAC|\n" +
-//"5 - Na tela de micro serviços selecionar micro RETMPNDAC|\n" +
-//"6 - Validar data da retirada do MPNDAC|\n" +
-//"7 - Acessar a tela ACN, informar terminal e tecle ENTER|\n" +
-//"8 - Validar que <<<Possui_micros>>>|\n" +
-//"9 - Acessar tela BLA, informar terminal, teclar enter e selecionar terminal atual|\n" +
-//"10 - Validar <<<Categoria_do_terminal>>>|\n" +
-//"11 - Acessar a tela 9ASNC, informar UF e tecle ENTER|\n" +
-//"12 - Informar canal de venda e teclar PF4|\n" +
-//"13 - Validar plano <<<que_existe>>> cadastrado na hierarquia <<<1_2_3_etc>>> para produto do terminal consultado|\n" +
-//"14 - Acessar a tela 9ASN3, informar plano e tipo de trafego da hierarquia <<<1_2_3_9ASN3>>> consultado tecle ENTER|\n" +
-//"15 - Validar que <<<possui_n_possui_pla>>> plano do terminal cadastrados como incompativel|\n" +
-//"16 - Acessar a tela 9ASN3, informar micro e tipo de trafego da hierarquia <<<1_2_3_9ASN3>>> consultado tecle ENTER|\n" +
-//"17 - Validar que <<<possui_n_possui_mic>>> micro do terminal cadastrados como  incompativel");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial|\n" +
-//"3 - Será apresentado nova tela com a lista de OS's|\n" +
-//"4 - Será apresentada nova tela com dados da OS|\n" +
-//"5 - Será apresentada tela com dados do micro serviço|\n" +
-//"6 - Dados validados|\n" +
-//"7 - Será apresentada lista de micro serviços vinculados ao terminal|\n" +
-//"8 - Micros validados|\n" +
-//"9 - Serão apresentados dados do contrato.|\n" +
-//"10 - Categoria validada|\n" +
-//"11 - Será apresentada tela de consulta|\n" +
-//"12 - Será apresentada tela com qtde meses de concessão, qtde meses carencia e serviços MPN cadastrados por produto com numero de hierarquia (prioridade)|\n" +
-//"13 - Validada lista de serviços MPN|\n" +
-//"14 - seerá apresentada tela com plano incompativeis|\n" +
-//"15 - Validados planos incompativeis|\n" +
-//"16 - Será apresentada tela com micros incompativeis|\n" +
-//"17 - Validados micros incompativeis");
-//        }
-//		
-//		if(temp.getTestPlan().getTestCase().get(i).getTestScriptName().equals("Abertura de ordem - Diversos - Macro A - Sem camp - com adesão ao DACC")){
-//                            System.out.println(temp.getTestPlan().getTestCase().get(i).getTestScriptName());
-//                            temp.getTestPlan().getTestCase().get(i).setStepDescription("1 - Acessar o ambiente de teste|\n" +
-//"2 - Preencher STCH*(trilha da demanda) e teclar ENTER.|\n" +
-//"3 - Acessar a tela AA, insira o terminal  e tecle ENTER. Em seguida deve-se teclar PF6.|\n" +
-//"4 -  Preencha o tipo de macro serviço MACRO A e preencha os campos pedido por solicitados |\n" +
-//"5 -  selecione origem de cadastramento <<<origem_cadastramento_PDV>>> e tecle F4 |\n" +
-//"6 - Na tela de campanhas informar PF9 para seguir sem campanha|\n" +
-//"7 - Preencha S para seguir sem campanha|\n" +
-//"8 - <<<Selecionar_validar>>> micro(s) serviço(s) <<<Micro1_2_etc>>>|\n" +
-//"9 - Selecionar <<<Carac_do_micro>>>|\n" +
-//"10 - Selecionar S para DACC <<<Com_sem_benef>>>|\n" +
-//"11 - Selecionar <<<Banco>>> agencia e conta corrente (no caso de CEF informar também operação) e enter|\n" +
-//"12 - Selecionar <<<S_N_CTASPA>>> e enter|\n" +
-//"13 - Validar valores de serviço e assinatura dos micros <<<Micros_valores>>>|\n" +
-//"14 - Validar valores de assinatura e serviço e teclar PF4\n" +
-//"\n" +
-//"");
-//                            temp.getTestPlan().getTestCase().get(i).setExpectedResults("1 - Será apresentado a tela para preenchimento de trilha|\n" +
-//"2 - Será apresentado a tela do menu inicial|\n" +
-//"3 - Será apresentado um pop-up para geração do protocolo de atendimento|\n" +
-//"4 - Será apresentado uma nova tela para preenchimento da origem de cadastramento|\n" +
-//"5 - Será apresentado uma nova tela para selecionar nova campanha|\n" +
-//"6 - Será apresentada tela para confirmar seguir sem campanha|\n" +
-//"7 - Será apresentada tela para selecionar micro serviços|\n" +
-//"8 - Será apresentada tela para selecionar <<<Tela_carac_do_micro>>>|\n" +
-//"9 - Será apresentada tela para informar se haverá adesão ao DACC|\n" +
-//"10 - Será apresentada tela para informar dados bancarios|\n" +
-//"11 - Será apresentada tela para informar se haverá adesão ao CTASPA (conta sem papel)|\n" +
-//"12 - Será apresentada tela de valores de serviço e assinatura|\n" +
-//"13 - Será apresentada janela com valores totais de serviços e assinatura|\n" +
-//"14 - Será apresentada janela com o numero da OS\n" +
-//"\n" +
-//"");
-//        }
-//        
-//        
-//        }
-
-        
-        
-        
-        
-        
-        
+        TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());   
         
         if(temp != null){
             
@@ -3301,8 +2785,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             modelInstancia.removeRow(0);
         }
         
+        
+            
+        
         for(int i = 0 ; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
-            modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario()+"", this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt()+"", this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode()+"",this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada()});
+                        
+            
+            modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(),this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), i, 1);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), i, 2);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), i, 3);
@@ -3716,6 +3205,126 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     modelPlan.setValueAt(valorNumeroCenario,j,0);
                 }
         }
+    }
+    
+    public void atualizaDadosBoleanos(int hashCode, boolean valor, String campo ){
+        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
+        switch(campo){
+            case NAME_ITEM_CTS_PRIORITARIOS:
+                //atualiza objeto
+                for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+                    if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                        testPlan.getTestPlan().getTestCase().get(j).setPriority(valor);
+                    }
+                }
+
+                //atualiza tabela
+                for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
+                        tabelaInstancia.setRowSelectionInterval(j, j);
+                        tabelaInstancia.setValueAt(valor, j, 5);
+
+                    }
+                }
+
+                
+
+                //atualiza model
+                for (int j = 0; j < modelPlan.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
+                        modelPlan.setValueAt(valor, j, 5);
+
+                    }
+                }
+
+                break;
+            
+            case NAME_ITEM_MASSA_DADOS:
+                 //atualiza objeto
+                for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+                    if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                        testPlan.getTestPlan().getTestCase().get(j).setData(valor);
+                    }
+                }
+
+                //atualiza tabela
+                for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
+                        tabelaInstancia.setRowSelectionInterval(j, j);
+                        tabelaInstancia.setValueAt(valor, j, 6);
+
+                    }
+                }               
+
+                //atualiza model
+                for (int j = 0; j < modelPlan.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
+                        modelPlan.setValueAt(valor, j, 6);
+
+                    }
+                }
+
+                break;
+                
+                 case NAME_ITEM_RETRABALHO:
+                 //atualiza objeto
+                for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+                    if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                        testPlan.getTestPlan().getTestCase().get(j).setRework(valor);
+                    }
+                }
+
+                //atualiza tabela
+                for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
+                        tabelaInstancia.setRowSelectionInterval(j, j);
+                        tabelaInstancia.setValueAt(valor, j, 7);
+
+                    }
+                }               
+
+                //atualiza model
+                for (int j = 0; j < modelPlan.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
+                        modelPlan.setValueAt(valor, j, 7);
+
+                    }
+                }
+
+                break;
+                
+                 case NAME_ITEM_REGRESSAO:
+                 //atualiza objeto
+                for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+                    if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                        testPlan.getTestPlan().getTestCase().get(j).setRegression(valor);
+                    }
+                }
+
+                //atualiza tabela
+                for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
+                        tabelaInstancia.setRowSelectionInterval(j, j);
+                        tabelaInstancia.setValueAt(valor, j, 8);
+
+                    }
+                }               
+
+                //atualiza model
+                for (int j = 0; j < modelPlan.getRowCount(); j++) {
+                    if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
+                        modelPlan.setValueAt(valor, j, 8);
+
+                    }
+                }
+
+                break;
+        }
+                
+      
+        
+        
+        
     }
     public void ordenarCTs(){
         if (tabelaInstancia.getRowCount() > 0) {

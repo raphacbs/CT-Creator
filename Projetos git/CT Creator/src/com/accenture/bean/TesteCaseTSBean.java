@@ -37,6 +37,10 @@ public class TesteCaseTSBean implements Serializable {
     private boolean automatizado;
     private String cenario;
     private static final long serialVersionUID = 8449377741076660063L;//-1432622747367978334L; 
+    private boolean rework;
+    private boolean priority;
+    private boolean regression;
+    private boolean data;
     
 //
     public TesteCaseTSBean(TestCaseTSPropertiesBean testCaseProperties) {
@@ -212,6 +216,38 @@ public class TesteCaseTSBean implements Serializable {
 
     public void setCenario(String cenario) {
         this.cenario = cenario;
+    }
+
+    public boolean isRework() {
+        return rework;
+    }
+
+    public void setRework(boolean rework) {
+        this.rework = rework;
+    }
+
+    public boolean isPriority() {
+        return priority;
+    }
+
+    public void setPriority(boolean priority) {
+        this.priority = priority;
+    }
+
+    public boolean isRegression() {
+        return regression;
+    }
+
+    public void setRegression(boolean regression) {
+        this.regression = regression;
+    }
+
+    public boolean isData() {
+        return data;
+    }
+
+    public void setData(boolean data) {
+        this.data = data;
     }
     
     

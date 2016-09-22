@@ -291,7 +291,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="44" pref="44" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -577,7 +577,7 @@
                 <Column editable="true" title="Regress&#xe3;o" type="java.lang.Boolean"/>
               </Table>
             </Property>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());&#xa;tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){&#xa;   public void mouseMoved(MouseEvent e){&#xa;        Point p = e.getPoint(); &#xa;        int row = tabelaCt.rowAtPoint(p);&#xa;        int column = tabelaCt.columnAtPoint(p);&#xa;        tabelaCt.setToolTipText(String.valueOf(tabelaCt.getValueAt(row,column)));&#xa;    }//end MouseMoved&#xa;});">
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());&#xa;tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){&#xa;   public void mouseMoved(MouseEvent e){&#xa;        Point p = e.getPoint(); &#xa;        int row = tabelaInstancia.rowAtPoint(p);&#xa;        int column = tabelaInstancia.columnAtPoint(p);&#xa;        tabelaInstancia.setToolTipText(String.valueOf(tabelaInstancia.getValueAt(row,column)));&#xa;    }//end MouseMoved&#xa;});">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
@@ -608,22 +608,22 @@
                     <Connection code="new JDateChooserRenderer()" type="code"/>
                   </Renderer>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
