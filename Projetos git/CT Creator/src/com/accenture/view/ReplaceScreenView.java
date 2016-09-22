@@ -37,6 +37,13 @@ public class ReplaceScreenView extends java.awt.Dialog {
     private ButtonIconBean icon;
     private int[] hashCode;
     private List<TesteCaseTSBean> listTc;
+    private final String NAME_ITEM_CENARIO = "Nº CENÁRIO";
+    private final String NAME_ITEM_CASO_TESTE = "Nº CASO DE TESTE";
+    private final String NAME_ITEM_CTS_PRIORITARIOS = "CTs Prioritários";
+    private final String NAME_ITEM_MASSA_DADOS = "Massa de Dados";
+    private final String NAME_ITEM_RETRABALHO = "Passível de Re-Trabalho";
+    private final String NAME_ITEM_REGRESSAO = "Regressão";
+            
 
     /**
      * Creates new form GUIFiltroCT
@@ -102,6 +109,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
         bntSubstituir = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         checkboxIncremental = new javax.swing.JCheckBox();
+        jLabel35 = new javax.swing.JLabel();
+        jComboBoxYesOrNo = new javax.swing.JComboBox<>();
 
         setTitle("Filtro - Caso de Teste");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -111,6 +120,12 @@ public class ReplaceScreenView extends java.awt.Dialog {
         });
 
         jPanel1.setPreferredSize(new java.awt.Dimension(380, 300));
+
+        jComboCampos.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboCamposItemStateChanged(evt);
+            }
+        });
 
         jLabel34.setText("SUBSTITUIR POR:");
 
@@ -151,6 +166,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
 
         checkboxIncremental.setText("Incrementar?");
 
+        jLabel35.setText("SUBSTITUIR POR:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,20 +181,27 @@ public class ReplaceScreenView extends java.awt.Dialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(bntSubstituir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(bntCancelar))
                             .addComponent(jComboCampos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel34)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(checkboxIncremental)
+                                .addComponent(jLabel35)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBoxYesOrNo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(textSubstituir))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel34)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(checkboxIncremental)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(textSubstituir))))))
                 .addGap(19, 19, 19))
         );
         jPanel1Layout.setVerticalGroup(
@@ -187,23 +211,37 @@ public class ReplaceScreenView extends java.awt.Dialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel51))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(textSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addGap(3, 3, 3)
-                .addComponent(checkboxIncremental)
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(jLabel1)
+                        .addGap(44, 44, 44))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel35)
+                            .addComponent(jComboBoxYesOrNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel34)
+                            .addComponent(textSubstituir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(checkboxIncremental)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bntCancelar)
                     .addComponent(bntSubstituir))
                 .addGap(16, 16, 16))
         );
 
-        jComboCampos.addItem("Nº CENÁRIO");
-        jComboCampos.addItem("Nº CASO DE TESTE");
+        jComboCampos.addItem(NAME_ITEM_CENARIO);
+        jComboCampos.addItem(NAME_ITEM_CASO_TESTE);
+        jComboCampos.addItem(NAME_ITEM_CTS_PRIORITARIOS);
+        jComboCampos.addItem(NAME_ITEM_MASSA_DADOS);
+        jComboCampos.addItem(NAME_ITEM_RETRABALHO);
+        jComboCampos.addItem(NAME_ITEM_REGRESSAO);
+        jComboBoxYesOrNo.addItem("Sim");
+        jComboBoxYesOrNo.addItem("Não");
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -273,6 +311,27 @@ public class ReplaceScreenView extends java.awt.Dialog {
         }
     }//GEN-LAST:event_textSubstituirKeyTyped
 
+    private void jComboCamposItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboCamposItemStateChanged
+        // TODO add your handling code here:
+        if (jComboCampos.getSelectedItem().equals(NAME_ITEM_CTS_PRIORITARIOS) || 
+                jComboCampos.getSelectedItem().equals(NAME_ITEM_MASSA_DADOS) ||
+                jComboCampos.getSelectedItem().equals(NAME_ITEM_REGRESSAO) || 
+                jComboCampos.getSelectedItem().equals(NAME_ITEM_RETRABALHO)) {
+            
+            checkboxIncremental.setVisible(false);
+            textSubstituir.setVisible(false);
+            jLabel34.setVisible(false);
+            jComboBoxYesOrNo.setVisible(true);
+            jLabel35.setVisible(true);
+        }else{
+            checkboxIncremental.setVisible(true);
+            textSubstituir.setVisible(true);
+            jLabel34.setVisible(true);
+            jComboBoxYesOrNo.setVisible(false);
+            jLabel35.setVisible(false);
+        }
+    }//GEN-LAST:event_jComboCamposItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -302,9 +361,11 @@ public class ReplaceScreenView extends java.awt.Dialog {
     private javax.swing.JButton bntCancelar;
     private javax.swing.JButton bntSubstituir;
     private javax.swing.JCheckBox checkboxIncremental;
+    private javax.swing.JComboBox<String> jComboBoxYesOrNo;
     private javax.swing.JComboBox jComboCampos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField textSubstituir;
@@ -358,7 +419,7 @@ public class ReplaceScreenView extends java.awt.Dialog {
         }
 
         switch (jComboCampos.getSelectedItem().toString()) {
-            case "Nº CENÁRIO":
+            case NAME_ITEM_CENARIO:
                 for (int i = 0; i < listTc.size(); i++) {
 //                    if(textProcurado.getText().equals(listTc.get(i).getNumeroCenario())){
                     numeroCenario = textSubstituir.getText();
@@ -375,7 +436,7 @@ public class ReplaceScreenView extends java.awt.Dialog {
                 }
                 break;
 
-            case "Nº CASO DE TESTE":
+            case NAME_ITEM_CASO_TESTE:
                 for (int i = 0; i < listTc.size(); i++) {
 //                    if(textProcurado.getText().equals(listTc.get(i).getNumeroCt())){
                     numeroCenario = listTc.get(i).getNumeroCenario();
@@ -391,6 +452,22 @@ public class ReplaceScreenView extends java.awt.Dialog {
 //                    }
                 }
                 break;
+                
+            default:
+                boolean valor = false;
+                for (int i = 0; i < listTc.size(); i++) {
+                    
+                    
+                    if(jComboBoxYesOrNo.getSelectedItem().equals("Sim")){
+                        valor = true;
+                    }
+                    
+                    hashCode = listTc.get(i).getHashCode();
+                    guiInstanceCT.atualizaDadosBoleanos(hashCode, valor, jComboCampos.getSelectedItem().toString());
+
+                }
+                break;
+                
 
         }
 
