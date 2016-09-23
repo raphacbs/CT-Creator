@@ -5,6 +5,7 @@
  */
 package com.accenture.bean;
 
+import com.accenture.util.ProjectSettings;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,7 +24,7 @@ public class SVNPropertiesVOBean {
     private String systems;
     private Properties fileProperties;
     private FileInputStream file;
-    private String path = "./res/svn.properties";
+   
     private FileOutputStream fileOut;
     private String folderTemplocal;
     private String faseCR;
@@ -41,7 +42,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setVersion(double version) throws FileNotFoundException, IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("version", version+"");
         fileProperties.store(fileOut, null);
     }
@@ -51,7 +52,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setTestPhaseTS(String testPhaseTS) throws FileNotFoundException, IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("testPhase", faseCR);
         fileProperties.store(fileOut, null);
     }
@@ -64,7 +65,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setFaseCR(String faseCR) throws FileNotFoundException, IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("faseCR", faseCR);
         fileProperties.store(fileOut, null);
        
@@ -77,7 +78,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setUser(String user) throws IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("usuarioSvn", user);
         fileProperties.store(fileOut, null);
     }
@@ -88,7 +89,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setPass(String pass) throws IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("senhaSvn", pass);
         fileProperties.store(fileOut, null);        
     }
@@ -99,7 +100,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setUrl(String url) throws IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.setProperty("url", url);
         fileProperties.store(fileOut, null);
     }
@@ -110,7 +111,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setDir(String dir) throws IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
        fileProperties.setProperty("caminhoSVN", dir);
        fileProperties.store(fileOut, null);
     }
@@ -121,7 +122,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setFolderTemplocal(String folderTemplocal) throws  IOException {
-       fileOut = new FileOutputStream(path);
+       fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
        fileProperties.setProperty("pastaTemp", folderTemplocal);
        fileProperties.store(fileOut, null);
     }
@@ -133,7 +134,7 @@ public class SVNPropertiesVOBean {
     }
 
     public void setSystems(String systems) throws IOException {
-        fileOut = new FileOutputStream(path);
+        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
        fileProperties.setProperty("sistemas",  systems.toString());
        fileProperties.store(fileOut, null);
         fileOut.close();
@@ -145,7 +146,7 @@ public class SVNPropertiesVOBean {
     }
     
      public void setComplexidade(String complexidade) throws IOException {
-       fileOut = new FileOutputStream(path);
+       fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
        fileProperties.setProperty("complexidadeTS",  complexidade.toString());
        fileProperties.store(fileOut, null);
        fileOut.close();
@@ -153,7 +154,7 @@ public class SVNPropertiesVOBean {
     
     public void loadFileProperties() throws FileNotFoundException, IOException{
         fileProperties = new Properties();
-        file = new FileInputStream(path);
+        file = new FileInputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
         fileProperties.load(file);
         file.close();
         
