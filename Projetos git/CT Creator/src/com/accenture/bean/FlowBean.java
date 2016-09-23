@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author raphael.da.silva
  */
-public class WorkflowBean {
+public class FlowBean {
     
     private String id;
     private String name;
@@ -69,6 +69,11 @@ public class WorkflowBean {
 
     public void setTestCases(List<String> testCases) {
         this.testCases = testCases;
+    }
+
+    @Override
+    public String toString() {
+        return  name+" - "+system;
     }
     
     

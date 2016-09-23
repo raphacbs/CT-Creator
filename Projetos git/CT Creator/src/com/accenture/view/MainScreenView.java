@@ -88,6 +88,8 @@ public class MainScreenView extends javax.swing.JFrame {
         itemMenuImportaCT = new javax.swing.JMenuItem();
         itemMenuExportarPlanilhaTI = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItemFuncionalidade = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
         itemMenuConfiguracoes = new javax.swing.JMenuItem();
 
@@ -227,6 +229,19 @@ public class MainScreenView extends javax.swing.JFrame {
         menuImportarExportar.add(jMenuItem5);
 
         jMenuBar1.add(menuImportarExportar);
+
+        jMenu4.setText("Funcionalidades");
+
+        jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, 0));
+        jMenuItemFuncionalidade.setText("Gerenciar Funcionalidades");
+        jMenuItemFuncionalidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFuncionalidadeActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItemFuncionalidade);
+
+        jMenuBar1.add(jMenu4);
 
         menuConfiguracoes.setText("Configurações");
         menuConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
@@ -481,6 +496,23 @@ public class MainScreenView extends javax.swing.JFrame {
            }
     }//GEN-LAST:event_formWindowClosing
 
+    private void jMenuItemFuncionalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFuncionalidadeActionPerformed
+         try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            criaJanelaFuncionalidade();
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItemFuncionalidadeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -535,12 +567,14 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItemFuncionalidade;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuCT;
     private javax.swing.JMenu menuConfiguracoes;
@@ -562,6 +596,7 @@ public class MainScreenView extends javax.swing.JFrame {
     EditScreenTSView guiEdit;
     ChooseTestCaseTsScreenView guiChooseTestCaseTsScreenView;
     InstanceScreenTSView guiInstaceTs;
+    ManageflowsScreenView guiManageflowsScreenView;
 
     public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiInstaceTs = new InstanceScreenTSView();
@@ -705,6 +740,15 @@ public class MainScreenView extends javax.swing.JFrame {
         guiConsultaALM.centralizaJanela();
 
         guiConsultaALM.setVisible(true);
+
+    }
+    
+     private void criaJanelaFuncionalidade() throws SQLException, ClassNotFoundException, IOException, SVNException {
+        guiManageflowsScreenView = new ManageflowsScreenView();
+        desktop.add(guiManageflowsScreenView);
+        guiManageflowsScreenView.centralizaJanela();
+
+        guiManageflowsScreenView.setVisible(true);
 
     }
 

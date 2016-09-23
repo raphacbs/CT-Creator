@@ -23,7 +23,7 @@ import org.tmatesoft.svn.core.wc.SVNStatus;
  *
  * @author raphael.da.silva
  */
-public class WorkflowDAO extends FrameworkSvnManager{
+public class FlowDAO extends FrameworkSvnManager{
     
     private SVNPropertiesVOBean properties;
     private String url;
@@ -33,7 +33,7 @@ public class WorkflowDAO extends FrameworkSvnManager{
     private SVNClientManager clientManager;
     
 
-    public WorkflowDAO() throws IOException, SVNException {
+    public FlowDAO() throws IOException, SVNException {
         properties = new SVNPropertiesVOBean();
         url = properties.getUrl()+properties.getDir()+"/fluxos";
         username = properties.getUser();

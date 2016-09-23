@@ -6,8 +6,8 @@
 package com.accenture.ts.rn;
 
 
-import com.accenture.bean.WorkflowBean;
-import com.accenture.ts.dao.WorkflowDAO;
+import com.accenture.bean.FlowBean;
+import com.accenture.ts.dao.FlowDAO;
 import com.accenture.util.FunctiosDates;
 import com.accenture.util.ProjectSettings;
 import java.io.File;
@@ -26,40 +26,40 @@ import org.tmatesoft.svn.core.SVNException;
  *
  * @author raphael.da.silva
  */
-public class WorkflowRN {
+public class FlowRN {
     
     
     private Properties fileProperties = null;
     private FileInputStream file;
-    private WorkflowDAO workflowDAO;
+    private FlowDAO workflowDAO;
 
-    public WorkflowRN() throws IOException, SVNException {
-       workflowDAO = new WorkflowDAO();
+    public FlowRN() throws IOException, SVNException {
+       workflowDAO = new FlowDAO();
     }
     
     
     
-    public WorkflowBean getWorkflowBean(String name) throws IOException, SVNException {
-        WorkflowDAO workflowDAO = new WorkflowDAO();
-        WorkflowBean workflowBean = new WorkflowBean();
+    private FlowBean getFlowBean(String name) throws IOException, SVNException {
+        
+        FlowBean flowBean = new FlowBean();
         
         if (!name.contains(".properties")) {
             name += ".properties";
         }
 
         loadFileProperties(name);
-        workflowBean.setName(fileProperties.getProperty(ProjectSettings.PROPERTY_NAME));
-        workflowBean.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_DESCRIPTION));
-        workflowBean.setId(fileProperties.getProperty(ProjectSettings.PROPERTY_ID));
-        workflowBean.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
-        workflowBean.setRegisterDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_REGISTER_DATE)));
-        workflowBean.setTestCases(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_TEST_CASES).split(ProjectSettings.DELIDELIMITER_COMMA)));
+        flowBean.setName(fileProperties.getProperty(ProjectSettings.PROPERTY_NAME));
+        flowBean.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_DESCRIPTION));
+        flowBean.setId(fileProperties.getProperty(ProjectSettings.PROPERTY_ID));
+        flowBean.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
+        flowBean.setRegisterDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_REGISTER_DATE)));
+        flowBean.setTestCases(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_TEST_CASES).split(ProjectSettings.DELIDELIMITER_COMMA)));
 
-        return workflowBean;
+        return flowBean;
     }
     
-    public WorkflowBean readFileFluxo(String name){
-        WorkflowBean workflowBean = new WorkflowBean();
+    public FlowBean readFileFluxo(String name){
+        FlowBean workflowBean = new FlowBean();
         
         
         
@@ -75,21 +75,25 @@ public class WorkflowRN {
         
     }
     
-    public WorkflowBean getFile(String fileName) throws SVNException, IOException{
+    public FlowBean getFile(String fileName) throws SVNException, IOException{
         //atualiza pasta com o fluxo
         workflowDAO.donwloadFluxos();
-        //verifica se o arquivo está bloqueado
-        if(workflowDAO.isLock(fileName)){
-            return null;
-        }else{
-            workflowDAO.lockFile(fileName);
-        }
+//        //verifica se o arquivo está bloqueado
+//        if(workflowDAO.isLock(fileName)){
+//            return null;
+//        }else{
+//            workflowDAO.lockFile(fileName);
+//        }
         
-        return getWorkflowBean(fileName);
+        return getFlowBean(fileName);
         
     }
     
-    public void saveFile(String fileName, WorkflowBean workflowBean ) throws SVNException, IOException{
+    public void saveFile(String fileName, FlowBean workflowBean ) throws SVNException, IOException{
+        
+        //atualiza pasta com o fluxo
+        workflowDAO.donwloadFluxos();
+        
         if(fileName == null){
             String id = createFile(workflowBean);
             workflowDAO.save();
@@ -101,7 +105,7 @@ public class WorkflowRN {
         }   
     }
     
-    private String  createFile(WorkflowBean workflowBean) throws FileNotFoundException, IOException, SVNException{
+    private String  createFile(FlowBean workflowBean) throws FileNotFoundException, IOException, SVNException{
         String id = generateId();
         File newFile = new File(ProjectSettings.PATH_FILE_FLUXO+"/"+id+".properties");
         FileOutputStream fileOut = new FileOutputStream(newFile);
