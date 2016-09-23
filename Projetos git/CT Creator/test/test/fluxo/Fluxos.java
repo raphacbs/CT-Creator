@@ -5,10 +5,10 @@
  */
 package test.fluxo;
 
-import com.accenture.bean.WorkflowBean;
-import com.accenture.ts.dao.WorkflowDAO;
+import com.accenture.bean.FlowBean;
+import com.accenture.ts.dao.FlowDAO;
 import com.accenture.ts.rn.TestCaseTSRN;
-import com.accenture.ts.rn.WorkflowRN;
+import com.accenture.ts.rn.FlowRN;
 import com.accenture.util.FunctiosDates;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public class Fluxos {
     public static void main(String[] args) throws IOException, SVNException {
-//        WorkflowDAO w = new WorkflowDAO();
+//        FlowDAO w = new FlowDAO();
 //        w.donwloadFluxos();
 //        System.out.println(w.getEntriesWorkflow());
 //        System.out.println(w.isWorkingCopy("C:\\FastPlan\\fluxos"));
@@ -34,32 +34,32 @@ public class Fluxos {
 //        TestCaseTSRN tcRN = new TestCaseTSRN();
 //        tcRN.importSheetAllCts("C:\\Users\\raphael.da.silva\\Desktop\\Planos\\TS.xlsx", "Importando planos para o repositorio");
 
-        WorkflowRN workflowRN = new WorkflowRN();
+        FlowRN workflowRN = new FlowRN();
         
 //        System.out.println("test.fluxo.Fluxos.main() - "+ workflowRN.getEntries());
         
-        WorkflowBean wb = workflowRN.getFile(workflowRN.getEntries().get(0).getName());
-        
-        System.out.println("Nome: "+wb.getName()+"\nDescrição: "+wb.getDescription()+"\nData: "+wb.getRegisterDate()+"\nSistema: "+wb.getSystem()
-        +"\nTestCases: "+wb.getTestCases());
+//        FlowBean wb = workflowRN.getFile(workflowRN.getEntries().get(0).getName());
+//        
+//        System.out.println("Nome: "+wb.getName()+"\nDescrição: "+wb.getDescription()+"\nData: "+wb.getRegisterDate()+"\nSistema: "+wb.getSystem()
+//        +"\nTestCases: "+wb.getTestCases());
 
-//          List<String> tcs = new ArrayList<String>();
-//          tcs.add("0004");
-//          tcs.add("0008");
-//          tcs.add("0004");
-//          tcs.add("0003");
-//          tcs.add("0002");
-//          tcs.add("0006");
-//          
-//          WorkflowBean wb = new WorkflowBean();
-//          wb.setDescription("Craiado via código");
-//          wb.setName("Ativa MSISDN");
-//          wb.setRegisterDate(FunctiosDates.getDateActual());
-//          wb.setSystem("BLL");
-//          wb.setTestCases(tcs);
-//          
-//          
-//          workflowRN.saveFile(null, wb);
+          List<String> tcs = new ArrayList<String>();
+          tcs.add("0004");
+          tcs.add("0008");
+          tcs.add("0004");
+          tcs.add("0003");
+          tcs.add("0002");
+          tcs.add("0006");
+          
+          FlowBean wb = new FlowBean();
+          wb.setDescription("Craiado via código");
+          wb.setName("Ativa MSISDN");
+          wb.setRegisterDate(FunctiosDates.getDateActual());
+          wb.setSystem("BLL");
+          wb.setTestCases(tcs);
+          
+          
+          workflowRN.saveFile(null, wb);
         
     }
 }
