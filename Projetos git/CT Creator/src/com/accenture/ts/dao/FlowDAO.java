@@ -93,5 +93,12 @@ public class FlowDAO extends FrameworkSvnManager{
         SVNStatus status = getStatus(clientManager, ProjectSettings.PATH_FILE_FLUXO+"/"+nameFile);
         return status.getLocalLock().getOwner();
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    
+    
         
 }

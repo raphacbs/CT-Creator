@@ -28,4 +28,7 @@ public class ProjectSettings {
     //delimitadores
     public final static String DELIDELIMITER_COMMA= ";";
     
+    //EXTENSIONS
+    public final static String EXTENSION_FILE_PROPERTY= ".properties";
+    
 }

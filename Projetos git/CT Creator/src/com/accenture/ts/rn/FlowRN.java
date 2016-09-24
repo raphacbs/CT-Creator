@@ -89,28 +89,33 @@ public class FlowRN {
         
     }
     
-    public void saveFile(String fileName, FlowBean workflowBean ) throws SVNException, IOException{
+    
+    
+    public String saveFile(String fileName, FlowBean flowBean ) throws SVNException, IOException{
         
         //atualiza pasta com o fluxo
         workflowDAO.donwloadFluxos();
         
         if(fileName == null){
-            String id = createFile(workflowBean);
+            String id = createFile(flowBean);            
             workflowDAO.save();
-            workflowDAO.lockFile(id+".properties");
+//            workflowDAO.lockFile(id+".properties");
+            return id+ProjectSettings.EXTENSION_FILE_PROPERTY;
         }else{
+            editFile(fileName, flowBean);
             workflowDAO.unLockFile(fileName);
             workflowDAO.save();
-            workflowDAO.lockFile(fileName);
+//            workflowDAO.lockFile(fileName);
+            return fileName;
         }   
     }
     
     private String  createFile(FlowBean workflowBean) throws FileNotFoundException, IOException, SVNException{
         String id = generateId();
-        File newFile = new File(ProjectSettings.PATH_FILE_FLUXO+"/"+id+".properties");
+        File newFile = new File(ProjectSettings.PATH_FILE_FLUXO+"/"+id+ProjectSettings.EXTENSION_FILE_PROPERTY);
         FileOutputStream fileOut = new FileOutputStream(newFile);
         
-        loadFileProperties(id+".properties");
+        loadFileProperties(id+ProjectSettings.EXTENSION_FILE_PROPERTY);
               
         fileProperties.put(ProjectSettings.PROPERTY_ID, id);
         fileProperties.put(ProjectSettings.PROPERTY_DESCRIPTION, workflowBean.getDescription());
@@ -124,13 +129,71 @@ public class FlowRN {
         return id;
     }
     
-    public void lockFile(String nameFile) throws SVNException{
-        workflowDAO.lockFile(nameFile);
+    private String editFile(String nameFile, FlowBean fb) throws FileNotFoundException, IOException{
+        
+        if(!nameFile.contains(ProjectSettings.EXTENSION_FILE_PROPERTY)){
+            nameFile+=ProjectSettings.EXTENSION_FILE_PROPERTY;
+        }
+        
+        File newFile = new File(ProjectSettings.PATH_FILE_FLUXO+"/"+nameFile);
+        FileOutputStream fileOut = new FileOutputStream(newFile);
+        
+        loadFileProperties(nameFile);
+              
+        fileProperties.setProperty(ProjectSettings.PROPERTY_ID, fb.getId());
+        fileProperties.setProperty(ProjectSettings.PROPERTY_DESCRIPTION, fb.getDescription());
+        fileProperties.setProperty(ProjectSettings.PROPERTY_NAME, fb.getName());
+        fileProperties.setProperty(ProjectSettings.PROPERTY_REGISTER_DATE, FunctiosDates.dateToString(fb.getRegisterDate(),"dd/MM/yyyy HH:mm:ss"));
+        fileProperties.setProperty(ProjectSettings.PROPERTY_SYSTEM, fb.getSystem());
+        String cts = "";
+        cts = fb.getTestCases().stream().map((testCase) -> testCase +";").reduce(cts, String::concat);
+        fileProperties.setProperty(ProjectSettings.PROPERTY_TEST_CASES, cts);
+        fileProperties.store(fileOut, null);
+        return nameFile;
+    }
+        
+    
+    public boolean lockFile(String nameFile) throws SVNException{
+        if(verifyUserLock(nameFile)){
+            workflowDAO.lockFile(nameFile);
+            return true;
+        }else{
+            return false;
+        }       
+        
     }
     
-    public void unLockFile(String nameFile) throws SVNException{
-        workflowDAO.unLockFile(nameFile);
+    public boolean unLockFile(String nameFile) throws SVNException{
+        
+        if(verifyUserLock(nameFile)){
+            workflowDAO.unLockFile(nameFile);
+            return true;
+        }else{            
+            return false;
+        }   
     }
+    
+    public boolean verifyUserLock(String nameFile) throws SVNException{
+        if(workflowDAO.isLock(nameFile)){
+            if(workflowDAO.getUserLock(nameFile).equalsIgnoreCase(workflowDAO.getUsername())){
+                return true;
+            }else{
+                return false;
+            }         
+        }else{
+            return true;
+        }
+    }
+    
+    public String getUserLock(String nameFile) throws SVNException{
+        if(workflowDAO.isLock(nameFile)){
+            return workflowDAO.getUsername();
+        }else{
+            return null;
+        }
+        
+    }
+        
     
     private String generateId() throws SVNException, IOException{
          List<SVNDirEntry> entries = workflowDAO.getEntriesWorkflow();
