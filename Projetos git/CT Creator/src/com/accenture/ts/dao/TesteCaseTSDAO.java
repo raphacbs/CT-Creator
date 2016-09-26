@@ -733,7 +733,11 @@ public class TesteCaseTSDAO {
             testCase.setSTIPRJ(project);
             testCase.setTestPhase(phase);
             testCase.setComplexidade(complexidade.getStringCellValue());
+            if(automatizado != null){
             testCase.setAutomatizado(automatizado.getBooleanCellValue());
+            }else{
+                testCase.setAutomatizado(false);
+            }
             listTS.add(testCase);
 
             linha = linha + 2;

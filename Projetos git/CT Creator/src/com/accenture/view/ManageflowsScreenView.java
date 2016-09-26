@@ -6,8 +6,10 @@
 package com.accenture.view;
 
 import com.accenture.bean.FlowBean;
+import com.accenture.bean.TestCaseTSPropertiesBean;
 import javax.swing.DefaultListModel;
 import com.accenture.ts.rn.FlowRN;
+import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.ProjectSettings;
 import java.awt.Dimension;
@@ -22,6 +24,8 @@ import javax.swing.SwingWorker;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import com.accenture.util.FunctiosDates;
+import java.awt.Cursor;
+import javax.swing.JDialog;
 
 /**
  *
@@ -55,6 +59,10 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             }.run();
         
         
+    }
+    
+    public ManageflowsScreenView(List<String> Cts){
+        addCT(Cts);
     }
     
     private void loadFlows(String name, String system){
@@ -126,6 +134,8 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         DefaultListModel model =  new DefaultListModel();
@@ -140,7 +150,6 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         fieldTextFlowName = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        fieldTextFlowDescription = new javax.swing.JTextField();
         fieldComboboxFlowSystem = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -155,6 +164,11 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         bntAdd = new javax.swing.JButton();
         bntExcluir = new javax.swing.JButton();
         bntSave = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        fieldTextFlowDescription = new javax.swing.JTextArea();
+
+        jMenuItem1.setText("Teste");
+        jPopupMenu1.add(jMenuItem1);
 
         setClosable(true);
         setIconifiable(true);
@@ -177,6 +191,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(listSelectTestCase);
+        listSelectTestCase.add(jPopupMenu1);
 
         jTextFieldNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,12 +246,32 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         });
 
         bntSubir.setText("^");
+        bntSubir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntSubirActionPerformed(evt);
+            }
+        });
 
         bntDesce.setText("V");
+        bntDesce.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntDesceActionPerformed(evt);
+            }
+        });
 
         bntAdd.setText("+");
+        bntAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntAddActionPerformed(evt);
+            }
+        });
 
         bntExcluir.setText("-");
+        bntExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntExcluirActionPerformed(evt);
+            }
+        });
 
         bntSave.setText("Salvar");
         bntSave.addActionListener(new java.awt.event.ActionListener() {
@@ -244,6 +279,10 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 bntSaveActionPerformed(evt);
             }
         });
+
+        fieldTextFlowDescription.setColumns(20);
+        fieldTextFlowDescription.setRows(5);
+        jScrollPane2.setViewportView(fieldTextFlowDescription);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -275,40 +314,41 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bntEditOrCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntDeleteFlow)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(bntDeleteFlow))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(fieldTextFlowDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                                    .addComponent(fieldTextFlowName))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(fieldTextFlowName)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel6))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel5)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(fieldTextFlowId)
                                     .addComponent(fieldComboboxFlowSystem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(bntSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(bntDesce, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bntAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(bntAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(4, 4, 4))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -332,30 +372,35 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
                             .addComponent(fieldTextFlowName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(fieldTextFlowId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fieldTextFlowId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(fieldComboboxFlowSystem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(fieldTextFlowDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fieldComboboxFlowSystem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bntSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntDesce, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                                 .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bntNew)
                             .addComponent(bntEditOrCancel)
@@ -437,8 +482,45 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntNewActionPerformed
 
     private void bntSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSaveActionPerformed
-       save();
+       
+       new SwingWorker() {
+            
+            
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+               save();
+
+                
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+            
+          
+
+        }.execute();
     }//GEN-LAST:event_bntSaveActionPerformed
+
+    private void bntSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSubirActionPerformed
+        moveUpTestCases();
+    }//GEN-LAST:event_bntSubirActionPerformed
+
+    private void bntDesceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDesceActionPerformed
+        moveDownTestCases();
+    }//GEN-LAST:event_bntDesceActionPerformed
+
+    private void bntExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExcluirActionPerformed
+        deleteTestCases();
+    }//GEN-LAST:event_bntExcluirActionPerformed
+
+    private void bntAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddActionPerformed
+        openScreenAddCT();
+    }//GEN-LAST:event_bntAddActionPerformed
     
     private void loadFielsFlow(int i){
         DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectTestCase.getModel();
@@ -569,7 +651,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             FlowRN flowRN = new FlowRN();
             FlowBean fb = new FlowBean();
             DefaultListModel model = (DefaultListModel) listTestCases.getModel();
-            DefaultListModel modelSlectionTestCase = (DefaultListModel) listSelectTestCase.getModel();
+            DefaultListModel modelSelectionTestCase = (DefaultListModel) listSelectTestCase.getModel();
             
             List<String> testCases = new ArrayList<String>();
 
@@ -588,32 +670,38 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 fb.setRegisterDate(FunctiosDates.getDateActual());
                 String id = flowRN.saveFile(null, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
-                    modelSlectionTestCase.clear();
+                    modelSelectionTestCase.clear();
                 }
-                loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
-                
-                for (int i = 0; i < modelSlectionTestCase.getSize(); i++) {
-                    if (((FlowBean) model.getElementAt(i)).getId().equals(id)) {
-                        listSelectTestCase.getSelectionModel().setSelectionInterval(i, i);
-                        loadFielsFlow(i);
-                    }
-                }
+//                loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
+//                
+//                for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
+//                    if (((FlowBean) model.getElementAt(i)).getId().equals(id)) {
+//                        listSelectTestCase.getSelectionModel().setSelectionInterval(i, i);
+//                        loadFielsFlow(i);
+//                    }
+//                }
+                cleanFilds();
+                setEnableComponents(false);
+                setEnableComponentsSearch(true);
+                bntNew.setText("Novo");
             } else {
-                fb.setRegisterDate(((FlowBean)modelSlectionTestCase.getElementAt(listSelectTestCase.getSelectedIndex())).getRegisterDate());
+                fb.setRegisterDate(((FlowBean)modelSelectionTestCase.getElementAt(listSelectTestCase.getSelectedIndex())).getRegisterDate());
                 flowRN.saveFile(fb.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
-                    modelSlectionTestCase.clear();
+                    modelSelectionTestCase.clear();
                 }
                 loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
-                for (int i = 0; i < modelSlectionTestCase.getSize(); i++) {
-                    if (((FlowBean) modelSlectionTestCase.getElementAt(i)).getId().equals(fb.getId())) {
+                for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
+                    if (((FlowBean) modelSelectionTestCase.getElementAt(i)).getId().equals(fb.getId())) {
                         listSelectTestCase.getSelectionModel().setSelectionInterval(i, i);
                         loadFielsFlow(i);
                     }
                 }
                 loadFielsFlow(listSelectTestCase.getSelectedIndex());
+                modeEdit(false);
+                bntEditOrCancel.setText("Editar");
             }
-            modeEdit(false);
+           
             bntNew.setEnabled(true);
             bntDeleteFlow.setEnabled(true);
             JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Informação", JOptionPane.INFORMATION_MESSAGE);
@@ -639,26 +727,119 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     }
     
     private void newFlow(){
-        
-        if(bntNew.getText().equals("Novo")){
-            setEnableComponentsSearch(false);
-            setEnableFields(true);
-            bntDeleteFlow.setEnabled(false);
-            bntEditOrCancel.setEnabled(false);
-            bntSave.setEnabled(true);
-            bntNew.setText("Cancelar");
+        try {
             
-        }else{
-            setEnableComponentsSearch(true);
-            setEnableFields(false);
-            bntDeleteFlow.setEnabled(true);
-            bntEditOrCancel.setEnabled(true);
-            bntSave.setEnabled(false);
-            bntNew.setText("Novo");
-            
+            if (bntNew.getText().equals("Novo")) {
+                setEnableFields(true);
+                setEnableComponentsSearch(false);
+                bntDeleteFlow.setEnabled(false);
+                bntEditOrCancel.setEnabled(false);
+                bntSave.setEnabled(true);
+                bntAdd.setEnabled(true);
+                bntExcluir.setEnabled(true);
+                bntSubir.setEnabled(true);
+                bntDesce.setEnabled(true);
+                bntNew.setText("Cancelar");
+
+            } else {
+                setEnableFields(false);
+                setEnableComponentsSearch(true);
+                bntDeleteFlow.setEnabled(true);
+                bntEditOrCancel.setEnabled(true);
+                bntSave.setEnabled(false);
+                bntAdd.setEnabled(false);
+                bntExcluir.setEnabled(false);
+                bntSubir.setEnabled(false);
+                bntDesce.setEnabled(false);
+                bntNew.setText("Novo");
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
         }
         
     }
+    
+    private void moveUpTestCases() {
+        try {
+            DefaultListModel model = (DefaultListModel) listTestCases.getModel();
+            Object obj = listTestCases.getSelectedValue();
+            if (obj != null) {
+                int index = listTestCases.getSelectedIndex();
+                if (index != 0) {
+                    model.remove(index);
+                    model.add(index - 1, obj);
+                    listTestCases.setSelectedIndex(index - 1);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
+        }
+    }
+    
+     private void moveDownTestCases() {
+        try {
+            DefaultListModel model = (DefaultListModel) listTestCases.getModel();
+            Object obj = listTestCases.getSelectedValue();
+            int size = model.size()-1;
+            if (obj != null) {
+                int index = listTestCases.getSelectedIndex();
+                if (size != index) {
+                    model.remove(index);
+                    model.add(index + 1, obj);
+                    listTestCases.setSelectedIndex(index + 1);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
+        }
+    }
+     private void deleteTestCases(){
+         try {
+         DefaultListModel model = (DefaultListModel) listTestCases.getModel();
+         Object [] itens = listTestCases.getSelectedValues();
+         for(int i =0; i < itens.length; i++){
+             model.removeElement(itens[i]);
+         }
+         } catch (Exception ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
+        }
+         
+     }
+     
+     private void openScreenAddCT(){
+        try {
+            ChooseTestCaseTsToFlowScreenView view = new ChooseTestCaseTsToFlowScreenView(fieldComboboxFlowSystem.getSelectedItem().toString(), this,null,true);
+//            view.centralizaJanela();
+            view.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+     }
+     
+     public void addCT(List<String> cts){
+         DefaultListModel model = (DefaultListModel) listTestCases.getModel();
+         for (String ct : cts) {
+//             fieldTextFlowDescription.setText(fieldTextFlowDescription.getText()+"\n"+ct.substring(ct.indexOf("-")));
+             //ct.substring(0,ct.indexOf("-"))
+             model.addElement(ct);
+         }
+     }
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -672,7 +853,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private javax.swing.JButton bntSearch;
     private javax.swing.JButton bntSubir;
     private javax.swing.JComboBox<String> fieldComboboxFlowSystem;
-    private javax.swing.JTextField fieldTextFlowDescription;
+    private javax.swing.JTextArea fieldTextFlowDescription;
     private javax.swing.JTextField fieldTextFlowId;
     private javax.swing.JTextField fieldTextFlowName;
     private javax.swing.JComboBox<String> jComboBoxSistemas;
@@ -683,7 +864,10 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldNome;
@@ -694,6 +878,8 @@ public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
+
+    
 
 
 }
