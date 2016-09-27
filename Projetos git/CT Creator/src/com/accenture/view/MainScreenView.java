@@ -230,10 +230,10 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(menuImportarExportar);
 
-        jMenu4.setText("Funcionalidades");
+        jMenu4.setText("Fluxos");
 
-        jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, 0));
-        jMenuItemFuncionalidade.setText("Gerenciar Funcionalidades");
+        jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItemFuncionalidade.setText("Gerenciar Fluxos");
         jMenuItemFuncionalidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFuncionalidadeActionPerformed(evt);

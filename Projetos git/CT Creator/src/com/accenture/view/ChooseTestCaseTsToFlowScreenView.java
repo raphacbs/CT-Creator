@@ -42,6 +42,8 @@ import javax.swing.table.TableRowSorter;
 import org.tmatesoft.svn.core.SVNException;
 import com.accenture.filter.TableFilterHeader;
 import com.accenture.filter.TableFilterHeader.Position;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 
 /**
@@ -69,12 +71,14 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         setTitle("Selecionar Caso de Teste para adiciona-lo no fluxo");
         this.system = system;
         this.flowView = flowView;
-
+        
         new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                setVisible(true);
+                
+                filterTable();
                 atualizaTabelaCT(system);
+                setVisible(true);
                 return null;
             }
 
@@ -100,8 +104,13 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaSelecioneCT = new javax.swing.JTable();
-        bntCopiar = new javax.swing.JButton();
+        bntAplica = new javax.swing.JButton();
         bntCancelar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        DefaultListModel modelListTestCases =  new DefaultListModel();
+        jList1 = new JList(modelListTestCases);
+        bntAdd = new javax.swing.JButton();
+        bntRemover = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Selecione o CT que deseja adicionar");
@@ -140,10 +149,8 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         tabelaSelecioneCT.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaSelecioneCT);
         if (tabelaSelecioneCT.getColumnModel().getColumnCount() > 0) {
-            tabelaSelecioneCT.getColumnModel().getColumn(0).setPreferredWidth(60);
-            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(170);
-            tabelaSelecioneCT.getColumnModel().getColumn(2).setPreferredWidth(90);
-            tabelaSelecioneCT.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(600);
+            tabelaSelecioneCT.getColumnModel().getColumn(3).setResizable(false);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setMinWidth(0);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setPreferredWidth(0);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setMaxWidth(0);
@@ -155,10 +162,10 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         filterHeader = new TableFilterHeader(tabelaSelecioneCT, AutoChoices.ENABLED);
         filterHeader.setPosition(Position.TOP);
 
-        bntCopiar.setText("Adicionar");
-        bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
+        bntAplica.setText("Aplicar");
+        bntAplica.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bntCopiarMouseClicked(evt);
+                bntAplicaMouseClicked(evt);
             }
         });
 
@@ -169,36 +176,67 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
             }
         });
 
+        jScrollPane2.setViewportView(jList1);
+
+        bntAdd.setText("ADD");
+        bntAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntAddActionPerformed(evt);
+            }
+        });
+
+        bntRemover.setText("Remover");
+        bntRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntRemoverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bntCopiar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bntCancelar)
-                .addGap(467, 467, 467))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1015, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bntRemover))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bntAplica)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bntCancelar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntCopiar)
-                    .addComponent(bntCancelar))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bntAplica)
+                            .addComponent(bntCancelar))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bntRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -208,7 +246,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_bntCancelarActionPerformed
 
-    private void bntCopiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCopiarMouseClicked
+    private void bntAplicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntAplicaMouseClicked
 
         new SwingWorker() {
             
@@ -243,18 +281,85 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
 
 
 
-    }//GEN-LAST:event_bntCopiarMouseClicked
+    }//GEN-LAST:event_bntAplicaMouseClicked
+
+    private void bntAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddActionPerformed
+       addCTList();
+    }//GEN-LAST:event_bntAddActionPerformed
+
+    private void bntRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntRemoverActionPerformed
+          new SwingWorker() {
+            
+            
+
+            @Override
+            protected Object doInBackground() throws Exception {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                deleteTestCases();
+
+                
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+            
+          
+
+        }.execute();
+    }//GEN-LAST:event_bntRemoverActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bntAdd;
+    private javax.swing.JButton bntAplica;
     private javax.swing.JButton bntCancelar;
-    private javax.swing.JButton bntCopiar;
+    private javax.swing.JButton bntRemover;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tabelaSelecioneCT;
     // End of variables declaration//GEN-END:variables
     
+     private void deleteTestCases(){
+         try {
+         DefaultListModel model = (DefaultListModel) jList1.getModel();
+         Object [] itens = jList1.getSelectedValues();
+         for(int i =0; i < itens.length; i++){
+             model.removeElement(itens[i]);
+         }
+         } catch (Exception ex) {
+            Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+
+        }
+         
+     }
     
+    
+    private void addCTList() {
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+
+        List<String> cts = new ArrayList<String>();
+
+        int[] selects = tabelaSelecioneCT.getSelectedRows();
+        for (int i = 0; i < tabelaSelecioneCT.getSelectedRowCount(); i++) {
+            for (TestCaseTSPropertiesBean bean : listProperties) {
+                if (bean.getHashCode() == Integer.parseInt(tabelaSelecioneCT.getValueAt(selects[i], 4).toString())) {
+                    cts.add(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 0).toString() + "-" + tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 1).toString());
+                }
+            }
+
+        }
+
+        for (String ct : cts) {
+            model.addElement(ct);
+        }
+    }
     
     public void filterTable(){
         DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
@@ -309,7 +414,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
                 System.out.println("CAPTURANDO URL: " + listTemp.get(i).getDirEntry().getURL());
                 String dataFormatada = sdf.format(listTemp.get(i).getDirEntry().getDate());
 
-                model.addRow(new String[]{id, nameCT, modifyBy, dataFormatada, hashCode+""});
+                model.addRow(new Object[]{id, nameCT, modifyBy, dataFormatada, hashCode});
             }
 
         } catch (SVNException ex) {
@@ -373,18 +478,33 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
     
     
     private void addCT() {
-        DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
+//        DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
         List<String> cts = new ArrayList<String>();
-        int [] selects = tabelaSelecioneCT.getSelectedRows();
-        for (int i = 0; i < tabelaSelecioneCT.getSelectedRowCount(); i++) {
-            for(TestCaseTSPropertiesBean bean : listProperties){
-                if(bean.getHashCode() == Integer.parseInt(tabelaSelecioneCT.getValueAt(selects[i],4).toString()))
-                    cts.add(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 0).toString()+"-"+tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 1).toString());
-            }
-            
-            
+//        
+//        int [] selects = tabelaSelecioneCT.getSelectedRows();
+//        for (int i = 0; i < tabelaSelecioneCT.getSelectedRowCount(); i++) {
+//            for(TestCaseTSPropertiesBean bean : listProperties){
+//                if(bean.getHashCode() == Integer.parseInt(tabelaSelecioneCT.getValueAt(selects[i],4).toString()))
+//                    cts.add(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 0).toString()+"-"+tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 1).toString());
+//            }
+//            
+//            
+//        }
+        
+//        for (int i = 0; i < tabelaSelecioneCT.getRowCount(); i++) {
+//            boolean select = (boolean) tabelaSelecioneCT.getValueAt(i, 5);
+//            if(select){
+//                cts.add(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 0).toString()+"-"+tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRows()[i], 1).toString());
+//            }
+//        }
+
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+        
+        for (int i = 0; i <model.getSize(); i++) {
+            cts.add(model.getElementAt(i).toString());
         }
-       
+        
+        
         flowView.addCT(cts);
         this.dispose();
     }

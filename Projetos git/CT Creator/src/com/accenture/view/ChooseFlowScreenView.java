@@ -5,6 +5,7 @@
  */
 package com.accenture.view;
 
+import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.FlowBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.ts.rn.FlowRN;
@@ -48,6 +49,7 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
                 protected Object doInBackground() {
                                       
                     loadComboTS();
+                    addIconInButton();
                     
                     
                     
@@ -248,11 +250,12 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
                         .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fieldTextFlowName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(fieldTextFlowId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(fieldTextFlowName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6)
+                                .addComponent(fieldTextFlowId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
@@ -477,6 +480,11 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    private void addIconInButton() {
+        ButtonIconBean iconBean = new ButtonIconBean();
+        bntSearch.setIcon(iconBean.getIconBntSearchCt());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

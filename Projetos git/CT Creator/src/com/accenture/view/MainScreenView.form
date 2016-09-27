@@ -165,15 +165,15 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Funcionalidades"/>
+            <Property name="text" type="java.lang.String" value="Fluxos"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFuncionalidade">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F"/>
+                  <KeyStroke key="Alt+F"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Gerenciar Funcionalidades"/>
+                <Property name="text" type="java.lang.String" value="Gerenciar Fluxos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFuncionalidadeActionPerformed"/>
