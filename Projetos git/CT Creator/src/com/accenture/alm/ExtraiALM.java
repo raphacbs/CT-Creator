@@ -75,9 +75,10 @@ public class ExtraiALM {
 //        Design Steps
 //        String requirementsUrl = con.buildEntityCollectionUrl("test");
 //        String defectsUrl = conStep.buildEntityCollectionUrl("designstep");
-         String testLabUrl = con.buildEntityCollectionUrl("test");
+         String testLabUrl = con.buildEntityCollectionUrl("design");
         
-         String designUrl = con.buildEntityCollectionUrl("design-step");
+         String designUrl = con.buildEntityCollectionUrl("defect");
+         
         
 
 //        String testLab = con.buildEntityCollectionUrl(testLabUrl);

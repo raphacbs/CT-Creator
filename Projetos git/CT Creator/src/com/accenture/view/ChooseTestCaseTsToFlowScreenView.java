@@ -5,6 +5,7 @@
  */
 package com.accenture.view;
 
+import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
@@ -77,6 +78,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
             protected Object doInBackground() throws Exception {
                 
                 filterTable();
+                addIcons();
                 atualizaTabelaCT(system);
                 setVisible(true);
                 return null;
@@ -178,14 +180,12 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
 
         jScrollPane2.setViewportView(jList1);
 
-        bntAdd.setText("ADD");
         bntAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntAddActionPerformed(evt);
             }
         });
 
-        bntRemover.setText("Remover");
         bntRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntRemoverActionPerformed(evt);
@@ -216,6 +216,9 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
                 .addComponent(bntCancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAdd, bntRemover});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -238,6 +241,8 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
                         .addComponent(bntRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bntAdd, bntRemover});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -507,6 +512,12 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         
         flowView.addCT(cts);
         this.dispose();
+    }
+    
+    private void addIcons(){
+        ButtonIconBean iconBean = new ButtonIconBean();
+        bntAdd.setIcon(iconBean.getIconBntAddCtDefault());
+        bntRemover.setIcon(iconBean.getIconBntRemoveCt());
     }
 
 }
