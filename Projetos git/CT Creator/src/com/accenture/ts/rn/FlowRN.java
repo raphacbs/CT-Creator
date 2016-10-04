@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -212,6 +213,27 @@ public class FlowRN {
     
     public List<SVNDirEntry> getEntries() throws SVNException, IOException{
         return workflowDAO.getEntriesWorkflow();
+    }
+    
+    public String deleteFlow(List<FlowBean> flows) throws SVNException{
+        List<String> flowNames = new ArrayList<String>();
+        
+        for (FlowBean flow : flows) {
+            if(workflowDAO.isLock(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY)){
+                if(unLockFile(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY)){
+                    flowNames.add(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
+                }else{
+                    return "O fluxo "+flow.getName()+" está bloqueado pelo usuário "+getUserLock(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
+
+                }
+            }else{
+                flowNames.add(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
+            }
+            
+        }     
+        
+        workflowDAO.deleteFile(flowNames);
+        return null;
     }
         
     

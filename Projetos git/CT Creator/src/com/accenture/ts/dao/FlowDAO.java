@@ -65,8 +65,12 @@ public class FlowDAO extends FrameworkSvnManager{
         return isWorkingCopyRoot(pathWC);
     }
     
-    public void deleteFile(String nameFile) throws SVNException{
-        delete(clientManager, ProjectSettings.PATH_FILE_FLUXO+"/"+nameFile, true);
+    public void deleteFile(List<String> nameFiles) throws SVNException{
+        
+        for(int i = 0; i < nameFiles.size(); i++){
+             delete(clientManager, ProjectSettings.PATH_FILE_FLUXO+"/"+nameFiles.get(i), true);
+        }
+       
         commitChanged(clientManager, ProjectSettings.PATH_FILE_FLUXO, true, "Commit realizado pelo método deleteFile()");
     }
     
@@ -91,7 +95,7 @@ public class FlowDAO extends FrameworkSvnManager{
     
     public String getUserLock(String nameFile) throws SVNException{
         SVNStatus status = getStatus(clientManager, ProjectSettings.PATH_FILE_FLUXO+"/"+nameFile);
-        return status.getLocalLock().getOwner();
+        return status.getRemoteLock().getOwner();
     }
 
     public String getUsername() {

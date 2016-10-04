@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author raphael.da.silva
  */
-public class FlowBean {
+public class FlowBean implements Comparable<FlowBean> {
     
     private String id;
     private String name;
@@ -76,7 +76,17 @@ public class FlowBean {
         return  name+" - "+system;
     }
     
-    
+     @Override
+     public int compareTo(FlowBean outroFlow) {
+         
+         int sistema = this.getSystem().compareToIgnoreCase(outroFlow.getSystem());
+         if (sistema !=0) return sistema;
+         
+         int name = this.getName().compareToIgnoreCase(outroFlow.getName());
+         if(name != 0)return name;
+         
+         return this.getRegisterDate().compareTo(outroFlow.getRegisterDate());
+     }
     
     
     

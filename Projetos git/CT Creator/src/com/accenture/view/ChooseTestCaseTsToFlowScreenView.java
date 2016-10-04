@@ -266,9 +266,10 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-                if (tabelaSelecioneCT.getSelectedRowCount() == 0) {
+                DefaultListModel model = (DefaultListModel) jList1.getModel();
+                if (model.getSize()<=0) {
                     aguarde.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Favor adicione pelo menos um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     
                    addCT();
