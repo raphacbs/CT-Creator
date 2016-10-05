@@ -437,7 +437,7 @@ public class FilterTestCaseTSForPlanScreenView extends java.awt.Dialog {
             }
             
             guiInstanceCT.cleanFields();
-            guiInstanceCT.loadTableCt(listTestCaseTSPropertiesBean);
+            guiInstanceCT.loadTableCt(listTestCaseTSPropertiesBean, true);
         } catch (SVNException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {

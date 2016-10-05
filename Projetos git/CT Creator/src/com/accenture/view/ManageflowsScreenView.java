@@ -73,40 +73,50 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     
     private void loadFlows(String name, String system){
         try{
+            labelQtdFluxos.setText("Total de fluxos:  "+0);
             FlowRN flowRN = new FlowRN();
             DefaultListModel modelFlow = (DefaultListModel) listSelectTestCase.getModel();
             List<SVNDirEntry> list = flowRN.getEntries();       
             List<FlowBean> flowBeans = new ArrayList<FlowBean>();
+            refreshLabelStatus("Aguarde, atualizando lista de fluxos...");
             
             for (SVNDirEntry sVNDirEntry : list) {  
-                flowBeans.add(flowRN.getFile(sVNDirEntry.getName()));           
+                flowBeans.add(flowRN.getFile(sVNDirEntry.getName()));
+                
             }
             
             Collections.sort(flowBeans);
-
+            
+            
             
             for (int i =0; i < flowBeans.size();i++) {
                 if(name.isEmpty() && system.isEmpty()){
                     modelFlow.addElement(flowBeans.get(i));
+                    refreshLabelStatus("Carregando: "+flowBeans.get(i).getName());
                 }else if(name.isEmpty()){
                     if(flowBeans.get(i).getSystem().equalsIgnoreCase(system)){
                         modelFlow.addElement(flowBeans.get(i));
+                        refreshLabelStatus("Carregando: "+flowBeans.get(i).getName());
                     }
                 }else if(system.isEmpty()){
                     if(flowBeans.get(i).getName().contains(name)){
                         modelFlow.addElement(flowBeans.get(i));
+                        refreshLabelStatus("Carregando: "+flowBeans.get(i).getName());
                     }
                 }else{
                     if(flowBeans.get(i).getName().contains(name) && flowBeans.get(i).getSystem().equalsIgnoreCase(system)){
                         modelFlow.addElement(flowBeans.get(i));
+                        refreshLabelStatus("Carregando: "+flowBeans.get(i).getName());
                     }
                 }
-                    
-                    
+                
             }
+            listSelectTestCase.repaint();
+            labelQtdFluxos.setText("Total de fluxos:  "+modelFlow.size());
+            refreshLabelStatus("Lista de fluxos carregada.");
             
         }catch(Exception ex){
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -129,9 +139,9 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             
             
         } catch (SVNException ex) {
-           addExceptionTextArea(ex);
+           addLogTextArea(ex);
         } catch (IOException ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
         }
 
     }
@@ -184,6 +194,8 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         fieldTextFlowDescription = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         labelQtdCts = new javax.swing.JLabel();
+        labelStatus = new javax.swing.JLabel();
+        labelQtdFluxos = new javax.swing.JLabel();
 
         jMenuItem1.setText("Teste");
         jPopupMenu1.add(jMenuItem1);
@@ -356,14 +368,18 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         fieldTextFlowDescription.setRows(5);
         jScrollPane2.setViewportView(fieldTextFlowDescription);
 
-        jButton1.setText("...");
+        jButton1.setText("LOG");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        labelQtdCts.setText("Quantidade CTs:");
+        labelQtdCts.setText("Total de CTs:");
+
+        labelStatus.setText("Status:");
+
+        labelQtdFluxos.setText("Total de fluxos:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -371,22 +387,24 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(14, 14, 14))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxSistemas, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bntSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(14, 14, 14))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBoxSistemas, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(bntSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelQtdFluxos, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -409,17 +427,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(bntNew)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(bntSave)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(bntEditOrCancel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntDeleteFlow)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -430,7 +438,17 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                             .addComponent(bntExcluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bntAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bntDesce, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bntSubir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(bntSubir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bntNew)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bntSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bntEditOrCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntDeleteFlow)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -451,7 +469,10 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel2)))
                             .addComponent(bntSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1))
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelQtdFluxos)
+                        .addGap(15, 15, 15))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -483,10 +504,11 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 44, Short.MAX_VALUE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                                .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelStatus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bntNew)
                             .addComponent(bntEditOrCancel)
@@ -504,10 +526,11 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextFieldNomeActionPerformed
 
     private void bntSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSearchActionPerformed
-//        new SwingWorker() {
-//
-//            @Override
-//            protected Object doInBackground() throws Exception {
+        new SwingWorker() {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                refreshLabelStatus("Aguarde, atualizando lista de fluxos...");
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 if (listSelectTestCase.getModel().getSize() > 0) {
                     DefaultListModel modelFlow = (DefaultListModel) listSelectTestCase.getModel();
@@ -517,16 +540,17 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
                 
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-//
-//                return null;
-//            }
-//
-//            @Override
-//            protected void done() {
-//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-//            }
-//
-//        }.execute();
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                listSelectTestCase.repaint();
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+        }.execute();
         
         
         
@@ -558,6 +582,8 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                     if (listSelectTestCase.getSelectedIndices().length == 1) {
                         if (bntEditOrCancel.getText().equals("Editar")) {
                             if (modeEdit(true)) {
+                                refreshLabelStatus("Editando fluxo...");
+                                addLogTextArea("Editando fluxo...");
                                 bntNew.setEnabled(false);
                                 bntEditOrCancel.setText("Cancelar");
                                 bntSave.setEnabled(true);
@@ -566,6 +592,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                             }
                         } else if (bntEditOrCancel.getText().equals("Cancelar")) {
                             if (modeEdit(false)) {
+                                
                                 bntNew.setEnabled(true);
                                 bntSave.setEnabled(false);
                                 bntEditOrCancel.setText("Editar");
@@ -573,14 +600,17 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                                 bntDeleteFlow.setEnabled(true);
                                 editing = false;
                                 loadFielsFlow(listSelectTestCase.getSelectedIndex());
+                                refreshLabelStatus("Edição cancelada...");
+                                addLogTextArea("Edição cancelada...");
                             }
                         }
                     } else {
                         cleanFilds();
-                        
+                        refreshLabelStatus("Selecione apenas um fluxo");
                         JOptionPane.showMessageDialog(null, "Por favor, selecione apenas uma funcionalidade para edita-lá", "Atenção", JOptionPane.WARNING_MESSAGE);
                     }
                 } else {
+                    refreshLabelStatus("Selecione um fluxo");
                     JOptionPane.showMessageDialog(null, "Por favor, selecione uma funcionalidade para edita-lá", "Atenção", JOptionPane.WARNING_MESSAGE);
                 }
 
@@ -598,6 +628,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private void bntDeleteFlowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDeleteFlowActionPerformed
                
         try {
+            refreshLabelStatus("Aguarde, excluindo fluxo...");
             if (listSelectTestCase.getSelectedIndex() != -1) {
                 if(JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) fluxos selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                     getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -615,7 +646,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -661,28 +692,28 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
 
     private void bntExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExcluirActionPerformed
         
-//         new SwingWorker() {
-//            
-//            
-//
-//            @Override
-//            protected Object doInBackground() throws Exception {
-//            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+         new SwingWorker() {
+            
+            
+
+            @Override
+            protected Object doInBackground() throws Exception {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 deleteTestCases();
                 refreshQTDCTs();
-//
-//                
-//                return null;
-//            }
-//
-//            @Override
-//            protected void done() {
-//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-//            }
-//            
-//          
-//
-//        }.execute();
+
+                
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+            
+          
+
+        }.execute();
     }//GEN-LAST:event_bntExcluirActionPerformed
 
     private void bntAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddActionPerformed
@@ -796,7 +827,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             String nameFile = fb.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY;
             
             if(active){
-                
+                if(flowRN.verifyExistFile(nameFile)){
                 //tenta bloquear o arquivo
                 if(flowRN.lockFile(nameFile)){
                     setEnableComponents(active);
@@ -806,6 +837,11 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 }else{
                     JOptionPane.showMessageDialog(null, "A funicionalidade está bloqueada pelo usuário: "+flowRN.getUserLock(fb.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY)+"\n"
                             + "para editar tente novamente mais tarde! ", "Atenção", JOptionPane.WARNING_MESSAGE);
+                    editing = false;
+                    return false;
+                }
+                }else{
+                    JOptionPane.showMessageDialog(null, "A funicionalidade foi excluída, favor atualize a lista. ", "Atenção", JOptionPane.WARNING_MESSAGE);
                     editing = false;
                     return false;
                 }
@@ -826,24 +862,27 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             
             
         } catch (IOException ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao manipular algum arquivo, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            editing = false;
             return false;
 
         } catch (SVNException ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ocorreu um erro com o SVN, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            editing = false;
             return false;
 
         }   catch (Exception ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
+            editing = false;
             return false;
         }       
         
@@ -877,10 +916,12 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             fb.setName(fieldTextFlowName.getText());
             fb.setSystem(fieldComboboxFlowSystem.getSelectedItem().toString());
             
+            
 
             fb.setTestCases(testCases);
 
             if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
+                refreshLabelStatus("Salvando novo fluxo...");
                 fb.setRegisterDate(FunctiosDates.getDateActual());
                 String id = flowRN.saveFile(null, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
@@ -900,7 +941,11 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 setEnableComponentsSearch(true);
                 bntNew.setText("Novo");
                 editing=false;
+                refreshLabelStatus("novo fluxo cadastrado.");
+                addLogTextArea("Novo fluxo cadastrado"+fb.toString());
             } else {
+                refreshLabelStatus("salvando alterações do fluxo.");
+                addLogTextArea("salvando alterações do fluxo."+fb.toString());
                 fb.setRegisterDate(((FlowBean)modelSelectionTestCase.getElementAt(listSelectTestCase.getSelectedIndex())).getRegisterDate());
                 flowRN.saveFile(fb.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
@@ -916,6 +961,8 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 loadFielsFlow(listSelectTestCase.getSelectedIndex());
                 modeEdit(false);
                 bntEditOrCancel.setText("Editar");
+                refreshLabelStatus("alterações do fluxo concluidas.");
+                addLogTextArea("alterações do fluxo concluidas.."+fb.toString());
             }
            
             bntNew.setEnabled(true);
@@ -928,20 +975,23 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 return false;
             }
         } catch (SVNException ex) {
-            addExceptionTextArea(ex);
+            refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro com o SVN, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
 
         } catch (IOException ex) {
-            addExceptionTextArea(ex);
+            refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao manipular algum arquivo, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
         } catch (Exception ex) {
-            addExceptionTextArea(ex);
+            refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -963,7 +1013,9 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 bntSubir.setEnabled(true);
                 bntDesce.setEnabled(true);
                 bntNew.setText("Cancelar");
-                fieldTextFlowId.setText("");
+                cleanFilds();
+                addLogTextArea("usuário iniciou cadastro de um novo fluxo.");
+                refreshLabelStatus("usuário iniciou cadastro de um novo fluxo.");
 
             } else {
                 setEnableFields(false);
@@ -976,10 +1028,12 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 bntSubir.setEnabled(false);
                 bntDesce.setEnabled(false);
                 bntNew.setText("Novo");
+                addLogTextArea("usuário cancelou cadastro de um novo fluxo.");
+                refreshLabelStatus("usuário cancelou cadastro de um novo fluxo.");
 
             }
         } catch (Exception ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -1001,7 +1055,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -1023,7 +1077,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            addExceptionTextArea(ex);
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -1038,7 +1092,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
              model.removeElement(itens[i]);
          }
          } catch (Exception ex) {
-             addExceptionTextArea(ex);
+             addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -1049,12 +1103,14 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
      
      private void openScreenAddCT(){
         try {
+            refreshLabelStatus("Abrindo janela de cts...");
             ChooseTestCaseTsToFlowScreenView view = new ChooseTestCaseTsToFlowScreenView(fieldComboboxFlowSystem.getSelectedItem().toString(), this,null,true);
 //            view.centralizaJanela();
 //            view.setVisible(true);
             
         } catch (ClassNotFoundException ex) {
-            addExceptionTextArea(ex);
+            refreshLabelStatus("Erro na tentativa de abrir janelas cts, verifique detalhes no log");
+            addLogTextArea(ex);
             Logger.getLogger(ManageflowsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -1071,12 +1127,16 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
          refreshQTDCTs();
      }
      
-    private void addExceptionTextArea(Exception ex){
+    private void addLogTextArea(Exception ex){
          StringWriter sw = new StringWriter();
          PrintWriter pw = new PrintWriter(sw);
          ex.printStackTrace(pw);
          String exceptionText = sw.toString();                       
-         statusTextArea.setText(exceptionText);
+         statusTextArea.setText(statusTextArea.getText()+"\n"+exceptionText);
+    }
+    
+    private void addLogTextArea(String text){
+        statusTextArea.setText(statusTextArea.getText()+"\n"+text);
     }
     
     private void addIconInButton() {
@@ -1108,10 +1168,37 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         
         String retorno = flowRN.deleteFlow(flows);
         if(retorno!=null){
+            refreshLabelStatus(retorno);
+            addLogTextArea(retorno);
             JOptionPane.showMessageDialog(null, ""+retorno, "Exclusão do fluxo não permitida", JOptionPane.WARNING_MESSAGE);
         }
         
     }
+    
+    private void refreshLabelStatus(String text){
+        new SwingWorker() {
+            
+            
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                labelStatus.setText("Status: "+text);   
+                
+                
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                labelStatus.repaint();
+            }
+            
+          
+
+        }.execute();
+    }
+    
+    
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1148,6 +1235,8 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JLabel labelQtdCts;
+    private javax.swing.JLabel labelQtdFluxos;
+    private javax.swing.JLabel labelStatus;
     private javax.swing.JList<String> listSelectTestCase;
     private javax.swing.JList<String> listTestCases;
     private javax.swing.JTextArea statusTextArea;

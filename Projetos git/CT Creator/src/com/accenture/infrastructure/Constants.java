@@ -17,7 +17,7 @@ public class Constants {
     public static final String HOST = "10.58.176.175";
     public static final String PORT = "8080";
     public static final String USERNAME = "TR358126";
-    public static final String PASSWORD = "qwe07poi";
+    public static final String PASSWORD = "qwe01poi";
     public static final String DOMAIN = "AUXILIARES";
     public static final String PROJECT = "AUTOM_ACC";
     public static final boolean VERSIONED = true;

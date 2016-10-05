@@ -60,99 +60,41 @@ public class ExtraiALM {
         if (login.isAuthenticated() == null) {
             System.out.println("we're logged in - no url was returned from isAuthenticated");
         }
-        //And now we logout
-//        login.logout();
+ 
 
-        //And now we can see that we are indeed logged out - because isAuthenticated once again returns a URL, and not null.
-//        if (login.isAuthenticated() != null) {
-//            System.out.println("user and password successfully logged out, cookies: "
-//                               + con.getCookieString());
-//        }
-//        else {
-//            System.out.println("logout failed.");
-//        }
-//        
-//        Design Steps
-//        String requirementsUrl = con.buildEntityCollectionUrl("test");
-//        String defectsUrl = conStep.buildEntityCollectionUrl("designstep");
-         String testLabUrl = con.buildEntityCollectionUrl("design");
-        
-         String designUrl = con.buildEntityCollectionUrl("defect");
-         
-        
+         String testLabUrl = con.buildEntityCollectionUrl("test-instances");
 
-//        String testLab = con.buildEntityCollectionUrl(testLabUrl);
-//
-//        System.out.println("Projeto: " + con.getProject());
-//        System.out.println("String TestLAb: " + testLabUrl);
-//        System.out.println("String conStep: " + defctsUrl);
-         
-         System.out.println("String conStep: " + designUrl);
-
-        //Read a simple resource. This example is not an entity.
-//        String resourceWeWantToRead = con.buildUrl("qcbin/rest/server");
         String resourceWeWantToRead = con.buildUrl("qcbin/rest/server");
 
-//        defectsUrl = conStep.buildUrl("qcbin/rest/domains/OI/projects/Rep_Central3");
+
         Map<String, String> requestHeaders = new HashMap<String, String>();
         requestHeaders.put("Accept", "application/xml");
         String responseStr = con.httpGet(resourceWeWantToRead, null, requestHeaders).toString();
         System.out.println("server properties from rest: " + responseStr.trim());
-//        System.out.println("cookies after first service (creates an implicit session on the server, delivered using the cookie QCSession):"
-//                           + con.getCookieString());
+
 
         //Query a collection of entities:
         StringBuilder b = new StringBuilder();
         //The query: "where field name starts with r"
-       b.append("query={name['*wf_extrai_debito_bll_to_dw*']}");
-//        b.append("query={name['*validar*'];user-template-24[Baixa%20or%20Alta]}");
-//        b.append("query={user-template-01['**']}");
-//        b.append("user-template-01['**']");
+        b.append("query={name['*a*']}");
         //The fields to display: id, name
         b.append("&fields=name");
         //The sort order: descending by ID (highest ID first)
         b.append("&order-by={id[DESC]}");
         //Display 10 results
-//        b.append("&page-size=1");
+        b.append("&page-size=1");
         //Counting from the 1st result, inclusive
 //        b.append("&start-index=1");
 
         System.out.println("QUERY: " + b.toString());
 
-//        con.httpGet(testLabUrl, b.toString(), requestHeaders);
-//        conStep.httpGet(defectsUrl, b.toString(), requestHeaders);
-
-        String listFromCollectionAsXml
-                = con.httpGet(designUrl, null, requestHeaders).toString();
-
-//        String listFromCollectionAsXmlDefects
-//                = con.httpGet(defectsUrl, b.toString(), requestHeaders).toString();
-//
         String listFromCollectionAsXmlTests
-                = con.httpGet(testLabUrl, b.toString(), requestHeaders).toString();
+                = con.httpGet(testLabUrl, null, requestHeaders).toString();
 
-        System.out.println("Steps : " + listFromCollectionAsXml);
-
-        System.out.println("Lista de CTs : " + listFromCollectionAsXmlTests);
-//        System.out.println("response for list requirements: " + listFromCollectionAsXml);
-//        System.out.println("Lista de desing: " + listFromCollectionAsXmlDefects);
-        //Read the entity we generated in the above step. Perform a get operation on its URL.
-//        String postedEntityReturnedXml =
-//                con.httpGet(newCreatedResourceUrl, null, requestHeaders).toString();
-//        System.out.println("response for retrieving entity: " + postedEntityReturnedXml.trim());
-        //xml -> class instance
-//        Entity entity = EntityMarshallingUtils.marshal(Entity.class, listFromCollectionAsXmlTests);
-        //Now show that you can do something with that object
-//        List<Field> fields = entity.getFields().getField();
-//        System.out.print("listing fields from marshalled object: ");
-//        for (Field field : fields) {
-//            System.out.print(field.getName() + "=" + field.getValue() + ", ");
-//        }
-//        System.out.println("");
-        //cleanup
-//        writeExample.deleteEntity(newCreatedResourceUrl).toString().trim();
+  
+        System.out.println("Defects : " + listFromCollectionAsXmlTests);
         
-      
+
 
         login.logout();
 

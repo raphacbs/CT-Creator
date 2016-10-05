@@ -11,9 +11,11 @@ import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.ts.rn.FlowRN;
 import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -127,7 +129,6 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
 
         jLabel2.setText("Sistema:");
 
-        bntSearch.setText("Buscar");
         bntSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntSearchActionPerformed(evt);
@@ -327,6 +328,7 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
 
     private void loadFlows(String name, String system) {
         try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             FlowRN flowRN = new FlowRN();
             DefaultListModel modelFlow = (DefaultListModel) listSelectTestCase.getModel();
             List<SVNDirEntry> list = flowRN.getEntries();
@@ -335,6 +337,8 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
             for (SVNDirEntry sVNDirEntry : list) {
                 flowBeans.add(flowRN.getFile(sVNDirEntry.getName()));
             }
+            
+            Collections.sort(flowBeans);
 
             for (int i = 0; i < flowBeans.size(); i++) {
                 if (name.isEmpty() && system.isEmpty()) {
@@ -352,9 +356,12 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
                 }
 
             }
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            instanceScreenTSView.addExceptionTextArea(e);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -373,47 +380,45 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
     }
     
     private void sendFlow(){
-        try{
-        List<TestCaseTSPropertiesBean> listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
-        List<TestCaseTSPropertiesBean> tempTestCase = new ArrayList<TestCaseTSPropertiesBean>();
-        List<String> cts = new ArrayList<String>();
-        
-        if(listTestCases.getModel().getSize() > 0){
-            for(int i = 0 ; i < listTestCases.getModel().getSize();i++ ){
-              String temp = listTestCases.getModel().getElementAt(i);
-               if(temp.contains("-")){
-                cts.add(temp.substring(0, temp.indexOf("-")));
-               }else{
-                   cts.add(temp);
-               }
-            }
-            
-            SvnConnectionRN svn = new SvnConnectionRN();
-            
-            
-            
-            
-            for (String ct : cts) {
-                tempTestCase = svn.search(fieldComboboxFlowSystem.getSelectedItem().toString(), ct);;
-                for (int i = 0; i < tempTestCase.size(); i++) {
-                    if(tempTestCase.get(i).getTesteCaseId().equals(ct)){
-                        listTestCaseTSPropertiesBean.add(tempTestCase.get(i));
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            List<TestCaseTSPropertiesBean> listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
+            List<TestCaseTSPropertiesBean> tempTestCase = new ArrayList<TestCaseTSPropertiesBean>();
+            List<String> cts = new ArrayList<String>();
+
+            if (listTestCases.getModel().getSize() > 0) {
+                for (int i = 0; i < listTestCases.getModel().getSize(); i++) {
+                    String temp = listTestCases.getModel().getElementAt(i);
+                    if (temp.contains("-")) {
+                        cts.add(temp.substring(0, temp.indexOf("-")));
+                    } else {
+                        cts.add(temp);
                     }
                 }
+
+                SvnConnectionRN svn = new SvnConnectionRN();
+
+                for (String ct : cts) {
+                    tempTestCase = svn.search(fieldComboboxFlowSystem.getSelectedItem().toString(), ct);;
+                    for (int i = 0; i < tempTestCase.size(); i++) {
+                        if (tempTestCase.get(i).getTesteCaseId().equals(ct)) {
+                            listTestCaseTSPropertiesBean.add(tempTestCase.get(i));
+                        }
+                    }
+                }
+
+                instanceScreenTSView.loadListFluxo(fieldComboboxFlowSystem.getSelectedItem().toString(), listTestCaseTSPropertiesBean);
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                this.dispose();
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecione um fluxo", "Alerta", JOptionPane.WARNING_MESSAGE);
             }
-            
-            
-            
-           
-            instanceScreenTSView.loadListFluxo(fieldComboboxFlowSystem.getSelectedItem().toString(), listTestCaseTSPropertiesBean);
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(null, "Selecione um fluxo", "Alerta", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception e) {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            instanceScreenTSView.addExceptionTextArea(e);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }catch(Exception e){
-        instanceScreenTSView.addExceptionTextArea(e);
-        JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-    }
     }
     
      private void loadComboTS() {

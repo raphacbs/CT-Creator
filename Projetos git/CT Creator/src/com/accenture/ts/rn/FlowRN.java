@@ -154,7 +154,8 @@ public class FlowRN {
     }
         
     
-    public boolean lockFile(String nameFile) throws SVNException{
+    public boolean lockFile(String nameFile) throws SVNException, IOException{
+        
         if(verifyUserLock(nameFile)){
             workflowDAO.lockFile(nameFile);
             return true;
@@ -175,6 +176,8 @@ public class FlowRN {
     }
     
     public boolean verifyUserLock(String nameFile) throws SVNException{
+        
+        
         if(workflowDAO.isLock(nameFile)){
             if(workflowDAO.getUserLock(nameFile).equalsIgnoreCase(workflowDAO.getUsername())){
                 return true;
@@ -188,7 +191,7 @@ public class FlowRN {
     
     public String getUserLock(String nameFile) throws SVNException{
         if(workflowDAO.isLock(nameFile)){
-            return workflowDAO.getUsername();
+            return workflowDAO.getUserLock(nameFile);
         }else{
             return null;
         }
@@ -215,26 +218,42 @@ public class FlowRN {
         return workflowDAO.getEntriesWorkflow();
     }
     
-    public String deleteFlow(List<FlowBean> flows) throws SVNException{
+    public String deleteFlow(List<FlowBean> flows) throws SVNException, IOException{
         List<String> flowNames = new ArrayList<String>();
         
-        for (FlowBean flow : flows) {
-            if(workflowDAO.isLock(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY)){
-                if(unLockFile(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY)){
-                    flowNames.add(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
-                }else{
-                    return "O fluxo "+flow.getName()+" está bloqueado pelo usuário "+getUserLock(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
+             for (FlowBean flow : flows) {
+            if (verifyExistFile(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
+                if (workflowDAO.isLock(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
+                    if (unLockFile(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
+                        flowNames.add(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY);
+                    } else {
+                        return "O fluxo " + flow.getName() + " está bloqueado pelo usuário " + getUserLock(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY);
 
+                    }
+                } else {
+                    flowNames.add(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY);
                 }
             }else{
-                flowNames.add(flow.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY);
+                return "O fluxo " + flow.getName() + " não existe, favor atualize a lista.";
             }
-            
-        }     
-        
+        }
+
         workflowDAO.deleteFile(flowNames);
         return null;
     }
+    
+
+    public boolean verifyExistFile(String Filename) throws SVNException, IOException{
+        boolean exist = false;
+        List<SVNDirEntry> entries = getEntries();
         
+        for (SVNDirEntry entry : entries) {
+            if(entry.getName().equalsIgnoreCase(Filename)){
+                exist = true;
+            }
+        }
+        
+        return exist;
+    }
     
 }

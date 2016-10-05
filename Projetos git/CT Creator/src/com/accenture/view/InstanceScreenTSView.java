@@ -172,7 +172,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             bntMudaStepSubir.setEnabled(false);
             bntEditParameter.setEnabled(false);
             bntReplace.setEnabled(false);
-            
+            this.setMaximizable(true);
             loadComboTS();
             
             radioGrupo.add(radioAntiga);
@@ -331,7 +331,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
-        setTitle("Plano de Teste TS");
+        setTitle("Edição de Plano de Teste TS");
         setMinimumSize(new java.awt.Dimension(1150, 33));
         setPreferredSize(new java.awt.Dimension(1200, 650));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -526,10 +526,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
         tabelaInstancia.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 tabelaInstanciaInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         tabelaInstancia.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -637,10 +637,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         testPlanSystem.setName(""); // NOI18N
         testPlanSystem.setPreferredSize(new java.awt.Dimension(6, 19));
         testPlanSystem.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 testPlanSystemInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -896,20 +896,20 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                                     .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelQtdCTs)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(45, 45, 45)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelQtdCTs)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1994,17 +1994,19 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         clipboard.setContents(selection, null);
     }
 
-    public void loadTableCt(List<TestCaseTSPropertiesBean> listPropertiesBean) {
+    public void loadTableCt(List<TestCaseTSPropertiesBean> listPropertiesBean, boolean sort) {
         DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
         DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
         listTestCaseTSPropertiesBean = listPropertiesBean;
-
-        Collections.sort(listTestCaseTSPropertiesBean, new Comparator<TestCaseTSPropertiesBean>() {
-            @Override
-            public int compare(TestCaseTSPropertiesBean t, TestCaseTSPropertiesBean t1) {
-                return t.getDirEntry().getName().compareTo(t1.getDirEntry().getName());
-            }
-        });
+        
+        if (sort) {
+            Collections.sort(listTestCaseTSPropertiesBean, new Comparator<TestCaseTSPropertiesBean>() {
+                @Override
+                public int compare(TestCaseTSPropertiesBean t, TestCaseTSPropertiesBean t1) {
+                    return t.getDirEntry().getName().compareTo(t1.getDirEntry().getName());
+                }
+            });
+        }
 
         while (model.getRowCount() > 0) {
             model.removeRow(0);
@@ -2277,7 +2279,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
                 
                 
-                loadTableCt(listTestCaseTSPropertiesBean);
+                loadTableCt(listTestCaseTSPropertiesBean, false);
                 tabelaCt.getSelectionModel().setSelectionInterval(0, (listTestCaseTSPropertiesBean.size()-1));
                 
                 for(int i = 0; i < listTestCaseTSPropertiesBean.size(); i++){
@@ -3523,12 +3525,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             
                             
                         }
-//                        else{
-//                            if(planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pre_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pos_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("observacoes")){
-//                                String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "");
-//                                planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
-//                            }
-//                        }
+                        else{
+                            if(planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pre_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pos_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("observacoes")){
+                                String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<"+planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue()+">");
+                                planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
+                            }
+                        }
                     }
                 }
                 addTextLabelStatus("Parâmetros setados");

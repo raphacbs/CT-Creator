@@ -58,7 +58,7 @@ public class RestConnector {
                         + project
                         + "/"
                         + entityType
-                        + "s");
+                        + "");
     }
     /**
      * @param path
