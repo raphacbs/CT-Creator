@@ -44,6 +44,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
      */
     public ManageflowsScreenView() throws IOException, SVNException {
         initComponents();
+        
         new SwingWorker() {
 
                 @Override
@@ -243,6 +244,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setForeground(java.awt.Color.black);
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Gestão de Funcionalidades");
@@ -386,7 +388,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
@@ -432,7 +434,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(labelQtdCts, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(bntExcluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -471,8 +473,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelQtdFluxos)
-                        .addGap(15, 15, 15))
+                        .addComponent(labelQtdFluxos))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -505,7 +506,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                                 .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelStatus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -526,10 +527,10 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextFieldNomeActionPerformed
 
     private void bntSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSearchActionPerformed
-        new SwingWorker() {
-
-            @Override
-            protected Object doInBackground() throws Exception {
+//        new SwingWorker() {
+//
+//            @Override
+//            protected Object doInBackground() throws Exception {
                 refreshLabelStatus("Aguarde, atualizando lista de fluxos...");
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 if (listSelectTestCase.getModel().getSize() > 0) {
@@ -538,19 +539,19 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 }
                 cleanFilds();
                 loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
-                
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-
-                return null;
-            }
-
-            @Override
-            protected void done() {
                 listSelectTestCase.repaint();
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            }
 
-        }.execute();
+//                return null;
+//            }
+//
+//            @Override
+//            protected void done() {
+//                listSelectTestCase.repaint();
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//            }
+//
+//        }.execute();
         
         
         
