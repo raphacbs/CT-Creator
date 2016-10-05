@@ -2886,7 +2886,15 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             
         
         for(int i = 0 ; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
-                        
+            
+            
+            String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
+            if (!desc.contains("<<<pre_requisito>>>")) {
+                desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
+                desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
+                desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
+                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
+            }
             
             modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(),this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), i, 1);
@@ -3525,12 +3533,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             
                             
                         }
-                        else{
-                            if(planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pre_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pos_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("observacoes")){
-                                String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<"+planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue()+">");
-                                planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
-                            }
-                        }
+//                        else{
+//                            if(planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pre_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pos_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("observacoes")){
+//                                String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<"+planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue()+">");
+//                                planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
+//                            }
+//                        }
                     }
                 }
                 addTextLabelStatus("Parâmetros setados");
