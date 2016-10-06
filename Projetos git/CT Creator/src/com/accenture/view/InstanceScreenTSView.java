@@ -280,11 +280,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jMonthChooser1 = new com.toedter.calendar.JMonthChooser();
         jDateChooserRelease = new com.toedter.calendar.JDateChooser();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         LabelStatus = new javax.swing.JLabel();
         bntStatus = new javax.swing.JButton();
         ProgressAguarde = new javax.swing.JProgressBar();
         bntAddFluxosInPlan = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuItemAbrirPlano = new javax.swing.JMenuItem();
@@ -526,10 +526,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
         tabelaInstancia.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 tabelaInstanciaInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         tabelaInstancia.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -637,10 +637,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         testPlanSystem.setName(""); // NOI18N
         testPlanSystem.setPreferredSize(new java.awt.Dimension(6, 19));
         testPlanSystem.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 testPlanSystemInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -728,9 +728,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         jLabel13.setText("Release:");
 
-        jLabel14.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel14.setText("*");
-
         LabelStatus.setText("Status: ");
         LabelStatus.setToolTipText(LabelStatus.getText());
         LabelStatus.setAutoscrolls(true);
@@ -753,6 +750,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 bntAddFluxosInPlanActionPerformed(evt);
             }
         });
+
+        jLabel15.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel15.setText("*");
 
         jMenu1.setText("Plano");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
@@ -830,110 +830,97 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bntGenereteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76)
-                        .addComponent(bntResetFiltro)
-                        .addGap(8, 33, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel7))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabel1)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntResetFiltro))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel1)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jComboBoxTestFase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(testPlanSTI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel9)
-                                                .addGap(50, 50, 50))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel6)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                            .addComponent(jComboBoxCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                    .addComponent(testPlanName)))
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel10)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(radioAntiga)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(radioNova)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jComboBoxTestFase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(testPlanSTI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
+                                        .addGap(50, 50, 50)
+                                        .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel9))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel6)))
+                                .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jDateChooserFim, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                    .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(testPlanName)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(radioAntiga)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(radioNova)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel15))
+                            .addComponent(jLabel11))
                         .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jDateChooserFim, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bntFiltrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelQtdCTs)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jScrollPane3)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddCTInPlan, bntAddFluxosInPlan, bntDeleteCt, bntFiltrar});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(labelQtdCTs)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bntDeleteCt, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(labelQtdCTs)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(testPlanName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -967,7 +954,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                                 .addComponent(radioAntiga)
                                 .addComponent(radioNova)
                                 .addComponent(jLabel13)
-                                .addComponent(jLabel14))
+                                .addComponent(jLabel15))
                             .addComponent(jDateChooserRelease, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -983,7 +970,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             .addComponent(bntResetFiltro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bntGenereteDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntDeleteCt, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -1001,6 +998,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bntCancelar, bntExportar});
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bntAddCTInPlan, bntAddFluxosInPlan, bntDeleteCt, bntFiltrar});
 
         bntAddCTInPlan.setToolTipText("Instancia CTs selecionados");
         bntDeleteCt.setToolTipText("Delete CTs selecionados");
@@ -2542,6 +2541,15 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
     }
     
+    public boolean isDigit(String s) {
+     for (int i = 0; i < s.length(); i++) {
+           char ch = s.charAt(i);
+           if (ch < 48 || ch > 57)
+                return false;
+     }
+     return true;
+ }
+    
     public void addCtInTestPlan(List<TesteCaseTSBean> list) {
         try {
             boolean first = true;
@@ -2550,36 +2558,45 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
             DefaultTableModel modelCt = (DefaultTableModel) tabelaCt.getModel();
            
-            String testCase = "";
-            for(int j =0; j<list.size();j++){
-                 testPlanSystem.setText(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
-                 
-                if (!list.isEmpty()) {
-                    list.get(j).setProduct(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
-                    if (IsEmptyTablePlan(model, list.get(j)) || validSystem(list.get(j))) {
-                        if(first){
-                            while(cont == 0)
-                            cont = Integer.parseInt(JOptionPane.showInputDialog(this, "Digite a quantidade: "));
-                            
-                            
-                            first = false;
-                        }
-                        int []cenario = new int[cont];
-                        
-                        int qtd = 1;
-                        if(model.getRowCount()!=0){
-                            qtd = Integer.parseInt(model.getValueAt(model.getRowCount()-1, 1).toString());
-                        }
-                        if(!list.get(j).getTestScriptName().equals(testCase)){
+            while (first) {
+
+                String qtd ="";
+                qtd = JOptionPane.showInputDialog(this, "Digite a quantidade: ","Quantidade de CTs",JOptionPane.CLOSED_OPTION);
+                
+                if(qtd==null || qtd.isEmpty()){
+                    cont=0;
+                    break;
+                }
+                
+                if (isDigit(qtd)) {
+                    cont = Integer.parseInt(qtd);
+                    first = false;
+                }
+            }
+            for (int i = 0; i < cont; i++) {
+
+                String testCase = "";
+                for (int j = 0; j < list.size(); j++) {
+                    testPlanSystem.setText(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
+
+                    if (!list.isEmpty()) {
+                        list.get(j).setProduct(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
+                        if (IsEmptyTablePlan(model, list.get(j)) || validSystem(list.get(j))) {
+
+                            int[] cenario = new int[cont];
+
+                            int qtd = 1;
+                            if (model.getRowCount() != 0) {
+                                qtd = Integer.parseInt(model.getValueAt(model.getRowCount() - 1, 1).toString());
+                            }
+                            if (!list.get(j).getTestScriptName().equals(testCase)) {
 //                            callViewParameter(list.get(j).getStepDescription(),list.get(j).getExpectedResults(),list.get(j).getTestScriptName());
-                            testCase = list.get(j).getTestScriptName();
-                        }
-                        for (int i = 0; i < cont; i++) {
+                                testCase = list.get(j).getTestScriptName();
+                            }
+
 //                    testPlan.getTestPlan().addTestCase(listTestCase.get(0));
-
-
                             TesteCaseTSBean tc = new TesteCaseTSBean();
-                            
+
                             tc.setExpectedResults(list.get(j).getExpectedResults());
                             tc.setStepDescription(list.get(j).getStepDescription());
                             tc.setDataPlanejada(list.get(j).getDataPlanejada());
@@ -2600,14 +2617,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             tc.setDataPlanejada(new Date(System.currentTimeMillis()));
                             tc.setComplexidade(list.get(j).getComplexidade());
                             tc.setAutomatizado(list.get(j).isAutomatizado());
-                            
+
                             tc.setPriority(false);
                             tc.setData(false);
                             tc.setRework(false);
                             tc.setRegression(false);
-                            
-                            
-                             switch (list.get(j).getComplexidade()) {
+
+                            switch (list.get(j).getComplexidade()) {
 
                                 case "Muito Alta":
                                     tc.setComplexidade("Muito Alto");
@@ -2623,63 +2639,60 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                                 case "M\\u00E9dia":
                                     tc.setComplexidade("Medio");
-                                    break;    
+                                    break;
 
                                 case "Medio":
                                     tc.setComplexidade("Medio");
-                                    break;    
+                                    break;
 
                                 case "Baixa":
                                     tc.setComplexidade("Baixo");
                                     break;
-                              case "Muito Baixa":
+                                case "Muito Baixa":
                                     tc.setComplexidade("Muito Baixo");
-                                    break;       
+                                    break;
 
                                 default:
                                     tc.setComplexidade(list.get(j).getComplexidade());
                             }
 
-                            
-                            
-                            System.out.println("hashCode: "+tc.hashCode());
+                            System.out.println("hashCode: " + tc.hashCode());
 
                             testPlan.getTestPlan().addTestCase(tc);
 //                    listTestCasePlan.add(tc);
 
 //                            model.addRow(new String[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode()+""});
-                            model.addRow(new Object[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode(), tc.getDataPlanejada(),tc.isPriority(), tc.isData(),tc.isRework(), tc.isRegression()});
-                            
+                            model.addRow(new Object[]{"00", "00", list.get(j).getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(), tc.isRework(), tc.isRegression()});
+
 //                            model.setValueAt(tc.getDataPlanejada(), i, 4);
                             qtd++;
-                        }
-                        if (!IsEmptyTablePlan(model)) {
-                            bntDeleteCt.setEnabled(true);
-                            bntOrdenar.setEnabled(true);
-                            bntDuplicate.setEnabled(true);                            
-                            bntMudaStepDescer.setEnabled(true);
-                            bntMudaStepSubir.setEnabled(true);
-                            bntEditParameter.setEnabled(true);
-                            bntReplace.setEnabled(true);
-                            bntGenereteDate.setEnabled(true);
+
+                            if (!IsEmptyTablePlan(model)) {
+                                bntDeleteCt.setEnabled(true);
+                                bntOrdenar.setEnabled(true);
+                                bntDuplicate.setEnabled(true);
+                                bntMudaStepDescer.setEnabled(true);
+                                bntMudaStepSubir.setEnabled(true);
+                                bntEditParameter.setEnabled(true);
+                                bntReplace.setEnabled(true);
+                                bntGenereteDate.setEnabled(true);
 //                            for(int i = 0; i < model.getRowCount(); i++){
 //                            tabelaInstancia.editingStopped(null);
 //                            tabelaInstancia.setValueAt("0", i, 0);
 //                            tabelaInstancia.editingStopped(null);
 //                            tabelaInstancia.setValueAt("0", i, 1);
 //                            }
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Você está tentando inserir CTs de mais de um sistema no Plano de teste.\n"
+                                    + "Favor esvazie o plano de teste antes de inseri-los.", "Erro", JOptionPane.WARNING_MESSAGE);
                         }
-                        
-                        
-                        
                     } else {
-                        JOptionPane.showMessageDialog(null, "Você está tentando inserir CTs de mais de um sistema no Plano de teste.\n"
-                                + "Favor esvazie o plano de teste antes de inseri-los.", "Erro", JOptionPane.WARNING_MESSAGE);
+
+                        JOptionPane.showMessageDialog(null, "Por favor selecione um Caso de teste à "
+                                + "ser inserido no Plano de teste", "Erro", JOptionPane.WARNING_MESSAGE);
                     }
-                } else {
-                    
-                    JOptionPane.showMessageDialog(null, "Por favor selecione um Caso de teste à "
-                            + "ser inserido no Plano de teste", "Erro", JOptionPane.WARNING_MESSAGE);
                 }
             }
             first = true;
@@ -3089,8 +3102,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             @Override
             public void tableChanged(TableModelEvent tme) {
 //                tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
-                if (tme.getType() == TableModelEvent.UPDATE) {
-                    int lineSelect  = tabelaInstancia.getSelectedRow();
+                int lineSelect  = tabelaInstancia.getSelectedRow();
+                if (tme.getType() == TableModelEvent.UPDATE && lineSelect != -1) {
+                   
+                    
+                    
                     if((tabelaInstancia.getValueAt(lineSelect, 0) != null || tabelaInstancia.getValueAt(lineSelect, 1) != null) && (tabelaInstancia.getValueAt(lineSelect, 0).toString().equals("") || tabelaInstancia.getValueAt(lineSelect, 1).toString().equals("") )){
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario("00");
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt("00");
@@ -3219,17 +3235,21 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     
     public void upddateTableInstance(){
         DefaultTableModel modelCT = (DefaultTableModel) tabelaInstancia.getModel();
+        
+        tabelaInstancia.getSelectionModel().clearSelection();
            
-            
+        for(int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
+                     modelCT.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), i, 4);
+                }
                      
-                //apaga linhas da tabela steps
-                while (modelCT.getRowCount() > 0) {
-                    modelCT.removeRow(0);
-                }
-                
-                for(int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
-                     modelCT.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario()+"", this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt()+"", this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode()+"", this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada()});
-                }
+//                //apaga linhas da tabela steps
+//                while (modelCT.getRowCount() > 0) {
+//                    modelCT.removeRow(0);
+//                }
+//                
+//                for(int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
+//                     modelCT.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario()+"", this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt()+"", this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode()+"", this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada()});
+//                }
     }
     
     public void selectLineTableInstance(int line){
@@ -3799,7 +3819,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
