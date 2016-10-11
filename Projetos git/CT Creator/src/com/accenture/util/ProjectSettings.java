@@ -31,4 +31,7 @@ public class ProjectSettings {
     //EXTENSIONS
     public final static String EXTENSION_FILE_PROPERTY= ".properties";
     
+    //propierties 
+    public final static String PROPERTY_SYSTEM_LINE_SEPARATOR = "line.separator";
+    
 }

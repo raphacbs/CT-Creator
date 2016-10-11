@@ -727,6 +727,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     public void loadComboTS() throws IOException, SVNException {
         
         
+        
         testCaseRN = new TestCaseTSRN();
 //         JOptionPane.showMessageDialog(null, " testCaseRN = new TestCaseTSRN();", "Combo Sistema carregado!", JOptionPane.INFORMATION_MESSAGE);
         ArrayList systems = testCaseRN.systemsTestCase();

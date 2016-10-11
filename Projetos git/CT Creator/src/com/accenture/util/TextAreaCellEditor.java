@@ -251,35 +251,50 @@ public class TextAreaCellEditor implements TableCellEditor {
         String parametros = "(\\W)*(parametro)";
 
         final StyleContext cont = StyleContext.getDefaultStyleContext();
-        final AttributeSet attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.RED);
+        final AttributeSet attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLUE);
+        
         final AttributeSet attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
         DefaultStyledDocument docParametro = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                 super.insertString(offset, str, a);
 
                 String text = getText(0, getLength());
-                int before = findLastNonWordChar(text, offset);
-                if (before < 0) {
-                    before = 0;
-                }
-                int after = findFirstNonWordChar(text, offset + str.length());
-                int wordL = before;
-                int wordR = before;
+               
 
                 System.out.println("Texto: " + text);
                 System.out.println("Parametros: " + getParametros(text));
 
-                while (wordR <= after) {
-                    if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
-                        if (text.substring(wordL, wordR).matches(getParametros(text))) {
-                            setCharacterAttributes(wordL, wordR - wordL, attr, false);
-                        } else {
-                            setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
-                        }
-                        wordL = wordR;
+              
+                        int ini =0;
+                        int fim =0;
+                        
+                        String temp = text.replace("\n", "");
+                        
+                        String [] words = temp.split(" ");
+                        for (int i = 0; i < words.length; i++) {
+                            ini = text.indexOf(words[i]);
+                            fim = ini + words[i].length();
+                       
+                            if (words[i].matches("<{3}\\w{1,20}\\>{3}+")) {
+                                setCharacterAttributes(ini, fim - ini, attr, false);
+                            } else {
+                                setCharacterAttributes(ini, fim - ini, attrBlack, false);
+                            }                          
+                            
+                       
+                        
+                       
+                        
+                        
+//                        if (text.substring(wordL, wordR).matches("<{3}\\w{1,20}\\>{3}+")) {
+//                            setCharacterAttributes(wordL, wordR - wordL, attr, false);
+//                        } else {
+//                            setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
+//                        }
+                       
                     }
-                    wordR++;
-                }
+                   
+                
             }
 
             public void remove(int offs, int len) throws BadLocationException {
@@ -292,7 +307,7 @@ public class TextAreaCellEditor implements TableCellEditor {
                 }
                 int after = findFirstNonWordChar(text, offs);
 
-                if (text.substring(before, after).matches(getParametros(text))) {
+                if (text.substring(before, after).matches("\\W")) {
                     setCharacterAttributes(before, after - before, attr, false);
                 } else {
                     setCharacterAttributes(before, after - before, attrBlack, false);
@@ -311,7 +326,8 @@ public class TextAreaCellEditor implements TableCellEditor {
         textArea.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 
         textArea.setBackground(cor);
-        textArea.setSelectionColor(Color.black);
+        textArea.setSelectionColor(Color.blue);
+        textArea.setSelectedTextColor(Color.white);
         SpellChecker.setUserDictionaryProvider(new FileUserDictionary());
         SpellChecker.registerDictionaries(null, null);
         SpellChecker.register(textArea);
