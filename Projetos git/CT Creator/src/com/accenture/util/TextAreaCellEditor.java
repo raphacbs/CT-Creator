@@ -72,6 +72,14 @@ public class TextAreaCellEditor implements TableCellEditor {
     private Matcher m;
     private String regex;
     private EditScreenTSView internalFrame;
+    //240, 255, 255)
+    Color corBrackground = new Color(240, 255, 255);
+    private final StyleContext cont = StyleContext.getDefaultStyleContext();
+    private final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.ORANGE);//200, 255, 255
+    private final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
+    private final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
+    private final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, corBrackground);
+    private final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), StyleConstants.ALIGN_JUSTIFIED, true);
 
     private int findLastNonWordChar(String text, int index) {
         while (--index >= 0) {
@@ -95,16 +103,7 @@ public class TextAreaCellEditor implements TableCellEditor {
     public TextAreaCellEditor(EditScreenTSView internalFrame) {
         String parametros = "(\\W)*(parametro)";
         this.internalFrame = internalFrame;
-        Color cor = new Color(220, 255, 255);
-        final StyleContext cont = StyleContext.getDefaultStyleContext();
-        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.GREEN);
-        final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-        final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
-        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, cor);
-        final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), new String(), new String().toUpperCase() );
-        
-        
-        
+          
         
         DefaultStyledDocument docParametro = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
@@ -127,10 +126,17 @@ public class TextAreaCellEditor implements TableCellEditor {
                     fim = words[i].length();
 
                     if (words[i].matches("<{3}\\w{1,20}>{3}")) {
-                     setCharacterAttributes(ini, fim, atributeColor, false);
-                     setCharacterAttributes(ini, fim, attributeBold, false);
-                     setCharacterAttributes(ini, fim, attributeText, false);
+                        setCharacterAttributes(ini, fim, atributeColor, false);
+                        setCharacterAttributes(ini, fim, attributeBold, false);
+                        setCharacterAttributes(ini, fim, attributeText, false);
+                    } else if (words[i].matches("<{3}\\w{1,20}>{3}.")) {
+                        setCharacterAttributes(ini, fim - 1, atributeColor, false);
+                        setCharacterAttributes(ini, fim - 1, attributeBold, false);
+                        setCharacterAttributes(ini, fim - 1, attributeText, false);
                     }
+
+                    
+                    
 
                 }
                 
@@ -178,7 +184,7 @@ public class TextAreaCellEditor implements TableCellEditor {
         textArea.setDragEnabled(true);
         textArea.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 
-        textArea.setBackground(cor);
+        textArea.setBackground(corBrackground);
         textArea.setSelectionColor(Color.blue);
         textArea.setSelectedTextColor(Color.white);
         
@@ -273,17 +279,6 @@ public class TextAreaCellEditor implements TableCellEditor {
 
     public TextAreaCellEditor() {
         
-        Color cor = new Color(220, 255, 255);
-        final StyleContext cont = StyleContext.getDefaultStyleContext();
-        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.GREEN);
-        final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-        final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
-        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, cor);
-        final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), StyleConstants.ALIGN_JUSTIFIED, true);
-        
-        
-        
-        
         DefaultStyledDocument docParametro = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                  super.insertString(offset, str, a);
@@ -356,7 +351,7 @@ public class TextAreaCellEditor implements TableCellEditor {
         textArea.setDragEnabled(true);
         textArea.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 
-        textArea.setBackground(cor);
+        textArea.setBackground(corBrackground);
         textArea.setSelectionColor(Color.blue);
         textArea.setSelectedTextColor(Color.white);
         SpellChecker.setUserDictionaryProvider(new FileUserDictionary());
