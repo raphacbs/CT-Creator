@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -94,11 +95,13 @@ public class TextAreaCellEditor implements TableCellEditor {
     public TextAreaCellEditor(EditScreenTSView internalFrame) {
         String parametros = "(\\W)*(parametro)";
         this.internalFrame = internalFrame;
+        Color cor = new Color(220, 255, 255);
         final StyleContext cont = StyleContext.getDefaultStyleContext();
-        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLUE);
+        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.GREEN);
         final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
-        final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), StyleConstants.ALIGN_JUSTIFIED, true);
+        final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
+        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, cor);
+        final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), new String(), new String().toUpperCase() );
         
         
         
@@ -106,12 +109,38 @@ public class TextAreaCellEditor implements TableCellEditor {
         DefaultStyledDocument docParametro = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                 super.insertString(offset, str, a);
-
-              
-                
                 String text = getText(0, getLength());
+                System.out.println("Texto: " + text);
+                System.out.println("Parametros: " + getParametros(text));
+
+                int ini = 0;
+                int fim = 0;
+
+                String temp = text.replace("\n", " ");
+
+                setCharacterAttributes(ini, getLength(), attributeNoParameterColor, false);
+                setCharacterAttributes(ini, getLength(), attributeNoBold, false);
+
+                String[] words = temp.split(" ");
+                for (int i = 0; i < words.length; i++) {
+                    ini = text.indexOf(words[i]);
+                    fim = words[i].length();
+
+                    if (words[i].matches("<{3}\\w{1,20}>{3}")) {
+                     setCharacterAttributes(ini, fim, atributeColor, false);
+                     setCharacterAttributes(ini, fim, attributeBold, false);
+                     setCharacterAttributes(ini, fim, attributeText, false);
+                    }
+
+                }
                 
                 
+
+            }
+
+            public void remove(int offs, int len) throws BadLocationException {
+                super.remove(offs, len);
+                String text = getText(0, getLength());
 
                 System.out.println("Texto: " + text);
                 System.out.println("Parametros: " + getParametros(text));
@@ -119,61 +148,29 @@ public class TextAreaCellEditor implements TableCellEditor {
                 int ini = 0;
                 int fim = 0;
 
-                String temp = text.replace("\n", "");
+                String temp = text.replace("\n", " ");
+
+                setCharacterAttributes(ini, getLength(), attributeNoParameterColor, false);
+                setCharacterAttributes(ini, getLength(), attributeNoBold, false);
 
                 String[] words = temp.split(" ");
                 for (int i = 0; i < words.length; i++) {
                     ini = text.indexOf(words[i]);
-                    fim = ini + words[i].length();
+                    fim = words[i].length();
 
-                    if (words[i].matches("<{3}\\w{1,20}\\>{3}")) {
-                        setCharacterAttributes(ini, fim - ini, atributeColor, false);
-//                        setCharacterAttributes(ini, fim - ini, attributeBold, false);
-                    } else {
-                        setCharacterAttributes(ini, fim - ini, attributeNoParameterColor, false);
+                    if (words[i].matches("<{3}\\w{1,20}>{3}")) {
+                        setCharacterAttributes(ini, fim, atributeColor, false);
+                        setCharacterAttributes(ini, fim, attributeBold, false);
+                        setCharacterAttributes(ini, fim, attributeText, false);
                     }
 
                 }
-
-                
-            }
-
-            public void remove(int offs, int len) throws BadLocationException {
-                super.remove(offs, len);
-
-              
-//                
-//                String text = getText(0, getLength());
-//                
-//                
-//
-//                System.out.println("Texto: " + text);
-//                System.out.println("Parametros: " + getParametros(text));
-//
-//                int ini = 0;
-//                int fim = 0;
-//
-//                String temp = text.replace("\n", "");
-//
-//                String[] words = temp.split(" ");
-//                for (int i = 0; i < words.length; i++) {
-//                    ini = text.indexOf(words[i]);
-//                    fim = ini + words[i].length();
-//
-//                    if (words[i].matches("<{3}\\w{1,20}\\>{3}+")) {
-//                        setCharacterAttributes(ini, fim - ini, atributeColor, false);
-//                        setCharacterAttributes(ini, fim - ini, attributeBold, false);
-//                    } else {
-//                        setCharacterAttributes(ini, fim - ini, attributeNoParameterColor, false);
-//                    }
-//
-//                }
             }
         };
 
         textArea = new JTextPane(docParametro);
 
-        Color cor = new Color(220, 255, 255);
+       
         scrollPane = new JScrollPane(textArea);
         scrollPane.setBorder(BorderFactory.createBevelBorder(2, Color.lightGray, Color.yellow));
 //        textArea.setLineWrap(true);
@@ -275,12 +272,13 @@ public class TextAreaCellEditor implements TableCellEditor {
     }
 
     public TextAreaCellEditor() {
-        String parametros = "(\\W)*(parametro)";
-
+        
+        Color cor = new Color(220, 255, 255);
         final StyleContext cont = StyleContext.getDefaultStyleContext();
-        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLUE);
+        final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.GREEN);
         final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+        final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
+        final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, cor);
         final AttributeSet attributeText = cont.addAttribute(cont.getEmptySet(), StyleConstants.ALIGN_JUSTIFIED, true);
         
         
@@ -288,32 +286,28 @@ public class TextAreaCellEditor implements TableCellEditor {
         
         DefaultStyledDocument docParametro = new DefaultStyledDocument() {
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
-                super.insertString(offset, str, a);
-
-               
-                
+                 super.insertString(offset, str, a);
                 String text = getText(0, getLength());
-                
-                
-
                 System.out.println("Texto: " + text);
                 System.out.println("Parametros: " + getParametros(text));
 
                 int ini = 0;
                 int fim = 0;
 
-                String temp = text.replace("\n", "");
+                String temp = text.replace("\n", " ");
+
+                setCharacterAttributes(ini, getLength(), attributeNoParameterColor, false);
+                setCharacterAttributes(ini, getLength(), attributeNoBold, false);
 
                 String[] words = temp.split(" ");
                 for (int i = 0; i < words.length; i++) {
                     ini = text.indexOf(words[i]);
-                    fim = ini + words[i].length();
+                    fim = words[i].length();
 
-                    if (words[i].matches("<{3}\\w{1,20}\\>{3}")) {
-                        setCharacterAttributes(ini, fim - ini, atributeColor, false);
-//                        setCharacterAttributes(ini, fim - ini, attributeBold, false);
-                    } else {
-                        setCharacterAttributes(ini, fim - ini, attributeNoParameterColor, false);
+                    if (words[i].matches("<{3}\\w{1,20}>{3}")) {
+                     setCharacterAttributes(ini, fim, atributeColor, false);
+                     setCharacterAttributes(ini, fim, attributeBold, false);
+                     setCharacterAttributes(ini, fim, attributeText, false);
                     }
 
                 }
@@ -324,24 +318,37 @@ public class TextAreaCellEditor implements TableCellEditor {
             public void remove(int offs, int len) throws BadLocationException {
                 super.remove(offs, len);
 
-//                String text = getText(0, getLength());
-//                int before = findLastNonWordChar(text, offs);
-//                if (before < 0) {
-//                    before = 0;
-//                }
-//                int after = findFirstNonWordChar(text, offs);
-//
-//                if (text.substring(before, after).matches("\\W")) {
-//                    setCharacterAttributes(before, after - before, atributeColor, false);
-//                } else {
-//                    setCharacterAttributes(before, after - before, attributeNoParameterColor, false);
-//                }
+                 String text = getText(0, getLength());
+
+                System.out.println("Texto: " + text);
+                System.out.println("Parametros: " + getParametros(text));
+
+                int ini = 0;
+                int fim = 0;
+
+                String temp = text.replace("\n", " ");
+
+                setCharacterAttributes(ini, getLength(), attributeNoParameterColor, false);
+                setCharacterAttributes(ini, getLength(), attributeNoBold, false);
+
+                String[] words = temp.split(" ");
+                for (int i = 0; i < words.length; i++) {
+                    ini = text.indexOf(words[i]);
+                    fim = words[i].length();
+
+                    if (words[i].matches("<{3}\\w{1,20}>{3}")) {
+                        setCharacterAttributes(ini, fim, atributeColor, false);
+                        setCharacterAttributes(ini, fim, attributeBold, false);
+                        setCharacterAttributes(ini, fim, attributeText, false);
+                    }
+
+                }
             }
         };
 
         textArea = new JTextPane(docParametro);
 
-        Color cor = new Color(220, 255, 255);
+        
         scrollPane = new JScrollPane(textArea);
         scrollPane.setBorder(BorderFactory.createBevelBorder(2, Color.lightGray, Color.yellow));
 //        textArea.setLineWrap(true);
