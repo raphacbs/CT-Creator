@@ -3670,7 +3670,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
               parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
               if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 addTextLabelStatus("Gerando relatório");
-                BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(),  parametros, ProjectSettings.FILE_NAME_REPORT_CTS);
+                BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(),  parametros, ProjectSettings.FILE_NAME_REPORT_PLANO);
                 addTextLabelStatus("Relatório gerado");
               }
 
