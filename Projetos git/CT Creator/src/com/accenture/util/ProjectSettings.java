@@ -34,4 +34,8 @@ public class ProjectSettings {
     //propierties 
     public final static String PROPERTY_SYSTEM_LINE_SEPARATOR = "line.separator";
     
+    //files reports
+    public final static String FILE_NAME_REPORT_PLANO = "reportCT.jrxml";
+    public final static String FILE_NAME_REPORT_CTS = "CtsCadastrados.jrxml";
+    
 }

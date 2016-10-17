@@ -15,7 +15,7 @@ import com.accenture.control.Validacao;
 import com.accenture.filter.AutoChoices;
 import com.accenture.filter.TableFilterHeader;
 import com.accenture.filter.TableFilterHeader.Position;
-import com.accenture.reports.ReportPlan;
+import com.accenture.reports.BuildReport;
 import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.dao.TesteCaseTSDAO;
 import com.accenture.ts.rn.ParameterRN;
@@ -84,6 +84,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.accenture.util.JDateChooserCellEditor;
+import com.accenture.util.ProjectSettings;
 import java.awt.Point;
 import java.awt.event.MouseMotionAdapter;
 import java.io.FileNotFoundException;
@@ -3667,9 +3668,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
               parametros.put("NOME_PLANO", planTemp.getTestPlan().getName());
               parametros.put("STI_PLANO", testPlanSTI.getText());
               parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
-              addTextLabelStatus("Gerando relatório");
-              ReportPlan.geraRelatorio(planTemp.getTestPlan().getTestCase(), destino.getPath() + "\\" + nomePlanilha, parametros);
-              addTextLabelStatus("Relatório gerado");
+              if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                addTextLabelStatus("Gerando relatório");
+                BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(),  parametros, ProjectSettings.FILE_NAME_REPORT_CTS);
+                addTextLabelStatus("Relatório gerado");
+              }
 
             } else {
                 JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "CT Creator", JOptionPane.INFORMATION_MESSAGE);

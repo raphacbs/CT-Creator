@@ -90,6 +90,8 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItemFuncionalidade = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        menuItemCT = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
         itemMenuConfiguracoes = new javax.swing.JMenuItem();
 
@@ -242,6 +244,18 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu4.add(jMenuItemFuncionalidade);
 
         jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Relatórios");
+
+        menuItemCT.setText("Caso de Testes");
+        menuItemCT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemCTActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuItemCT);
+
+        jMenuBar1.add(jMenu5);
 
         menuConfiguracoes.setText("Configurações");
         menuConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
@@ -513,6 +527,20 @@ public class MainScreenView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItemFuncionalidadeActionPerformed
 
+    private void menuItemCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCTActionPerformed
+        try {
+            criaJanelaReport();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_menuItemCTActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -568,6 +596,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -579,6 +608,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenu menuCT;
     private javax.swing.JMenu menuConfiguracoes;
     private javax.swing.JMenu menuImportarExportar;
+    private javax.swing.JMenuItem menuItemCT;
     // End of variables declaration//GEN-END:variables
 
     RegisterScreenTIView guiJanelaCadCT;
@@ -597,6 +627,14 @@ public class MainScreenView extends javax.swing.JFrame {
     ChooseTestCaseTsScreenView guiChooseTestCaseTsScreenView;
     InstanceScreenTSView guiInstaceTs;
     ManageflowsScreenView guiManageflowsScreenView;
+    FilterReportScreenView guiFilterReportScreenView;
+    
+    public void criaJanelaReport() throws IOException, ClassNotFoundException, SQLException, SVNException {
+        guiFilterReportScreenView = new FilterReportScreenView();
+        desktop.add(guiFilterReportScreenView);
+        guiFilterReportScreenView.centralizaJanela();
+        guiFilterReportScreenView.setVisible(true);
+    }
 
     public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiInstaceTs = new InstanceScreenTSView();

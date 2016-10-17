@@ -19,23 +19,26 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import java.util.List;
 import java.util.Map;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author raphael.da.silva
  */
-public class ReportPlan {
-    public static void geraRelatorio(List<TesteCaseTSBean> listTC, String dir, Map<String,Object> parametros) throws JRException{
+public class BuildReport {
+    public static void geraRelatorio(List<?> listObject, Map<String,Object> parametros, String fileReport) throws JRException{
         System.out.println("Gerando relatório...");
         
        
-        InputStream fonte = ReportPlan.class.getResourceAsStream("/report/reportCT.jrxml");
+        InputStream fonte = BuildReport.class.getResourceAsStream("/report/"+fileReport);
         // compilacao do JRXML 
         JasperReport report = JasperCompileManager.compileReport(fonte);
         
-        JasperPrint print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(listTC));
-        
+        JasperPrint print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(listObject));
+        JasperViewer viewer = new JasperViewer( print , true );
+        viewer.setTitle("Relatório CT Creator");        
+        viewer.setVisible(true);
         // exportacao do relatorio para outro formato, no caso PDF 
-        JasperExportManager.exportReportToPdfFile(print, dir+".pdf");
+//        JasperExportManager.exportReportToPdfFile(print, dir+".pdf");
         System.out.println("Relatório gerado.");
     }
 }

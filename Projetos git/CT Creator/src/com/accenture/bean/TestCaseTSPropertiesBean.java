@@ -11,7 +11,7 @@ import org.tmatesoft.svn.core.SVNDirEntry;
  *
  * @author brucilin.de.gouveia
  */
-public class TestCaseTSPropertiesBean {
+public class TestCaseTSPropertiesBean  implements Comparable<TestCaseTSPropertiesBean> {
 
     private SVNDirEntry dirEntry;
     private String testCaseName;
@@ -80,6 +80,18 @@ public class TestCaseTSPropertiesBean {
     public void setSystem(String system) {
         this.system = system;
     }
+    
+     @Override
+     public int compareTo(TestCaseTSPropertiesBean caseTSPropertiesBean) {
+         
+         int sistema = this.getSystem().compareToIgnoreCase(caseTSPropertiesBean.getSystem());
+         if (sistema !=0) return sistema;
+         
+         int name = this.getTesteCaseId().compareToIgnoreCase(caseTSPropertiesBean.getTesteCaseId());
+         if(name != 0)return name;
+         
+         return this.getTestCaseName().compareTo(caseTSPropertiesBean.getTestCaseName());
+     }
     
     
 
