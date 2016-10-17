@@ -34,8 +34,9 @@ public class BuildReport {
         JasperReport report = JasperCompileManager.compileReport(fonte);
         
         JasperPrint print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(listObject));
-        JasperViewer viewer = new JasperViewer( print , true );
-        viewer.setTitle("Relatório CT Creator");        
+        JasperViewer viewer = new JasperViewer( print , false );
+        viewer.setTitle("Relatório CT Creator");
+     
         viewer.setVisible(true);
         // exportacao do relatorio para outro formato, no caso PDF 
 //        JasperExportManager.exportReportToPdfFile(print, dir+".pdf");
