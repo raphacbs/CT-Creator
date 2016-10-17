@@ -25,6 +25,8 @@ public class ProjectSettings {
 //    public final static String URL_SVN_FLUXO = "/CTs/fluxos";
     public final static String PATH_FILE_SVN_PROPERTIES = "./res/svn.properties";
     
+    public final static String PATH_FILE_SVN_FLOW_PROPERTIES = "./res/svn.properties";
+    
     //delimitadores
     public final static String DELIDELIMITER_COMMA= ";";
     
