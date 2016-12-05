@@ -428,10 +428,10 @@ public class TesteCaseTSDAO {
             
         }
         
-        if(testCasesAutomatizados.size()!=0){
-        ExtraiPlanilha extraiPlanilha = new ExtraiPlanilha();
-        extraiPlanilha.exportTStoTI(testCasesAutomatizados, sheetTI);
-        }
+//        if(testCasesAutomatizados.size()!=0){
+//        ExtraiPlanilha extraiPlanilha = new ExtraiPlanilha();
+//        extraiPlanilha.exportTStoTI(testCasesAutomatizados, sheetTI);
+//        }
        
         
         logger.info("Preparando para salvar planilha");

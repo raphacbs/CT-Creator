@@ -9,6 +9,8 @@ import com.accenture.infrastructure.AuthenticateLoginLogoutExample;
 import java.util.HashMap;
 import java.util.Map;
 import com.accenture.infrastructure.Constants;
+import com.accenture.infrastructure.Entity;
+import com.accenture.infrastructure.EntityMarshallingUtils;
 import com.accenture.infrastructure.RestConnector;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,7 +64,7 @@ public class ExtraiALM {
         }
  
 
-         String testLabUrl = con.buildEntityCollectionUrl("test-instances");
+        String testLabUrl = con.buildEntityCollectionUrl("test-sets");
 
         String resourceWeWantToRead = con.buildUrl("qcbin/rest/server");
 
@@ -76,11 +78,11 @@ public class ExtraiALM {
         //Query a collection of entities:
         StringBuilder b = new StringBuilder();
         //The query: "where field name starts with r"
-        b.append("query={name['*a*']}");
+        b.append("query={name['Janeiro']}");
         //The fields to display: id, name
         b.append("&fields=name");
         //The sort order: descending by ID (highest ID first)
-        b.append("&order-by={id[DESC]}");
+        b.append("&order-by={name[DESC]}");
         //Display 10 results
         b.append("&page-size=1");
         //Counting from the 1st result, inclusive
@@ -89,7 +91,10 @@ public class ExtraiALM {
         System.out.println("QUERY: " + b.toString());
 
         String listFromCollectionAsXmlTests
-                = con.httpGet(testLabUrl, null, requestHeaders).toString();
+                = con.httpGet(testLabUrl, b.toString(), requestHeaders).toString();
+        
+        
+         Entity entity = EntityMarshallingUtils.marshal(Entity.class, listFromCollectionAsXmlTests);
 
   
         System.out.println("Defects : " + listFromCollectionAsXmlTests);

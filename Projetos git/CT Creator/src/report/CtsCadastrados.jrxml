@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CtsCadastrados" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="68ab9da7-f081-461a-baee-09d29916dec6">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CtsCadastrados" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="68ab9da7-f081-461a-baee-09d29916dec6">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="232"/>
+	<property name="ireport.x" value="367"/>
+	<property name="ireport.y" value="233"/>
+	<style name="style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style mode="Opaque" backcolor="#E6E4E4"/>
+		</conditionalStyle>
+	</style>
 	<scriptlet name="scriptlet1" class="net.sf.jasperreports.engine.JRDefaultScriptlet"/>
 	<parameter name="SISTEMA" class="java.lang.String"/>
 	<queryString>
@@ -25,7 +31,7 @@
 		<groupFooter>
 			<band height="20">
 				<textField>
-					<reportElement x="311" y="0" width="242" height="20" uuid="fa166d20-7a4b-481d-ae62-bd0c22eb7694"/>
+					<reportElement x="553" y="0" width="242" height="20" uuid="fa166d20-7a4b-481d-ae62-bd0c22eb7694"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA["Total de CTs do "+$F{system}+" "+$V{group_system_COUNT}]]></textFieldExpression>
 				</textField>
@@ -66,16 +72,15 @@
 				<text><![CDATA[Filtro Sistema:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="311" y="39" width="244" height="20" uuid="459438e2-2a1d-4184-a4ee-5bea59a9b0f2"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Relatório emitido em: "+com.accenture.util.FunctiosDates.dateToString(new java.util.Date())]]></textFieldExpression>
+				<reportElement x="0" y="39" width="553" height="20" uuid="459438e2-2a1d-4184-a4ee-5bea59a9b0f2"/>
+				<textFieldExpression><![CDATA["Relatório emitido em: "+com.accenture.util.FunctiosDates.dateToString(new java.util.Date(), "dd/MM/yyyy - HH:mm")]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="311" y="0" width="85" height="20" uuid="eb945b9a-4a22-46b3-bf85-cfe548ee4088"/>
+				<reportElement x="577" y="0" width="57" height="20" uuid="eb945b9a-4a22-46b3-bf85-cfe548ee4088"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -96,7 +101,7 @@
 				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="413" y="0" width="140" height="20" uuid="f4a3a6c9-ad72-49ce-aa8a-c8ae66a4f05f"/>
+				<reportElement x="645" y="0" width="157" height="20" uuid="f4a3a6c9-ad72-49ce-aa8a-c8ae66a4f05f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -107,20 +112,20 @@
 	<detail>
 		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="2" width="35" height="20" uuid="96e945f6-3e2b-4d49-9050-b7853c5a35ba"/>
+				<reportElement style="style1" x="0" y="2" width="35" height="20" uuid="96e945f6-3e2b-4d49-9050-b7853c5a35ba"/>
 				<textFieldExpression><![CDATA[$F{testeCaseId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="47" y="2" width="252" height="20" uuid="04c72af6-751b-4f19-ba73-f2c33cc1c479"/>
+				<reportElement style="style1" x="47" y="2" width="506" height="20" uuid="04c72af6-751b-4f19-ba73-f2c33cc1c479"/>
 				<textFieldExpression><![CDATA[$F{testCaseName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="311" y="2" width="85" height="20" uuid="e8141a78-d4b6-44c1-8261-0926b8ed8d47"/>
+				<reportElement style="style1" x="577" y="0" width="57" height="20" uuid="e8141a78-d4b6-44c1-8261-0926b8ed8d47"/>
 				<textFieldExpression><![CDATA[$F{system}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="413" y="2" width="140" height="20" uuid="bd68d2dc-c941-413a-a38d-a4d70f13ada8"/>
-				<textFieldExpression><![CDATA[$F{dirEntry}.getAuthor()+" - "+ com.accenture.util.FunctiosDates.dateToString($F{dirEntry}.getDate())]]></textFieldExpression>
+				<reportElement style="style1" x="645" y="0" width="157" height="20" uuid="bd68d2dc-c941-413a-a38d-a4d70f13ada8"/>
+				<textFieldExpression><![CDATA[$F{dirEntry}.getAuthor()+" - "+ com.accenture.util.FunctiosDates.dateToString($F{dirEntry}.getDate(), "dd/MM/yyyy - HH:mm")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -133,7 +138,7 @@
 	<summary>
 		<band height="42" splitType="Stretch">
 			<textField>
-				<reportElement x="396" y="0" width="157" height="20" uuid="1139030f-7524-4e7d-90be-dad9b8f97e9c"/>
+				<reportElement x="611" y="0" width="184" height="20" uuid="1139030f-7524-4e7d-90be-dad9b8f97e9c"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Total de CTs: "+$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>

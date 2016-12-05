@@ -2901,6 +2901,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         
         for(int i = 0 ; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
             
+            String name = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
+           
+            
+            this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(name);
             
             String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
             if (!desc.contains("<<<pre_requisito>>>")) {
