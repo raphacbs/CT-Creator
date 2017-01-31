@@ -132,7 +132,8 @@ public class FilterReportScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntCancelarActionPerformed
 
     private void bntGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntGerarRelatorioActionPerformed
-       new SwingWorker() {
+       System.setProperty("java.awt.headless", "true");
+        new SwingWorker() {
 
             @Override
             protected Object doInBackground()  {
@@ -140,10 +141,13 @@ public class FilterReportScreenView extends javax.swing.JInternalFrame {
                 try { 
                     geraRelatorio();
                 } catch (SVNException ex) {
+                    ex.printStackTrace();
                     Logger.getLogger(FilterReportScreenView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                     Logger.getLogger(FilterReportScreenView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (JRException ex) {
+                    ex.printStackTrace();
                     Logger.getLogger(FilterReportScreenView.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;

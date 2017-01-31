@@ -28,6 +28,7 @@ public class BuildReport {
     public static void geraRelatorio(List<?> listObject, Map<String,Object> parametros, String fileReport) throws JRException{
         System.out.println("Gerando relatório...");
         
+        try{
        
         InputStream fonte = BuildReport.class.getResourceAsStream("/report/"+fileReport);
         // compilacao do JRXML 
@@ -41,5 +42,9 @@ public class BuildReport {
         // exportacao do relatorio para outro formato, no caso PDF 
 //        JasperExportManager.exportReportToPdfFile(print, dir+".pdf");
         System.out.println("Relatório gerado.");
+        
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
