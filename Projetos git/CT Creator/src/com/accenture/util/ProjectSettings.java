@@ -11,18 +11,21 @@ package com.accenture.util;
  */
 public class ProjectSettings {
     
-    
     public final static String PROPERTY_NAME = "name";
     public final static String PROPERTY_DESCRIPTION = "decription";
     public final static String PROPERTY_REGISTER_DATE = "registerDate";
     public final static String PROPERTY_SYSTEM = "system";
     public final static String PROPERTY_TEST_CASES= "testCases";
     public final static String PROPERTY_ID= "id";
-    
+
+    //SVN
+    public final static String SVN_FOLDER_FLUXOS = "/fluxos";
+    public final static String SVN_FOLDER_SCRIPTS = "/scripts";
+    public final static String SVN_FOLDER_COMPONENTS = "/components";
     
     //diretorios
-    public final static String PATH_FILE_FLUXO = "C:\\FastPlan\\fluxos";
-//    public final static String URL_SVN_FLUXO = "/CTs/fluxos";
+    public final static String PATH_FILE_FLUXO = "C:/FastPlan/fluxos";
+//  public final static String URL_SVN_FLUXO = "/CTs/fluxos";
     public final static String PATH_FILE_SVN_PROPERTIES = "./res/svn.properties";
     
     public final static String PATH_FILE_SVN_FLOW_PROPERTIES = "./res/svn.properties";
