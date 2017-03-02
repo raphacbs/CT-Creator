@@ -47,7 +47,7 @@ public class ScriptDAO extends FrameworkSvnManager{
     
     public ScriptDAO() throws IOException, SVNException{
          properties = new SVNPropertiesVOBean();
-        url = properties.getUrl()+ properties.getUrlComponents();
+        url = properties.getUrl()+ properties.getUrlScritps();
         username = properties.getUser();
         password = properties.getPass();               
         repo =  getRepository(url, username, password);
@@ -68,12 +68,12 @@ public class ScriptDAO extends FrameworkSvnManager{
     }
      
     public List<SVNDirEntry> getEntries(String system) throws SVNException, IOException{   
-        return getListEntries(new SVNPropertiesVOBean().getUrlComponents()+"/"+system, repo);       
+        return getListEntries(new SVNPropertiesVOBean().getUrlScritps()+"/"+system, repo);       
     }
     
     public void save(String system) throws SVNException{
         addEntryWorkingCopy(clientManager, ProjectSettings.PATH_FILE_SCRIPT+"/"+system);
-        commitChanged(clientManager, ProjectSettings.PATH_FILE_SCRIPT+"/"+system, true, "Salvando componente via CT CREATOR");
+        commitChanged(clientManager, ProjectSettings.PATH_FILE_SCRIPT+"/"+system, true, "Salvando script via CT CREATOR");
     }
     
      public void deleteFile(List<String> nameFiles, String system) throws SVNException{

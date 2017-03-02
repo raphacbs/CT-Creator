@@ -107,6 +107,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuItemFuncionalidade = new javax.swing.JMenuItem();
         menuMatrizRastreabilidade = new javax.swing.JMenu();
         itemMenuComponentes = new javax.swing.JMenuItem();
+        itemMenuScripts = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuItemCT = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
@@ -271,6 +272,14 @@ public class MainScreenView extends javax.swing.JFrame {
             }
         });
         menuMatrizRastreabilidade.add(itemMenuComponentes);
+
+        itemMenuScripts.setText("Scripts(Cenários)");
+        itemMenuScripts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuScriptsActionPerformed(evt);
+            }
+        });
+        menuMatrizRastreabilidade.add(itemMenuScripts);
 
         jMenuBar1.add(menuMatrizRastreabilidade);
 
@@ -584,6 +593,20 @@ public class MainScreenView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_itemMenuComponentesActionPerformed
 
+    private void itemMenuScriptsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuScriptsActionPerformed
+        try {
+            criaJanelaScripts();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_itemMenuScriptsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -636,6 +659,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemMenuImportaStepPadrao;
     private javax.swing.JMenuItem itemMenuNovoCT;
     private javax.swing.JMenuItem itemMenuPesquisaCT;
+    private javax.swing.JMenuItem itemMenuScripts;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -674,6 +698,7 @@ public class MainScreenView extends javax.swing.JFrame {
     ManageflowsScreenView guiManageflowsScreenView;
     FilterReportScreenView guiFilterReportScreenView;
     ManageComponentsScreenView guiComponentsScreenView;
+    ManageScriptsScreenView guiManageScriptsScreenView;
 
     public void criaJanelaReport() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiFilterReportScreenView = new FilterReportScreenView();
@@ -841,6 +866,13 @@ public class MainScreenView extends javax.swing.JFrame {
         desktop.add(guiComponentsScreenView);
         guiComponentsScreenView.centralizaJanela();
         guiComponentsScreenView.setVisible(true);
+
+    }
+    private void criaJanelaScripts() throws SQLException, ClassNotFoundException, IOException, SVNException {
+        guiManageScriptsScreenView = new ManageScriptsScreenView();
+        desktop.add(guiManageScriptsScreenView);
+        guiManageScriptsScreenView.centralizaJanela();
+        guiManageScriptsScreenView.setVisible(true);
 
     }
 

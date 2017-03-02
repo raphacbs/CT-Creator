@@ -6,11 +6,12 @@
 package com.accenture.view;
 
 import com.accenture.bean.ButtonIconBean;
-import com.accenture.bean.ComponenteBean;
-import com.accenture.bean.FlowBean;
-import com.accenture.ts.rn.ComponenteRN;
+
+import com.accenture.bean.ScriptBean;
+
 import javax.swing.DefaultListModel;
-import com.accenture.ts.rn.FlowRN;
+
+import com.accenture.ts.rn.ScriptRN;
 import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.ProjectSettings;
 import java.awt.Dimension;
@@ -70,32 +71,32 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         addScript(Cts);
     }
 
-    private void carregaComponentes(String system) {
+    private void carregaScript(String system) {
         try {
-            labelQtdFluxos.setText("Total de componentes:  " + 0);
+            labelQtdFluxos.setText("Total de scripts:  " + 0);
 
-            DefaultListModel modelFlow = (DefaultListModel) listSelectComponent.getModel();
-            List<SVNDirEntry> list = ComponenteRN.getInstance().getEntries(system);
-            List<ComponenteBean> componentes = new ArrayList<ComponenteBean>();
-            refreshLabelStatus("Aguarde, atualizando lista de componentes...");
+            DefaultListModel modelFlow = (DefaultListModel) listSelectScript.getModel();
+            List<SVNDirEntry> list = ScriptRN.getInstance().getEntries(system);
+            List<ScriptBean> scripts = new ArrayList<ScriptBean>();
+            refreshLabelStatus("Aguarde, atualizando lista de scripts...");
 
-            componentes = ComponenteRN.getInstance().getComponents(list, system);
+            scripts = ScriptRN.getInstance().getScripts(list, system);
 
-            Collections.sort(componentes);
+            Collections.sort(scripts);
 
-            for (int i = 0; i < componentes.size(); i++) {
+            for (int i = 0; i < scripts.size(); i++) {
                 if (jTextFieldNome.getText().isEmpty()) {
-                    modelFlow.addElement(componentes.get(i));
-                    refreshLabelStatus("Carregando: " + componentes.get(i).getNameComponent());
-                } else if (componentes.get(i).getNameComponent().contains(jTextFieldNome.getText())) {
-                    modelFlow.addElement(componentes.get(i));
-                    refreshLabelStatus("Carregando: " + componentes.get(i).getNameComponent());
+                    modelFlow.addElement(scripts.get(i));
+                    refreshLabelStatus("Carregando: " + scripts.get(i).getNameScript());
+                } else if (scripts.get(i).getNameScript().contains(jTextFieldNome.getText())) {
+                    modelFlow.addElement(scripts.get(i));
+                    refreshLabelStatus("Carregando: " + scripts.get(i).getNameScript());
                 }
             }
 
-            listSelectComponent.repaint();
+            listSelectScript.repaint();
             labelQtdFluxos.setText("Total de fluxos:  " + modelFlow.size());
-            refreshLabelStatus("Lista de componentes carregada.");
+            refreshLabelStatus("Lista de scripts carregada.");
 
         } catch (Exception ex) {
             addLogTextArea(ex);
@@ -144,7 +145,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         DefaultListModel model =  new DefaultListModel();
-        listSelectComponent =  new JList(model);
+        listSelectScript =  new JList(model);
         jTextFieldNome = new javax.swing.JTextField();
         jComboBoxSistemas = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -248,20 +249,20 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         /*
-        listSelectComponent.setModel(new javax.swing.AbstractListModel<String>() {
+        listSelectScript.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Teste" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         */
-        listSelectComponent.setToolTipText("");
-        listSelectComponent.addMouseListener(new java.awt.event.MouseAdapter() {
+        listSelectScript.setToolTipText("");
+        listSelectScript.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                listSelectComponentMouseReleased(evt);
+                listSelectScriptMouseReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(listSelectComponent);
-        listSelectComponent.add(jPopupMenu1);
+        jScrollPane1.setViewportView(listSelectScript);
+        listSelectScript.add(jPopupMenu1);
 
         jTextFieldNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +306,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
         jScrollPane3.setViewportView(listScripts);
 
-        jLabel7.setText("Scripts:");
+        jLabel7.setText("Componentes:");
 
         bntDelete.setText("Excluir");
         bntDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -511,16 +512,16 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 //            @Override
 //            protected Object doInBackground() throws Exception {
         if (!jComboBoxSistemas.getSelectedItem().toString().isEmpty()) {
-            refreshLabelStatus("Aguarde, atualizando lista de componente...");
+            refreshLabelStatus("Aguarde, atualizando lista de scripts...");
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            if (listSelectComponent.getModel().getSize() > 0) {
-                DefaultListModel modelFlow = (DefaultListModel) listSelectComponent.getModel();
+            if (listSelectScript.getModel().getSize() > 0) {
+                DefaultListModel modelFlow = (DefaultListModel) listSelectScript.getModel();
                 modelFlow.clear();
             }
             cleanFilds();
 
-            carregaComponentes(jComboBoxSistemas.getSelectedItem().toString());
-            listSelectComponent.repaint();
+            carregaScript(jComboBoxSistemas.getSelectedItem().toString());
+            listSelectScript.repaint();
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } else {
             JOptionPane.showMessageDialog(null, "Favor selecionar um sistema, para refinar a busca", "Componente", JOptionPane.WARNING_MESSAGE);
@@ -539,9 +540,9 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_bntSearchActionPerformed
 
-    private void listSelectComponentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listSelectComponentMouseReleased
-        if (listSelectComponent.getSelectedIndices().length == 1) {
-            carregaCampos(listSelectComponent.getSelectedIndex());
+    private void listSelectScriptMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listSelectScriptMouseReleased
+        if (listSelectScript.getSelectedIndices().length == 1) {
+            carregaCampos(listSelectScript.getSelectedIndex());
             bntDelete.setEnabled(true);
             bntEditOrCancel.setEnabled(true);
 
@@ -550,7 +551,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             bntDelete.setEnabled(true);
         }
         refreshQTDCTs();
-    }//GEN-LAST:event_listSelectComponentMouseReleased
+    }//GEN-LAST:event_listSelectScriptMouseReleased
 
     private void bntEditOrCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntEditOrCancelActionPerformed
         new SwingWorker() {
@@ -559,8 +560,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             protected Object doInBackground() throws Exception {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                if (listSelectComponent.getSelectedValue() != null) {
-                    if (listSelectComponent.getSelectedIndices().length == 1) {
+                if (listSelectScript.getSelectedValue() != null) {
+                    if (listSelectScript.getSelectedIndices().length == 1) {
                         if (bntEditOrCancel.getText().equals("Editar")) {
                             if (modeEdit(true)) {
                                 refreshLabelStatus("Editando componente...");
@@ -580,7 +581,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                                 bntEditOrCancel.setEnabled(true);
                                 bntDelete.setEnabled(true);
                                 editing = false;
-                                carregaCampos(listSelectComponent.getSelectedIndex());
+                                carregaCampos(listSelectScript.getSelectedIndex());
                                 refreshLabelStatus("Edição cancelada...");
                                 addLogTextArea("Edição cancelada...");
                             }
@@ -609,15 +610,15 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private void bntDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDeleteActionPerformed
 
         try {
-            refreshLabelStatus("Aguarde, excluindo compoenente...");
-            if (listSelectComponent.getSelectedIndex() != -1) {
-                if (JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) componente(s) selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            refreshLabelStatus("Aguarde, excluindo script...");
+            if (listSelectScript.getSelectedIndex() != -1) {
+                if (JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) script(s) selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     String system = fieldComboboxSystem.getSelectedItem().toString();
-                    deleteComponentes(system);
-                    DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
+                    deleteScripts(system);
+                    DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectScript.getModel();
                     modelSelectTestCase.clear();
-                    carregaComponentes(system);
+                    carregaScript(system);
                     cleanFilds();
                     getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
@@ -636,7 +637,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntDeleteActionPerformed
 
     private void bntNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntNewActionPerformed
-        newComponent();
+        newScript();
     }//GEN-LAST:event_bntNewActionPerformed
 
     private void bntSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSaveActionPerformed
@@ -726,18 +727,18 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntLimparActionPerformed
 
     private void carregaCampos(int i) {
-        DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
+        DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectScript.getModel();
         DefaultListModel modelFlow = (DefaultListModel) listScripts.getModel();
         modelFlow.clear();
 
-        ComponenteBean componente = (ComponenteBean) modelSelectTestCase.getElementAt(i);
-        fieldTextName.setText(componente.getNameComponent());
-        fieldComboboxSystem.setSelectedItem(componente.getSystem());
-        fieldTextDescription.setText(componente.getDescription());
-        fieldTextFlowId.setText(componente.getNameComponent());
+        ScriptBean script = (ScriptBean) modelSelectTestCase.getElementAt(i);
+        fieldTextName.setText(script.getNameScript());
+        fieldComboboxSystem.setSelectedItem(script.getSystem());
+        fieldTextDescription.setText(script.getDescription());
+        fieldTextFlowId.setText(script.getNameScript());
 
-        for (String script : componente.getScripts()) {
-            modelFlow.addElement(script);
+        for (String componente : script.getComponents()) {
+            modelFlow.addElement(componente);
         }
     }
 
@@ -756,7 +757,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private void setEnableFields(boolean enable) {
         jTextFieldNome.setEnabled(enable);
         jComboBoxSistemas.setEnabled(enable);
-        listSelectComponent.setEnabled(enable);
+        listSelectScript.setEnabled(enable);
         fieldComboboxSystem.setEnabled(enable);
         fieldTextDescription.setEnabled(enable);
         fieldTextName.setEnabled(enable);
@@ -767,7 +768,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         bntSearch.setEnabled(enable);
         jTextFieldNome.setEnabled(enable);
         jComboBoxSistemas.setEnabled(enable);
-        listSelectComponent.setEnabled(enable);
+        listSelectScript.setEnabled(enable);
     }
 
     private void setEnableComponents(boolean enable) {
@@ -787,38 +788,38 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean modeEdit(boolean active) {
         try {
 
-            DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
-            ComponenteBean componente = (ComponenteBean) modelSelectTestCase.getElementAt(listSelectComponent.getSelectedIndex());
-            String nameFile = componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY;
+            DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectScript.getModel();
+            ScriptBean script = (ScriptBean) modelSelectTestCase.getElementAt(listSelectScript.getSelectedIndex());
+            String nameFile = script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY;
             String system = fieldComboboxSystem.getSelectedItem().toString();
             if (active) {
-                if (ComponenteRN.getInstance().verifyExistFile(nameFile, system)) {
+                if (ScriptRN.getInstance().verifyExistFile(nameFile, system)) {
                     //tenta bloquear o arquivo
-                    if (ComponenteRN.getInstance().lockFile(nameFile, system)) {
+                    if (ScriptRN.getInstance().lockFile(nameFile, system)) {
                         setEnableComponents(active);
                         setEnableComponentsSearch(!active);
                         editing = true;
                         return true;
                     } else {
-                        JOptionPane.showMessageDialog(null, "O componente está bloqueado pelo usuário: " + ComponenteRN.getInstance().getUserLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system) + "\n"
+                        JOptionPane.showMessageDialog(null, "O script está bloqueado pelo usuário: " + ScriptRN.getInstance().getUserLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system) + "\n"
                                 + "para editar tente novamente mais tarde! ", "Atenção", JOptionPane.WARNING_MESSAGE);
                         editing = false;
                         return false;
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "O componente foi excluído, favor atualize a lista. ", "Atenção", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "O script foi excluído, favor atualize a lista. ", "Atenção", JOptionPane.WARNING_MESSAGE);
                     editing = false;
                     return false;
                 }
 
             } else {
-                if (ComponenteRN.getInstance().unLockFile(nameFile, system)) {
+                if (ScriptRN.getInstance().unLockFile(nameFile, system)) {
                     setEnableComponents(active);
                     setEnableComponentsSearch(!active);
                     editing = false;
                     return true;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ComponenteRN.getInstance().getUserLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ScriptRN.getInstance().getUserLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
                     editing = true;
                     return false;
                 }
@@ -865,9 +866,9 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
             if (!fieldTextName.getText().isEmpty() || model.isEmpty()) {
 
-                ComponenteBean componente = new ComponenteBean();
+                ScriptBean script = new ScriptBean();
 
-                DefaultListModel modelSelectionTestCase = (DefaultListModel) listSelectComponent.getModel();
+                DefaultListModel modelSelectionTestCase = (DefaultListModel) listSelectScript.getModel();
 
                 List<String> testCases = new ArrayList<String>();
 
@@ -875,24 +876,24 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     testCases.add(model.getElementAt(i).toString());
                 }
 
-                componente.setDescription(fieldTextDescription.getText());
-                componente.setNameComponent(fieldTextName.getText());
-                componente.setSystem(fieldComboboxSystem.getSelectedItem().toString());
+                script.setDescription(fieldTextDescription.getText());
+                script.setNameScript(fieldTextName.getText());
+                script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
 
-                componente.setScripts(testCases);
+                script.setComponents(testCases);
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
-                    refreshLabelStatus("Salvando novo componente...");
-                    componente.setDate(FunctiosDates.getDateActual());
-                    String id = ComponenteRN.getInstance().saveFile(null, componente).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
-                    if (listSelectComponent.getModel().getSize() > 0) {
+                    refreshLabelStatus("Salvando novo script...");
+                    script.setDate(FunctiosDates.getDateActual());
+                    String id = ScriptRN.getInstance().saveFile(null, script).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                    if (listSelectScript.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
-                    carregaComponentes(jComboBoxSistemas.getSelectedItem().toString());
+                    carregaScript(jComboBoxSistemas.getSelectedItem().toString());
                     //Action Item 18037 - Raphael - Inicio
                     for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
-                        if (((ComponenteBean) modelSelectionTestCase.getElementAt(i)).getNameComponent().equals(id)) {
-                            listSelectComponent.getSelectionModel().setSelectionInterval(i, i);
+                        if (((ScriptBean) modelSelectionTestCase.getElementAt(i)).getNameScript().equals(id)) {
+                            listSelectScript.getSelectionModel().setSelectionInterval(i, i);
                             carregaCampos(i);
                         }
                     }
@@ -903,34 +904,34 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     bntNew.setText("Novo");
                     editing = false;
                     refreshLabelStatus("novo fluxo cadastrado.");
-                    addLogTextArea("Novo fluxo cadastrado" + componente.toString());
+                    addLogTextArea("Novo fluxo cadastrado" + script.toString());
                 } else {
                     refreshLabelStatus("salvando alterações do componente.");
-                    addLogTextArea("salvando alterações do componente." + componente.toString());
-                    componente.setDate(((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getDate());
-                    String nome = ((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getNameComponent();
-                    if (nome.equals(componente.getNameComponent())) {
-                        ComponenteRN.getInstance().saveFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, componente).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                    addLogTextArea("salvando alterações do componente." + script.toString());
+                    script.setDate(((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getDate());
+                    String nome = ((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getNameScript();
+                    if (nome.equals(script.getNameScript())) {
+                        ScriptRN.getInstance().saveFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, script).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
 
                     } else {
-                        ComponenteRN.getInstance().renomear(nome, componente.getSystem(), componente.getNameComponent(), componente);
+                        ScriptRN.getInstance().renomear(nome, script.getSystem(), script.getNameScript(), script);
                     }
 
-                    if (listSelectComponent.getModel().getSize() > 0) {
+                    if (listSelectScript.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
-                    carregaComponentes(componente.getSystem());
+                    carregaScript(script.getSystem());
                     for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
-                        if (((ComponenteBean) modelSelectionTestCase.getElementAt(i)).getNameComponent().equals(componente.getNameComponent())) {
-                            listSelectComponent.getSelectionModel().setSelectionInterval(i, i);
+                        if (((ScriptBean) modelSelectionTestCase.getElementAt(i)).getNameScript().equals(script.getNameScript())) {
+                            listSelectScript.getSelectionModel().setSelectionInterval(i, i);
                             carregaCampos(i);
                         }
                     }
-                    carregaCampos(listSelectComponent.getSelectedIndex());
+                    carregaCampos(listSelectScript.getSelectedIndex());
                     modeEdit(false);
                     bntEditOrCancel.setText("Editar");
-                    refreshLabelStatus("alterações do componente concluidas.");
-                    addLogTextArea("alterações do componente concluidas.." + componente.toString());
+                    refreshLabelStatus("alterações do script concluidas.");
+                    addLogTextArea("alterações do script concluidas.." + script.toString());
                 }
 
                 bntNew.setEnabled(true);
@@ -943,7 +944,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 return false;
             }
         } catch (SVNException ex) {
-            refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
+            refreshLabelStatus("Erro na tentativa de salvar o script, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro com o SVN, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -951,7 +952,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (IOException ex) {
-            refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
+            refreshLabelStatus("Erro na tentativa de salvar o script, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao manipular algum arquivo, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -967,7 +968,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         }
     }
 
-    private void newComponent() {
+    private void newScript() {
         try {
 
             if (bntNew.getText().equals("Novo")) {
@@ -982,8 +983,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 bntDesce.setEnabled(true);
                 bntNew.setText("Cancelar");
                 cleanFilds();
-                addLogTextArea("usuário iniciou cadastro de um novo componente.");
-                refreshLabelStatus("usuário iniciou cadastro de um novo componente.");
+                addLogTextArea("usuário iniciou cadastro de um novo script.");
+                refreshLabelStatus("usuário iniciou cadastro de um novo script.");
 
             } else {
                 setEnableFields(false);
@@ -996,8 +997,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 bntSubir.setEnabled(false);
                 bntDesce.setEnabled(false);
                 bntNew.setText("Novo");
-                addLogTextArea("usuário cancelou cadastro de um novo componente.");
-                refreshLabelStatus("usuário cancelou cadastro de um novo componente.");
+                addLogTextArea("usuário cancelou cadastro de um novo script.");
+                refreshLabelStatus("usuário cancelou cadastro de um novo script.");
 
             }
         } catch (Exception ex) {
@@ -1125,19 +1126,19 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         labelQtdCts.setText("Quantidade de Scripts: " + model.getSize());
     }
 
-    private void deleteComponentes(String system) throws IOException, SVNException {
-        List<ComponenteBean> componentes = new ArrayList<ComponenteBean>();
-        Object[] objs = listSelectComponent.getSelectedValues();
+    private void deleteScripts(String system) throws IOException, SVNException {
+        List<ScriptBean> scripts = new ArrayList<ScriptBean>();
+        Object[] objs = listSelectScript.getSelectedValues();
 
         for (Object obj : objs) {
-            componentes.add((ComponenteBean) obj);
+            scripts.add((ScriptBean) obj);
         }
 
-        String retorno = ComponenteRN.getInstance().delete(componentes, system);
+        String retorno = ScriptRN.getInstance().delete(scripts, system);
         if (retorno != null) {
             refreshLabelStatus(retorno);
             addLogTextArea(retorno);
-            JOptionPane.showMessageDialog(null, "" + retorno, "Exclusão do componente não permitida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "" + retorno, "Exclusão do script não permitida", JOptionPane.WARNING_MESSAGE);
         }
 
     }
@@ -1198,7 +1199,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel labelQtdFluxos;
     private javax.swing.JLabel labelStatus;
     private javax.swing.JList<String> listScripts;
-    private javax.swing.JList<String> listSelectComponent;
+    private javax.swing.JList<String> listSelectScript;
     private javax.swing.JTextArea statusTextArea;
     // End of variables declaration//GEN-END:variables
 public void centralizaJanela() {

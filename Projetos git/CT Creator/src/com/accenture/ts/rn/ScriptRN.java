@@ -5,9 +5,9 @@
  */
 package com.accenture.ts.rn;
 
-import com.accenture.bean.ComponenteBean;
+
 import com.accenture.bean.ScriptBean;
-import com.accenture.ts.dao.ComponenteDAO;
+
 import com.accenture.ts.dao.ScriptDAO;
 import com.accenture.util.FunctiosDates;
 import com.accenture.util.ProjectSettings;
@@ -93,7 +93,7 @@ public class ScriptRN {
 
     private void loadFileProperties(String fileName, String system) throws FileNotFoundException, IOException {
         fileProperties = new Properties();
-        file = new FileInputStream(ProjectSettings.PATH_FILE_COMPONENT + "/" + system + "/" + fileName);
+        file = new FileInputStream(ProjectSettings.PATH_FILE_SCRIPT + "/" + system + "/" + fileName);
         fileProperties.load(file);
         file.close();
 
@@ -102,65 +102,66 @@ public class ScriptRN {
 //      private void loadFiles() throws SVNException{
 //          componentDAO.donwloadFiles();
 //      }
-    public String saveFile(String fileName, ComponenteBean componente) throws SVNException, IOException {
+    public String saveFile(String fileName, ScriptBean script) throws SVNException, IOException {
 
         //atualiza pasta 
-        scriptDAO.donwloadFiles(componente.getSystem());
+        scriptDAO.donwloadFiles(script.getSystem());
 
         if (fileName == null) {
-            String id = createFile(componente);
-            scriptDAO.save(componente.getSystem());
+            String id = createFile(script);
+            scriptDAO.save(script.getSystem());
 //            workflowDAO.lockFile(id+".properties");
             return id + ProjectSettings.EXTENSION_FILE_PROPERTY;
         } else {
-            editFile(fileName, componente);
-            scriptDAO.unLockFile(fileName, componente.getSystem());
-            scriptDAO.save(componente.getSystem());
+            editFile(fileName, script);
+            scriptDAO.unLockFile(fileName, script.getSystem());
+            scriptDAO.save(script.getSystem());
 //            workflowDAO.lockFile(fileName);
             return fileName;
         }
     }
 
-    private String createFile(ComponenteBean componente) throws FileNotFoundException, IOException, SVNException {
-        String id = generateId(componente.getSystem());
-        componente.setNameComponent(id + componente.getNameComponent());
-        File newFile = new File(ProjectSettings.PATH_FILE_COMPONENT + "/" + componente.getSystem() + "/" + componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY);
+    private String createFile(ScriptBean script) throws FileNotFoundException, IOException, SVNException {
+        String id = generateId(script.getSystem());
+        script.setNameScript(id + script.getNameScript());
+        File newFile = new File(ProjectSettings.PATH_FILE_SCRIPT + "/" + script.getSystem() + "/" + script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
         FileOutputStream fileOut = new FileOutputStream(newFile);
 
-        loadFileProperties(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, componente.getSystem());
+        loadFileProperties(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, script.getSystem());
 
-        fileProperties.put(ProjectSettings.PROPERTY_COMPONENT_NAME, componente.getNameComponent());
-        fileProperties.put(ProjectSettings.PROPERTY_COMPONENT_DESCRIPTION, componente.getDescription());
-        fileProperties.put(ProjectSettings.PROPERTY_DATE, FunctiosDates.dateToString(componente.getDate(), "dd/MM/yyyy HH:mm:ss"));
-        fileProperties.put(ProjectSettings.PROPERTY_SYSTEM, componente.getSystem());
+        fileProperties.put(ProjectSettings.PROPERTY_SCRIPT_NAME, script.getNameScript());
+        fileProperties.put(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION, script.getDescription());
+        fileProperties.put(ProjectSettings.PROPERTY_DATE, FunctiosDates.dateToString(script.getDate(), "dd/MM/yyyy HH:mm:ss"));
+        fileProperties.put(ProjectSettings.PROPERTY_SYSTEM, script.getSystem());
         String scripts = "";
-        scripts = componente.getScripts().stream().map((script) -> script + ";").reduce(scripts, String::concat);
+        scripts = script.getComponents().stream().map((componente) -> componente + ";").reduce(scripts, String::concat);
         fileProperties.put(ProjectSettings.PROPERTY_SCRIPTS, scripts);
         fileProperties.store(fileOut, null);
-        return componente.getNameComponent();
+        return script.getNameScript();
     }
 
-    private String editFile(String nameFile, ComponenteBean componente) throws FileNotFoundException, IOException {
+    private String editFile(String nameFile, ScriptBean script) throws FileNotFoundException, IOException {
 
         if (!nameFile.contains(ProjectSettings.EXTENSION_FILE_PROPERTY)) {
             nameFile += ProjectSettings.EXTENSION_FILE_PROPERTY;
         }
 
-        File newFile = new File(ProjectSettings.PATH_FILE_COMPONENT + "/" + componente.getSystem() + "/" + nameFile);
+        File newFile = new File(ProjectSettings.PATH_FILE_SCRIPT + "/" + script.getSystem() + "/" + nameFile);
         FileOutputStream fileOut = new FileOutputStream(newFile);
 
-        loadFileProperties(nameFile, componente.getSystem());
+        loadFileProperties(nameFile, script.getSystem());
 
-        fileProperties.put(ProjectSettings.PROPERTY_COMPONENT_NAME, componente.getNameComponent());
-        fileProperties.put(ProjectSettings.PROPERTY_COMPONENT_DESCRIPTION, componente.getDescription());
-        fileProperties.put(ProjectSettings.PROPERTY_DATE, FunctiosDates.dateToString(componente.getDate(), "dd/MM/yyyy HH:mm:ss"));
-        fileProperties.put(ProjectSettings.PROPERTY_SYSTEM, componente.getSystem());
+        fileProperties.put(ProjectSettings.PROPERTY_SCRIPT_NAME, script.getNameScript());
+        fileProperties.put(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION, script.getDescription());
+        fileProperties.put(ProjectSettings.PROPERTY_DATE, FunctiosDates.dateToString(script.getDate(), "dd/MM/yyyy HH:mm:ss"));
+        fileProperties.put(ProjectSettings.PROPERTY_SYSTEM, script.getSystem());
+
         String scripts = "";
-        scripts = componente.getScripts().stream().map((script) -> script + ";").reduce(scripts, String::concat);
+        scripts = script.getComponents().stream().map((componente) -> componente + ";").reduce(scripts, String::concat);
         fileProperties.put(ProjectSettings.PROPERTY_SCRIPTS, scripts);
 
         fileProperties.store(fileOut, null);
-        return componente.getNameComponent();
+        return script.getNameScript();
     }
 
     public boolean lockFile(String nameFile, String system) throws SVNException, IOException {
@@ -264,31 +265,31 @@ public class ScriptRN {
         return exist;
     }
 
-    public String delete(List<ComponenteBean> componentes, String system) throws SVNException, IOException {
-        List<String> componenteNames = new ArrayList<String>();
+    public String delete(List<ScriptBean> scripts, String system) throws SVNException, IOException {
+        List<String> scriptNames = new ArrayList<String>();
 
-        for (ComponenteBean componente : componentes) {
-            if (verifyExistFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                if (scriptDAO.isLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                    if (unLockFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                        componenteNames.add(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY);
+        for (ScriptBean script : scripts) {
+            if (verifyExistFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
+                if (scriptDAO.isLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
+                    if (unLockFile(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
+                        scriptNames.add(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
                     } else {
-                        return "O compoenente " + componente.getNameComponent() + " está bloqueado pelo usuário " + getUserLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system);
+                        return "O script " + script.getNameScript()+ " está bloqueado pelo usuário " + getUserLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system);
 
                     }
                 } else {
-                    componenteNames.add(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY);
+                    scriptNames.add(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
                 }
             } else {
-                return "O componente " + componente.getNameComponent() + " não existe, favor atualize a lista.";
+                return "O scripts " + script.getNameScript()+ " não existe, favor atualize a lista.";
             }
         }
 
-        scriptDAO.deleteFile(componenteNames, system);
+        scriptDAO.deleteFile(scriptNames, system);
         return null;
     }
 
-    public void renomear(String nameFile, String system, String newName, ComponenteBean componente) throws Exception {
+    public void renomear(String nameFile, String system, String newName, ScriptBean script) throws Exception {
         if (!nameFile.contains(ProjectSettings.EXTENSION_FILE_PROPERTY)) {
             nameFile += ProjectSettings.EXTENSION_FILE_PROPERTY;
         }
@@ -298,9 +299,9 @@ public class ScriptRN {
 
         scriptDAO.renomearArquivo(nameFile, newName, system);
 
-        editFile(newName, componente);
+        editFile(newName, script);
 //        componentDAO.unLockFile(fileName, componente.getSystem());
-        scriptDAO.save(componente.getSystem());
+        scriptDAO.save(script.getSystem());
 
     }
 
