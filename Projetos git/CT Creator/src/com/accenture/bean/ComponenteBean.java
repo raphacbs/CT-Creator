@@ -5,26 +5,32 @@
  */
 package com.accenture.bean;
 
-import groovy.transform.ToString;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author sara.patricia.silva
  */
-public class ComponenteBean implements Comparable<ComponenteBean>{
-    
-     private String nameComponent;
-     private String description;
-     private String system;
-     private List<String> scripts;
-     private Date date;
-     
+public class ComponenteBean implements Comparable<ComponenteBean> {
+
+    private String idComponent;
+    private String partNameComponent;
+    private String nameComponent;
+    private String description;
+    private String system;
+    private List<String> scripts;
+    private Date date;
+
     public ComponenteBean() {
     }
 
-    public ComponenteBean(String nameComponent, String description, String system, List<String> scripts, Date date) {
+    public ComponenteBean(String idComponent, String partNameComponent, String nameComponent, String description, String system, List<String> scripts, Date date) {
+
+        this.idComponent = idComponent;
+        this.partNameComponent = partNameComponent;
         this.nameComponent = nameComponent;
         this.description = description;
         this.system = system;
@@ -38,6 +44,8 @@ public class ComponenteBean implements Comparable<ComponenteBean>{
 
     public void setNameComponent(String nameComponent) {
         this.nameComponent = nameComponent;
+        //this.setIdComponent(this.getIdComponentByNameComponent(nameComponent));
+        //this.setPartNameComponent(this.getPartNameComponentByNameComponent(nameComponent));
     }
 
     public String getDescription() {
@@ -71,21 +79,88 @@ public class ComponenteBean implements Comparable<ComponenteBean>{
     public void setDate(Date date) {
         this.date = date;
     }
-    
-  
+
+    public String getIdComponent() {
+        return idComponent;
+    }
+
+    public String getIdComponentByNameComponent(String nameComponent) {
+
+        String regexComponent = "^comp_\\d+_";
+        String retorno = null;
+
+        Pattern p = Pattern.compile(regexComponent);
+        Matcher m = p.matcher(nameComponent);
+
+        // if we find a match, get the group 
+        if (m.find()) {
+            m.group();
+            // get the matching group
+            //codeGroup = m.group(0);
+            retorno = m.group(0);
+            // print the group
+            //System.out.format(codeGroup);
+
+        }
+
+        return retorno;
+    }
+
+    public void setIdComponent(String idComponent) {
+
+        this.idComponent = idComponent;
+        if (this.getIdComponent() != null && this.getPartNameComponent() != null) {
+            this.setNameComponent(this.getIdComponent() + this.getPartNameComponent());
+        }
+
+    }
+
+    public String getPartNameComponent() {
+        return partNameComponent;
+    }
+
+    public String getPartNameComponentByNameComponent(String nameComponent) {
+
+        String regexComponent = "^comp_\\d+_";
+        String retorno = null;
+
+        Pattern p = Pattern.compile(regexComponent);
+        Matcher m = p.matcher(nameComponent);
+
+        // if we find a match, get the group 
+        if (m.find()) {
+            m.group();
+            // get the matching group
+            //codeGroup = m.group(0);
+            retorno = nameComponent.replace(m.group(0), "");
+            // print the group
+            //System.out.format(codeGroup);
+
+        }
+
+        return retorno;
+
+    }
+
+    public void setPartNameComponent(String partNameComponent) {
+
+        this.partNameComponent = partNameComponent;
+        if (this.getIdComponent() != null && this.getPartNameComponent() != null) {
+            this.setNameComponent(this.getIdComponent() + this.getPartNameComponent());
+        }
+
+    }
 
     @Override
     public int compareTo(ComponenteBean componente) {
-                
-         return this.getNameComponent().compareToIgnoreCase(componente.getNameComponent());
-         
-         
-      }
-    
+
+        return this.getNameComponent().compareToIgnoreCase(componente.getNameComponent());
+
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return getNameComponent();
     }
- 
-    
+
 }

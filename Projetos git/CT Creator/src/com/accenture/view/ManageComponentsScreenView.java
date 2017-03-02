@@ -639,10 +639,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         modelFlow.clear();
 
         ComponenteBean componente = (ComponenteBean) modelSelectTestCase.getElementAt(i);
-        fieldTextName.setText(componente.getNameComponent());
+        fieldTextName.setText(componente.getPartNameComponent());
         fieldComboboxSystem.setSelectedItem(componente.getSystem());
         fieldTextDescription.setText(componente.getDescription());
-        fieldTextFlowId.setText(componente.getNameComponent());
+        fieldTextFlowId.setText(componente.getIdComponent());
 
         for (String script : componente.getScripts()) {
             modelFlow.addElement(script);
@@ -719,17 +719,15 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                     return false;
                 }
 
+            } else if (ComponenteRN.getInstance().unLockFile(nameFile, system)) {
+                setEnableComponents(active);
+                setEnableComponentsSearch(!active);
+                editing = false;
+                return true;
             } else {
-                if (ComponenteRN.getInstance().unLockFile(nameFile, system)) {
-                    setEnableComponents(active);
-                    setEnableComponentsSearch(!active);
-                    editing = false;
-                    return true;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ComponenteRN.getInstance().getUserLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
-                    editing = true;
-                    return false;
-                }
+                JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ComponenteRN.getInstance().getUserLock(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
+                editing = true;
+                return false;
             }
 
         } catch (IOException ex) {
@@ -771,7 +769,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() || model.isEmpty()) {
+            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty()) {
 
                 ComponenteBean componente = new ComponenteBean();
 
@@ -784,7 +782,8 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 }
 
                 componente.setDescription(fieldTextDescription.getText());
-                componente.setNameComponent(fieldTextName.getText());
+                //componente.setNameComponent(fieldTextName.getText());
+                componente.setPartNameComponent(fieldTextName.getText());
                 componente.setSystem(fieldComboboxSystem.getSelectedItem().toString());
 
                 componente.setScripts(testCases);
@@ -816,6 +815,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                     refreshLabelStatus("salvando alterações do componente.");
                     addLogTextArea("salvando alterações do componente." + componente.toString());
                     componente.setDate(((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getDate());
+                    componente.setIdComponent(((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getIdComponent());
                     String nome = ((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getNameComponent();
                     if (nome.equals(componente.getNameComponent())) {
                         ComponenteRN.getInstance().saveFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, componente).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");

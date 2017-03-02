@@ -74,6 +74,8 @@ public class ComponenteRN {
             loadFileProperties(entry.getName(), system);
 
             componente.setNameComponent(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_NAME));
+            componente.setIdComponent(componente.getIdComponentByNameComponent(componente.getNameComponent()));
+            componente.setPartNameComponent(componente.getPartNameComponentByNameComponent(componente.getNameComponent()));
             componente.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_DESCRIPTION));
             componente.setScripts(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
             componente.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
@@ -117,7 +119,8 @@ public class ComponenteRN {
 
     private String createFile(ComponenteBean componente) throws FileNotFoundException, IOException, SVNException {
         String id = generateId(componente.getSystem());
-        componente.setNameComponent(id + componente.getNameComponent());
+        componente.setIdComponent(id);
+        //componente.setNameComponent(id + componente.getNameComponent());
         File newFile = new File(ProjectSettings.PATH_FILE_COMPONENT + "/" + componente.getSystem() + "/" + componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY);
         FileOutputStream fileOut = new FileOutputStream(newFile);
 
