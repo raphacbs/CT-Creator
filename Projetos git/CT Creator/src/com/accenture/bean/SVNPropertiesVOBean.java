@@ -32,6 +32,12 @@ public class SVNPropertiesVOBean {
     private boolean first;
     private double version;
     private String complexidade;
+    
+    private String urlComponents;
+    private String urlScripts;
+    
+    
+    
     public SVNPropertiesVOBean() throws IOException {
        loadFileProperties();
         
@@ -151,6 +157,31 @@ public class SVNPropertiesVOBean {
        fileProperties.store(fileOut, null);
        fileOut.close();
     }
+     
+     public String getUrlComponents(){
+         this.urlComponents = fileProperties.getProperty("urlComponents");
+        return this.urlComponents;
+     }
+     
+     public void setUrlComponents(String urlComponents) throws FileNotFoundException, IOException{
+       fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
+       fileProperties.setProperty("urlComponents",  urlComponents.toString());
+       fileProperties.store(fileOut, null);
+       fileOut.close();
+     }
+     
+     
+      public String getUrlScritps(){
+         this.urlComponents = fileProperties.getProperty("urlScripts");
+        return this.urlComponents;
+     }
+     
+     public void setUrlScripts(String urlScripts) throws FileNotFoundException, IOException{
+       fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
+       fileProperties.setProperty("urlScripts",  urlScripts.toString());
+       fileProperties.store(fileOut, null);
+       fileOut.close();
+     }
     
     public void loadFileProperties() throws FileNotFoundException, IOException{
         fileProperties = new Properties();

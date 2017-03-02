@@ -37,13 +37,12 @@ public class MainScreenView extends javax.swing.JFrame {
      */
     public MainScreenView() {
         try {
-        setTitle("CT Creator - Versão: "+new SVNPropertiesVOBean().getVersion());
-        initComponents();
+            setTitle("CT Creator - Versão: " + new SVNPropertiesVOBean().getVersion());
+            initComponents();
 
 //        URL url = this.getClass().getResource("carregado.gif");
 //        Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);
 //        this.setIconImage(null);
-        
             this.setIconImage(ImageIO.read(new File("res/logo_ctcreator.png")));
         } catch (IOException ex) {
             //Nao deve acontecer se o icone estiver no lugar certo.
@@ -90,6 +89,8 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItemFuncionalidade = new javax.swing.JMenuItem();
+        menuMatrizRastreabilidade = new javax.swing.JMenu();
+        itemMenuComponentes = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuItemCT = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
@@ -244,6 +245,18 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu4.add(jMenuItemFuncionalidade);
 
         jMenuBar1.add(jMenu4);
+
+        menuMatrizRastreabilidade.setText("Automação");
+
+        itemMenuComponentes.setText("Componentes");
+        itemMenuComponentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuComponentesActionPerformed(evt);
+            }
+        });
+        menuMatrizRastreabilidade.add(itemMenuComponentes);
+
+        jMenuBar1.add(menuMatrizRastreabilidade);
 
         jMenu5.setText("Relatórios");
 
@@ -487,31 +500,31 @@ public class MainScreenView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuBar1MouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        JInternalFrame [] j = desktop.getAllFrames();
+        JInternalFrame[] j = desktop.getAllFrames();
 
-        if(j.length > 0 ){
-               JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
-               repaint();
-               
-           }else{
+        if (j.length > 0) {
+            JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
+            repaint();
+
+        } else {
             try {
                 new TestCaseTSRN().deleteDir("");
             } catch (IOException ex) {
-                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - "+ex.toString());
+                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
                 dispose();
-               System.exit(0); //calling the method is a must
+                System.exit(0); //calling the method is a must
             } catch (SVNException ex) {
-               System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - "+ex.toString());
+                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
                 dispose();
-               System.exit(0); //calling the method is a must
+                System.exit(0); //calling the method is a must
             }
-               dispose();
-               System.exit(0); //calling the method is a must
-           }
+            dispose();
+            System.exit(0); //calling the method is a must
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemFuncionalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFuncionalidadeActionPerformed
-         try {
+        try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             criaJanelaFuncionalidade();
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -540,6 +553,20 @@ public class MainScreenView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_menuItemCTActionPerformed
+
+    private void itemMenuComponentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuComponentesActionPerformed
+        try {
+            criaJanelaComponentes();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_itemMenuComponentesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -585,6 +612,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem itemMenuCTExistente;
+    private javax.swing.JMenuItem itemMenuComponentes;
     private javax.swing.JMenuItem itemMenuConfiguracoes;
     private javax.swing.JMenuItem itemMenuConsultaCTAlm;
     private javax.swing.JMenuItem itemMenuExportarPlanilhaTI;
@@ -609,6 +637,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenu menuConfiguracoes;
     private javax.swing.JMenu menuImportarExportar;
     private javax.swing.JMenuItem menuItemCT;
+    private javax.swing.JMenu menuMatrizRastreabilidade;
     // End of variables declaration//GEN-END:variables
 
     RegisterScreenTIView guiJanelaCadCT;
@@ -628,7 +657,8 @@ public class MainScreenView extends javax.swing.JFrame {
     InstanceScreenTSView guiInstaceTs;
     ManageflowsScreenView guiManageflowsScreenView;
     FilterReportScreenView guiFilterReportScreenView;
-    
+    ManageComponentsScreenView guiComponentsScreenView;
+
     public void criaJanelaReport() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiFilterReportScreenView = new FilterReportScreenView();
         desktop.add(guiFilterReportScreenView);
@@ -780,13 +810,21 @@ public class MainScreenView extends javax.swing.JFrame {
         guiConsultaALM.setVisible(true);
 
     }
-    
-     private void criaJanelaFuncionalidade() throws SQLException, ClassNotFoundException, IOException, SVNException {
+
+    private void criaJanelaFuncionalidade() throws SQLException, ClassNotFoundException, IOException, SVNException {
         guiManageflowsScreenView = new ManageflowsScreenView();
         desktop.add(guiManageflowsScreenView);
         guiManageflowsScreenView.centralizaJanela();
 
         guiManageflowsScreenView.setVisible(true);
+
+    }
+
+    private void criaJanelaComponentes() throws SQLException, ClassNotFoundException, IOException, SVNException {
+        guiComponentsScreenView = new ManageComponentsScreenView();
+        desktop.add(guiComponentsScreenView);
+        guiComponentsScreenView.centralizaJanela();
+        guiComponentsScreenView.setVisible(true);
 
     }
 
@@ -806,9 +844,8 @@ public class MainScreenView extends javax.swing.JFrame {
         intFrame.setVisible(false);
         desktop.remove(intFrame);
     }
-    
- 
-/*
+
+    /*
     @Override
     public synchronized void addWindowListener(WindowListener wl) {
        // super.addWindowListener(wl); //To change body of generated methods, choose Tools | Templates.
@@ -822,10 +859,5 @@ public class MainScreenView extends javax.swing.JFrame {
                System.exit(0); //calling the method is a must
            }
     }
- */
-    
-    
-    
-
- 
+     */
 }

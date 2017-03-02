@@ -5,6 +5,7 @@
  */
 package com.accenture.bean;
 
+import groovy.transform.ToString;
 import java.util.Date;
 import java.util.List;
 
@@ -12,18 +13,18 @@ import java.util.List;
  *
  * @author sara.patricia.silva
  */
-public class ComponenteBean {
+public class ComponenteBean implements Comparable<ComponenteBean>{
     
      private String nameComponent;
      private String description;
      private String system;
-     private List<ScriptBean> scripts;
+     private List<String> scripts;
      private Date date;
      
     public ComponenteBean() {
     }
 
-    public ComponenteBean(String nameComponent, String description, String system, List<ScriptBean> scripts, Date date) {
+    public ComponenteBean(String nameComponent, String description, String system, List<String> scripts, Date date) {
         this.nameComponent = nameComponent;
         this.description = description;
         this.system = system;
@@ -55,11 +56,11 @@ public class ComponenteBean {
         this.system = system;
     }
 
-    public List<ScriptBean> getScripts() {
+    public List<String> getScripts() {
         return scripts;
     }
 
-    public void setScripts(List<ScriptBean> scripts) {
+    public void setScripts(List<String> scripts) {
         this.scripts = scripts;
     }
 
@@ -69,6 +70,21 @@ public class ComponenteBean {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+  
+
+    @Override
+    public int compareTo(ComponenteBean componente) {
+                
+         return this.getNameComponent().compareToIgnoreCase(componente.getNameComponent());
+         
+         
+      }
+    
+    @Override
+    public String toString(){
+        return getNameComponent();
     }
  
     

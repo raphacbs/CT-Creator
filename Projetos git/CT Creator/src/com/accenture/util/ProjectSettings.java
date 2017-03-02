@@ -17,9 +17,10 @@ public class ProjectSettings {
     public final static String PROPERTY_SYSTEM = "system";
     public final static String PROPERTY_TEST_CASES= "testCases";
     public final static String PROPERTY_ID= "id";
-    public final static String PROPERTY_COMPONENT_NAME = "nameComponent";
     public final static String PROPERTY_SCRIPTS = "scripts";
     public final static String PROPERTY_DATE = "date";
+    public final static String PROPERTY_COMPONENT_NAME = "nameComponent";
+    public final static String PROPERTY_COMPONENT_DESCRIPTION = "description";
 
     //SVN
     public final static String SVN_FOLDER_FLUXOS = "/fluxos";
