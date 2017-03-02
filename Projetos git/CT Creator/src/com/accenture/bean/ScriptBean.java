@@ -17,14 +17,14 @@ public class ScriptBean implements Comparable<ScriptBean>{
     private String nameScript;
     private String description;
     private String system;
-    private List<ComponenteBean> components;
+    private List<String> components;
     private List<String> testCases;
     private Date date;
 
     public ScriptBean() {
     }
 
-    public ScriptBean(String nameScript, String description, String system, List<ComponenteBean> components, List<String> testCases, Date date) {
+    public ScriptBean(String nameScript, String description, String system, List<String> components, List<String> testCases, Date date) {
         this.nameScript = nameScript;
         this.description = description;
         this.system = system;
@@ -57,11 +57,11 @@ public class ScriptBean implements Comparable<ScriptBean>{
         this.system = system;
     }
 
-    public List<ComponenteBean> getComponents() {
+    public List<String> getComponents() {
         return components;
     }
 
-    public void setComponents(List<ComponenteBean> components) {
+    public void setComponents(List<String> components) {
         this.components = components;
     }
 
