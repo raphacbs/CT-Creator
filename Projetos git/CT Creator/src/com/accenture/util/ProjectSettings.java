@@ -20,7 +20,11 @@ public class ProjectSettings {
     public final static String PROPERTY_SCRIPTS = "scripts";
     public final static String PROPERTY_DATE = "date";
     public final static String PROPERTY_COMPONENT_NAME = "nameComponent";
+    public final static String PROPERTY_SCRIPT_NAME = "nameScript";
     public final static String PROPERTY_COMPONENT_DESCRIPTION = "description";
+    public final static String PROPERTY_SCRIPT_DESCRIPTION = "description";
+    
+    
 
     //SVN
     public final static String SVN_FOLDER_FLUXOS = "/fluxos";
