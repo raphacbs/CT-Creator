@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author sara.patricia.silva
  */
-public class ScriptBean {
+public class ScriptBean implements Comparable<ScriptBean>{
     
     private String nameScript;
     private String description;
@@ -79,6 +79,19 @@ public class ScriptBean {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+     @Override
+    public int compareTo(ScriptBean script) {
+                
+         return this.getNameScript().compareToIgnoreCase(script.getNameScript());
+         
+         
+      }
+    
+    @Override
+    public String toString(){
+        return getNameScript();
     }
 
     

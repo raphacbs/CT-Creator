@@ -37,7 +37,7 @@ import org.tmatesoft.svn.core.wc.SVNStatus;
  */
 public class ComponenteDAO extends FrameworkSvnManager{
     
-     private SVNPropertiesVOBean properties;
+    private SVNPropertiesVOBean properties;
     private String url;
     private String username;
     private String password;

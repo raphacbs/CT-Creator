@@ -34,7 +34,7 @@ import java.util.Collections;
  *
  * @author raphael.da.silva
  */
-public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
+public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     //variaveis locais
     private boolean editing = false;
@@ -42,7 +42,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     /**
      * Creates new form ManageflowsScreenView
      */
-    public ManageComponentsScreenView() throws IOException, SVNException {
+    public ManageScriptsScreenView() throws IOException, SVNException {
         initComponents();
 
         new SwingWorker() {
@@ -66,7 +66,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
     }
 
-    public ManageComponentsScreenView(List<String> Cts) {
+    public ManageScriptsScreenView(List<String> Cts) {
         addScript(Cts);
     }
 
@@ -99,7 +99,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
@@ -164,6 +164,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         listScripts = new JList(modelListTestCases);
         jLabel7 = new javax.swing.JLabel();
         bntDelete = new javax.swing.JButton();
+        bntSubir = new javax.swing.JButton();
+        bntDesce = new javax.swing.JButton();
+        bntAdd = new javax.swing.JButton();
+        bntExcluir = new javax.swing.JButton();
         bntSave = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         fieldTextDescription = new javax.swing.JTextArea();
@@ -221,7 +225,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         setForeground(java.awt.Color.black);
         setIconifiable(true);
         setMaximizable(true);
-        setTitle("Componentes");
+        setTitle("Scripts (Cenários Automação)");
         setToolTipText("Tela de manutenção de componentes");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -310,6 +314,30 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntSubir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntSubirActionPerformed(evt);
+            }
+        });
+
+        bntDesce.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntDesceActionPerformed(evt);
+            }
+        });
+
+        bntAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntAddActionPerformed(evt);
+            }
+        });
+
+        bntExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntExcluirActionPerformed(evt);
+            }
+        });
+
         bntSave.setText("Salvar");
         bntSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,9 +411,15 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                             .addComponent(labelStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(labelQtdCts, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelQtdCts, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bntExcluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bntAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bntDesce, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bntSubir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bntNew)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -394,9 +428,8 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                         .addComponent(bntEditOrCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bntDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -439,13 +472,22 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelStatus)
+                            .addComponent(jLabel7)
                             .addComponent(labelQtdCts))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bntSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntDesce, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelStatus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bntNew)
@@ -587,7 +629,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
@@ -616,6 +658,56 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         }.execute();
     }//GEN-LAST:event_bntSaveActionPerformed
+
+    private void bntSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSubirActionPerformed
+        moveUpTestCases();
+    }//GEN-LAST:event_bntSubirActionPerformed
+
+    private void bntDesceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDesceActionPerformed
+        moveDownTestCases();
+    }//GEN-LAST:event_bntDesceActionPerformed
+
+    private void bntExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExcluirActionPerformed
+
+        new SwingWorker() {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                deleteTestCases();
+                refreshQTDCTs();
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+        }.execute();
+    }//GEN-LAST:event_bntExcluirActionPerformed
+
+    private void bntAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddActionPerformed
+
+        new SwingWorker() {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                openScreenAddScript();
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+        }.execute();
+
+    }//GEN-LAST:event_bntAddActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         if (editing) {
@@ -650,10 +742,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     }
 
     private void setEnableButtons(boolean enable) {
-//        bntAdd.setEnabled(enable);
-//        bntExcluir.setEnabled(enable);
-//        bntSubir.setEnabled(enable);
-//        bntDesce.setEnabled(enable);
+        bntAdd.setEnabled(enable);
+        bntExcluir.setEnabled(enable);
+        bntSubir.setEnabled(enable);
+        bntDesce.setEnabled(enable);
         bntEditOrCancel.setEnabled(enable);
         bntDelete.setEnabled(enable);
         bntNew.setEnabled(enable);
@@ -683,10 +775,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         fieldTextDescription.setEnabled(enable);
         fieldTextName.setEnabled(enable);
         listScripts.setEnabled(enable);
-//        bntAdd.setEnabled(enable);
-//        bntExcluir.setEnabled(enable);
-//        bntSubir.setEnabled(enable);
-//        bntDesce.setEnabled(enable);
+        bntAdd.setEnabled(enable);
+        bntExcluir.setEnabled(enable);
+        bntSubir.setEnabled(enable);
+        bntDesce.setEnabled(enable);
         bntEditOrCancel.setEnabled(enable);
         bntDelete.setEnabled(enable);
         bntSave.setEnabled(enable);
@@ -734,7 +826,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         } catch (IOException ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao manipular algum arquivo, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             editing = false;
@@ -742,7 +834,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         } catch (SVNException ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ocorreu um erro com o SVN, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             editing = false;
@@ -750,7 +842,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             editing = false;
@@ -853,7 +945,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         } catch (SVNException ex) {
             refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro com o SVN, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
@@ -861,14 +953,14 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         } catch (IOException ex) {
             refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao manipular algum arquivo, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
         } catch (Exception ex) {
             refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return false;
@@ -884,10 +976,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 bntDelete.setEnabled(false);
                 bntEditOrCancel.setEnabled(false);
                 bntSave.setEnabled(true);
-//                bntAdd.setEnabled(true);
-//                bntExcluir.setEnabled(true);
-//                bntSubir.setEnabled(true);
-//                bntDesce.setEnabled(true);
+                bntAdd.setEnabled(true);
+                bntExcluir.setEnabled(true);
+                bntSubir.setEnabled(true);
+                bntDesce.setEnabled(true);
                 bntNew.setText("Cancelar");
                 cleanFilds();
                 addLogTextArea("usuário iniciou cadastro de um novo componente.");
@@ -899,10 +991,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 bntDelete.setEnabled(true);
                 bntEditOrCancel.setEnabled(true);
                 bntSave.setEnabled(false);
-//                bntAdd.setEnabled(false);
-//                bntExcluir.setEnabled(false);
-//                bntSubir.setEnabled(false);
-//                bntDesce.setEnabled(false);
+                bntAdd.setEnabled(false);
+                bntExcluir.setEnabled(false);
+                bntSubir.setEnabled(false);
+                bntDesce.setEnabled(false);
                 bntNew.setText("Novo");
                 addLogTextArea("usuário cancelou cadastro de um novo componente.");
                 refreshLabelStatus("usuário cancelou cadastro de um novo componente.");
@@ -910,7 +1002,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
 
@@ -932,7 +1024,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
 
@@ -954,7 +1046,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
 
@@ -970,7 +1062,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
         } catch (Exception ex) {
             addLogTextArea(ex);
-            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
 
@@ -1019,12 +1111,12 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private void addIconInButton() {
         ButtonIconBean iconBean = new ButtonIconBean();
         bntSearch.setIcon(iconBean.getIconBntSearchCt());
-//        bntSubir.setIcon(iconBean.getIconBntMoveStepTop());
-//        bntDesce.setIcon(iconBean.getIconBntMoveStepBottom());
+        bntSubir.setIcon(iconBean.getIconBntMoveStepTop());
+        bntDesce.setIcon(iconBean.getIconBntMoveStepBottom());
         bntSave.setIcon(iconBean.getIconBntSaveMinimum());
         bntNew.setIcon(iconBean.getIconBntAddNewCt());
-//        bntAdd.setIcon(iconBean.getIconBntAddNewStep());
-//        bntExcluir.setIcon(iconBean.getIconBntRemoveStep());
+        bntAdd.setIcon(iconBean.getIconBntAddNewStep());
+        bntExcluir.setIcon(iconBean.getIconBntRemoveStep());
         bntDelete.setIcon(iconBean.getIconBntRemoveCt());
     }
 
@@ -1070,12 +1162,16 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bntAdd;
     private javax.swing.JButton bntDelete;
+    private javax.swing.JButton bntDesce;
     private javax.swing.JButton bntEditOrCancel;
+    private javax.swing.JButton bntExcluir;
     private javax.swing.JButton bntLimpar;
     private javax.swing.JButton bntNew;
     private javax.swing.JButton bntSave;
     private javax.swing.JButton bntSearch;
+    private javax.swing.JButton bntSubir;
     private javax.swing.JDialog dialogLog;
     private javax.swing.JComboBox<String> fieldComboboxSystem;
     private javax.swing.JTextArea fieldTextDescription;

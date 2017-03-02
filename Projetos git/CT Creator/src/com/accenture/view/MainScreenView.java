@@ -8,11 +8,15 @@ package com.accenture.view;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.ts.dao.TesteCaseTSDAO;
 import com.accenture.ts.rn.TestCaseTSRN;
+import com.accenture.util.ProjectSettings;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -39,6 +43,18 @@ public class MainScreenView extends javax.swing.JFrame {
         try {
             setTitle("CT Creator - Versão: " + new SVNPropertiesVOBean().getVersion());
             initComponents();
+            
+            List<String> users = Arrays.asList(new SVNPropertiesVOBean().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
+            String userCurrent = new SVNPropertiesVOBean().getUser();
+            
+            if(users.contains(userCurrent)){
+              menuMatrizRastreabilidade.setVisible(true);
+            }else{
+               menuMatrizRastreabilidade.setVisible(false); 
+            }
+            
+            
+            
 
 //        URL url = this.getClass().getResource("carregado.gif");
 //        Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);

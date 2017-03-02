@@ -36,6 +36,8 @@ public class SVNPropertiesVOBean {
     private String urlComponents;
     private String urlScripts;
     
+    private String usersAuto;
+    
     
     
     public SVNPropertiesVOBean() throws IOException {
@@ -179,6 +181,17 @@ public class SVNPropertiesVOBean {
      public void setUrlScripts(String urlScripts) throws FileNotFoundException, IOException{
        fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
        fileProperties.setProperty("urlScripts",  urlScripts.toString());
+       fileProperties.store(fileOut, null);
+       fileOut.close();
+     }
+      public String getUsersAuto(){
+         this.urlComponents = fileProperties.getProperty("usuariosAuto");
+        return this.urlComponents;
+     }
+     
+     public void setUsersAuto(String urlScripts) throws FileNotFoundException, IOException{
+       fileOut = new FileOutputStream(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
+       fileProperties.setProperty("usuariosAuto",  urlScripts.toString());
        fileProperties.store(fileOut, null);
        fileOut.close();
      }
