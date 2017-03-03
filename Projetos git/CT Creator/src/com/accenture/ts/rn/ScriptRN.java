@@ -5,7 +5,6 @@
  */
 package com.accenture.ts.rn;
 
-
 import com.accenture.bean.ScriptBean;
 
 import com.accenture.ts.dao.ScriptDAO;
@@ -30,14 +29,13 @@ import org.tmatesoft.svn.core.SVNException;
  * @author Oi_TSS
  */
 public class ScriptRN {
-    
+
     private Properties fileProperties = null;
     private FileInputStream file;
     private ScriptDAO scriptDAO;
     private static ScriptRN scriptRN;
-    
-    
-     private ScriptRN() throws IOException, SVNException {
+
+    private ScriptRN() throws IOException, SVNException {
         scriptDAO = new ScriptDAO();
     }
 
@@ -45,8 +43,8 @@ public class ScriptRN {
         scriptRN = new ScriptRN();
         return scriptRN;
     }
-    
-      public ScriptBean getScript(String name, String system) throws IOException, SVNException {
+
+    public ScriptBean getScript(String name, String system) throws IOException, SVNException {
         ScriptBean script = new ScriptBean();
 
         scriptDAO.donwloadFiles(system);
@@ -62,9 +60,6 @@ public class ScriptRN {
         script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
         script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
         script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
-        
-        
-        
 
         return script;
     }
@@ -79,12 +74,14 @@ public class ScriptRN {
 
             loadFileProperties(entry.getName(), system);
 
-           script.setNameScript(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_NAME));
-        script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
-        script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
-        script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
-        script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
-       
+            script.setNameScript(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_NAME));
+            script.setIdScript(script.getIdComponentByNameComponent(script.getNameScript()));
+            script.setPartNameScript(script.getPartNameComponentByNameComponent(script.getNameScript()));
+            script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
+            script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
+            script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
+            script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
+
             scripts.add(script);
         }
 
@@ -123,8 +120,9 @@ public class ScriptRN {
 
     private String createFile(ScriptBean script) throws FileNotFoundException, IOException, SVNException {
         String id = generateId(script.getSystem());
-        script.setNameScript(id + script.getNameScript());
-        File newFile = new File(ProjectSettings.PATH_FILE_SCRIPT + "/" + script.getSystem() + "/" + script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
+        script.setIdScript(id);
+        //script.setNameScript(id + script.getNameScript());
+        File newFile = new File(ProjectSettings.PATH_FILE_SCRIPT + "/" + script.getSystem() + "/" + script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY);
         FileOutputStream fileOut = new FileOutputStream(newFile);
 
         loadFileProperties(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, script.getSystem());
@@ -270,18 +268,18 @@ public class ScriptRN {
 
         for (ScriptBean script : scripts) {
             if (verifyExistFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                if (scriptDAO.isLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                    if (unLockFile(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
-                        scriptNames.add(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
+                if (scriptDAO.isLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
+                    if (unLockFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system)) {
+                        scriptNames.add(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY);
                     } else {
-                        return "O script " + script.getNameScript()+ " está bloqueado pelo usuário " + getUserLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system);
+                        return "O script " + script.getNameScript() + " está bloqueado pelo usuário " + getUserLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system);
 
                     }
                 } else {
-                    scriptNames.add(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY);
+                    scriptNames.add(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY);
                 }
             } else {
-                return "O scripts " + script.getNameScript()+ " não existe, favor atualize a lista.";
+                return "O scripts " + script.getNameScript() + " não existe, favor atualize a lista.";
             }
         }
 
@@ -305,5 +303,4 @@ public class ScriptRN {
 
     }
 
-    
 }
