@@ -890,8 +890,10 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     if (listSelectScript.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
-                    carregaScript(jComboBoxSistemas.getSelectedItem().toString());
-                    //Action Item 18037 - Raphael - Inicio
+                    carregaScript(fieldComboboxSystem.getSelectedItem().toString());                   
+                    jComboBoxSistemas.setSelectedItem(fieldComboboxSystem.getSelectedItem().toString());
+                    
+                    //Action Item 18037 - Raphael - Inicio                            
                     for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
                         if (((ScriptBean) modelSelectionTestCase.getElementAt(i)).getNameScript().equals(id)) {
                             listSelectScript.getSelectionModel().setSelectionInterval(i, i);
