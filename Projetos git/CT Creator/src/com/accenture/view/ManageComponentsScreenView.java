@@ -642,7 +642,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         fieldTextName.setText(componente.getPartNameComponent());
         fieldComboboxSystem.setSelectedItem(componente.getSystem());
         fieldTextDescription.setText(componente.getDescription());
-        fieldTextFlowId.setText(componente.getIdComponent());
+        fieldTextFlowId.setText(componente.getIdComponent().substring(0,componente.getIdComponent().length()-1));
 
         for (String script : componente.getScripts()) {
             modelFlow.addElement(script);
