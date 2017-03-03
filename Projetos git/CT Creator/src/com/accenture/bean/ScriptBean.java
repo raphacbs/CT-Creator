@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  */
 public class ScriptBean implements Comparable<ScriptBean> {
 
-    private String idComponent;
-    private String partNameComponent;
+    private String idScript;
+    private String partNameScript;
     private String nameScript;
     private String description;
     private String system;
@@ -28,10 +28,10 @@ public class ScriptBean implements Comparable<ScriptBean> {
     public ScriptBean() {
     }
 
-    public ScriptBean(String nameScript, String description, String system, List<String> components, List<String> testCases, Date date) {
+    public ScriptBean(String idScript,String partNameScript,String nameScript, String description, String system, List<String> components, List<String> testCases, Date date) {
 
-        this.idComponent = idComponent;
-        this.partNameComponent = partNameComponent;
+        this.idScript = idScript;
+        this.partNameScript = partNameScript;
         this.nameScript = nameScript;
         this.description = description;
         this.system = system;
@@ -88,17 +88,17 @@ public class ScriptBean implements Comparable<ScriptBean> {
         this.date = date;
     }
 
-    public String getIdComponent() {
-        return idComponent;
+    public String getIdScript() {
+        return idScript;
     }
 
-    public String getIdComponentByNameComponent(String nameComponent) {
+    public String getIdComponentByNameComponent(String nameScript) {
 
-        String regexComponent = "^comp_\\d+_";
+        String regexComponent = "^Cen_\\d+_";
         String retorno = null;
 
         Pattern p = Pattern.compile(regexComponent);
-        Matcher m = p.matcher(nameComponent);
+        Matcher m = p.matcher(nameScript);
 
         // if we find a match, get the group 
         if (m.find()) {
@@ -114,33 +114,39 @@ public class ScriptBean implements Comparable<ScriptBean> {
         return retorno;
     }
 
-    public void setIdComponent(String idComponent) {
+    public void setIdScript(String idScript) {
 
-        this.idComponent = idComponent;
-        if (this.getIdComponent() != null && this.getPartNameComponent() != null) {
-            this.setNameComponent(this.getIdComponent() + this.getPartNameComponent());
+        this.idScript = idScript;
+        if (this.getIdScript() != null && this.getPartNameScript() != null) {
+            this.setNameScript(this.getIdScript() + this.getPartNameScript());
         }
 
     }
 
-    public String getPartNameComponent() {
-        return partNameComponent;
+    public String getPartNameScript() {
+        return partNameScript;
     }
 
-    public String getPartNameComponentByNameComponent(String nameComponent) {
+    
+    /**
+     * 
+     * @param nameScript
+     * @return 
+     */
+    public String getPartNameComponentByNameComponent(String nameScript) {
 
-        String regexComponent = "^comp_\\d+_";
+        String regexComponent = "^Cen_\\d+_";
         String retorno = null;
 
         Pattern p = Pattern.compile(regexComponent);
-        Matcher m = p.matcher(nameComponent);
+        Matcher m = p.matcher(nameScript);
 
         // if we find a match, get the group 
         if (m.find()) {
             m.group();
             // get the matching group
             //codeGroup = m.group(0);
-            retorno = nameComponent.replace(m.group(0), "");
+            retorno = nameScript.replace(m.group(0), "");
             // print the group
             //System.out.format(codeGroup);
 
@@ -150,11 +156,11 @@ public class ScriptBean implements Comparable<ScriptBean> {
 
     }
 
-    public void setPartNameComponent(String partNameComponent) {
+    public void setPartNameScript(String partNameScript) {
 
-        this.partNameComponent = partNameComponent;
-        if (this.getIdComponent() != null && this.getPartNameComponent() != null) {
-            this.setNameComponent(this.getIdComponent() + this.getPartNameComponent());
+        this.partNameScript = partNameScript;
+        if (this.getIdScript() != null && this.getPartNameScript() != null) {
+            this.setNameScript(this.getIdScript() + this.getPartNameScript());
         }
 
     }
