@@ -113,6 +113,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
             jComboBoxSistemas.addItem("");
+            fieldComboboxSystem.addItem("");
             for (int i = 0; i < systems.size(); i++) {
                 jComboBoxSistemas.addItem(systems.get(i).toString());
                 fieldComboboxSystem.addItem(systems.get(i).toString());
@@ -762,6 +763,8 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         fieldTextDescription.setText("");
         fieldTextName.setText("");
         fieldTextFlowId.setText("");
+        fieldComboboxSystem.setSelectedItem("");
+        
         DefaultListModel model = (DefaultListModel) listScripts.getModel();
         model.clear();
     }
@@ -769,7 +772,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty()) {
+            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
 
                 ComponenteBean componente = new ComponenteBean();
 
@@ -795,8 +798,9 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                     if (listSelectComponent.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
-                    carregaComponentes(jComboBoxSistemas.getSelectedItem().toString());
-                    //Action Item 18037 - Raphael - Inicio
+                    carregaComponentes(fieldComboboxSystem.getSelectedItem().toString());
+                    jComboBoxSistemas.setSelectedItem(fieldComboboxSystem.getSelectedItem().toString());
+//Action Item 18037 - Raphael - Inicio
                     for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
                         if (((ComponenteBean) modelSelectionTestCase.getElementAt(i)).getNameComponent().equals(id)) {
                             listSelectComponent.getSelectionModel().setSelectionInterval(i, i);

@@ -114,6 +114,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
             jComboBoxSistemas.addItem("");
+            fieldComboboxSystem.addItem("");
             for (int i = 0; i < systems.size(); i++) {
                 jComboBoxSistemas.addItem(systems.get(i).toString());
                 fieldComboboxSystem.addItem(systems.get(i).toString());
@@ -855,6 +856,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         fieldTextDescription.setText("");
         fieldTextName.setText("");
         fieldTextFlowId.setText("");
+        fieldComboboxSystem.setSelectedItem("");
         DefaultListModel model = (DefaultListModel) listScripts.getModel();
         model.clear();
     }
