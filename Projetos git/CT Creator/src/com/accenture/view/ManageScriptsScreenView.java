@@ -565,8 +565,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     if (listSelectScript.getSelectedIndices().length == 1) {
                         if (bntEditOrCancel.getText().equals("Editar")) {
                             if (modeEdit(true)) {
-                                refreshLabelStatus("Editando componente...");
-                                addLogTextArea("Editando componente...");
+                                refreshLabelStatus("Editando script...");
+                                addLogTextArea("Editando script...");
                                 bntNew.setEnabled(false);
                                 bntEditOrCancel.setText("Cancelar");
                                 bntSave.setEnabled(true);
@@ -626,7 +626,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Por favor, selecione um componente para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Por favor, selecione um script para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -697,7 +697,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                openScreenAddScript();
+                openScreenAddComponent();
 
                 return null;
             }
@@ -1073,20 +1073,20 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     }
 
-    private void openScreenAddScript() {
-//        try {
-//            refreshLabelStatus("Abrindo janela de cts...");
-//            ChooseTestCaseTsToFlowScreenView view = new ChooseTestCaseTsToFlowScreenView(fieldComboboxSystem.getSelectedItem().toString(), this,null,true);
-////            view.centralizaJanela();
-////            view.setVisible(true);
-//            
-//        } catch (ClassNotFoundException ex) {
-//            refreshLabelStatus("Erro na tentativa de abrir janelas cts, verifique detalhes no log");
-//            addLogTextArea(ex);
-//            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
-//            ex.printStackTrace();
-//        }
+    private void openScreenAddComponent() {
+        try {
+            refreshLabelStatus("Abrindo janela de cts...");
+            ChooseComponenteScreenView view = new ChooseComponenteScreenView(fieldComboboxSystem.getSelectedItem().toString(), this,null,true);
+//            view.centralizaJanela();
+//            view.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            refreshLabelStatus("Erro na tentativa de abrir janelas cts, verifique detalhes no log");
+            addLogTextArea(ex);
+            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }
 
     public void addScript(List<String> scripts) {
