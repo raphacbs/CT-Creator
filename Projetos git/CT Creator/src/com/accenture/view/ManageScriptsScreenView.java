@@ -864,7 +864,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty()) {
+            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
 
                 ScriptBean script = new ScriptBean();
 
