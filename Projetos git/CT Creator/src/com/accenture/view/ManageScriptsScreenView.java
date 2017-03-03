@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 
 import com.accenture.bean.ScriptBean;
+import com.accenture.ts.rn.ComponenteRN;
 
 import javax.swing.DefaultListModel;
 
@@ -868,34 +869,38 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
                 ScriptBean script = new ScriptBean();
 
-                DefaultListModel modelSelectionTestCase = (DefaultListModel) listSelectScript.getModel();
+                DefaultListModel modelListScript = (DefaultListModel) listSelectScript.getModel();
 
-                List<String> testCases = new ArrayList<String>();
+                List<String> componentNames = new ArrayList<String>();
 
                 for (int i = 0; i < model.size(); i++) {
-                    testCases.add(model.getElementAt(i).toString());
+                    if(!model.getElementAt(i).toString().isEmpty()){
+                         componentNames.add(model.getElementAt(i).toString());
+                    }
                 }
-
+                script.setIdScript(fieldTextFlowId.getText()+"_");
                 script.setDescription(fieldTextDescription.getText());
                 script.setPartNameScript(fieldTextName.getText());
                 //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
-
-                script.setComponents(testCases);
+                ComponenteRN.getInstance().insereScript(componentNames, script.getSystem(), script.getNameScript());
+                script.setComponents(componentNames);
+                
+                
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
                     refreshLabelStatus("Salvando novo script...");
                     script.setDate(FunctiosDates.getDateActual());
                     String id = ScriptRN.getInstance().saveFile(null, script).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                     if (listSelectScript.getModel().getSize() > 0) {
-                        modelSelectionTestCase.clear();
+                        modelListScript.clear();
                     }
                     carregaScript(fieldComboboxSystem.getSelectedItem().toString());                   
                     jComboBoxSistemas.setSelectedItem(fieldComboboxSystem.getSelectedItem().toString());
                     
                     //Action Item 18037 - Raphael - Inicio                            
-                    for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
-                        if (((ScriptBean) modelSelectionTestCase.getElementAt(i)).getNameScript().equals(id)) {
+                    for (int i = 0; i < modelListScript.getSize(); i++) {
+                        if (((ScriptBean) modelListScript.getElementAt(i)).getNameScript().equals(id)) {
                             listSelectScript.getSelectionModel().setSelectionInterval(i, i);
                             carregaCampos(i);
                         }
@@ -911,9 +916,9 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 } else {
                     refreshLabelStatus("salvando alterações do componente.");
                     addLogTextArea("salvando alterações do componente." + script.toString());
-                    script.setDate(((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getDate());
-                    script.setIdScript(((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getIdScript());
-                    String nome = ((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getNameScript();
+                    script.setDate(((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getDate());
+                    script.setIdScript(((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getIdScript());
+                    String nome = ((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getNameScript();
                     if (nome.equals(script.getNameScript())) {
                         ScriptRN.getInstance().saveFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, script).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
 
@@ -922,11 +927,11 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     }
 
                     if (listSelectScript.getModel().getSize() > 0) {
-                        modelSelectionTestCase.clear();
+                        modelListScript.clear();
                     }
                     carregaScript(script.getSystem());
-                    for (int i = 0; i < modelSelectionTestCase.getSize(); i++) {
-                        if (((ScriptBean) modelSelectionTestCase.getElementAt(i)).getNameScript().equals(script.getNameScript())) {
+                    for (int i = 0; i < modelListScript.getSize(); i++) {
+                        if (((ScriptBean) modelListScript.getElementAt(i)).getNameScript().equals(script.getNameScript())) {
                             listSelectScript.getSelectionModel().setSelectionInterval(i, i);
                             carregaCampos(i);
                         }
@@ -963,7 +968,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             ex.printStackTrace();
             return false;
         } catch (Exception ex) {
-            refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
+            refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);

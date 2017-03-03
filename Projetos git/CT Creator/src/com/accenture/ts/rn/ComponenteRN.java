@@ -55,7 +55,7 @@ public class ComponenteRN {
         loadFileProperties(name, system);
 
         componente.setNameComponent(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_NAME));
-        componente.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_DESCRIPTION));
+        componente.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_DESCRIPTION));
         componente.setScripts(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
         componente.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
         componente.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
@@ -92,6 +92,30 @@ public class ComponenteRN {
         file = new FileInputStream(ProjectSettings.PATH_FILE_COMPONENT + "/" + system + "/" + fileName);
         fileProperties.load(file);
         file.close();
+
+    }
+
+    public void insereScript(List<String> nomes, String system, String nomeScript) throws SVNException, IOException {
+        componentDAO.donwloadFiles(system);
+
+        for (String nome : nomes) {
+            if (!nome.contains(".properties")) {
+                nome += ".properties";
+            }
+            
+            ComponenteBean comp = getComponent(nome, system);
+            List<String> scripts = new ArrayList<String>();
+            for(String n : comp.getScripts()){
+                scripts.add(n);
+            }           
+            scripts.add(nomeScript);
+            comp.setScripts(scripts);
+            saveFile(nome, comp);
+            
+            
+        }
+        
+        componentDAO.save(system);
 
     }
 
