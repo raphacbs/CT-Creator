@@ -56,7 +56,7 @@ public class ComponenteRN {
 
         componente.setNameComponent(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_NAME));
         componente.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_DESCRIPTION));
-        componente.setScripts(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
+        componente.setScripts(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
         componente.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
         componente.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 

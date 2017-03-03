@@ -1164,6 +1164,14 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
         }.execute();
     }
+    
+    public void addComponentes(List<String> nameComponentes){
+         DefaultListModel model = (DefaultListModel) listScripts.getModel();
+         for (String ct : nameComponentes) {
+             model.addElement(ct);
+         }
+         refreshQTDCTs();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

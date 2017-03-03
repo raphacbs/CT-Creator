@@ -57,7 +57,7 @@ public class ScriptRN {
 
         script.setNameScript(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_NAME));
         script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
-        script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
+        script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
         script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
         script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 
@@ -78,7 +78,7 @@ public class ScriptRN {
             script.setIdScript(script.getIdComponentByNameComponent(script.getNameScript()));
             script.setPartNameScript(script.getPartNameComponentByNameComponent(script.getNameScript()));
             script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
-            script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.PROPERTY_SYSTEM_LINE_SEPARATOR)));
+            script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
             script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
             script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 

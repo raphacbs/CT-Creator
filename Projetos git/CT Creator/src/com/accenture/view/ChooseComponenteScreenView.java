@@ -503,6 +503,7 @@ public class ChooseComponenteScreenView extends javax.swing.JDialog {
         }
 
 //        flowView.addCT(cts);
+        scriptView.addComponentes(cts);
         this.dispose();
     }
 
