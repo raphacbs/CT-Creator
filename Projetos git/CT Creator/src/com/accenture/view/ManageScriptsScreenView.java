@@ -732,10 +732,10 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         modelFlow.clear();
 
         ScriptBean script = (ScriptBean) modelSelectTestCase.getElementAt(i);
-        fieldTextName.setText(script.getNameScript());
+        fieldTextName.setText(script.getPartNameScript());
         fieldComboboxSystem.setSelectedItem(script.getSystem());
         fieldTextDescription.setText(script.getDescription());
-        fieldTextFlowId.setText(script.getNameScript());
+        fieldTextFlowId.setText(script.getIdScript().substring(0,script.getIdScript().length()-1));
 
         for (String componente : script.getComponents()) {
             modelFlow.addElement(componente);
@@ -790,7 +790,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
             DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectScript.getModel();
             ScriptBean script = (ScriptBean) modelSelectTestCase.getElementAt(listSelectScript.getSelectedIndex());
-            String nameFile = script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY;
+            String nameFile = script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY;
             String system = fieldComboboxSystem.getSelectedItem().toString();
             if (active) {
                 if (ScriptRN.getInstance().verifyExistFile(nameFile, system)) {
@@ -801,7 +801,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                         editing = true;
                         return true;
                     } else {
-                        JOptionPane.showMessageDialog(null, "O script está bloqueado pelo usuário: " + ScriptRN.getInstance().getUserLock(script.getNameScript()+ ProjectSettings.EXTENSION_FILE_PROPERTY, system) + "\n"
+                        JOptionPane.showMessageDialog(null, "O script está bloqueado pelo usuário: " + ScriptRN.getInstance().getUserLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system) + "\n"
                                 + "para editar tente novamente mais tarde! ", "Atenção", JOptionPane.WARNING_MESSAGE);
                         editing = false;
                         return false;
@@ -812,17 +812,15 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     return false;
                 }
 
+            } else if (ScriptRN.getInstance().unLockFile(nameFile, system)) {
+                setEnableComponents(active);
+                setEnableComponentsSearch(!active);
+                editing = false;
+                return true;
             } else {
-                if (ScriptRN.getInstance().unLockFile(nameFile, system)) {
-                    setEnableComponents(active);
-                    setEnableComponentsSearch(!active);
-                    editing = false;
-                    return true;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ScriptRN.getInstance().getUserLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
-                    editing = true;
-                    return false;
-                }
+                JOptionPane.showMessageDialog(null, "Não foi possível desbloquear o arquivo: " + ScriptRN.getInstance().getUserLock(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, system), "Atenção", JOptionPane.WARNING_MESSAGE);
+                editing = true;
+                return false;
             }
 
         } catch (IOException ex) {
@@ -864,7 +862,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() || model.isEmpty()) {
+            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty()) {
 
                 ScriptBean script = new ScriptBean();
 
@@ -877,7 +875,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 }
 
                 script.setDescription(fieldTextDescription.getText());
-                script.setNameScript(fieldTextName.getText());
+                script.setPartNameScript(fieldTextName.getText());
+                //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
 
                 script.setComponents(testCases);
@@ -909,6 +908,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     refreshLabelStatus("salvando alterações do componente.");
                     addLogTextArea("salvando alterações do componente." + script.toString());
                     script.setDate(((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getDate());
+                    script.setIdScript(((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getIdScript());
                     String nome = ((ScriptBean) modelSelectionTestCase.getElementAt(listSelectScript.getSelectedIndex())).getNameScript();
                     if (nome.equals(script.getNameScript())) {
                         ScriptRN.getInstance().saveFile(script.getNameScript() + ProjectSettings.EXTENSION_FILE_PROPERTY, script).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
