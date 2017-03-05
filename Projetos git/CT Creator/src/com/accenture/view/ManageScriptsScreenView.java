@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 
 import com.accenture.bean.ScriptBean;
+import com.accenture.ts.dao.ScriptDAO;
 import com.accenture.ts.rn.ComponenteRN;
 
 import javax.swing.DefaultListModel;
@@ -693,23 +694,29 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     private void bntAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddActionPerformed
 
-        new SwingWorker() {
+        if (!fieldComboboxSystem.getSelectedItem().toString().isEmpty()) {
+            new SwingWorker() {
 
-            @Override
-            protected Object doInBackground() throws Exception {
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                openScreenAddComponent();
+                @Override
+                protected Object doInBackground() throws Exception {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    openScreenAddComponent();
 
-                return null;
-            }
+                    return null;
+                }
 
-            @Override
-            protected void done() {
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            }
+                @Override
+                protected void done() {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
 
-        }.execute();
+            }.execute();
 
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Por favor selecione um Sistema para realizar a busca.", "Atenção", JOptionPane.WARNING_MESSAGE);
+
+        }
     }//GEN-LAST:event_bntAddActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
@@ -869,6 +876,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
                 ScriptBean script = new ScriptBean();
 
+                script.setComponents(ScriptRN.getInstance().loadActualComponentsScript(fieldTextFlowId.getText() + "_" + fieldTextName.getText(), fieldComboboxSystem.getSelectedItem().toString()));
+
                 DefaultListModel modelListScript = (DefaultListModel) listSelectScript.getModel();
 
                 List<String> componentNames = new ArrayList<String>();
@@ -883,7 +892,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 script.setPartNameScript(fieldTextName.getText());
                 //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
-                ComponenteRN.getInstance().insereScript(componentNames, script.getSystem(), script.getNameScript());
+                ComponenteRN.getInstance().insereRemoveScript(componentNames,script.getComponents(), script.getSystem(), script.getNameScript());
                 script.setComponents(componentNames);
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {

@@ -106,28 +106,57 @@ public class ComponenteRN {
 
     }
 
-    public void insereScript(List<String> nomes, String system, String nomeScript) throws SVNException, IOException {
+    public void insereRemoveScript(List<String> listComponentNameModel, List<String> listComponentName, String system, String nomeScript) throws SVNException, IOException {
         componentDAO.donwloadFiles(system);
 
-        for (String nome : nomes) {
+        //Deletando os scriptsArrList dos componentes que foram deletados do script atual
+        //for()
+        for (String name : listComponentName) {
+
+            if (!listComponentNameModel.contains(name)) {
+
+                if (!name.contains(".properties")) {
+                    name += ".properties";
+                }
+
+                ComponenteBean compRemove = getComponent(name, system);
+                ArrayList<String> scriptsArrList = new ArrayList<>();
+                List<String> scriptsList = new ArrayList<>();
+                scriptsList = compRemove.getScripts();
+
+                //Passando List para ArrayList para usar o método remove
+                for (String itemList : scriptsList) {
+                    scriptsArrList.add(itemList);
+                }
+
+                scriptsArrList.remove(nomeScript);
+                compRemove.setScripts(scriptsArrList);
+                saveFile(name, compRemove);
+
+            }
+
+        }
+
+        //Adicionando os scriptsArrList aos componentes que foram adicionandos no script atual
+        for (String nome : listComponentNameModel) {
             if (!nome.contains(".properties")) {
                 nome += ".properties";
             }
 
-            ComponenteBean comp = getComponent(nome, system);
+            ComponenteBean compInseri = getComponent(nome, system);
             List<String> scripts = new ArrayList<String>();
-            for (String n : comp.getScripts()) {
+            for (String n : compInseri.getScripts()) {
 
                 if (!n.isEmpty()) {
                     scripts.add(n);
                 }
             }
 
-            if (!comp.contaisScript(nomeScript)) {
+            if (!compInseri.contaisScript(nomeScript)) {
                 scripts.add(nomeScript);
             }
-            comp.setScripts(scripts);
-            saveFile(nome, comp);
+            compInseri.setScripts(scripts);
+            saveFile(nome, compInseri);
 
         }
 

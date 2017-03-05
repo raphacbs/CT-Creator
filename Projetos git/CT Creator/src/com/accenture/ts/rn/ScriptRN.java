@@ -71,7 +71,7 @@ public class ScriptRN {
         scriptDAO.donwloadFiles(system);
 
         for (SVNDirEntry entry : list) {
-            
+
             ScriptBean script = new ScriptBean();
             String[] componentsInScriptArr;
             ArrayList<String> componentsInScriptList = new ArrayList<>();
@@ -314,6 +314,26 @@ public class ScriptRN {
 //        componentDAO.unLockFile(fileName, componente.getSystem());
         scriptDAO.save(script.getSystem());
 
+    }
+
+    public ArrayList<String> loadActualComponentsScript(String nameScript, String system) throws IOException, SVNException {
+
+        String[] componentArr;
+        ArrayList<String> componentList = new ArrayList<>();
+        scriptDAO.donwloadFiles(system);
+
+        loadFileProperties(nameScript+ProjectSettings.EXTENSION_FILE_PROPERTY, system);
+
+        componentArr = fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA);
+
+        for (String component : componentArr) {
+
+            if (!component.isEmpty()) {
+                componentList.add(component);
+            }
+        }
+
+        return componentList;
     }
 
 }
