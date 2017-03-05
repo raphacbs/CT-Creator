@@ -163,4 +163,26 @@ public class ComponenteBean implements Comparable<ComponenteBean> {
         return getNameComponent();
     }
 
+    
+      /**
+     * Método verifica se existe componentes associados ao script
+     *
+     * @return
+     */
+    public boolean existsScriptAssociate() {
+
+        return this.getScripts().isEmpty();
+
+    }
+
+    /**
+     * 
+     * @param nameScript
+     * @return 
+     */
+    public boolean contaisScript(String nameScript) {
+
+        return this.getScripts().contains(nameScript);
+
+    }
 }

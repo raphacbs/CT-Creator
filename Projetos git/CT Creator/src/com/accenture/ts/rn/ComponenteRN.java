@@ -102,19 +102,23 @@ public class ComponenteRN {
             if (!nome.contains(".properties")) {
                 nome += ".properties";
             }
-            
+
             ComponenteBean comp = getComponent(nome, system);
             List<String> scripts = new ArrayList<String>();
-            for(String n : comp.getScripts()){
+            for (String n : comp.getScripts()) {
+              
+                if(!n.isEmpty())
                 scripts.add(n);
-            }           
-            scripts.add(nomeScript);
+            }
+
+            if (!comp.contaisScript(nomeScript)) {
+                scripts.add(nomeScript);
+            }
             comp.setScripts(scripts);
             saveFile(nome, comp);
-            
-            
+
         }
-        
+
         componentDAO.save(system);
 
     }

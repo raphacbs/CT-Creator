@@ -28,7 +28,7 @@ public class ScriptBean implements Comparable<ScriptBean> {
     public ScriptBean() {
     }
 
-    public ScriptBean(String idScript,String partNameScript,String nameScript, String description, String system, List<String> components, List<String> testCases, Date date) {
+    public ScriptBean(String idScript, String partNameScript, String nameScript, String description, String system, List<String> components, List<String> testCases, Date date) {
 
         this.idScript = idScript;
         this.partNameScript = partNameScript;
@@ -127,11 +127,10 @@ public class ScriptBean implements Comparable<ScriptBean> {
         return partNameScript;
     }
 
-    
     /**
-     * 
+     *
      * @param nameScript
-     * @return 
+     * @return
      */
     public String getPartNameComponentByNameComponent(String nameScript) {
 
@@ -164,7 +163,7 @@ public class ScriptBean implements Comparable<ScriptBean> {
         }
 
     }
-    
+
     @Override
     public int compareTo(ScriptBean script) {
 
@@ -177,4 +176,14 @@ public class ScriptBean implements Comparable<ScriptBean> {
         return getNameScript();
     }
 
+    /**
+     * Método verifica se existe componentes associados ao script
+     *
+     * @return
+     */
+    public boolean existsComponentsAssociate() {
+
+        return this.getComponents().isEmpty();
+
+    }
 }
