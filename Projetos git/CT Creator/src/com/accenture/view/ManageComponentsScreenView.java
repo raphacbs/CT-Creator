@@ -25,6 +25,7 @@ import javax.swing.SwingWorker;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import com.accenture.util.FunctiosDates;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -643,7 +644,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         fieldTextName.setText(componente.getPartNameComponent());
         fieldComboboxSystem.setSelectedItem(componente.getSystem());
         fieldTextDescription.setText(componente.getDescription());
-        fieldTextFlowId.setText(componente.getIdComponent().substring(0,componente.getIdComponent().length()-1));
+        fieldTextFlowId.setText(componente.getIdComponent().substring(0, componente.getIdComponent().length() - 1));
 
         for (String script : componente.getScripts()) {
             modelFlow.addElement(script);
@@ -764,7 +765,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         fieldTextName.setText("");
         fieldTextFlowId.setText("");
         fieldComboboxSystem.setSelectedItem("");
-        
+
         DefaultListModel model = (DefaultListModel) listScripts.getModel();
         model.clear();
     }
@@ -772,7 +773,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
+            if (!fieldTextName.getText().trim().isEmpty() && !fieldTextDescription.getText().trim().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
 
                 ComponenteBean componente = new ComponenteBean();
 
@@ -851,7 +852,28 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
                 return true;
             } else {
-                JOptionPane.showMessageDialog(null, "Campo Obrigatórios não preenchidos, \nverifique o campo nome e o CTs", "Alerta", JOptionPane.WARNING_MESSAGE);
+
+                //List of fields Empty
+                ArrayList<String> fieldsMandatory = new ArrayList<>();
+                String fields = "";
+
+                if (fieldTextName.getText().isEmpty()) {
+                    fieldsMandatory.add("Nome");
+                }
+                if (fieldTextDescription.getText().isEmpty()) {
+                    fieldsMandatory.add("Descrição");
+                }
+                if (fieldComboboxSystem.getSelectedItem().equals("")) {
+                    fieldsMandatory.add("Sistema");
+                }
+
+                for (String field : fieldsMandatory) {
+
+                    fields = fields + field + ";\n";
+
+                }
+
+                JOptionPane.showMessageDialog(null, "Campo Obrigatórios não preenchidos, \nVerifique o(s) campo(s) informado(s) abaixo: \n\n" + fields, "Alerta", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         } catch (SVNException ex) {

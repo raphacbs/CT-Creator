@@ -737,7 +737,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         fieldTextName.setText(script.getPartNameScript());
         fieldComboboxSystem.setSelectedItem(script.getSystem());
         fieldTextDescription.setText(script.getDescription());
-        fieldTextFlowId.setText(script.getIdScript().substring(0,script.getIdScript().length()-1));
+        fieldTextFlowId.setText(script.getIdScript().substring(0, script.getIdScript().length() - 1));
 
         for (String componente : script.getComponents()) {
             modelFlow.addElement(componente);
@@ -865,7 +865,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
-            if (!fieldTextName.getText().isEmpty() && !fieldTextDescription.getText().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
+            if (!fieldTextName.getText().trim().isEmpty() && !fieldTextDescription.getText().trim().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
 
                 ScriptBean script = new ScriptBean();
 
@@ -874,19 +874,17 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 List<String> componentNames = new ArrayList<String>();
 
                 for (int i = 0; i < model.size(); i++) {
-                    if(!model.getElementAt(i).toString().isEmpty()){
-                         componentNames.add(model.getElementAt(i).toString());
+                    if (!model.getElementAt(i).toString().isEmpty()) {
+                        componentNames.add(model.getElementAt(i).toString());
                     }
                 }
-                script.setIdScript(fieldTextFlowId.getText()+"_");
+                script.setIdScript(fieldTextFlowId.getText() + "_");
                 script.setDescription(fieldTextDescription.getText());
                 script.setPartNameScript(fieldTextName.getText());
                 //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
                 ComponenteRN.getInstance().insereScript(componentNames, script.getSystem(), script.getNameScript());
                 script.setComponents(componentNames);
-                
-                
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
                     refreshLabelStatus("Salvando novo script...");
@@ -895,9 +893,9 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     if (listSelectScript.getModel().getSize() > 0) {
                         modelListScript.clear();
                     }
-                    carregaScript(fieldComboboxSystem.getSelectedItem().toString());                   
+                    carregaScript(fieldComboboxSystem.getSelectedItem().toString());
                     jComboBoxSistemas.setSelectedItem(fieldComboboxSystem.getSelectedItem().toString());
-                    
+
                     //Action Item 18037 - Raphael - Inicio                            
                     for (int i = 0; i < modelListScript.getSize(); i++) {
                         if (((ScriptBean) modelListScript.getElementAt(i)).getNameScript().equals(id)) {
@@ -949,7 +947,28 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
                 return true;
             } else {
-                JOptionPane.showMessageDialog(null, "Campo Obrigatórios não preenchidos, \nverifique o campo nome e o CTs", "Alerta", JOptionPane.WARNING_MESSAGE);
+
+                //List of fields Empty
+                ArrayList<String> fieldsMandatory = new ArrayList<>();
+                String fields = "";
+
+                if (fieldTextName.getText().isEmpty()) {
+                    fieldsMandatory.add("Nome");
+                }
+                if (fieldTextDescription.getText().isEmpty()) {
+                    fieldsMandatory.add("Descrição");
+                }
+                if (fieldComboboxSystem.getSelectedItem().equals("")) {
+                    fieldsMandatory.add("Sistema");
+                }
+
+                for (String field : fieldsMandatory) {
+
+                    fields = fields + field + ";\n";
+
+                }
+
+                JOptionPane.showMessageDialog(null, "Campo Obrigatórios não preenchidos, \nVerifique o(s) campo(s) informado(s) abaixo: \n\n" + fields, "Alerta", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         } catch (SVNException ex) {
@@ -1083,10 +1102,10 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private void openScreenAddComponent() {
         try {
             refreshLabelStatus("Abrindo janela de cts...");
-            ChooseComponenteScreenView view = new ChooseComponenteScreenView(fieldComboboxSystem.getSelectedItem().toString(), this,null,true);
+            ChooseComponenteScreenView view = new ChooseComponenteScreenView(fieldComboboxSystem.getSelectedItem().toString(), this, null, true);
 //            view.centralizaJanela();
 //            view.setVisible(true);
-            
+
         } catch (ClassNotFoundException ex) {
             refreshLabelStatus("Erro na tentativa de abrir janelas cts, verifique detalhes no log");
             addLogTextArea(ex);
@@ -1169,13 +1188,13 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
         }.execute();
     }
-    
-    public void addComponentes(List<String> nameComponentes){
-         DefaultListModel model = (DefaultListModel) listScripts.getModel();
-         for (String ct : nameComponentes) {
-             model.addElement(ct);
-         }
-         refreshQTDCTs();
+
+    public void addComponentes(List<String> nameComponentes) {
+        DefaultListModel model = (DefaultListModel) listScripts.getModel();
+        for (String ct : nameComponentes) {
+            model.addElement(ct);
+        }
+        refreshQTDCTs();
     }
 
 
