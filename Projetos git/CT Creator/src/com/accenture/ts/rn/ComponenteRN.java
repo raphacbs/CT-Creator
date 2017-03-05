@@ -65,19 +65,30 @@ public class ComponenteRN {
 
     public List<ComponenteBean> getComponents(List<SVNDirEntry> list, String system) throws IOException, SVNException {
 
-        List<ComponenteBean> componentes = new ArrayList<ComponenteBean>();
+        List<ComponenteBean> componentes = new ArrayList<>();
         componentDAO.donwloadFiles(system);
 
         for (SVNDirEntry entry : list) {
             ComponenteBean componente = new ComponenteBean();
+            String[] scriptsInComponentArr;
+            ArrayList<String> scriptsInComponentList = new ArrayList<>();
 
             loadFileProperties(entry.getName(), system);
 
+            scriptsInComponentArr = (fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA));
+
+            for (String script : scriptsInComponentArr) {
+
+                if (!script.isEmpty()) {
+                    scriptsInComponentList.add(script);
+                }
+            }
             componente.setNameComponent(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_NAME));
             componente.setIdComponent(componente.getIdComponentByNameComponent(componente.getNameComponent()));
             componente.setPartNameComponent(componente.getPartNameComponentByNameComponent(componente.getNameComponent()));
             componente.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENT_DESCRIPTION));
-            componente.setScripts(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
+
+            componente.setScripts(scriptsInComponentList);
             componente.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
             componente.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 
@@ -106,9 +117,10 @@ public class ComponenteRN {
             ComponenteBean comp = getComponent(nome, system);
             List<String> scripts = new ArrayList<String>();
             for (String n : comp.getScripts()) {
-              
-                if(!n.isEmpty())
-                scripts.add(n);
+
+                if (!n.isEmpty()) {
+                    scripts.add(n);
+                }
             }
 
             if (!comp.contaisScript(nomeScript)) {

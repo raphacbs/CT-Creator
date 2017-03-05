@@ -66,19 +66,32 @@ public class ScriptRN {
 
     public List<ScriptBean> getScripts(List<SVNDirEntry> list, String system) throws IOException, SVNException {
 
-        List<ScriptBean> scripts = new ArrayList<ScriptBean>();
+        List<ScriptBean> scripts = new ArrayList<>();
+
         scriptDAO.donwloadFiles(system);
 
         for (SVNDirEntry entry : list) {
+            
             ScriptBean script = new ScriptBean();
+            String[] componentsInScriptArr;
+            ArrayList<String> componentsInScriptList = new ArrayList<>();
 
             loadFileProperties(entry.getName(), system);
+
+            componentsInScriptArr = fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA);
+
+            for (String component : componentsInScriptArr) {
+
+                if (!component.isEmpty()) {
+                    componentsInScriptList.add(component);
+                }
+            }
 
             script.setNameScript(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_NAME));
             script.setIdScript(script.getIdComponentByNameComponent(script.getNameScript()));
             script.setPartNameScript(script.getPartNameComponentByNameComponent(script.getNameScript()));
             script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
-            script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
+            script.setComponents(componentsInScriptList);
             script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
             script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 

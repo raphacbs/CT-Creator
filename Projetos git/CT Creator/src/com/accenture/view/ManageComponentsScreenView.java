@@ -569,22 +569,29 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private void bntDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDeleteActionPerformed
 
         try {
-            refreshLabelStatus("Aguarde, excluindo compoenente...");
-            if (listSelectComponent.getSelectedIndex() != -1) {
-                if (JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) componente(s) selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    String system = fieldComboboxSystem.getSelectedItem().toString();
-                    deleteComponentes(system);
-                    DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
-                    modelSelectTestCase.clear();
-                    carregaComponentes(system);
-                    cleanFilds();
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            if (listScripts.getModel().getSize() == 0) {
+                
+                refreshLabelStatus("Aguarde, excluindo compoenente...");
+                if (listSelectComponent.getSelectedIndex() != -1) {
+                    if (JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) componente(s) selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        String system = fieldComboboxSystem.getSelectedItem().toString();
+                        deleteComponentes(system);
+                        DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
+                        modelSelectTestCase.clear();
+                        carregaComponentes(system);
+                        cleanFilds();
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, selecione um componente para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
                 }
-
             } else {
-                JOptionPane.showMessageDialog(null, "Por favor, selecione um componente para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
+                
+                JOptionPane.showMessageDialog(null, "Atenção, o componente não pode ser excluido pois está contido em um ou mais Scripts. Desvincule-os e tente novamente.", "Atenção", JOptionPane.WARNING_MESSAGE);
+
             }
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
