@@ -11,6 +11,10 @@ import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.ProjectSettings;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,13 +24,34 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import org.tmatesoft.svn.core.SVNException;
+
+class Background extends JPanel {
+
+    private BufferedImage img = null;
+    private final int x = 0;
+    private final int y = 0;
+
+    public Background(String urlImg) throws IOException {
+        this.img = ImageIO.read(new File(urlImg));
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics gr = (Graphics2D) g.create();
+        gr.drawImage(img, x, y, this.getWidth(), this.getHeight(), this);
+        gr.dispose();
+    }
+}
 
 /**
  *
@@ -43,18 +68,15 @@ public class MainScreenView extends javax.swing.JFrame {
         try {
             setTitle("CT Creator - Versão: " + new SVNPropertiesVOBean().getVersion());
             initComponents();
-            
+
             List<String> users = Arrays.asList(new SVNPropertiesVOBean().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
             String userCurrent = new SVNPropertiesVOBean().getUser();
-            
-            if(users.contains(userCurrent)){
-              menuMatrizRastreabilidade.setVisible(true);
-            }else{
-               menuMatrizRastreabilidade.setVisible(false); 
+
+            if (users.contains(userCurrent)) {
+                menuMatrizRastreabilidade.setVisible(true);
+            } else {
+                menuMatrizRastreabilidade.setVisible(false);
             }
-            
-            
-            
 
 //        URL url = this.getClass().getResource("carregado.gif");
 //        Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);
@@ -65,7 +87,15 @@ public class MainScreenView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
-        desktop = new JDesktopPane();
+        //Background background = new Background("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png");
+        //background.paint(g);
+        desktop = new JDesktopPane() {
+            Image im = (new ImageIcon("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png")).getImage();
+
+            public void paintComponent(Graphics g) {
+                g.drawImage(im, 0, 0, this);
+            }
+        };
         setDesktop(desktop);
         desktop.setBackground(Color.LIGHT_GRAY);
         setContentPane(desktop);
@@ -125,6 +155,8 @@ public class MainScreenView extends javax.swing.JFrame {
             }
         });
 
+        jMenuBar1.setBackground(java.awt.Color.white);
+        jMenuBar1.setForeground(java.awt.Color.darkGray);
         jMenuBar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenuBar1MouseClicked(evt);
@@ -868,6 +900,7 @@ public class MainScreenView extends javax.swing.JFrame {
         guiComponentsScreenView.setVisible(true);
 
     }
+
     private void criaJanelaScripts() throws SQLException, ClassNotFoundException, IOException, SVNException {
         guiManageScriptsScreenView = new ManageScriptsScreenView();
         desktop.add(guiManageScriptsScreenView);
