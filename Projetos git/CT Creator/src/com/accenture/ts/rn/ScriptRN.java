@@ -324,7 +324,7 @@ public class ScriptRN {
 
         loadFileProperties(nameScript+ProjectSettings.EXTENSION_FILE_PROPERTY, system);
 
-        componentArr = fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA);
+        componentArr = fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENTS).split(ProjectSettings.DELIDELIMITER_COMMA);
 
         for (String component : componentArr) {
 
