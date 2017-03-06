@@ -57,7 +57,7 @@ public class ScriptRN {
 
         script.setNameScript(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_NAME));
         script.setDescription(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPT_DESCRIPTION));
-        script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
+        script.setComponents(Arrays.asList(fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENTS).split(ProjectSettings.DELIDELIMITER_COMMA)));
         script.setSystem(fileProperties.getProperty(ProjectSettings.PROPERTY_SYSTEM));
         script.setDate(FunctiosDates.stringToDate(fileProperties.getProperty(ProjectSettings.PROPERTY_DATE)));
 
@@ -78,7 +78,7 @@ public class ScriptRN {
 
             loadFileProperties(entry.getName(), system);
 
-            componentsInScriptArr = fileProperties.getProperty(ProjectSettings.PROPERTY_SCRIPTS).split(ProjectSettings.DELIDELIMITER_COMMA);
+            componentsInScriptArr = fileProperties.getProperty(ProjectSettings.PROPERTY_COMPONENTS).split(ProjectSettings.DELIDELIMITER_COMMA);
 
             for (String component : componentsInScriptArr) {
 
@@ -146,7 +146,7 @@ public class ScriptRN {
         fileProperties.put(ProjectSettings.PROPERTY_SYSTEM, script.getSystem());
         String scripts = "";
         scripts = script.getComponents().stream().map((componente) -> componente + ";").reduce(scripts, String::concat);
-        fileProperties.put(ProjectSettings.PROPERTY_SCRIPTS, scripts);
+        fileProperties.put(ProjectSettings.PROPERTY_COMPONENTS, scripts);
         fileProperties.store(fileOut, null);
         return script.getNameScript();
     }
@@ -169,7 +169,7 @@ public class ScriptRN {
 
         String scripts = "";
         scripts = script.getComponents().stream().map((componente) -> componente + ";").reduce(scripts, String::concat);
-        fileProperties.put(ProjectSettings.PROPERTY_SCRIPTS, scripts);
+        fileProperties.put(ProjectSettings.PROPERTY_COMPONENTS, scripts);
 
         fileProperties.store(fileOut, null);
         return script.getNameScript();
