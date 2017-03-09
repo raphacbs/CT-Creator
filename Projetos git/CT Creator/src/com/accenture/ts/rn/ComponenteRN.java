@@ -9,6 +9,7 @@ import com.accenture.bean.ComponenteBean;
 import com.accenture.ts.dao.ComponenteDAO;
 import com.accenture.util.FunctiosDates;
 import com.accenture.util.ProjectSettings;
+import com.accenture.view.ManageScriptsScreenView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,9 +44,10 @@ public class ComponenteRN {
         return componentRN;
     }
 
-    public ComponenteBean getComponent(String name, String system) throws IOException, SVNException {
+    public ComponenteBean getComponent(String name, String system, boolean update) throws IOException, SVNException {
         ComponenteBean componente = new ComponenteBean();
 
+        if(update)
         componentDAO.donwloadFiles(system);
 
         if (!name.contains(".properties")) {
@@ -112,14 +114,18 @@ public class ComponenteRN {
         //Deletando os scriptsArrList dos componentes que foram deletados do script atual
         //for()
         for (String name : listComponentName) {
+            
+            
+                System.out.println("Componente "+name+" editando..");
 
             if (!listComponentNameModel.contains(name)) {
 
                 if (!name.contains(".properties")) {
                     name += ".properties";
                 }
-
-                ComponenteBean compRemove = getComponent(name, system);
+                
+                
+                ComponenteBean compRemove = getComponent(name, system, false);
                 ArrayList<String> scriptsArrList = new ArrayList<>();
                 List<String> scriptsList = new ArrayList<>();
                 scriptsList = compRemove.getScripts();
@@ -131,19 +137,24 @@ public class ComponenteRN {
 
                 scriptsArrList.remove(nomeScript);
                 compRemove.setScripts(scriptsArrList);
-                saveFile(name, compRemove);
+                saveFile(name, compRemove, false);
+                
 
             }
 
         }
+        
+         componentDAO.donwloadFiles(system);
 
         //Adicionando os scriptsArrList aos componentes que foram adicionandos no script atual
         for (String nome : listComponentNameModel) {
             if (!nome.contains(".properties")) {
                 nome += ".properties";
             }
+            
+             ManageScriptsScreenView.getInstance().refreshLabelStatus("Componente "+nome+" editando...");
 
-            ComponenteBean compInseri = getComponent(nome, system);
+            ComponenteBean compInseri = getComponent(nome, system, false);
             List<String> scripts = new ArrayList<String>();
             for (String n : compInseri.getScripts()) {
 
@@ -156,20 +167,25 @@ public class ComponenteRN {
                 scripts.add(nomeScript);
             }
             compInseri.setScripts(scripts);
-            saveFile(nome, compInseri);
+            saveFile(nome, compInseri,false);
+            
+             ManageScriptsScreenView.getInstance().refreshLabelStatus("Componente "+nome+" foi salvo.");
 
         }
 
         componentDAO.save(system);
+        
+       
 
     }
 
 //      private void loadFiles() throws SVNException{
 //          componentDAO.donwloadFiles();
 //      }
-    public String saveFile(String fileName, ComponenteBean componente) throws SVNException, IOException {
+    public String saveFile(String fileName, ComponenteBean componente, boolean update) throws SVNException, IOException {
 
         //atualiza pasta 
+        if(update)
         componentDAO.donwloadFiles(componente.getSystem());
 
         if (fileName == null) {

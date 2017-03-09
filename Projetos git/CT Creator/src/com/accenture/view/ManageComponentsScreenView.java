@@ -802,7 +802,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
                     refreshLabelStatus("Salvando novo componente...");
                     componente.setDate(FunctiosDates.getDateActual());
-                    String id = ComponenteRN.getInstance().saveFile(null, componente).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                    String id = ComponenteRN.getInstance().saveFile(null, componente,true).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                     if (listSelectComponent.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
@@ -830,7 +830,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                     componente.setIdComponent(((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getIdComponent());
                     String nome = ((ComponenteBean) modelSelectionTestCase.getElementAt(listSelectComponent.getSelectedIndex())).getNameComponent();
                     if (nome.equals(componente.getNameComponent())) {
-                        ComponenteRN.getInstance().saveFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, componente).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                        ComponenteRN.getInstance().saveFile(componente.getNameComponent() + ProjectSettings.EXTENSION_FILE_PROPERTY, componente, true).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
 
                     } else {
                         ComponenteRN.getInstance().renomear(nome, componente.getSystem(), componente.getNameComponent(), componente);
