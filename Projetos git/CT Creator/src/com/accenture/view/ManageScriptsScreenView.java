@@ -41,6 +41,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     //variaveis locais
     private boolean editing = false;
+    private static ManageScriptsScreenView instancia;
 
     /**
      * Creates new form ManageflowsScreenView
@@ -66,6 +67,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             }
 
         }.run();
+        
+        instancia = this;
 
     }
 
@@ -896,6 +899,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
                 ComponenteRN.getInstance().insereRemoveScript(componentNames,script.getComponents(), script.getSystem(), script.getNameScript());
+                
                 script.setComponents(componentNames);
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
@@ -924,8 +928,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                     refreshLabelStatus("novo fluxo cadastrado.");
                     addLogTextArea("Novo fluxo cadastrado" + script.toString());
                 } else {
-                    refreshLabelStatus("salvando alterações do componente.");
-                    addLogTextArea("salvando alterações do componente." + script.toString());
+                    refreshLabelStatus("salvando alterações do script.");
+                    addLogTextArea("salvando alterações do script." + script.toString());
                     script.setDate(((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getDate());
                     script.setIdScript(((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getIdScript());
                     String nome = ((ScriptBean) modelListScript.getElementAt(listSelectScript.getSelectedIndex())).getNameScript();
@@ -1145,9 +1149,14 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         statusTextArea.setText(statusTextArea.getText() + "\n" + exceptionText);
     }
 
-    private void addLogTextArea(String text) {
+    public void addLogTextArea(String text) {
         statusTextArea.setText(statusTextArea.getText() + "\n" + text);
     }
+    
+    public static ManageScriptsScreenView getInstance(){
+        return instancia;
+    }
+            
 
     private void addIconInButton() {
         ButtonIconBean iconBean = new ButtonIconBean();
@@ -1183,7 +1192,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
     }
 
-    private void refreshLabelStatus(String text) {
+    public void refreshLabelStatus(String text) {
         new SwingWorker() {
 
             @Override

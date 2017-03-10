@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -77,6 +78,10 @@ public class SplashScreen extends JWindow {
     public void showSplash() throws InterruptedException {
 
         try {
+            
+          
+                      
+                    
             ManipulaDadosSQLite bd;
             JPanel content = (JPanel) getContentPane();
             content.setBackground(Color.lightGray);
@@ -133,6 +138,18 @@ public class SplashScreen extends JWindow {
 //            charset.setAccessible(true);
 //            charset.set(null, null);
             // Espera ate que os recursos estejam carregados
+            
+            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
+            copyrt.setText("Verificando arquivo "+folderRes.getName());
+            if(folderRes.exists()){
+                
+                new File("C:\\FastPlan\\res\\svn.properties").delete();
+                copyrt.setText("svn.properties deletado");
+                folderRes.renameTo(new File("C:\\FastPlan\\res\\svn.properties"));
+                copyrt.setText("svn.properties criado");
+                Thread.sleep(3000);
+                
+            }
 
             try {
                 filePropertiesLocal = new SVNPropertiesVOBean();
@@ -182,7 +199,10 @@ public class SplashScreen extends JWindow {
                 bd.atualizaCamposObrigatorios("CASO_TESTE", 1);
                 SVNPropertiesVOBean svnProperties = new SVNPropertiesVOBean();
                 svnProperties.setComplexidade("Muito Alto|Alto|Medio|Baixo|Muito Baixo");
-                copyrt.setText("Iniciando...");
+                
+                //verifica se arquivo svn.properties foi atualizado
+            
+            copyrt.setText("Iniciando...");
                 guiPrincipal = new MainScreenView();
                 guiPrincipal.setVisible(true);
 //            Thread.sleep(duration);
@@ -208,6 +228,9 @@ public class SplashScreen extends JWindow {
     }
 
     public static void main(String[] args) {
+        
+         
+        
         // Mostra uma imagem com o título da aplicação 
         SplashScreen splash = new SplashScreen(10000);
         splash.showSplashAndExit();
