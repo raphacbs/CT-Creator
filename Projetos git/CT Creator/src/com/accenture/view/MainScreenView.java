@@ -140,6 +140,7 @@ public class MainScreenView extends javax.swing.JFrame {
         itemMenuScripts = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuItemCT = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
         itemMenuConfiguracoes = new javax.swing.JMenuItem();
 
@@ -163,6 +164,7 @@ public class MainScreenView extends javax.swing.JFrame {
             }
         });
 
+        menuCT.setBackground(java.awt.Color.white);
         menuCT.setText("Casos de Teste");
         menuCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,6 +245,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(menuCT);
 
+        menuImportarExportar.setBackground(java.awt.Color.white);
         menuImportarExportar.setText("Importar/Exportar");
 
         itemMenuImportaStepPadrao.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
@@ -282,6 +285,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(menuImportarExportar);
 
+        jMenu4.setBackground(java.awt.Color.white);
         jMenu4.setText("Fluxos");
 
         jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
@@ -295,6 +299,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu4);
 
+        menuMatrizRastreabilidade.setBackground(java.awt.Color.white);
         menuMatrizRastreabilidade.setText("Automação");
 
         itemMenuComponentes.setText("Componentes");
@@ -315,7 +320,13 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(menuMatrizRastreabilidade);
 
+        jMenu5.setBackground(java.awt.Color.white);
         jMenu5.setText("Relatórios");
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
 
         menuItemCT.setText("Caso de Testes");
         menuItemCT.addActionListener(new java.awt.event.ActionListener() {
@@ -325,8 +336,12 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu5.add(menuItemCT);
 
+        jMenuItem6.setText("De x Para");
+        jMenu5.add(jMenuItem6);
+
         jMenuBar1.add(jMenu5);
 
+        menuConfiguracoes.setBackground(java.awt.Color.white);
         menuConfiguracoes.setText("Configurações");
         menuConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -640,6 +655,27 @@ public class MainScreenView extends javax.swing.JFrame {
     }//GEN-LAST:event_itemMenuScriptsActionPerformed
 
     /**
+     * Relatorio de De x Para
+     * @param evt 
+     */
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+
+     // TODO add your handling code here:
+      try {
+            criaJanelaReportDePara();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+     
+    }//GEN-LAST:event_jMenu5ActionPerformed
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -667,6 +703,7 @@ public class MainScreenView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -703,6 +740,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItemFuncionalidade;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuCT;
@@ -729,6 +767,7 @@ public class MainScreenView extends javax.swing.JFrame {
     InstanceScreenTSView guiInstaceTs;
     ManageflowsScreenView guiManageflowsScreenView;
     FilterReportScreenView guiFilterReportScreenView;
+    FilterReporDeParatScreenView guiFilterReportDeParaScreenView;
     ManageComponentsScreenView guiComponentsScreenView;
     ManageScriptsScreenView guiManageScriptsScreenView;
 
@@ -739,6 +778,13 @@ public class MainScreenView extends javax.swing.JFrame {
         guiFilterReportScreenView.setVisible(true);
     }
 
+      public void criaJanelaReportDePara() throws IOException, ClassNotFoundException, SQLException, SVNException {
+        guiFilterReportDeParaScreenView = new FilterReporDeParatScreenView();
+        desktop.add(guiFilterReportDeParaScreenView);
+        //guiFilterReportDeParaScreenView.centralizaJanela();
+        guiFilterReportDeParaScreenView.setVisible(true);
+    }
+    
     public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiInstaceTs = new InstanceScreenTSView();
         desktop.add(guiInstaceTs);

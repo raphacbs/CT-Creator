@@ -876,8 +876,11 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
                 ScriptBean script = new ScriptBean();
 
-                script.setComponents(ScriptRN.getInstance().loadActualComponentsScript(fieldTextFlowId.getText() + "_" + fieldTextName.getText(), fieldComboboxSystem.getSelectedItem().toString()));
-
+                if (!fieldTextFlowId.getText().isEmpty()) {
+                    script.setComponents(ScriptRN.getInstance().loadActualComponentsScript(fieldTextFlowId.getText() + "_" + fieldTextName.getText(), fieldComboboxSystem.getSelectedItem().toString()));
+                } else {
+                    script.setComponents(new ArrayList<String>());
+                }
                 DefaultListModel modelListScript = (DefaultListModel) listSelectScript.getModel();
 
                 List<String> componentNames = new ArrayList<String>();
