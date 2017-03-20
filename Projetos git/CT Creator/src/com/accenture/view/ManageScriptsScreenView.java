@@ -875,12 +875,13 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean save() {
         try {
             DefaultListModel model = (DefaultListModel) listScripts.getModel();
+            DefaultListModel modelScript = (DefaultListModel) listSelectScript.getModel();
             if (!fieldTextName.getText().trim().isEmpty() && !fieldTextDescription.getText().trim().isEmpty() && !fieldComboboxSystem.getSelectedItem().equals("")) {
 
                 ScriptBean script = new ScriptBean();
 
                 if (!fieldTextFlowId.getText().isEmpty()) {
-                    script.setComponents(ScriptRN.getInstance().loadActualComponentsScript(fieldTextFlowId.getText() + "_" + fieldTextName.getText(), fieldComboboxSystem.getSelectedItem().toString()));
+                    script.setComponents(ScriptRN.getInstance().loadActualComponentsScript(fieldTextFlowId.getText() + "_" + modelScript.getElementAt(listSelectScript.getSelectedIndex()).toString().replace(fieldTextFlowId.getText(), "").replaceFirst("_", ""), fieldComboboxSystem.getSelectedItem().toString()));
                 } else {
                     script.setComponents(new ArrayList<String>());
                 }

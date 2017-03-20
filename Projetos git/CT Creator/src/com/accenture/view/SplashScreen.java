@@ -138,16 +138,16 @@ public class SplashScreen extends JWindow {
 //            charset.setAccessible(true);
 //            charset.set(null, null);
             // Espera ate que os recursos estejam carregados
-            
-            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
+            Thread.sleep(3000);
+//            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
+            File folderRes = new File("C:\\Users\\Oi_TSS\\Documents\\NetBeansProjects\\CT-Creator\\Projetos git\\CT Creator\\res\\svn1.properties");
             copyrt.setText("Verificando arquivo "+folderRes.getName());
             if(folderRes.exists()){
                 
-                new File("C:\\FastPlan\\res\\svn.properties").delete();
+                new File("C:\\Users\\Oi_TSS\\Documents\\NetBeansProjects\\CT-Creator\\Projetos git\\CT Creator\\res\\svn.properties").delete();
                 copyrt.setText("svn.properties deletado");
-                folderRes.renameTo(new File("C:\\FastPlan\\res\\svn.properties"));
+                folderRes.renameTo(new File("C:\\Users\\Oi_TSS\\Documents\\NetBeansProjects\\CT-Creator\\Projetos git\\CT Creator\\res\\svn.properties"));
                 copyrt.setText("svn.properties criado");
-                Thread.sleep(3000);
                 
             }
 

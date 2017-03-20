@@ -232,17 +232,29 @@ public class TestCaseTSRN {
 
         for (int i = 0; i < list.size(); i++) {
             List<Step> listStep = new ArrayList<Step>();
-            for (int j = 0; j < breakTestCaseForStep(list.get(i).getStepDescription()).size(); j++) {
-                Step s = new Step();
-
-                String desc = breakTestCaseForStep(list.get(i).getStepDescription()).get(j);
-                String result = breakTestCaseForStep(list.get(i).getExpectedResults()).get(j);
+//            for (int j = 0; j < breakTestCaseForStep(list.get(i).getStepDescription()).size(); j++) {
+//                Step s = new Step();
+//
+//                String desc = breakTestCaseForStep(list.get(i).getStepDescription()).get(j);
+//                String result = breakTestCaseForStep(list.get(i).getExpectedResults()).get(j);
+//                if (!desc.equals("") || !result.equals("")) {
+//                    s.setDescStep(desc.substring(desc.indexOf("-") + 2));
+//                    s.setResultadoStep(result.substring(result.indexOf("-") + 2));
+//                }
+//                listStep.add(s);
+//            }
+             for(int j = 0; j < list.get(i).getStepDescription().split("|").length; j++){
+                 Step s = new Step();
+//
+                String desc = list.get(i).getStepDescription().split("|")[j];
+                String result = list.get(i).getExpectedResults().split("|")[j];
                 if (!desc.equals("") || !result.equals("")) {
                     s.setDescStep(desc.substring(desc.indexOf("-") + 2));
                     s.setResultadoStep(result.substring(result.indexOf("-") + 2));
                 }
                 listStep.add(s);
-            }
+             }
+            
             list.get(i).setListStep(listStep);
         }
 

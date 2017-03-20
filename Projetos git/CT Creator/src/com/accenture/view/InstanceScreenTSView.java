@@ -289,7 +289,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuItemAbrirPlano = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         menuItemSalvarPlano = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menuItemExportarPlano = new javax.swing.JMenuItem();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -771,6 +773,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
         jMenu1.add(menuItemAbrirPlano);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Abrir Plano SVN");
+        jMenu1.add(jMenuItem2);
+
         menuItemSalvarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuItemSalvarPlano.setText("Salvar Plano");
         menuItemSalvarPlano.addActionListener(new java.awt.event.ActionListener() {
@@ -779,6 +785,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
         jMenu1.add(menuItemSalvarPlano);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Publicar Plano SVN");
+        jMenu1.add(jMenuItem1);
 
         menuItemExportarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemExportarPlano.setText("Exportar Plano");
@@ -1645,7 +1655,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntGenereteDateActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void bntStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntStatusActionPerformed
@@ -3837,6 +3847,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private com.toedter.calendar.JMonthChooser jMonthChooser1;
     private javax.swing.JPopupMenu jPopupTabelaStep;
     private javax.swing.JScrollPane jScrollPane1;

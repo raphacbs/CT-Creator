@@ -5,12 +5,20 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
+import com.accenture.util.FrameworkSvnManager;
+import static com.accenture.util.FrameworkSvnManager.getListEntries;
+import com.accenture.util.ProjectSettings;
+import java.awt.Frame;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
 
 /**
  *
@@ -58,5 +66,17 @@ public class TestPlanTSDao implements Serializable {
     
     public void moveDownTestCase(int index){
         Collections.swap(this.testPlan.getTestCase(), index, index + 1);
+    }
+    
+
+    public List<SVNDirEntry> getEntries(String system) throws SVNException, IOException {
+        
+        SVNPropertiesVOBean properties = new SVNPropertiesVOBean();
+        String url =ProjectSettings.URL_PLANO_SVN +"/"+system;
+        String username = properties.getUser();
+        String password = properties.getPass();
+        
+        
+        return getListEntries(new SVNPropertiesVOBean().getUrlScritps() + "/" + system, FrameworkSvnManager.getRepository(url, username, password));
     }
 }

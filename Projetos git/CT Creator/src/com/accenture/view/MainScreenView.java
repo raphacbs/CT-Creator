@@ -661,17 +661,17 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
 
      // TODO add your handling code here:
-      try {
-            criaJanelaReportDePara();
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (SVNException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+//      try {
+//            criaJanelaReportDePara();
+//        } catch (IOException ex) {
+//            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        } catch (ClassNotFoundException ex) {
+//            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        } catch (SVNException ex) {
+//            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
      
     }//GEN-LAST:event_jMenu5ActionPerformed
 
@@ -767,7 +767,7 @@ public class MainScreenView extends javax.swing.JFrame {
     InstanceScreenTSView guiInstaceTs;
     ManageflowsScreenView guiManageflowsScreenView;
     FilterReportScreenView guiFilterReportScreenView;
-    FilterReporDeParatScreenView guiFilterReportDeParaScreenView;
+//    FilterReporDeParatScreenView guiFilterReportDeParaScreenView;;
     ManageComponentsScreenView guiComponentsScreenView;
     ManageScriptsScreenView guiManageScriptsScreenView;
 
@@ -778,12 +778,12 @@ public class MainScreenView extends javax.swing.JFrame {
         guiFilterReportScreenView.setVisible(true);
     }
 
-      public void criaJanelaReportDePara() throws IOException, ClassNotFoundException, SQLException, SVNException {
-        guiFilterReportDeParaScreenView = new FilterReporDeParatScreenView();
-        desktop.add(guiFilterReportDeParaScreenView);
-        //guiFilterReportDeParaScreenView.centralizaJanela();
-        guiFilterReportDeParaScreenView.setVisible(true);
-    }
+//      public void criaJanelaReportDePara() throws IOException, ClassNotFoundException, SQLException, SVNException {
+//        guiFilterReportDeParaScreenView = new FilterReporDeParatScreenView();
+//        desktop.add(guiFilterReportDeParaScreenView);
+//        //guiFilterReportDeParaScreenView.centralizaJanela();
+//        guiFilterReportDeParaScreenView.setVisible(true);
+//    }
     
     public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiInstaceTs = new InstanceScreenTSView();

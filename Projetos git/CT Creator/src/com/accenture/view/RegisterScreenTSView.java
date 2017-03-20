@@ -717,8 +717,48 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextNameTSKeyTyped
 
     private void jCheckBoxAutomatizadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAutomatizadoActionPerformed
-        // TODO add your handling code here:
+       if(jCheckBoxAutomatizado.isSelected()){
+            if (!jComboSistemasTS.getSelectedItem().toString().isEmpty()) {
+            new SwingWorker() {
+
+                @Override
+                protected Object doInBackground() throws Exception {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    openScreenAddScript();
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+
+            }.execute();
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Por favor selecione um Sistema para realizar a busca.", "Atenção", JOptionPane.WARNING_MESSAGE);
+
+        }
+       }
     }//GEN-LAST:event_jCheckBoxAutomatizadoActionPerformed
+    
+    
+    private void openScreenAddScript() {
+        try {
+            
+//            ChooseComponenteScreenView view = new ChooseComponenteScreenView(jComboSistemasTS.getSelectedItem().toString(), this, null, true);
+//            view.centralizaJanela();
+//            view.setVisible(true);
+
+        } catch (Exception ex) {
+            Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+    
     public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);

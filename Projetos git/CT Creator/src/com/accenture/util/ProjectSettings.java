@@ -29,13 +29,15 @@ public class ProjectSettings {
     public final static String SVN_FOLDER_FLUXOS = "/fluxos";
     public final static String SVN_FOLDER_SCRIPTS = "/scripts";
     public final static String SVN_FOLDER_COMPONENTS = "/components";
+    public final static String URL_PLANO_SVN = "http://10.20.136.198:2402/svn/Oi.TSS/branches/CT Delivery/CTs/saves";
+    
 
     //diretorios
     public final static String PATH_FILE_FLUXO = "C:/FastPlan/fluxos";
     public final static String PATH_FILE_COMPONENT = "C:/FastPlan/components";
     public final static String PATH_FILE_SCRIPT = "C:/FastPlan/scripts";
 //  public final static String URL_SVN_FLUXO = "/CTs/fluxos";
-    public final static String PATH_FILE_SVN_PROPERTIES = "./res/svn.properties";
+    public final static String PATH_FILE_SVN_PROPERTIES = "C:/FastPlan/res/svn.properties";
 
     public final static String PATH_FILE_SVN_FLOW_PROPERTIES = "./res/svn.properties";
 
