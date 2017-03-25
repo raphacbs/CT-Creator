@@ -64,10 +64,15 @@ public class MainScreenView extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
-    public MainScreenView() {
+    public MainScreenView()  {
         try {
             setTitle("CT Creator - Versão: " + new SVNPropertiesVOBean().getVersion());
             initComponents();
+            
+            
+            
+           
+            
 
             List<String> users = Arrays.asList(new SVNPropertiesVOBean().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
             String userCurrent = new SVNPropertiesVOBean().getUser();
@@ -89,7 +94,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         //Background background = new Background("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png");
         //background.paint(g);
-        desktop = new JDesktopPane() {
+        desktop = new JDesktopPane(){
             Image im = (new ImageIcon("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png")).getImage();
 
             public void paintComponent(Graphics g) {
@@ -102,6 +107,19 @@ public class MainScreenView extends javax.swing.JFrame {
         desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
         setExtendedState(MAXIMIZED_BOTH);
+        
+        
+         try {
+                criaJanelaMenu();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (SVNException ex) {
+                Logger.getLogger(MainScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
     }
 
@@ -770,13 +788,23 @@ public class MainScreenView extends javax.swing.JFrame {
 //    FilterReporDeParatScreenView guiFilterReportDeParaScreenView;;
     ManageComponentsScreenView guiComponentsScreenView;
     ManageScriptsScreenView guiManageScriptsScreenView;
+    MenuLateralView guiMenuLateralView; 
+    
+    
 
+    public void criaJanelaMenu() throws IOException, ClassNotFoundException, SQLException, SVNException {
+        guiMenuLateralView = new MenuLateralView();
+        desktop.add(guiMenuLateralView);
+//        guiMenuLateralView.centralizaJanela();
+        guiMenuLateralView.setVisible(true);
+    }
     public void criaJanelaReport() throws IOException, ClassNotFoundException, SQLException, SVNException {
         guiFilterReportScreenView = new FilterReportScreenView();
         desktop.add(guiFilterReportScreenView);
         guiFilterReportScreenView.centralizaJanela();
         guiFilterReportScreenView.setVisible(true);
     }
+   
 
 //      public void criaJanelaReportDePara() throws IOException, ClassNotFoundException, SQLException, SVNException {
 //        guiFilterReportDeParaScreenView = new FilterReporDeParatScreenView();

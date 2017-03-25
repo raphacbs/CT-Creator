@@ -209,7 +209,8 @@ public class SplashScreen extends JWindow {
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
+                ex.printStackTrace();
+                System.exit(1);
             }
             setVisible(false);
 
