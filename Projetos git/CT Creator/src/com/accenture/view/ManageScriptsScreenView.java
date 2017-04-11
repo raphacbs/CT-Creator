@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 
 import com.accenture.bean.ScriptBean;
+import com.accenture.log.MyLogger;
 import com.accenture.ts.dao.ScriptDAO;
 import com.accenture.ts.rn.ComponenteRN;
 
@@ -29,6 +30,7 @@ import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import com.accenture.util.FunctiosDates;
 import java.awt.Cursor;
+import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -42,12 +44,15 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     //variaveis locais
     private boolean editing = false;
     private static ManageScriptsScreenView instancia;
+    private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     /**
      * Creates new form ManageflowsScreenView
      */
     public ManageScriptsScreenView() throws IOException, SVNException {
         initComponents();
+        MyLogger.setup();
+        Log.setLevel(Level.INFO);
 
         new SwingWorker() {
 
@@ -67,7 +72,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             }
 
         }.run();
-        
+
         instancia = this;
 
     }
@@ -104,6 +109,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             refreshLabelStatus("Lista de scripts carregada.");
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -126,8 +132,10 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             }
 
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
         }
 
@@ -265,6 +273,11 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         listSelectScript.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 listSelectScriptMouseReleased(evt);
+            }
+        });
+        listSelectScript.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                listSelectScriptKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(listSelectScript);
@@ -634,6 +647,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Por favor, selecione um script para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -738,6 +752,22 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         statusTextArea.setText("");
     }//GEN-LAST:event_bntLimparActionPerformed
 
+    private void listSelectScriptKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listSelectScriptKeyReleased
+
+        if ((evt.getKeyCode() == KeyEvent.VK_UP) || (evt.getKeyCode() == KeyEvent.VK_DOWN && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR)) {
+            if (listSelectScript.getSelectedIndices().length == 1) {
+                carregaCampos(listSelectScript.getSelectedIndex());
+                bntDelete.setEnabled(true);
+                bntEditOrCancel.setEnabled(true);
+
+            } else {
+                cleanFilds();
+                bntDelete.setEnabled(true);
+            }
+            refreshQTDCTs();
+        }
+    }//GEN-LAST:event_listSelectScriptKeyReleased
+
     private void carregaCampos(int i) {
         DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectScript.getModel();
         DefaultListModel modelFlow = (DefaultListModel) listScripts.getModel();
@@ -836,6 +866,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             }
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -844,6 +875,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -852,6 +884,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -899,8 +932,8 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 script.setPartNameScript(fieldTextName.getText());
                 //script.setNameScript(fieldTextName.getText());
                 script.setSystem(fieldComboboxSystem.getSelectedItem().toString());
-                ComponenteRN.getInstance().insereRemoveScript(componentNames,script.getComponents(), script.getSystem(), script.getNameScript());
-                
+                ComponenteRN.getInstance().insereRemoveScript(componentNames, script.getComponents(), script.getSystem(), script.getNameScript());
+
                 script.setComponents(componentNames);
 
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
@@ -989,6 +1022,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 return false;
             }
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o script, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -997,6 +1031,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o script, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1004,6 +1039,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
             ex.printStackTrace();
             return false;
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1047,6 +1083,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1069,6 +1106,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1091,6 +1129,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1107,6 +1146,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
                 model.removeElement(itens[i]);
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageScriptsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1124,6 +1164,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
 //            view.setVisible(true);
 
         } catch (ClassNotFoundException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de abrir janelas cts, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1153,11 +1194,10 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     public void addLogTextArea(String text) {
         statusTextArea.setText(statusTextArea.getText() + "\n" + text);
     }
-    
-    public static ManageScriptsScreenView getInstance(){
+
+    public static ManageScriptsScreenView getInstance() {
         return instancia;
     }
-            
 
     private void addIconInButton() {
         ButtonIconBean iconBean = new ButtonIconBean();

@@ -25,7 +25,6 @@ public class TestPlanTSBean implements Serializable {
     private List<ParameterBean> parameters;
     private String release;
     private static final long serialVersionUID = -7932047122858971692L;
-    private String scripts;
 //    private static final long serialVersionUID = -7932047122858971692L; -1432622747367978334
 
     public TestPlanTSBean() {
@@ -101,14 +100,6 @@ public class TestPlanTSBean implements Serializable {
 
     public void setRelease(String release) {
         this.release = release;
-    }
-
-    public String getScripts() {
-        return scripts;
-    }
-
-    public void setScripts(String scripts) {
-        this.scripts = scripts;
     }
 
    

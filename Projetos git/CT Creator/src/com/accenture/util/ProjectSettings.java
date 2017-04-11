@@ -29,15 +29,18 @@ public class ProjectSettings {
     public final static String SVN_FOLDER_FLUXOS = "/fluxos";
     public final static String SVN_FOLDER_SCRIPTS = "/scripts";
     public final static String SVN_FOLDER_COMPONENTS = "/components";
-    public final static String URL_PLANO_SVN = "http://10.20.136.198:2402/svn/Oi.TSS/branches/CT Delivery/CTs/saves";
+    public final static String URL_PLANO_SVN = "/branches/CT Delivery/CTs/saves";
     
 
     //diretorios
     public final static String PATH_FILE_FLUXO = "C:/FastPlan/fluxos";
     public final static String PATH_FILE_COMPONENT = "C:/FastPlan/components";
     public final static String PATH_FILE_SCRIPT = "C:/FastPlan/scripts";
+    public final static String PATH_FILE_SAVE = "C:/FastPlan/saves";
+    public final static String PATH_FILE_SAVE_SVN = "C:/FastPlan/save/SVN";
 //  public final static String URL_SVN_FLUXO = "/CTs/fluxos";
     public final static String PATH_FILE_SVN_PROPERTIES = "C:/FastPlan/res/svn.properties";
+    public final static String PATH_FILE_SVN_UPDATE_PROPERTIES = "C:/FastPlan/res/svn1.properties";
 
     public final static String PATH_FILE_SVN_FLOW_PROPERTIES = "./res/svn.properties";
 
@@ -53,5 +56,12 @@ public class ProjectSettings {
     //files reports
     public final static String FILE_NAME_REPORT_PLANO = "reportCT.jrxml";
     public final static String FILE_NAME_REPORT_CTS = "CtsCadastrados.jrxml";
+    
+    public final static String PATH_LOG = "\\log";
+    public final static String PATH_LOG_TXT = PATH_LOG + "C:/FastPlan/LOG_CT_CREATOR.txt";
+    public final static String PATH_LOG_HTML = PATH_LOG + "C:/FastPlan/LOG_CT_CREATOR.html";
+    
+    
+    
 
 }

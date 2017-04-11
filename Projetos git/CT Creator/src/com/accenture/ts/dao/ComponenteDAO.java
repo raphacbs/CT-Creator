@@ -46,7 +46,7 @@ public class ComponenteDAO extends FrameworkSvnManager {
     private SVNClientManager clientManager;
 
     public ComponenteDAO() throws IOException, SVNException {
-        properties = new SVNPropertiesVOBean();
+        properties = SVNPropertiesVOBean.getInstance();//new SVNPropertiesVOBean();
         url = properties.getUrl() + properties.getUrlComponents();
         username = properties.getUser();
         password = properties.getPass();
@@ -68,7 +68,7 @@ public class ComponenteDAO extends FrameworkSvnManager {
     }
 
     public List<SVNDirEntry> getEntries(String system) throws SVNException, IOException {
-        return getListEntries(new SVNPropertiesVOBean().getUrlComponents() + "/" + system, repo);
+        return getListEntries(SVNPropertiesVOBean.getInstance().getUrlComponents() + "/" + system, repo);
     }
 
     public void save(String system) throws SVNException {

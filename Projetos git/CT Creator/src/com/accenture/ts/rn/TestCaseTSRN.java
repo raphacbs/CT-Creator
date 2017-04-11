@@ -61,7 +61,7 @@ public class TestCaseTSRN {
      */
     public void importSheetAllCts(String pathSheetFull, String commitMessege) throws IOException, SVNException {
 
-        String folderTemp = new SVNPropertiesVOBean().getFolderTemplocal();
+        String folderTemp = SVNPropertiesVOBean.getInstance().getFolderTemplocal();
         List<TesteCaseTSBean> listTS = tsDao.readSheet(pathSheetFull);
         String dirFull = "";
         tsDao.deleteDir(new File(folderTemp));
@@ -129,7 +129,7 @@ public class TestCaseTSRN {
      */
     public String createSheet(TesteCaseTSBean testCase, String system) throws IOException, SVNException {
         String nameSheet = createId(system) + testCase.getTestScriptName().toUpperCase();
-        String pathSheet = new SVNPropertiesVOBean().getFolderTemplocal() + system;
+        String pathSheet = SVNPropertiesVOBean.getInstance().getFolderTemplocal() + system;
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
         tsDao.newTsSheet(pathSheet, nameSheet, testCase);
@@ -139,7 +139,7 @@ public class TestCaseTSRN {
     //CR
     public String createSheet(TesteCaseTSBean testCase, String system, int hashCode) throws IOException, SVNException {
         String nameSheet = createId(system) + testCase.getTestScriptName().toUpperCase();
-        String pathSheet = new SVNPropertiesVOBean().getFolderTemplocal() + hashCode + "\\" + system;
+        String pathSheet =SVNPropertiesVOBean.getInstance().getFolderTemplocal() + hashCode + "\\" + system;
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
         tsDao.newTsSheet(pathSheet, nameSheet, testCase);
@@ -172,6 +172,8 @@ public class TestCaseTSRN {
     public void createSpreadsheetTSNew(String pathSheet, String nameSheet, TestPlanTSBean testPlan) throws FileNotFoundException, IOException, InterruptedException, Exception{
         nameSheet = nameSheet.replace("Siebel 6.3", "SBL6.3");
         nameSheet = nameSheet.replace("Siebel 8", "SBL8");  
+        nameSheet = nameSheet.replace("STC DADOS", "STC");  
+        nameSheet = nameSheet.replace("STC VOZ", "STC");  
         
    
         
@@ -205,6 +207,12 @@ public class TestCaseTSRN {
           
             
             testPlan.getTestCase().get(i).setListStep(steps);
+            
+            if(testPlan.getTestCase().get(i).getProduct().equals("STC VOZ") || testPlan.getTestCase().get(i).getProduct().equals("STC DADOS")){
+                testPlan.getTestCase().get(i).setProduct("STC");
+            }
+                
+            
                    
             
            
@@ -216,14 +224,14 @@ public class TestCaseTSRN {
     public void writerSheet(String pathSheet, String nameSheet, TesteCaseTSBean testCase) throws IOException {
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
-        tsDao.updateTsSheet(new SVNPropertiesVOBean().getFolderTemplocal() + "\\" + pathSheet, nameSheet, testCase);
+        tsDao.updateTsSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + "\\" + pathSheet, nameSheet, testCase);
     }
     
     //CR PERMITE VARIAS TELAS
     public void writerSheet(String pathSheet, String nameSheet, TesteCaseTSBean testCase, int hashCode) throws IOException {
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
-        tsDao.updateTsSheet(new SVNPropertiesVOBean().getFolderTemplocal() +hashCode+ "\\" + pathSheet, nameSheet, testCase);
+        tsDao.updateTsSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() +hashCode+ "\\" + pathSheet, nameSheet, testCase);
     }
     //CR
 
@@ -232,28 +240,28 @@ public class TestCaseTSRN {
 
         for (int i = 0; i < list.size(); i++) {
             List<Step> listStep = new ArrayList<Step>();
-//            for (int j = 0; j < breakTestCaseForStep(list.get(i).getStepDescription()).size(); j++) {
-//                Step s = new Step();
-//
-//                String desc = breakTestCaseForStep(list.get(i).getStepDescription()).get(j);
-//                String result = breakTestCaseForStep(list.get(i).getExpectedResults()).get(j);
-//                if (!desc.equals("") || !result.equals("")) {
-//                    s.setDescStep(desc.substring(desc.indexOf("-") + 2));
-//                    s.setResultadoStep(result.substring(result.indexOf("-") + 2));
-//                }
-//                listStep.add(s);
-//            }
-             for(int j = 0; j < list.get(i).getStepDescription().split("|").length; j++){
-                 Step s = new Step();
-//
-                String desc = list.get(i).getStepDescription().split("|")[j];
-                String result = list.get(i).getExpectedResults().split("|")[j];
+            for (int j = 0; j < breakTestCaseForStep(list.get(i).getStepDescription()).size(); j++) {
+                Step s = new Step();
+
+                String desc = breakTestCaseForStep(list.get(i).getStepDescription()).get(j);
+                String result = breakTestCaseForStep(list.get(i).getExpectedResults()).get(j);
                 if (!desc.equals("") || !result.equals("")) {
                     s.setDescStep(desc.substring(desc.indexOf("-") + 2));
                     s.setResultadoStep(result.substring(result.indexOf("-") + 2));
                 }
                 listStep.add(s);
-             }
+            }
+//             for(int j = 0; j < list.get(i).getStepDescription().split("|").length; j++){
+//                 Step s = new Step();
+//
+//                String desc = list.get(i).getStepDescription().split("|")[j];
+//                String result = list.get(i).getExpectedResults().split("|")[j];
+//                if (!desc.equals("") || !result.equals("")) {
+//                    s.setDescStep(desc.substring(desc.indexOf("-") + 2));
+//                    s.setResultadoStep(result.substring(result.indexOf("-") + 2));
+//                }
+//                listStep.add(s);
+//             }
             
             list.get(i).setListStep(listStep);
         }
@@ -379,31 +387,31 @@ public class TestCaseTSRN {
     }
 
     public ArrayList<String> systemsTestCase() throws IOException {
-        String temp = new SVNPropertiesVOBean().getSystems();
+        String temp = SVNPropertiesVOBean.getInstance().getSystems();
         return breakTestCaseForStep(temp);
     }
 
     public ArrayList<String> faseCRTestCase() throws IOException {
-        String temp = new SVNPropertiesVOBean().getFaseCR();
+        String temp =SVNPropertiesVOBean.getInstance().getFaseCR();
         return breakTestCaseForStep(temp);
     }
 
     public ArrayList<String> testPhase() throws IOException {
-        String temp = new SVNPropertiesVOBean().getTestPhaseTS();
+        String temp = SVNPropertiesVOBean.getInstance().getTestPhaseTS();
         return breakTestCaseForStep(temp);
     }
     
     public ArrayList<String> complexidade() throws IOException{
-        String temp = new SVNPropertiesVOBean().getComplexidade();
+        String temp = SVNPropertiesVOBean.getInstance().getComplexidade();
         return breakTestCaseForStep(temp);
     }
 
     public void deleteDir() throws IOException {
-        tsDao.deleteDir(new File(new SVNPropertiesVOBean().getFolderTemplocal()));
+        tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal()));
     }
 
     public void deleteDir(String folder) throws IOException {
-        tsDao.deleteDir(new File(new SVNPropertiesVOBean().getFolderTemplocal()+folder));
+        tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal()+folder));
     }
 
 }

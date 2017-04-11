@@ -20,7 +20,7 @@ public class SettingsArquivesTIDao {
 
     public SettingsArquivesTIDao() throws IOException {
         settings = new SettingsArchivesTIBean();
-        settingsLocal = new SVNPropertiesVOBean();
+        settingsLocal = SVNPropertiesVOBean.getInstance();//new SVNPropertiesVOBean();
 
     }
 

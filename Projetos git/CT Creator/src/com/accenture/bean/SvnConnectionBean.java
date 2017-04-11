@@ -31,7 +31,7 @@ public class SvnConnectionBean {
 
     public SvnConnectionBean() throws SVNException, FileNotFoundException, IOException {
 
-        this.svnProperties = new SVNPropertiesVOBean();
+        this.svnProperties = SVNPropertiesVOBean.getInstance(); //new SVNPropertiesVOBean();
         DAVRepositoryFactory.setup();
         this.authManager = new BasicAuthenticationManager(this.svnProperties.getUser(), this.svnProperties.getPass());
         this.url = SVNURL.parseURIDecoded(this.svnProperties.getUrl() + this.svnProperties.getDir());

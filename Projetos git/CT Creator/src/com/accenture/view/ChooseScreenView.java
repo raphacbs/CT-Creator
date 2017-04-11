@@ -449,7 +449,7 @@ public class ChooseScreenView extends javax.swing.JDialog {
 
     private TesteCaseTSBean downloadCT() throws ClassNotFoundException, IOException, SVNException {
         int indice = 0;
-        SVNPropertiesVOBean properties = new SVNPropertiesVOBean();
+        SVNPropertiesVOBean properties = SVNPropertiesVOBean.getInstance();
         int line = Integer.parseInt(tabelaSelecioneComponentes.getValueAt(tabelaSelecioneComponentes.getSelectedRow(), 4).toString());
 
         for (TestCaseTSPropertiesBean tcPropertiesBean : listProperties) {

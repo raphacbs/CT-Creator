@@ -42,13 +42,14 @@ import javax.swing.table.TableRowSorter;
 import org.tmatesoft.svn.core.SVNException;
 import com.accenture.filter.TableFilterHeader;
 import com.accenture.filter.TableFilterHeader.Position;
+import com.accenture.ts.rn.SavePlanRN;
 
 
 /**
  *
  * @author Raphael
  */
-public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
+public class ChoosePlanTsScreenView extends javax.swing.JDialog {
 
     
     
@@ -56,12 +57,15 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
     private TestCaseTSRN testCaseRN;
     private List<TestCaseTSPropertiesBean> listProperties;
     private TableFilterHeader filterHeader;
+    private String namePlan = "";
+    private String system = "";
 
     /**
      * Creates new form GUISelecionaCT
      */
-    public ChooseTestCaseTsScreenView() throws SQLException, ClassNotFoundException {
-
+    public ChoosePlanTsScreenView(InstanceScreenTSView instanceScreenTSView, java.awt.Frame parent, boolean modal) throws SQLException, ClassNotFoundException {
+        super(parent, modal);
+      
         initComponents();
         tabelaSelecioneCT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTitle("Copiar CT TS");
@@ -110,7 +114,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         bntPesquisar = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Selecione o CT que deseja copiar");
+        jLabel1.setText("Selecione o plano");
 
         tabelaSelecioneCT.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseMoved(MouseEvent e){
@@ -125,14 +129,14 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "CT", "Modificado por", "Data de moficação", "hashCode"
+                "Plano", "hashCode"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -146,13 +150,10 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         tabelaSelecioneCT.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaSelecioneCT);
         if (tabelaSelecioneCT.getColumnModel().getColumnCount() > 0) {
-            tabelaSelecioneCT.getColumnModel().getColumn(0).setPreferredWidth(60);
-            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(170);
-            tabelaSelecioneCT.getColumnModel().getColumn(2).setPreferredWidth(90);
-            tabelaSelecioneCT.getColumnModel().getColumn(3).setPreferredWidth(150);
-            tabelaSelecioneCT.getColumnModel().getColumn(4).setMinWidth(0);
-            tabelaSelecioneCT.getColumnModel().getColumn(4).setPreferredWidth(0);
-            tabelaSelecioneCT.getColumnModel().getColumn(4).setMaxWidth(0);
+            tabelaSelecioneCT.getColumnModel().getColumn(0).setPreferredWidth(170);
+            tabelaSelecioneCT.getColumnModel().getColumn(1).setMinWidth(0);
+            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(0);
+            tabelaSelecioneCT.getColumnModel().getColumn(1).setMaxWidth(0);
         }
         //ordenatabela();
         jScrollPane1.setHorizontalScrollBar(new JScrollBar(0));
@@ -161,10 +162,10 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         filterHeader = new TableFilterHeader(tabelaSelecioneCT, AutoChoices.ENABLED);
         filterHeader.setPosition(Position.TOP);
 
-        bntCopiar.setText("Copiar");
-        bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bntCopiarMouseClicked(evt);
+        bntCopiar.setText("Checkout");
+        bntCopiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntCopiarActionPerformed(evt);
             }
         });
 
@@ -181,7 +182,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setText("Nome CT:");
+        jLabel2.setText("Nome Plano:");
 
         jLabel33.setText("Sistema:");
 
@@ -206,7 +207,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 122, Short.MAX_VALUE)
+                                .addGap(0, 109, Short.MAX_VALUE)
                                 .addComponent(bntPesquisar)
                                 .addGap(171, 171, 171))
                             .addGroup(layout.createSequentialGroup()
@@ -257,73 +258,6 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_bntCancelarActionPerformed
 
-    private void bntCopiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCopiarMouseClicked
-
-        new SwingWorker() {
-            DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
-            JDialog aguarde;
-            final Frame GUIPrincipal = new MainScreenView();
-
-            {
-                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
-            }
-
-            @Override
-            protected Object doInBackground() throws Exception {
-                aguarde.setLocationRelativeTo(GUIPrincipal);
-                aguarde.setVisible(true);
-                if (tabelaSelecioneCT.getSelectedRowCount() == 0) {
-                    aguarde.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-
-                    
-
-                    criaJanelaTelaCadCT();
-
-                }
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                aguarde.dispose();
-            }
-
-        }.execute();
-
-//            DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
-//
-//            tabelaSelecioneCT.getSelectedRow ();
-//            final Frame GUIPrincipal = new GUIPrincipal();
-//
-//            if (tabelaSelecioneCT.getSelectedRowCount () 
-//                == 0) {
-//            JOptionPane.showMessageDialog(this, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//
-//            
-//                else {
-//            try {
-//                    System.out.println(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0));
-//                    ManipulaDadosSQLite bd = new ManipulaDadosSQLite();
-//                    Plano p = new Plano();
-//                    bd.getPorCasoTeste(p);
-//
-//                    criaJanelaTelaCadCT();
-//
-////                criaJanelaTelaCadCT();
-//                } catch (SQLException ex) {
-//                    JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getSQLState(), "ERRO", JOptionPane.ERROR);
-//                } catch (ClassNotFoundException ex) {
-//                    JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getCause(), "ERRO", JOptionPane.ERROR);
-//                } catch (IOException ex) {
-//                    Logger.getLogger(GUISelecionaCT.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-
-    }//GEN-LAST:event_bntCopiarMouseClicked
-
     private void textPesquisaCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPesquisaCTActionPerformed
         //Realiza pesquisa na tabela
 //        DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
@@ -349,6 +283,13 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         atualizaTabelaCT();
         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_bntPesquisarActionPerformed
+
+    private void bntCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCopiarActionPerformed
+        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+        InstanceScreenTSView.getInstance().recuperaPlano(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0).toString(),system);
+        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+         this.dispose();
+    }//GEN-LAST:event_bntCopiarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -395,13 +336,13 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
     }
     
-    public void centralizaJanela() {
-        Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
-    }
-
+   
     public void atualizaTabelaCT() {
-
+        
+        system = jComboSistemasTS.getSelectedItem().toString();
+        namePlan = textPesquisaCT.getText();
+        
+        if(system != null){
         DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
 
         if (model.getRowCount() != 0) {
@@ -414,35 +355,38 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         }
         try {
 
-            SvnConnectionRN svn = new SvnConnectionRN();
-
-            List<TestCaseTSPropertiesBean> listTemp = svn.search(jComboSistemasTS.getSelectedItem().toString(), textPesquisaCT.getText());
-            listProperties = listTemp;
+            
+            SavePlanRN save = new SavePlanRN();
+            List<String> tempList = save.recuperarPlano(system);
+            List<String> listName = new ArrayList<String>();
             String nameCT = "";
             String id = "";
             String modifyBy = "";
             int hashCode = 0;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
-            for (int i = 0; i < listTemp.size(); i++) {
-//            id = listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().replace(".xlsx","").substring(0,listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().indexOf("-"));
-//            nameCT = listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().replace(".xlsx","").substring(listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().indexOf("-")+1);
-                id = listTemp.get(i).getTesteCaseId();
-                nameCT = listTemp.get(i).getTestCaseName();
-                modifyBy = listTemp.get(i).getDirEntry().getAuthor();
-                hashCode = listTemp.get(i).getHashCode();
-                
-                System.out.println("CAPTURANDO URL: " + listTemp.get(i).getDirEntry().getURL());
-                String dataFormatada = sdf.format(listTemp.get(i).getDirEntry().getDate());
-
-                model.addRow(new String[]{id, nameCT, modifyBy, dataFormatada, hashCode+""});
-//            System.out.println(listStep.get(i).getCasoTeste());
+            
+            
+            for(String s : tempList ){
+                if(s.contains(namePlan)){
+                    listName.add(s);
+                }
             }
+            
+            for(String s : listName ){
+                 hashCode = s.hashCode();
+               model.addRow(new String[]{s,hashCode+""});
+            }
+
+         
 
         } catch (SVNException ex) {
            JOptionPane.showMessageDialog(null, ex.getErrorMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione um sistema", "Alerta", JOptionPane.ERROR_MESSAGE);
         }
 
     }

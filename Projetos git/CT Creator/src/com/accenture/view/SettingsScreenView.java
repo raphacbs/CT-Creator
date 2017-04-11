@@ -34,7 +34,7 @@ import org.tmatesoft.svn.core.SVNException;
 public class SettingsScreenView extends javax.swing.JInternalFrame {
 
     private ManipulaDadosSQLite bd = new ManipulaDadosSQLite();
-    private SVNPropertiesVOBean svnProperties = new SVNPropertiesVOBean();
+    private SVNPropertiesVOBean svnProperties = SVNPropertiesVOBean.getInstance();
     private MainScreenView desktop;
 
     /**

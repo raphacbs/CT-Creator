@@ -14,12 +14,15 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
+
 
 /**
  *
  * @author raphael.da.silva
  */
 public class FunctiosDates {
+    
 
     public static Date stringToDate(String stringDate) {
         Date date = null;
@@ -29,6 +32,8 @@ public class FunctiosDates {
             date = sdf.parse(stringDate);
         } catch (ParseException e) {
             e.printStackTrace();
+            return new Date();
+            
         }
         return date;
     }

@@ -81,7 +81,7 @@ public class FrameworkSvnManager {
 	public static SVNCommitInfo importDirectory(SVNClientManager ourClientManager, File localPach, String urlSVN,
 			String commitMessage, boolean isRecursive) throws SVNException {
 		return ourClientManager.getCommitClient().doImport(localPach, SVNURL.parseURIEncoded(urlSVN), commitMessage,
-				null, true, true, SVNDepth.INFINITY);
+				true);
 	}
 
 	public static void createWorkingCopy(SVNClientManager ourClientManager, String urlSVN, String dstPath, SVNDepth depth)

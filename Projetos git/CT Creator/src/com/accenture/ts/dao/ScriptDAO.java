@@ -46,7 +46,7 @@ public class ScriptDAO extends FrameworkSvnManager {
     private SVNClientManager clientManager;
 
     public ScriptDAO() throws IOException, SVNException {
-        properties = new SVNPropertiesVOBean();
+        properties = SVNPropertiesVOBean.getInstance();//new SVNPropertiesVOBean();
         url = properties.getUrl() + properties.getUrlScritps();
         username = properties.getUser();
         password = properties.getPass();
@@ -68,7 +68,7 @@ public class ScriptDAO extends FrameworkSvnManager {
     }
 
     public List<SVNDirEntry> getEntries(String system) throws SVNException, IOException {
-        return getListEntries(new SVNPropertiesVOBean().getUrlScritps() + "/" + system, repo);
+        return getListEntries(SVNPropertiesVOBean.getInstance().getUrlScritps() + "/" + system, repo);
     }
 
     public void save(String system) throws SVNException {

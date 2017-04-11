@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.ComponenteBean;
 import com.accenture.bean.FlowBean;
+import com.accenture.log.MyLogger;
 import com.accenture.ts.rn.ComponenteRN;
 import javax.swing.DefaultListModel;
 import com.accenture.ts.rn.FlowRN;
@@ -27,6 +28,7 @@ import org.tmatesoft.svn.core.SVNException;
 import com.accenture.util.FunctiosDates;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -39,12 +41,15 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
     //variaveis locais
     private boolean editing = false;
+    private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     /**
      * Creates new form ManageflowsScreenView
      */
     public ManageComponentsScreenView() throws IOException, SVNException {
         initComponents();
+        MyLogger.setup();
+        Log.setLevel(Level.INFO);
 
         new SwingWorker() {
 
@@ -99,6 +104,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             refreshLabelStatus("Lista de componentes carregada.");
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -121,8 +127,10 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             }
 
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
         }
 
@@ -256,6 +264,11 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
         listSelectComponent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 listSelectComponentMouseReleased(evt);
+            }
+        });
+        listSelectComponent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                listSelectComponentKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(listSelectComponent);
@@ -570,7 +583,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
         try {
             if (listScripts.getModel().getSize() == 0) {
-                
+
                 refreshLabelStatus("Aguarde, excluindo compoenente...");
                 if (listSelectComponent.getSelectedIndex() != -1) {
                     if (JOptionPane.showConfirmDialog(null, "Deseja excluir o(s) componente(s) selecionados?", "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -589,11 +602,12 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Por favor, selecione um componente para exclui-lo", "Atenção", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
-                
+
                 JOptionPane.showMessageDialog(null, "Atenção, o componente não pode ser excluido pois está contido em um ou mais Scripts. Desvincule-os e tente novamente.", "Atenção", JOptionPane.WARNING_MESSAGE);
 
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -641,6 +655,21 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private void bntLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntLimparActionPerformed
         statusTextArea.setText("");
     }//GEN-LAST:event_bntLimparActionPerformed
+
+    private void listSelectComponentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listSelectComponentKeyReleased
+        if ((evt.getKeyCode() == KeyEvent.VK_UP) || (evt.getKeyCode() == KeyEvent.VK_DOWN && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR)) {
+            if (listSelectComponent.getSelectedIndices().length == 1) {
+                carregaCampos(listSelectComponent.getSelectedIndex());
+                bntDelete.setEnabled(true);
+                bntEditOrCancel.setEnabled(true);
+
+            } else {
+                cleanFilds();
+                bntDelete.setEnabled(true);
+            }
+            refreshQTDCTs();
+        }
+    }//GEN-LAST:event_listSelectComponentKeyReleased
 
     private void carregaCampos(int i) {
         DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectComponent.getModel();
@@ -748,6 +777,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -756,6 +786,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -802,7 +833,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
                     refreshLabelStatus("Salvando novo componente...");
                     componente.setDate(FunctiosDates.getDateActual());
-                    String id = ComponenteRN.getInstance().saveFile(null, componente,true).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                    String id = ComponenteRN.getInstance().saveFile(null, componente, true).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                     if (listSelectComponent.getModel().getSize() > 0) {
                         modelSelectionTestCase.clear();
                     }
@@ -884,6 +915,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 return false;
             }
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -892,6 +924,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             return false;
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o componente, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -899,6 +932,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
             ex.printStackTrace();
             return false;
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             refreshLabelStatus("Erro na tentativa de salvar o fluxo, verifique detalhes no log");
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
@@ -942,6 +976,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
 
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -964,6 +999,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -986,6 +1022,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1002,6 +1039,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
                 model.removeElement(itens[i]);
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addLogTextArea(ex);
             Logger.getLogger(ManageComponentsScreenView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \nverifique mais detalhes no botão de log.", "Erro", JOptionPane.ERROR_MESSAGE);

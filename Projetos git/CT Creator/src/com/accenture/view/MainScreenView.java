@@ -16,11 +16,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -66,11 +68,18 @@ public class MainScreenView extends javax.swing.JFrame {
      */
     public MainScreenView() {
         try {
-            setTitle("CT Creator - Versão: " + new SVNPropertiesVOBean().getVersion());
+            setTitle("CT Creator - Versão: " + SVNPropertiesVOBean.getInstance().getVersion());
             initComponents();
 
-            List<String> users = Arrays.asList(new SVNPropertiesVOBean().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
-            String userCurrent = new SVNPropertiesVOBean().getUser();
+            List<String> users = new ArrayList<String>();
+            try {
+                users = Arrays.asList(SVNPropertiesVOBean.getInstance().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
+            } catch (NullPointerException e) {
+                              
+                users = Arrays.asList(SVNPropertiesVOBean.getInstance().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
+                
+            }
+            String userCurrent = SVNPropertiesVOBean.getInstance().getUser();
 
             if (users.contains(userCurrent)) {
                 menuMatrizRastreabilidade.setVisible(true);
@@ -141,6 +150,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         menuItemCT = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         menuConfiguracoes = new javax.swing.JMenu();
         itemMenuConfiguracoes = new javax.swing.JMenuItem();
 
@@ -338,6 +348,14 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuItem6.setText("De x Para");
         jMenu5.add(jMenuItem6);
+
+        jMenuItem7.setText("Log");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem7);
 
         jMenuBar1.add(jMenu5);
 
@@ -656,11 +674,12 @@ public class MainScreenView extends javax.swing.JFrame {
 
     /**
      * Relatorio de De x Para
-     * @param evt 
+     *
+     * @param evt
      */
     private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
 
-     // TODO add your handling code here:
+        // TODO add your handling code here:
 //      try {
 //            criaJanelaReportDePara();
 //        } catch (IOException ex) {
@@ -672,8 +691,22 @@ public class MainScreenView extends javax.swing.JFrame {
 //        } catch (SVNException ex) {
 //            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 //        }
-     
+
     }//GEN-LAST:event_jMenu5ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        try {
+            File log = new File(ProjectSettings.PATH_LOG_HTML);
+            if (log.exists()) {
+                java.awt.Desktop.getDesktop().open(log);
+            } else {
+                JOptionPane.showMessageDialog(null, "Log ainda não foi gerado.", "Log", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MainScreenView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -703,7 +736,7 @@ public class MainScreenView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        
+
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -741,6 +774,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItemFuncionalidade;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuCT;
@@ -784,9 +818,8 @@ public class MainScreenView extends javax.swing.JFrame {
 //        //guiFilterReportDeParaScreenView.centralizaJanela();
 //        guiFilterReportDeParaScreenView.setVisible(true);
 //    }
-    
     public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
-        guiInstaceTs = new InstanceScreenTSView();
+        guiInstaceTs =  InstanceScreenTSView.getInstance();
         desktop.add(guiInstaceTs);
         guiInstaceTs.centralizaJanela();
         guiInstaceTs.setVisible(true);

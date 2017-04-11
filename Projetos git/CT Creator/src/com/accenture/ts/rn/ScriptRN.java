@@ -268,6 +268,7 @@ public class ScriptRN {
         List<SVNDirEntry> entries = getEntries(system);
 
         for (SVNDirEntry entry : entries) {
+            System.out.println(entry.getName());
             if (entry.getName().equalsIgnoreCase(Filename)) {
                 exist = true;
             }

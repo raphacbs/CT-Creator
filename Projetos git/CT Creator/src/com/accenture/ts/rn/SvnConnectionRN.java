@@ -45,7 +45,7 @@ public class SvnConnectionRN {
      * @throws java.io.IOException
      */
     public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage) throws SVNException, IOException {
-        tsDao.deleteDir(new File(new SVNPropertiesVOBean().getFolderTemplocal()));
+        tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal()));
         connectionDao.checkOutEmpytFolder(testCase.getProduct());
         new TestCaseTSRN().createSheet(testCase, testCase.getProduct());
         connectionDao.addFileOrFolderSave(testCase.getProduct(), mensage);
@@ -186,7 +186,7 @@ public class SvnConnectionRN {
 //            connectionDao.moveToDeletados(system, tempOldName, newName);
             delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR CT VIA CT CREATOR.");
 //            connectionDao.checkOutEmpytFolder(system);
-            new File(new SVNPropertiesVOBean().getFolderTemplocal() + system + "\\" + tempOldName).delete();
+            new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + system + "\\" + tempOldName).delete();
             connectionDao.addFileOrFolder(system, "ADD CT MODIFICADO CT CREATOR.");
             String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + system + "/" + newName;
             SVNURL urlSvn = SVNURL.parseURIDecoded(url);
@@ -215,7 +215,7 @@ public class SvnConnectionRN {
 //            connectionDao.moveToDeletados(system, tempOldName, newName);
             delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR(nome) CT VIA CT CREATOR.");
 //            connectionDao.checkOutEmpytFolder(system);
-            new File(new SVNPropertiesVOBean().getFolderTemplocal() +hashCode+ "\\"+ system + "\\" + tempOldName).delete();
+            new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() +hashCode+ "\\"+ system + "\\" + tempOldName).delete();
             connectionDao.addFileOrFolder(system, "ADD CT MODIFICADO CT CREATOR.", hashCode);
             String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + system + "/" + newName;
             SVNURL urlSvn = SVNURL.parseURIDecoded(url);

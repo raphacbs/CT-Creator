@@ -15,10 +15,12 @@ import com.accenture.control.Validacao;
 import com.accenture.filter.AutoChoices;
 import com.accenture.filter.TableFilterHeader;
 import com.accenture.filter.TableFilterHeader.Position;
+import com.accenture.log.MyLogger;
 import com.accenture.reports.BuildReport;
 import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.dao.TesteCaseTSDAO;
 import com.accenture.ts.rn.ParameterRN;
+import com.accenture.ts.rn.SavePlanRN;
 import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.CabecalhoJTableCheckBox;
@@ -119,43 +121,42 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private boolean savePlan, isFirst = true;
     private Timer timer = new Timer();
     private final long tempo = (1000 * 60);
-    private TimerTask timerTask ;
+    private TimerTask timerTask;
     private org.apache.log4j.Logger logger;
     private SwingWorker task;
     private final String NAME_ITEM_CTS_PRIORITARIOS = "CTs Prioritários";
     private final String NAME_ITEM_MASSA_DADOS = "Massa de Dados";
     private final String NAME_ITEM_RETRABALHO = "Passível de Re-Trabalho";
     private final String NAME_ITEM_REGRESSAO = "Regressão";
-    
+    private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    public static String NAME_PLAN_SVN = "";
+    public static InstanceScreenTSView screen;
 
-    
     /**
      * Creates new form guiCadTS
      */
-    public InstanceScreenTSView() {
+    private InstanceScreenTSView() {
 
         try {
             initComponents();
+            MyLogger.setup();
+            Log.setLevel(Level.INFO);
             logger = org.apache.log4j.Logger.getLogger(TesteCaseTSDAO.class);
             timerTask = new TimerTask() {
 
                 @Override
                 public void run() {
 
-                   
-                    
                     testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
                     testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
 
                     salvaPlanoFile(testPlan, true);
-                        
-                    
 
                 }
             };
-            
+
             timer.scheduleAtFixedRate(timerTask, tempo, tempo);
-            
+
             listSteps = new ArrayList<Step>();
             listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
             listTestCase = new ArrayList<TesteCaseTSBean>();
@@ -175,15 +176,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             bntReplace.setEnabled(false);
             this.setMaximizable(true);
             loadComboTS();
-            
+
             radioGrupo.add(radioAntiga);
             radioGrupo.add(radioNova);
             radioGrupo.setSelected(radioNova.getModel(), true);
-            
+
             jComboBoxTestFase.setSelectedItem("TS");
 //            addIconInButton();
-
-            
 
             new SwingWorker() {
 
@@ -222,6 +221,16 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //        });
     }
 
+    public static InstanceScreenTSView getInstance(){
+        if(screen == null){
+            screen = new InstanceScreenTSView();
+        }
+        
+        return screen;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -286,12 +295,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         ProgressAguarde = new javax.swing.JProgressBar();
         bntAddFluxosInPlan = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
+        btnPublicarPlano = new javax.swing.JButton();
+        btnCheckout = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuItemAbrirPlano = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         menuItemSalvarPlano = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         menuItemExportarPlano = new javax.swing.JMenuItem();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -757,6 +766,20 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jLabel15.setForeground(new java.awt.Color(255, 0, 51));
         jLabel15.setText("*");
 
+        btnPublicarPlano.setText("Publicar Plano");
+        btnPublicarPlano.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPublicarPlanoActionPerformed(evt);
+            }
+        });
+
+        btnCheckout.setText("Checkout Plano");
+        btnCheckout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckoutActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Plano");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -773,10 +796,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
         jMenu1.add(menuItemAbrirPlano);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Abrir Plano SVN");
-        jMenu1.add(jMenuItem2);
-
         menuItemSalvarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuItemSalvarPlano.setText("Salvar Plano");
         menuItemSalvarPlano.addActionListener(new java.awt.event.ActionListener() {
@@ -785,10 +804,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
         jMenu1.add(menuItemSalvarPlano);
-
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Publicar Plano SVN");
-        jMenu1.add(jMenuItem1);
 
         menuItemExportarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemExportarPlano.setText("Exportar Plano");
@@ -825,95 +840,106 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(44, 44, 44))
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntGenereteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bntResetFiltro))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel1)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel8)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxTestFase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(testPlanSTI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(50, 50, 50)
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel9))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel6)))
                                 .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                    .addComponent(jComboBoxCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(testPlanName)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                    .addComponent(jLabel3)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jLabel7))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                    .addComponent(jLabel2)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jLabel1)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel8)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jComboBoxTestFase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(testPlanSTI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGap(50, 50, 50)
+                                                        .addComponent(jLabel5)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jLabel9))
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jLabel6)))
+                                                .addGap(10, 10, 10)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                                                    .addComponent(jComboBoxCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(testPlanName)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel10)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel12)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(radioAntiga)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(radioNova)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel13)
+                                                .addGap(2, 2, 2)
+                                                .addComponent(jLabel15))
+                                            .addComponent(jLabel11))
+                                        .addGap(10, 10, 10)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jDateChooserFim, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                                            .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntGenereteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(bntResetFiltro)))
+                        .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(radioAntiga)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(radioNova)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(2, 2, 2)
-                                .addComponent(jLabel15))
-                            .addComponent(jLabel11))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooserFim, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                            .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bntFiltrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(bntFiltrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnPublicarPlano)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCheckout)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelQtdCTs)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jScrollPane3)))
@@ -967,31 +993,35 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel13)
                                 .addComponent(jLabel15))
                             .addComponent(jDateChooserRelease, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(bntResetFiltro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bntGenereteDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnPublicarPlano)
+                            .addComponent(btnCheckout))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(bntResetFiltro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(bntGenereteDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntDeleteCt, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 245, Short.MAX_VALUE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -1073,7 +1103,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //        if (lineSelectTableCt != -1) {
         try {
             TestCaseTSRN testCaseRN = new TestCaseTSRN();
-            testCaseRN.deleteDir(this.hashCode()+"");
+            testCaseRN.deleteDir(this.hashCode() + "");
         } catch (Exception ex) {
             addExceptionTextArea(ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1082,28 +1112,28 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameClosing
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
-         try {
+        try {
 
             TestCaseTSRN testCaseRN = new TestCaseTSRN();
-            testCaseRN.deleteDir(this.hashCode()+"");
+            testCaseRN.deleteDir(this.hashCode() + "");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bntCancelarActionPerformed
 
     private void bntFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntFiltrarActionPerformed
-        try{
+        try {
             progress(true);
-        callFilter();
-        progress(false);
+            callFilter();
+            progress(false);
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
     }//GEN-LAST:event_bntFiltrarActionPerformed
 
@@ -1112,38 +1142,39 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntFiltrarMouseClicked
 
     private void bntMudaStepSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntMudaStepSubirActionPerformed
-       try{
-           progress(true);
-       if(tabelaInstancia.getSelectedRows().length > 0){
-        tabelaInstancia.editingStopped(null);
-        moveUp();
-        
-       }
-       progress(false);
-       } catch (Exception ex) {
+        try {
+            progress(true);
+            if (tabelaInstancia.getSelectedRows().length > 0) {
+                tabelaInstancia.editingStopped(null);
+                moveUp();
+
+            }
+            progress(false);
+        } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
     }//GEN-LAST:event_bntMudaStepSubirActionPerformed
 
     private void tabelaInstanciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaInstanciaMouseClicked
-       if(evt.getClickCount() == 2)
-          callViewParameter();  
-       
-       atualizaContagemLabelTabelaInstancia();
-       testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setPriority((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 5));
-        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setData((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 6));
-        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRework((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 7));
-        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRegression((Boolean)tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 8));
+        if (evt.getClickCount() == 2) {
+            callViewParameter();
+        }
+
+        atualizaContagemLabelTabelaInstancia();
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setPriority((Boolean) tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 5));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setData((Boolean) tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 6));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRework((Boolean) tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 7));
+        testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).setRegression((Boolean) tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 8));
     }//GEN-LAST:event_tabelaInstanciaMouseClicked
 
     private void bntExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportarActionPerformed
-       exportPlan(testPlan);
+        exportPlan(testPlan);
     }//GEN-LAST:event_bntExportarActionPerformed
 
     private void testPlanNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testPlanNameActionPerformed
@@ -1151,64 +1182,59 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_testPlanNameActionPerformed
 
     private void bntAddCTInPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddCTInPlanActionPerformed
-       try{
-           progress(true);
-        if (tabelaCt.getSelectedRowCount() != 0) {
+        try {
+            progress(true);
+            if (tabelaCt.getSelectedRowCount() != 0) {
 //            addCtInTestPlan();
 //        }else{
 
-            loadListCT();
-        }
-        
-        atualizaContagemLabelTabelaInstancia();
-        savePlan = false;
-       progress(false);
-         } catch (Exception ex) {
+                loadListCT();
+            }
+
+            atualizaContagemLabelTabelaInstancia();
+            savePlan = false;
+            progress(false);
+        } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
 
     }//GEN-LAST:event_bntAddCTInPlanActionPerformed
 
     private void bntDeleteCtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDeleteCtActionPerformed
-        try{
+        try {
             progress(true);
-        tabelaInstancia.editingStopped(null);
-        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
-        int[] qtdRowsSelects = tabelaInstancia.getSelectedRows();
-        int tamanho = qtdRowsSelects.length - 1;
-        
-        for (int i = tamanho; i >= 0; i--) {
+            tabelaInstancia.editingStopped(null);
+            DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
+            int[] qtdRowsSelects = tabelaInstancia.getSelectedRows();
+            int tamanho = qtdRowsSelects.length - 1;
 
-           
+            for (int i = tamanho; i >= 0; i--) {
+
 //            testPlan.removeTestCase(qtdRowsSelects[i]);
 //            listTestCasePlan.remove(qtdRowsSelects[i]);
-            int line = Integer.parseInt(tabelaInstancia.getValueAt(qtdRowsSelects[i], 3).toString());
-            
-            for(int t = 0 ; t < modelPlan.getRowCount(); t++){
-                if(line == Integer.parseInt(modelPlan.getValueAt(t, 3).toString())){
-                     modelPlan.removeRow(t);
-                }
-            }
+                int line = Integer.parseInt(tabelaInstancia.getValueAt(qtdRowsSelects[i], 3).toString());
 
-            for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
-                if (line == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
-                    testPlan.removeTestCase(j);
+                for (int t = 0; t < modelPlan.getRowCount(); t++) {
+                    if (line == Integer.parseInt(modelPlan.getValueAt(t, 3).toString())) {
+                        modelPlan.removeRow(t);
+                    }
                 }
-            }
+
+                for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+                    if (line == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                        testPlan.removeTestCase(j);
+                    }
+                }
 
                 savePlan = false;
 
-        }
-        
-        
- 
-        
+            }
 
 //        if (IsEmptyTablePlan(modelPlan)) {
 //
@@ -1220,143 +1246,143 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            bntEditParameter.setEnabled(false);
 //
 //        }
-        if (modelPlan.getRowCount() == 0) {
+            if (modelPlan.getRowCount() == 0) {
 
-            bntDeleteCt.setEnabled(false);
-            bntOrdenar.setEnabled(false);
-            bntDuplicate.setEnabled(false);
-            bntMudaStepDescer.setEnabled(false);
-            bntMudaStepSubir.setEnabled(false);
-            bntEditParameter.setEnabled(false);
-            bntGenereteDate.setEnabled(false);
+                bntDeleteCt.setEnabled(false);
+                bntOrdenar.setEnabled(false);
+                bntDuplicate.setEnabled(false);
+                bntMudaStepDescer.setEnabled(false);
+                bntMudaStepSubir.setEnabled(false);
+                bntEditParameter.setEnabled(false);
+                bntGenereteDate.setEnabled(false);
 
-        }
-        
-        atualizaContagemLabelTabelaInstancia();
-        
-        progress(false);
-        
+            }
+
+            atualizaContagemLabelTabelaInstancia();
+
+            progress(false);
+
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
 
     }//GEN-LAST:event_bntDeleteCtActionPerformed
 
     private void tabelaCtMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCtMouseReleased
-       try{
-           progress(true);
-        DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
-        if (evt.getClickCount() == 2 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
-            loadCT2();
-        } else {
-            
+        try {
+            progress(true);
+            DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+            if (evt.getClickCount() == 2 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
+                loadCT2();
+            } else {
+
 //            if(tabelaCt.getSelectedRowCount() > 1){
-            //apaga linhas da tabela steps
-            while (modelStep.getRowCount() > 0) {
-                modelStep.removeRow(0);
-            }
+                //apaga linhas da tabela steps
+                while (modelStep.getRowCount() > 0) {
+                    modelStep.removeRow(0);
+                }
 //            }
-        }
-        atualizaLabelTabelaCt();
-        progress(false);
+            }
+            atualizaLabelTabelaCt();
+            progress(false);
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
-        
+
     }//GEN-LAST:event_tabelaCtMouseReleased
 
     private void bntMudaStepDescerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntMudaStepDescerActionPerformed
-                    try{       
-                    progress(true);
-                    if (tabelaInstancia.getSelectedRows().length > 0) {
-                        tabelaInstancia.editingStopped(null);
-                        moveDown();
-                        progress(false);
+        try {
+            progress(true);
+            if (tabelaInstancia.getSelectedRows().length > 0) {
+                tabelaInstancia.editingStopped(null);
+                moveDown();
+                progress(false);
 
-                    }
-                    } catch (Exception ex) {
-                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                        addExceptionTextArea(ex);
-                        logger.error("Erro ao abrir o arquivo: ",ex);
-                        ex.printStackTrace();
-                        progress(false);
-
-                     }
-
-      
-    }//GEN-LAST:event_bntMudaStepDescerActionPerformed
-
-    private void bntEditParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntEditParameterActionPerformed
-       
-        try{
-        tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
-        progress(true);
-        if(tabelaInstancia.getSelectedRow()!= -1){
-            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            callViewParameter();
-            progress(false);
-            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        } else{
-            JOptionPane.showMessageDialog(null, "Favor selecioanar um CT!", "Instância", JOptionPane.WARNING_MESSAGE);
-            progress(false);
-        }
+            }
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
+
         }
-        
-    }//GEN-LAST:event_bntEditParameterActionPerformed
 
-    private void tabelaInstanciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaInstanciaKeyReleased
-        int lineSelect  = tabelaInstancia.getSelectedRow();
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario(tabelaInstancia.getValueAt(lineSelect, 0).toString());
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt(tabelaInstancia.getValueAt(lineSelect, 1).toString());
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setDataPlanejada((Date) tabelaInstancia.getValueAt(lineSelect, 4));
-        
-        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()"+ "data"+ (Date) tabelaInstancia.getValueAt(lineSelect, 4));
-    }//GEN-LAST:event_tabelaInstanciaKeyReleased
 
-    private void tabelaInstanciaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tabelaInstanciaInputMethodTextChanged
-        int lineSelect  = tabelaInstancia.getSelectedRow();
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario(tabelaInstancia.getValueAt(lineSelect, 0).toString());
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt(tabelaInstancia.getValueAt(lineSelect, 1).toString());
-        testPlan.getTestPlan().getTestCase().get(lineSelect).setDataPlanejada((Date) tabelaInstancia.getValueAt(lineSelect, 4));
-        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()"+ "data"+ (Date) tabelaInstancia.getValueAt(lineSelect, 4));
-    }//GEN-LAST:event_tabelaInstanciaInputMethodTextChanged
+    }//GEN-LAST:event_bntMudaStepDescerActionPerformed
 
-    private void bntOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOrdenarActionPerformed
-        
-            try{
-                progress(true);
-                ordenarCTs();
+    private void bntEditParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntEditParameterActionPerformed
+
+        try {
+            tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
+            progress(true);
+            if (tabelaInstancia.getSelectedRow() != -1) {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                callViewParameter();
                 progress(false);
-            } catch (Exception ex) {
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            } else {
+                JOptionPane.showMessageDialog(null, "Favor selecioanar um CT!", "Instância", JOptionPane.WARNING_MESSAGE);
+                progress(false);
+            }
+        } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
         }
-        
+
+    }//GEN-LAST:event_bntEditParameterActionPerformed
+
+    private void tabelaInstanciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaInstanciaKeyReleased
+        int lineSelect = tabelaInstancia.getSelectedRow();
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario(tabelaInstancia.getValueAt(lineSelect, 0).toString());
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt(tabelaInstancia.getValueAt(lineSelect, 1).toString());
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setDataPlanejada((Date) tabelaInstancia.getValueAt(lineSelect, 4));
+
+        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()" + "data" + (Date) tabelaInstancia.getValueAt(lineSelect, 4));
+    }//GEN-LAST:event_tabelaInstanciaKeyReleased
+
+    private void tabelaInstanciaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tabelaInstanciaInputMethodTextChanged
+        int lineSelect = tabelaInstancia.getSelectedRow();
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario(tabelaInstancia.getValueAt(lineSelect, 0).toString());
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt(tabelaInstancia.getValueAt(lineSelect, 1).toString());
+        testPlan.getTestPlan().getTestCase().get(lineSelect).setDataPlanejada((Date) tabelaInstancia.getValueAt(lineSelect, 4));
+        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()" + "data" + (Date) tabelaInstancia.getValueAt(lineSelect, 4));
+    }//GEN-LAST:event_tabelaInstanciaInputMethodTextChanged
+
+    private void bntOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOrdenarActionPerformed
+
+        try {
+            progress(true);
+            ordenarCTs();
+            progress(false);
+        } catch (Exception ex) {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            addExceptionTextArea(ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
+            ex.printStackTrace();
+            progress(false);
+
+        }
+
 
     }//GEN-LAST:event_bntOrdenarActionPerformed
 
@@ -1372,75 +1398,75 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 JOptionPane.showInternalMessageDialog(this, "Número informado inválido, favor verificar!", "Número Inválido", JOptionPane.WARNING_MESSAGE);
             }
         }
-        try{
+        try {
             progress(true);
 
-        for (int j = 0; j < qtdLoop; j++) {
+            for (int j = 0; j < qtdLoop; j++) {
 
-            if (tabelaInstancia.getSelectedRows().length > 0) {
+                if (tabelaInstancia.getSelectedRows().length > 0) {
 
-                DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
-                int[] countRow = tabelaInstancia.getSelectedRows();
+                    DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
+                    int[] countRow = tabelaInstancia.getSelectedRows();
 
-                tabelaInstancia.editingStopped(null);
+                    tabelaInstancia.editingStopped(null);
 
-                for (int i = 0; i < countRow.length; i++) {
-                    TesteCaseTSBean tc = new TesteCaseTSBean();
+                    for (int i = 0; i < countRow.length; i++) {
+                        TesteCaseTSBean tc = new TesteCaseTSBean();
 
-                    tc.setExpectedResults(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getExpectedResults());
-                    tc.setStepDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getStepDescription());
-                    tc.setDataPlanejada(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getDataPlanejada());
-                    tc.setFase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getFase());
-                    tc.setListStep(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getListStep());
-                    tc.setProduct(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getProduct());
-                    tc.setSTIPRJ(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getSTIPRJ());
-                    tc.setTestCaseProperties(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestCaseProperties());
-                    tc.setTestPhase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPhase());
-                    tc.setTestPlan(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPlan());
-                    tc.setTestScriptDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptDescription());
-                    tc.setTestScriptName(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptName());
-                    tc.setNumeroCenario(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCenario());
-                    tc.setNumeroCt(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCt());
-                    tc.setHashCode(tc.hashCode());
-                    tc.setComplexidade(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getComplexidade());
-                    tc.setParameters(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getParameters());
-                    tc.setAutomatizado(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isAutomatizado());
-                    tc.setHashCode(tc.hashCode());
-                    tc.setData(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isData());
-                    tc.setPriority(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isPriority());
-                    tc.setRegression(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRegression());
-                    tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
+                        tc.setExpectedResults(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getExpectedResults());
+                        tc.setStepDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getStepDescription());
+                        tc.setDataPlanejada(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getDataPlanejada());
+                        tc.setFase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getFase());
+                        tc.setListStep(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getListStep());
+                        tc.setProduct(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getProduct());
+                        tc.setSTIPRJ(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getSTIPRJ());
+                        tc.setTestCaseProperties(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestCaseProperties());
+                        tc.setTestPhase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPhase());
+                        tc.setTestPlan(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPlan());
+                        tc.setTestScriptDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptDescription());
+                        tc.setTestScriptName(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptName());
+                        tc.setNumeroCenario(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCenario());
+                        tc.setNumeroCt(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCt());
+                        tc.setHashCode(tc.hashCode());
+                        tc.setComplexidade(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getComplexidade());
+                        tc.setParameters(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getParameters());
+                        tc.setAutomatizado(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isAutomatizado());
+                        tc.setHashCode(tc.hashCode());
+                        tc.setData(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isData());
+                        tc.setPriority(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isPriority());
+                        tc.setRegression(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRegression());
+                        tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
 
-                    this.testPlan.getTestPlan().addTestCase(tc);
+                        this.testPlan.getTestPlan().addTestCase(tc);
 
-                    model.addRow(new Object[]{tc.getNumeroCenario(), tc.getNumeroCt(), tc.getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(),tc.isRework(),tc.isRegression()});
+                        model.addRow(new Object[]{tc.getNumeroCenario(), tc.getNumeroCt(), tc.getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(), tc.isRework(), tc.isRegression()});
 
-                    atualizaContagemLabelTabelaInstancia();
+                        atualizaContagemLabelTabelaInstancia();
+                        progress(false);
+
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione pelo menos um CT para duplicar", "CT Creator", JOptionPane.WARNING_MESSAGE);
                     progress(false);
-
                 }
-            
-        }else{
-            JOptionPane.showMessageDialog(null, "Selecione pelo menos um CT para duplicar", "CT Creator", JOptionPane.WARNING_MESSAGE);
-            progress(false);
-        }
 //        for (int i = 0; i < countRow.length; i++) {
 //            tabelaInstancia.editingStopped(null);
 //            model.setValueAt(0, countRow[i], 0);
 //            tabelaInstancia.editingStopped(null);
 //            model.setValueAt(0, countRow[i], 1);
 //        }
-    
-        }
-        
+
+            }
+
         } catch (Exception ex) {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
     }//GEN-LAST:event_bntDuplicateActionPerformed
 
@@ -1452,31 +1478,32 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntReplaceActionPerformed
 
     private void menuItemSalvarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarPlanoActionPerformed
-        try{
-        ProgressAguarde.setIndeterminate(true);
-        filterHeader.resetFilter();
-        testPlan.getTestPlan().setName(testPlanName.getText());
-        testPlan.getTestPlan().setSti(testPlanSTI.getText());
-        testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
-        testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
-            
+        try {
+            ProgressAguarde.setIndeterminate(true);
+            filterHeader.resetFilter();
+            testPlan.getTestPlan().setName(testPlanName.getText());
+            testPlan.getTestPlan().setSti(testPlanSTI.getText());
+            testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
+            testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+
 //        testPlan.getTestPlan().setSti(testPlanSystem.getText());
-        if(salvaPlanoFile(testPlan, false)){
-             savePlan = true;
-             JOptionPane.showMessageDialog(null, "Plano salvo com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
-             ProgressAguarde.setIndeterminate(false);
-        }
-        ProgressAguarde.setIndeterminate(false);
+            if (salvaPlanoFile(testPlan, false)) {
+                savePlan = true;
+                JOptionPane.showMessageDialog(null, "Plano salvo com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+                ProgressAguarde.setIndeterminate(false);
+            }
+            ProgressAguarde.setIndeterminate(false);
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             ProgressAguarde.setIndeterminate(false);
-            
+
         }
-        
+
     }//GEN-LAST:event_menuItemSalvarPlanoActionPerformed
 
     private void menuItemAbrirPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirPlanoActionPerformed
@@ -1515,13 +1542,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 ProgressAguarde.setIndeterminate(false);
             }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             ProgressAguarde.setIndeterminate(false);
-            
+
         }
     }//GEN-LAST:event_menuItemAbrirPlanoActionPerformed
 
@@ -1546,12 +1574,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_testPlanSystemInputMethodTextChanged
 
     private void tabelaInstanciaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaInstanciaMouseReleased
-       atualizaContagemLabelTabelaInstancia();
-        
+        atualizaContagemLabelTabelaInstancia();
+
     }//GEN-LAST:event_tabelaInstanciaMouseReleased
 
     private void menuItemExportarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExportarPlanoActionPerformed
-       exportPlan(testPlan);
+        exportPlan(testPlan);
     }//GEN-LAST:event_menuItemExportarPlanoActionPerformed
 
     private void bntResetFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntResetFiltroActionPerformed
@@ -1559,115 +1587,172 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntResetFiltroActionPerformed
 
     private void bntGenereteDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntGenereteDateActionPerformed
-       try{
-           progress(true);
-        if (tabelaInstancia.getRowCount() > 0) {
-            if (jDateChooserInicio.getDate() == null || jDateChooserFim.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Por favor, preencher os campos 'Data Inicio' e 'Data fim'.", "CT Creator", JOptionPane.WARNING_MESSAGE);
-            } else if (FunctiosDates.finishDateBiggerThenStartDate(jDateChooserInicio.getDate(), jDateChooserFim.getDate())) {
-                List<Date> listDate = FunctiosDates.getWorkingDays(jDateChooserInicio.getDate(), jDateChooserFim.getDate());
-                int qtdTestCase = testPlan.getTestPlan().getTestCase().size();
+        try {
+            progress(true);
+            if (tabelaInstancia.getRowCount() > 0) {
+                if (jDateChooserInicio.getDate() == null || jDateChooserFim.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Por favor, preencher os campos 'Data Inicio' e 'Data fim'.", "CT Creator", JOptionPane.WARNING_MESSAGE);
+                } else if (FunctiosDates.finishDateBiggerThenStartDate(jDateChooserInicio.getDate(), jDateChooserFim.getDate())) {
+                    List<Date> listDate = FunctiosDates.getWorkingDays(jDateChooserInicio.getDate(), jDateChooserFim.getDate());
+                    int qtdTestCase = testPlan.getTestPlan().getTestCase().size();
 
-                if (qtdTestCase > listDate.size()) {
-                    //quantidade de vezes que a data vai ser repetida
-                    int qtdRepiticoes = qtdTestCase / listDate.size();
-                    int mod = qtdTestCase % listDate.size();
-                    
-                    //verifica mod
-                    if ( mod != 0) {
-                        List<Date> tempList = new ArrayList<Date>();
-                        
-                        int cont = 0;
-                        for (int i = 0; i < listDate.size(); i++) {
-                            for (int j = 0; j < qtdRepiticoes; j++) {
+                    if (qtdTestCase > listDate.size()) {
+                        //quantidade de vezes que a data vai ser repetida
+                        int qtdRepiticoes = qtdTestCase / listDate.size();
+                        int mod = qtdTestCase % listDate.size();
+
+                        //verifica mod
+                        if (mod != 0) {
+                            List<Date> tempList = new ArrayList<Date>();
+
+                            int cont = 0;
+                            for (int i = 0; i < listDate.size(); i++) {
+                                for (int j = 0; j < qtdRepiticoes; j++) {
 //                                testPlan.getTestPlan().getTestCase().get(j + cont).setDataPlanejada(listDate.get(i));
                                     tempList.add(listDate.get(i));
+                                }
+                                cont += qtdRepiticoes;
                             }
-                            cont += qtdRepiticoes;
-                        }
-                        
-                        int i= 0;
-                        
-                        while(mod>0){
-                            
-                            tempList.add(listDate.get(i));
-                            
-                            mod--;i++;
-                        }
-                        
-                    Collections.sort(tempList, new Comparator<Date>() {
-                       @Override
-                       public int compare(Date t, Date t1) {
-                           return t.compareTo(t1);
-                       }
-                   });
-                    
-                    
+
+                            int i = 0;
+
+                            while (mod > 0) {
+
+                                tempList.add(listDate.get(i));
+
+                                mod--;
+                                i++;
+                            }
+
+                            Collections.sort(tempList, new Comparator<Date>() {
+                                @Override
+                                public int compare(Date t, Date t1) {
+                                    return t.compareTo(t1);
+                                }
+                            });
+
                             for (int j = 0; j < tempList.size(); j++) {
                                 testPlan.getTestPlan().getTestCase().get(j).setDataPlanejada(tempList.get(j));
-                                    
-                            }
-                      
-                   
-                        
-                    } else {
 
-                        int cont = 0;
-                        for (int i = 0; i < listDate.size(); i++) {
-                            for (int j = 0; j < qtdRepiticoes; j++) {
-                                testPlan.getTestPlan().getTestCase().get(j + cont).setDataPlanejada(listDate.get(i));
                             }
-                            cont += qtdRepiticoes;
+
+                        } else {
+
+                            int cont = 0;
+                            for (int i = 0; i < listDate.size(); i++) {
+                                for (int j = 0; j < qtdRepiticoes; j++) {
+                                    testPlan.getTestPlan().getTestCase().get(j + cont).setDataPlanejada(listDate.get(i));
+                                }
+                                cont += qtdRepiticoes;
+                            }
+
                         }
-                        
-                    }
-                } else if (qtdTestCase == listDate.size()) {
-                    for (int j = 0; j < listDate.size(); j++) {
-                                testPlan.getTestPlan().getTestCase().get(j).setDataPlanejada(listDate.get(j));
-                                    
-                            }
+                    } else if (qtdTestCase == listDate.size()) {
+                        for (int j = 0; j < listDate.size(); j++) {
+                            testPlan.getTestPlan().getTestCase().get(j).setDataPlanejada(listDate.get(j));
 
-                } else if (qtdTestCase < listDate.size()) {
-                    for (int j = 0; j < qtdTestCase; j++) {
-                                testPlan.getTestPlan().getTestCase().get(j).setDataPlanejada(listDate.get(j));
-                                    
-                            }
+                        }
+
+                    } else if (qtdTestCase < listDate.size()) {
+                        for (int j = 0; j < qtdTestCase; j++) {
+                            testPlan.getTestPlan().getTestCase().get(j).setDataPlanejada(listDate.get(j));
+
+                        }
+                    }
+                    upddateTableInstance();
+                    progress(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, "A data de inicio não pode ser maior que a data fim, favor verificar!", "CT Creator", JOptionPane.WARNING_MESSAGE);
+                    progress(false);
                 }
-                upddateTableInstance();
-                progress(false);
             } else {
-                JOptionPane.showMessageDialog(null, "A data de inicio não pode ser maior que a data fim, favor verificar!", "CT Creator", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Por favor, adcione pelo menos um CT para setar as datas.", "CT Creator", JOptionPane.WARNING_MESSAGE);
                 progress(false);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor, adcione pelo menos um CT para setar as datas.", "CT Creator", JOptionPane.WARNING_MESSAGE);
-            progress(false);
-        }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR AO ABRIR ARQUIVO", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ",ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
             ex.printStackTrace();
             progress(false);
-            
+
         }
     }//GEN-LAST:event_bntGenereteDateActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-       
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void bntStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntStatusActionPerformed
 //        statusTextArea.setText(LabelStatus.getText());
-                
+
         dialogLog.setVisible(true);
-        
+
     }//GEN-LAST:event_bntStatusActionPerformed
 
     private void bntAddFluxosInPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddFluxosInPlanActionPerformed
-    callFlows();
+        callFlows();
     }//GEN-LAST:event_bntAddFluxosInPlanActionPerformed
+
+    private void btnPublicarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPublicarPlanoActionPerformed
+
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            ProgressAguarde.setIndeterminate(true);
+            filterHeader.resetFilter();
+            testPlan.getTestPlan().setName(testPlanName.getText());
+            testPlan.getTestPlan().setSti(testPlanSTI.getText());
+            testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
+            testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+
+//        testPlan.getTestPlan().setSti(testPlanSystem.getText());
+            if (salvaPlanoFile(testPlan, false)) {
+                savePlan = true;
+                SavePlanRN save = new SavePlanRN();
+                String nomeArquivo = testPlanName.getText().replace(" ", "_") + ".plan";
+                String system = "";
+                if (testPlanSystem.getText().contains("STC")) {
+                    system = "STC";
+                } else {
+                    system = testPlanSystem.getText();
+                }
+
+                String pathFile = ProjectSettings.PATH_FILE_SAVE + "/" + nomeArquivo;
+
+                save.publicarPlano(pathFile, system);
+                JOptionPane.showMessageDialog(null, "Plano publicado com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+                ProgressAguarde.setIndeterminate(false);
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+            ProgressAguarde.setIndeterminate(false);
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            addExceptionTextArea(ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
+            ex.printStackTrace();
+            ProgressAguarde.setIndeterminate(false);
+
+        }
+
+
+    }//GEN-LAST:event_btnPublicarPlanoActionPerformed
+
+    private void btnCheckoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckoutActionPerformed
+        try {
+            ChoosePlanTsScreenView view = new ChoosePlanTsScreenView(this, null, true);
+//            view.centralizaJanela();            
+            view.setVisible(true);
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCheckoutActionPerformed
+
     public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
@@ -1686,8 +1771,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 jComboBoxCR.addItem(fases.get(i).toString());
             }
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             exceptionSVN(ex.getMessage());
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -1703,8 +1790,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         }
     }
-    
-     public File selecionarPlanilha() {
+
+    public File selecionarPlanilha() {
         FileFilter extensao = new FileNameExtensionFilter("Planilhas de Carga (*.xlsx, *.xlsm)", "xlsx, xlsm");
         JFileChooser file = new JFileChooser();
         file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -1728,25 +1815,25 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         return diretorio;
     }
 
-     public File getFilePlan() {
+    public File getFilePlan() {
         FileFilter extensao = new FileNameExtensionFilter(" (*.plan)", "plan");
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogTitle("Selecione o plano:");
         fileChooser.setCurrentDirectory(new File("C:\\FastPlan\\saves\\"));
         fileChooser.setApproveButtonText("Open");
-        
-         BorderLayout chooserLayout = (BorderLayout) fileChooser.getLayout();
-         chooserLayout.getLayoutComponent(BorderLayout.NORTH).setVisible(false);
+
+        BorderLayout chooserLayout = (BorderLayout) fileChooser.getLayout();
+        chooserLayout.getLayoutComponent(BorderLayout.NORTH).setVisible(false);
         //aqui está o X da questão ;D
-         fileChooser.getComponent(0).setVisible(false);
-        
+        fileChooser.getComponent(0).setVisible(false);
+
         File diretorio = null;
 
         fileChooser.setFileFilter(extensao);
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
-       
+
         int i = fileChooser.showOpenDialog(this);
 
         if (i == 1) {
@@ -1756,12 +1843,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
             diretorio = fileChooser.getSelectedFile();
             return diretorio;
-            
+
         }
 
-        
     }
-     
+
 //    private void addTCSVN() {
 //        try {
 //            boolean existeCT = false;
@@ -1945,7 +2031,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             if (rows[i] != tabelaInstancia.getRowCount() - 1) {
                 model.moveRow(rows[i], rows[i], rows[i] + 1);
                 testPlan.moveDownTestCase(rows[i]);
-               
+
 //                         Collections.swap(listTestCasePlan, rows[i], rows[i] + 1);
             }
             if (rows[i] != tabelaInstancia.getRowCount() - 1) {
@@ -2008,7 +2094,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
         DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
         listTestCaseTSPropertiesBean = listPropertiesBean;
-        
+
         if (sort) {
             Collections.sort(listTestCaseTSPropertiesBean, new Comparator<TestCaseTSPropertiesBean>() {
                 @Override
@@ -2055,8 +2141,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         } else {
             bntAddCTInPlan.setEnabled(false);
         }
-        
-        labelQtdCTs.setText("Qtd CTs: "+tabelaCt.getRowCount());
+
+        labelQtdCTs.setText("Qtd CTs: " + tabelaCt.getRowCount());
 
     }
 
@@ -2107,29 +2193,29 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 //Verifica se é o primeiro click na tabela e se o ct selecionado está bloqueado
                 if (ctbefore.equals("")) {
 
-                    svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                    listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
 //                    blockedFieldBnt(true);
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
                     ctBaixados.add(ctbefore);
                 } else if (isDonwloadCt(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName())) {
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                    listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
 //                    blockedFieldBnt(true);
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
                     ctBaixados.add(ctbefore);
                 } else {
-                    svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
 //                    svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getURL());
 //                    listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelect).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getName());
                     if (svnRN.isLocked(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem())) {
                         SVNLock lock = svnRN.getLock(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem());
 
-                        if (lock.getOwner().equals(new SVNPropertiesVOBean().getUser())) {
-                            listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                        if (lock.getOwner().equals(SVNPropertiesVOBean.getInstance().getUser())) {
+                            listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                             loadFields(listTestCase.get(0));
 //                            blockedFieldBnt(true);
                             ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -2140,7 +2226,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                     } else {
                         svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                        listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                        listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                         loadFields(listTestCase.get(0));
 //                        blockedFieldBnt(true);
                         ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -2154,14 +2240,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
@@ -2193,7 +2282,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 if (isDonwloadCt(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName())) {
                     downloadCtSvn();
                 } else {
-                    svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode());
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode());
                     downloadCtSvn();
                 }
 
@@ -2201,123 +2290,116 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         }
     }
-    
+
     private void loadListCT() {
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
             DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
-            
-            int [] selecionados = tabelaCt.getSelectedRows();
+
+            int[] selecionados = tabelaCt.getSelectedRows();
             // verifica se a linha clicada é a que está selecionada
-            
 
-             
-                //apaga linhas da tabela steps
-                while (modelStep.getRowCount() > 0) {
-                    modelStep.removeRow(0);
-                }
+            //apaga linhas da tabela steps
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
 
+            //captra linha selecioanda
+            List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
 
-                //captra linha selecioanda
-                
-                List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
-                
-                for(int i = 0; i < selecionados.length; i++){
-                 svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem(), listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName(), this.hashCode());    
-                 listTemp.add(new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal()+ this.hashCode()+"\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName()).get(0));
-                          
-                }
-                addCtInTestPlan(listTemp);
-                
-                
+            for (int i = 0; i < selecionados.length; i++) {
+                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem(), listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName(), this.hashCode());
+                listTemp.add(new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName()).get(0));
 
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            
+            }
+            addCtInTestPlan(listTemp);
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         }
     }
-    
+
     public void loadListFluxo(String system, List<TestCaseTSPropertiesBean> listTestCaseTSPropertiesBean) {
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
             DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
-            
+
 //            int [] selecionados = tabelaCt.getSelectedRows();
             // verifica se a linha clicada é a que está selecionada
-            
+            //apaga linhas da tabela steps
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
 
-             
-                //apaga linhas da tabela steps
-                while (modelStep.getRowCount() > 0) {
-                    modelStep.removeRow(0);
-                }
-                
-                while (modelCT.getRowCount() > 0) {
-                    modelCT.removeRow(0);
-                }
+            while (modelCT.getRowCount() > 0) {
+                modelCT.removeRow(0);
+            }
 
+            //captra linha selecioanda
+            List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
 
-                //captra linha selecioanda
-                
-                List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
-                
-                
-                loadTableCt(listTestCaseTSPropertiesBean, false);
-                tabelaCt.getSelectionModel().setSelectionInterval(0, (listTestCaseTSPropertiesBean.size()-1));
-                
-                for(int i = 0; i < listTestCaseTSPropertiesBean.size(); i++){
-                 svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), system, listTestCaseTSPropertiesBean.get(i).getDirEntry().getName(), this.hashCode());    
-                 listTemp.add(new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal()+ this.hashCode()+"\\" + listTestCaseTSPropertiesBean.get(i).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(i).getDirEntry().getName()).get(0));
-                          
-                }
-                
-                
-                
-                addCtInTestPlan(listTemp);
-                
-                
+            loadTableCt(listTestCaseTSPropertiesBean, false);
+            tabelaCt.getSelectionModel().setSelectionInterval(0, (listTestCaseTSPropertiesBean.size() - 1));
 
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            
+            for (int i = 0; i < listTestCaseTSPropertiesBean.size(); i++) {
+                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), system, listTestCaseTSPropertiesBean.get(i).getDirEntry().getName(), this.hashCode());
+                listTemp.add(new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(i).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(i).getDirEntry().getName()).get(0));
+
+            }
+
+            addCtInTestPlan(listTemp);
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addExceptionTextArea(ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addExceptionTextArea(ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             addExceptionTextArea(ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -2361,7 +2443,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             if (svnRN.isLocked(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem())) {
                 SVNLock lock = svnRN.getLock(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem());
 
-                if (lock.getOwner().equals(new SVNPropertiesVOBean().getUser())) {
+                if (lock.getOwner().equals(SVNPropertiesVOBean.getInstance().getUser())) {
                     locked = false;
                 } else {
                     locked = true;
@@ -2384,15 +2466,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private void downloadCtSvn() {
         DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
         try {
-            listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal()+ this.hashCode()+"\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+            listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
             loadFields(listTestCase.get(0));
 //                    blockedFieldBnt(true);
             ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
             ctBaixados.add(ctbefore);
 
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, "Erro " + ex.getMessage(), "SVN", JOptionPane.ERROR_MESSAGE);
         } catch (SVNException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, "Erro " + ex.getMessage(), "SVN", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -2402,61 +2486,68 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         try {
             dialogFiltro = new FilterTestCaseTSForPlanScreenView(this, null, true);
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
         dialogFiltro.centralizaJanelaDialogo(this);
         dialogFiltro.setVisible(true);
 
     }
-    
-    public void callFlows(){
+
+    public void callFlows() {
         ChooseFlowScreenView dialogFlow = null;
         try {
-            dialogFlow = new ChooseFlowScreenView( this, null, true);
+            dialogFlow = new ChooseFlowScreenView(this, null, true);
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 //        dialogFlow.centralizaJanelaDialogo(this);
         dialogFlow.setVisible(true);
     }
-    
+
     public void callViewReplace() {
         ReplaceScreenView dialogReplace = null;
         List<TesteCaseTSBean> listTc = new ArrayList<TesteCaseTSBean>();
-        
+
         int[] qtdRowsSelects = tabelaInstancia.getSelectedRows();
-        for(int i = 0 ; i < tabelaInstancia.getRowCount(); i ++){
-           for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
+        for (int i = 0; i < tabelaInstancia.getRowCount(); i++) {
+            for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
                 if (Integer.parseInt(tabelaInstancia.getValueAt(i, 3).toString()) == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
                     listTc.add(testPlan.getTestPlan().getTestCase().get(j));
                 }
             }
         }
-        
+
         try {
             dialogReplace = new ReplaceScreenView(this, null, true, listTc);
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
         dialogReplace.centralizaJanelaDialogo(this);
         dialogReplace.setVisible(true);
 
     }
-    
-    public void callViewParameter(){
+
+    public void callViewParameter() {
         ParameterEditView dialogParameter = null;
         boolean first = true;
-        
-            dialogParameter = new ParameterEditView(this,null, true);
-            dialogParameter.centralizaJanelaDialogo();
+
+        dialogParameter = new ParameterEditView(this, null, true);
+        dialogParameter.centralizaJanelaDialogo();
 //            
 //            for(int i =0; i < listcodeObject.size(); i++){
 //                if(testPlan.getTestPlan().getTestCase().get(tabelaInstancia.getSelectedRow()).hashCode() == listcodeObject.get(i)){
@@ -2470,30 +2561,29 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            }else{
 //                dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
 //            }
-            dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
-            
-            dialogParameter.setVisible(true);
-        
+        dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
+
+        dialogParameter.setVisible(true);
+
     }
-        
-    
-    public boolean validSystem(){
+
+    public boolean validSystem() {
         boolean valid = false;
         valid = listTestCase.get(0).getProduct().equals(testPlanSystem.getText());
-        if ((testPlanSystem.getText().equals("STC DADOS") || testPlanSystem.getText().equals("STC VOZ"))&&(listTestCase.get(0).getProduct().equals("STC VOZ") || listTestCase.get(0).getProduct().equals("STC DADOS"))){  
+        if ((testPlanSystem.getText().equals("STC DADOS") || testPlanSystem.getText().equals("STC VOZ")) && (listTestCase.get(0).getProduct().equals("STC VOZ") || listTestCase.get(0).getProduct().equals("STC DADOS"))) {
             valid = true;
         }
-        
+
         return valid;
     }
-    
-    public boolean validSystem(TesteCaseTSBean TestTemp){
+
+    public boolean validSystem(TesteCaseTSBean TestTemp) {
         boolean valid = false;
         valid = TestTemp.getProduct().equals(testPlanSystem.getText());
-        if ((testPlanSystem.getText().equals("STC DADOS") || testPlanSystem.getText().equals("STC VOZ"))&&(TestTemp.getProduct().equals("STC VOZ") || TestTemp.getProduct().equals("STC DADOS"))){  
+        if ((testPlanSystem.getText().equals("STC DADOS") || testPlanSystem.getText().equals("STC VOZ")) && (TestTemp.getProduct().equals("STC VOZ") || TestTemp.getProduct().equals("STC DADOS"))) {
             valid = true;
         }
-        
+
         return valid;
     }
 
@@ -2501,17 +2591,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
         DefaultTableModel modelCt = (DefaultTableModel) tabelaCt.getModel();
-        
+
         if (!listTestCase.isEmpty()) {
             if (IsEmptyTablePlan(model) || validSystem()) {
                 int cont = Integer.parseInt(JOptionPane.showInputDialog(this, "Digite a quantidade: "));
-                int []cenario = new int[cont];
-                
+                int[] cenario = new int[cont];
+
                 int qtd = 1;
-                if(model.getRowCount()!=0){
-                qtd = Integer.parseInt(model.getValueAt(model.getRowCount()-1, 1).toString());
+                if (model.getRowCount() != 0) {
+                    qtd = Integer.parseInt(model.getValueAt(model.getRowCount() - 1, 1).toString());
                 }
-                
+
                 for (int i = 0; i < cont; i++) {
 //                    testPlan.getTestPlan().addTestCase(listTestCase.get(0));
                     TesteCaseTSBean tc = new TesteCaseTSBean();
@@ -2528,9 +2618,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     tc.setTestPlan(listTestCase.get(0).getTestPlan());
                     tc.setTestScriptDescription(listTestCase.get(0).getTestScriptDescription());
                     tc.setTestScriptName(listTestCase.get(0).getTestScriptName());
-                    
-                    System.out.println("hashCode: "+tc.hashCode());
-                    
+
+                    System.out.println("hashCode: " + tc.hashCode());
+
                     testPlan.getTestPlan().addTestCase(tc);
 //                    listTestCasePlan.add(tc);
 
@@ -2551,34 +2641,35 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     + "ser inserido no Plano de teste", "Erro", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
     public boolean isDigit(String s) {
-     for (int i = 0; i < s.length(); i++) {
-           char ch = s.charAt(i);
-           if (ch < 48 || ch > 57)
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch < 48 || ch > 57) {
                 return false;
-     }
-     return true;
- }
-    
+            }
+        }
+        return true;
+    }
+
     public void addCtInTestPlan(List<TesteCaseTSBean> list) {
         try {
             boolean first = true;
-            int cont =0;
+            int cont = 0;
             Validacao v = new Validacao();
             DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
             DefaultTableModel modelCt = (DefaultTableModel) tabelaCt.getModel();
-           
+
             while (first) {
 
-                String qtd ="";
-                qtd = JOptionPane.showInputDialog(this, "Digite a quantidade: ","Quantidade de CTs",JOptionPane.CLOSED_OPTION);
-                
-                if(qtd==null || qtd.isEmpty()){
-                    cont=0;
+                String qtd = "";
+                qtd = JOptionPane.showInputDialog(this, "Digite a quantidade: ", "Quantidade de CTs", JOptionPane.CLOSED_OPTION);
+
+                if (qtd == null || qtd.isEmpty()) {
+                    cont = 0;
                     break;
                 }
-                
+
                 if (isDigit(qtd)) {
                     cont = Integer.parseInt(qtd);
                     first = false;
@@ -2708,8 +2799,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
             first = true;
         } catch (SQLException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2720,80 +2813,78 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         if (table.getRowCount() == 0) {
             result = true;
-            if(listTestCase.get(0).getProduct().equals("STC DADOS") || listTestCase.get(0).getProduct().equals("STC VOZ")){
+            if (listTestCase.get(0).getProduct().equals("STC DADOS") || listTestCase.get(0).getProduct().equals("STC VOZ")) {
                 testPlanSystem.setText("STC");
-            }else{
+            } else {
 //                testPlanSystem.setText(listTestCase.get(0).getProduct());
-               testPlanSystem.setText(listTestCaseTSPropertiesBean.get(0).getSystem());
+                testPlanSystem.setText(listTestCaseTSPropertiesBean.get(0).getSystem());
             }
-            
+
         }
 
         return result;
     }
-    
+
     public boolean IsEmptyTablePlan(DefaultTableModel table, TesteCaseTSBean test) {
 
         boolean result = false;
 
         String system = "";
-        
-         if (table.getRowCount() == 0) {
-            
-            switch(test.getProduct()){
+
+        if (table.getRowCount() == 0) {
+
+            switch (test.getProduct()) {
                 case "STC DADOS":
-                 result = true;
-                 testPlanSystem.setText("STC");
-                 lastSystem = "STC";
-                 break;
-                 
-                 case "STC VOZ":
-                 result = true;
-                 testPlanSystem.setText("STC");
-                 lastSystem = "STC";
-                 break;
-                 
-                 case "Siebel 6.3":
-                 result = true;
-                 testPlanSystem.setText("Siebel");
-                 lastSystem = "Siebel";
-                 break;
-                 
-                 case "Siebel 8":
-                 result = true;
-                 testPlanSystem.setText("Siebel");
-                 lastSystem = "Siebel";
-                 break;
-                 
-                 default:
-                 result = false;
-                 testPlanSystem.setText(listTestCaseTSPropertiesBean.get(0).getSystem());
-                 lastSystem = test.getProduct();
-                 break;
-                        
+                    result = true;
+                    testPlanSystem.setText("STC");
+                    lastSystem = "STC";
+                    break;
+
+                case "STC VOZ":
+                    result = true;
+                    testPlanSystem.setText("STC");
+                    lastSystem = "STC";
+                    break;
+
+                case "Siebel 6.3":
+                    result = true;
+                    testPlanSystem.setText("Siebel");
+                    lastSystem = "Siebel";
+                    break;
+
+                case "Siebel 8":
+                    result = true;
+                    testPlanSystem.setText("Siebel");
+                    lastSystem = "Siebel";
+                    break;
+
+                default:
+                    result = false;
+                    testPlanSystem.setText(listTestCaseTSPropertiesBean.get(0).getSystem());
+                    lastSystem = test.getProduct();
+                    break;
+
             }
-            
-        }else{
-              switch(test.getProduct()){
+
+        } else {
+            switch (test.getProduct()) {
                 case "STC DADOS":
-                 result = true;
-                 testPlanSystem.setText("STC");
-                 lastSystem = "STC";
-                 break;
-                 
-                 case "STC VOZ":
-                 result = true;
-                 testPlanSystem.setText("STC");
-                 lastSystem = "STC";
-                 break;
-              }
-              
-              if(lastSystem.equals(test.getProduct())){
-                  result = true;
-              }
-         }
-         
-         
+                    result = true;
+                    testPlanSystem.setText("STC");
+                    lastSystem = "STC";
+                    break;
+
+                case "STC VOZ":
+                    result = true;
+                    testPlanSystem.setText("STC");
+                    lastSystem = "STC";
+                    break;
+            }
+
+            if (lastSystem.equals(test.getProduct())) {
+                result = true;
+            }
+        }
 
         return result;
     }
@@ -2823,16 +2914,16 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         bntGenereteDate.setIcon(iconBean.getIconBntDate());
     }
 
-    public void sortAllRowsBy(DefaultTableModel model, int colIndex,boolean ascending) {
+    public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
         Vector data = model.getDataVector();
         Collections.sort(data, new ColumnSorter(colIndex, ascending));
         model.fireTableStructureChanged();
     }        // Este comparador é usado classificar vetores dos dados
 
     private boolean salvaPlanoFile(TestPlanTSDao testPlan, boolean autoSave) {
-         try {
-           
-            if(autoSave){
+        try {
+
+            if (autoSave) {
                 String nomeArquivo = "AUTOSAVE";
                 FileOutputStream saveFile = new FileOutputStream("C:\\FastPlan\\saves\\" + nomeArquivo + ".plan");
                 ObjectOutputStream stream = new ObjectOutputStream(saveFile);
@@ -2842,36 +2933,37 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                 stream.close();
                 return true;
-            } else{
-             
-                if(!testPlanName.getText().equals("")){
+            } else {
+
+                if (!testPlanName.getText().equals("")) {
                     filterHeader.resetFilter();
-                    String nomeArquivo = testPlanName.getText().replace(" ","_");
+                    String nomeArquivo = testPlanName.getText().replace(" ", "_");
                     FileOutputStream saveFile = new FileOutputStream("C:\\FastPlan\\saves\\" + nomeArquivo + ".plan");
                     ObjectOutputStream stream = new ObjectOutputStream(saveFile);
-                    
+
                     // salva o objeto
                     stream.writeObject(this.testPlan);
 
                     stream.close();
                     return true;
-                }else{
-                    JOptionPane.showMessageDialog(null, "Favor preencher o campo Título do plano", "Mensagem ao usuário", JOptionPane.WARNING_MESSAGE); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Favor preencher o campo Título do plano", "Mensagem ao usuário", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
-               }
+            }
         } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
-    
-    private TestPlanTSDao openPlanFile(String dirFile) throws FileNotFoundException, IOException, ClassNotFoundException{
-        TestPlanTSDao plan =   null;
+
+    private TestPlanTSDao openPlanFile(String dirFile) throws FileNotFoundException, IOException, ClassNotFoundException {
+        TestPlanTSDao plan = null;
         Object objeto = null;
-        if(dirFile != null){
-       
+        if (dirFile != null) {
+
             FileInputStream restFile = new FileInputStream(dirFile);
             ObjectInputStream stream = new ObjectInputStream(restFile);
 
@@ -2879,63 +2971,54 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             objeto = stream.readObject();
             plan = (TestPlanTSDao) objeto;
             stream.close();
-        
+
             return plan;
-        }else{
+        } else {
             return null;
         }
 
-        
     }
 
-    private void loadFilePlan() throws IOException, IOException, ClassNotFoundException  {
-        TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());   
-        
-        if(temp != null){
-            
-       this.testPlan = temp;
-        
-        testPlanName.setText(this.testPlan.getTestPlan().getName());
-        testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
-        testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
-        jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
-        jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
-        System.out.println("Valor p "+this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
-        DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
-        while (modelInstancia.getRowCount() > 0) {
-            modelInstancia.removeRow(0);
-        }
-        
-        
-            
-        
-        for(int i = 0 ; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
-            
-            String name = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
-           
-            
-            this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(name);
-            
-            String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
-            if (!desc.contains("<<<pre_requisito>>>")) {
-                desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
-                desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
-                desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
-                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
+    private void loadFilePlan() throws IOException, IOException, ClassNotFoundException {
+        TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());
+
+        if (temp != null) {
+
+            this.testPlan = temp;
+
+            testPlanName.setText(this.testPlan.getTestPlan().getName());
+            testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
+            testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
+            jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
+            jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
+            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
+            DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
+            while (modelInstancia.getRowCount() > 0) {
+                modelInstancia.removeRow(0);
             }
-            
-            modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(),this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
+
+            for (int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++) {
+
+                String name = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
+
+                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(name);
+
+                String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
+                if (!desc.contains("<<<pre_requisito>>>")) {
+                    desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
+                    desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
+                    desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
+                    this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
+                }
+
+                modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), i, 1);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), i, 2);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), i, 3);
-        }
+            }
         }
 
-        
-        
     }
-
-    
 
     public class ColumnSorter implements Comparator {
 
@@ -2977,36 +3060,38 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         }
     }
-    
-     public void abreJanelaEmail(String dirPlanilha) {
+
+    public void abreJanelaEmail(String dirPlanilha) {
         geraArquivoTemp(dirPlanilha);
-         System.out.println("Planilha email: "+dirPlanilha);
-        try {           
+        System.out.println("Planilha email: " + dirPlanilha);
+        try {
             String arquivo = "c://Fastplan//outlook_ts.vbs";
             Runtime.getRuntime().exec("cmd /c" + arquivo);
-            
+
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
 
     }
-    
+
     public void geraArquivoTemp(String dir) {
         FileWriter arq = null;
-        try { 
+        try {
             arq = new FileWriter("c:\\Fastplan\\tempDirPlanilha.txt");
             PrintWriter gravarArq = new PrintWriter(arq);
             gravarArq.printf(dir);
             arq.close();
-            
+
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-       
+
         }
-    
+
     }
-    
-    public void abrePlanilhaGerada(String planilha){
+
+    public void abrePlanilhaGerada(String planilha) {
         try {
             Desktop desktop = null;
             if (Desktop.isDesktopSupported()) {
@@ -3017,24 +3102,24 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public void setPlanInstance(TestPlanTSDao plan){
+
+    public void setPlanInstance(TestPlanTSDao plan) {
         this.testPlan = plan;
     }
-    
+
     public List<ParameterBean> addParameter(TesteCaseTSBean tc) {
-       ParameterRN rn = new ParameterRN();
+        ParameterRN rn = new ParameterRN();
         List<ParameterBean> parameters = new ArrayList<ParameterBean>();
         DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
         List<String> listDescriptionStep = rn.searchParameters(tc.getStepDescription());
         List<String> listExpectedResults = rn.searchParameters(tc.getExpectedResults());
         List<String> listDescriptionCT = rn.searchParameters(tc.getTestScriptDescription());
-        
+
         String nameTemp = "";
-        
+
         for (int i = 0; i < listDescriptionStep.size(); i++) {
             ParameterRN parameterRN = new ParameterRN();
-            if (!listDescriptionStep.get(i).equals(nameTemp)) {           
+            if (!listDescriptionStep.get(i).equals(nameTemp)) {
                 parameterRN.addParameter(listDescriptionStep.get(i), "", false);
                 nameTemp = listDescriptionStep.get(i);
                 parameters.add(parameterRN.getParameter());
@@ -3062,94 +3147,79 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
             }
         }
-        
-        for(int i = 0 ; i < listDescriptionCT.size() ; i++){
+
+        for (int i = 0; i < listDescriptionCT.size(); i++) {
             ParameterRN parameterRN = new ParameterRN();
             String nameParameter = "";
-            if(parameters.size()>0){ //CR 15119
-            for (int j = 0; j < parameters.size(); j++){
-                if(!listDescriptionCT.get(i).equals(parameters.get(j).getParameterName()) && !listDescriptionCT.get(i).equals(nameParameter)){
-                     parameterRN.addParameter(listDescriptionCT.get(i), "", false);
-                     parameters.add(parameterRN.getParameter());
-                     nameParameter = listDescriptionCT.get(i);
+            if (parameters.size() > 0) { //CR 15119
+                for (int j = 0; j < parameters.size(); j++) {
+                    if (!listDescriptionCT.get(i).equals(parameters.get(j).getParameterName()) && !listDescriptionCT.get(i).equals(nameParameter)) {
+                        parameterRN.addParameter(listDescriptionCT.get(i), "", false);
+                        parameters.add(parameterRN.getParameter());
+                        nameParameter = listDescriptionCT.get(i);
+                    }
                 }
-            }
-            }else{ //CR 15119
-                if( !listDescriptionCT.get(i).equals(nameParameter)){
-                     parameterRN.addParameter(listDescriptionCT.get(i), "", false);
-                     parameters.add(parameterRN.getParameter());
-                     nameParameter = listDescriptionCT.get(i);
+            } else { //CR 15119
+                if (!listDescriptionCT.get(i).equals(nameParameter)) {
+                    parameterRN.addParameter(listDescriptionCT.get(i), "", false);
+                    parameters.add(parameterRN.getParameter());
+                    nameParameter = listDescriptionCT.get(i);
                 }
             }
         }
-        
-        
+
         return parameters;
-        
-        
-        
-        
-
-        
-
-        
 
     }
-    
-    public boolean validFiledsExport(){
-            boolean b = false;
-            if(!testPlanName.getText().equals("")&& !testPlanSTI.getText().equals("") && !jComboBoxTestFase.getSelectedItem().toString().equals("") && !jComboBoxCR.getSelectedItem().toString().equals("") && jDateChooserRelease.getDate() != null ){
-                b = true;
-            }
-                
-            
-            return b;
-                    
-                    
+
+    public boolean validFiledsExport() {
+        boolean b = false;
+        if (!testPlanName.getText().equals("") && !testPlanSTI.getText().equals("") && !jComboBoxTestFase.getSelectedItem().toString().equals("") && !jComboBoxCR.getSelectedItem().toString().equals("") && jDateChooserRelease.getDate() != null) {
+            b = true;
         }
-    
+
+        return b;
+
+    }
+
     private void addTableListener() {
         tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
         DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
         model.addTableModelListener(new TableModelListener() {
-            
 
             @Override
             public void tableChanged(TableModelEvent tme) {
 //                tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
-                int lineSelect  = tabelaInstancia.getSelectedRow();
+                int lineSelect = tabelaInstancia.getSelectedRow();
                 if (tme.getType() == TableModelEvent.UPDATE && lineSelect != -1) {
-                   
-                    
-                    
-                    if((tabelaInstancia.getValueAt(lineSelect, 0) != null || tabelaInstancia.getValueAt(lineSelect, 1) != null) && (tabelaInstancia.getValueAt(lineSelect, 0).toString().equals("") || tabelaInstancia.getValueAt(lineSelect, 1).toString().equals("") )){
+
+                    if ((tabelaInstancia.getValueAt(lineSelect, 0) != null || tabelaInstancia.getValueAt(lineSelect, 1) != null) && (tabelaInstancia.getValueAt(lineSelect, 0).toString().equals("") || tabelaInstancia.getValueAt(lineSelect, 1).toString().equals(""))) {
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario("00");
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt("00");
-                    
-                    }else{
+
+                    } else {
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCenario(tabelaInstancia.getValueAt(lineSelect, 0).toString());
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setNumeroCt(tabelaInstancia.getValueAt(lineSelect, 1).toString());
                         testPlan.getTestPlan().getTestCase().get(lineSelect).setDataPlanejada((Date) tabelaInstancia.getValueAt(lineSelect, 4));
-                        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()"+ "data"+ (Date) tabelaInstancia.getValueAt(lineSelect, 4));
+                        System.out.println("com.accenture.view.InstanceScreenTSView.tabelaInstanciaKeyReleased()" + "data" + (Date) tabelaInstancia.getValueAt(lineSelect, 4));
                     }
-                        
-                    
+
                 }
             }
-        });    
-        
-        
+        });
+
     }
-    
-    public void validNumCenario(){
+
+    public void validNumCenario() {
 //        if (tabelaInstancia.getColumnModel().getColumnCount() > 0) 
-        TableColumn col = tabelaInstancia.getColumnModel().getColumn(0);   
+        TableColumn col = tabelaInstancia.getColumnModel().getColumn(0);
         TableColumn col1 = tabelaInstancia.getColumnModel().getColumn(1);
-        class MyTableCellEditor extends AbstractCellEditor   
-          implements TableCellEditor{   
+        class MyTableCellEditor extends AbstractCellEditor
+                implements TableCellEditor {
+
             private JTextField text;
-          JComponent component = new JTextField(); 
-          
+            JComponent component = new JTextField();
+
             MyTableCellEditor() {
                 ((JTextField) component).addKeyListener(new java.awt.event.KeyAdapter() {
                     public void keyTyped(java.awt.event.KeyEvent e) {
@@ -3169,94 +3239,91 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 //CR 15112 - FIM
 
             }
-          
-          public boolean stopCellEditing(){   
-            String s = (String)getCellEditorValue();   
-            //CR 15112 - inicio
-              if (s.length() < 2) {
-                  ((JTextField) component).setText("0" + s);
-              }else{
-                  ((JTextField)component).setText(s);   
-              }
-             //CR 15112 - fim
-             
-             savePlan = false;
-            
-            
-            return super.stopCellEditing();   
-          }   
-          public Component getTableCellEditorComponent(   
-            JTable table, Object value,   
-            boolean isSelected, int rowIndex, int vColIndex){   
-            if(isSelected){   
-              //   
-            }   
-            //CR 15112 - inicio
-            
-            ((JTextField) component).selectAll();
-            
-              if (((String) value).length() < 2) {
-                  ((JTextField) component).setText("0" + (String) value);
-              }else{
-                  ((JTextField)component).setText((String)value);   
-              }
-              ((JTextField) component).selectAll();
-             //CR 15112 - fim
-              return component;
-          }   
-          public String getCellEditorValue() { 
-              String s =  ((JTextField)component).getText();
+
+            public boolean stopCellEditing() {
+                String s = (String) getCellEditorValue();
+                //CR 15112 - inicio
+                if (s.length() < 2) {
+                    ((JTextField) component).setText("0" + s);
+                } else {
+                    ((JTextField) component).setText(s);
+                }
+                //CR 15112 - fim
+
+                savePlan = false;
+
+                return super.stopCellEditing();
+            }
+
+            public Component getTableCellEditorComponent(
+                    JTable table, Object value,
+                    boolean isSelected, int rowIndex, int vColIndex) {
+                if (isSelected) {
+                    //   
+                }
+                //CR 15112 - inicio
+
+                ((JTextField) component).selectAll();
+
+                if (((String) value).length() < 2) {
+                    ((JTextField) component).setText("0" + (String) value);
+                } else {
+                    ((JTextField) component).setText((String) value);
+                }
+                ((JTextField) component).selectAll();
+                //CR 15112 - fim
+                return component;
+            }
+
+            public String getCellEditorValue() {
+                String s = ((JTextField) component).getText();
 //             for(int i = 0; i < s.length(); i++){   
 //              Character caractere = s.charAt(i);   
 //              if(!Character.isDigit(caractere)){   
 //                  s.replace(caractere.toString(), "");
 //              }  
 //             }
-             
-            
-             
-             
-             return  s;
-              
-          }   
-          
-          public void keyTypedJText(KeyEvent e) {
+
+                return s;
+
+            }
+
+            public void keyTypedJText(KeyEvent e) {
 //        if (e.getSource()==((JTextField)component).getText()){
-            if (e.getKeyChar()<'0' || e.getKeyChar()>'9'){
-                 e.consume();//aciona esse propriedade para eliminar a ação do evento
-            }     
-            
-            
-            
-       
+                if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();//aciona esse propriedade para eliminar a ação do evento
+                }
+
 //        }
-    }
-    public void keyPressed(KeyEvent e) {
-        // Evento não utilizado, porém precisa ser declarado
-    }
-    public void keyReleased(KeyEvent e) {
-        // Evento não utilizado, porém precisa ser declarado
-    }
-    
-    public void mouseClicked(MouseEvent evt) {                                                
-        ((JTextField) component).selectAll();
-    }        
-    
+            }
+
+            public void keyPressed(KeyEvent e) {
+                // Evento não utilizado, porém precisa ser declarado
+            }
+
+            public void keyReleased(KeyEvent e) {
+                // Evento não utilizado, porém precisa ser declarado
+            }
+
+            public void mouseClicked(MouseEvent evt) {
+                ((JTextField) component).selectAll();
+            }
+
         }
         col.setCellEditor(new MyTableCellEditor());
-        col1.setCellEditor(new MyTableCellEditor());  
-        
+        col1.setCellEditor(new MyTableCellEditor());
+
     }
-    
-    public void upddateTableInstance(){
+
+    public void upddateTableInstance() {
         DefaultTableModel modelCT = (DefaultTableModel) tabelaInstancia.getModel();
-        
+
         tabelaInstancia.getSelectionModel().clearSelection();
-           
-        for(int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++){
-                     modelCT.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), i, 4);
-                }
-                     
+
+        for (int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++) {
+            modelCT.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), i, 4);
+        }
+
 //                //apaga linhas da tabela steps
 //                while (modelCT.getRowCount() > 0) {
 //                    modelCT.removeRow(0);
@@ -3266,90 +3333,86 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                     modelCT.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario()+"", this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt()+"", this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode()+"", this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada()});
 //                }
     }
-    
-    public void selectLineTableInstance(int line){
+
+    public void selectLineTableInstance(int line) {
         ListSelectionModel selectionModel = tabelaInstancia.getSelectionModel();
-        selectionModel.addSelectionInterval(line, line); 
+        selectionModel.addSelectionInterval(line, line);
     }
-    
-    
-    
-    
+
     class ColumnHeaderListener extends MouseAdapter {
-  public void mouseClicked(MouseEvent evt) {
-    JTable table = ((JTableHeader)evt.getSource()).getTable();
-    TableColumnModel colModel = table.getColumnModel();
-    
-    // índice da coluna cujo titulo foi clicado
-    int vColIndex = colModel.getColumnIndexAtX(evt.getX());
-    int mColIndex = table.convertColumnIndexToModel(vColIndex);
-    
-    if(vColIndex == -1) {
-      return;
+
+        public void mouseClicked(MouseEvent evt) {
+            JTable table = ((JTableHeader) evt.getSource()).getTable();
+            TableColumnModel colModel = table.getColumnModel();
+
+            // índice da coluna cujo titulo foi clicado
+            int vColIndex = colModel.getColumnIndexAtX(evt.getX());
+            int mColIndex = table.convertColumnIndexToModel(vColIndex);
+
+            if (vColIndex == -1) {
+                return;
+            }
+
+            System.out.println("O clique ocorreu no titulo da coluna com indice " + mColIndex);
+        }
     }
-    
-    System.out.println("O clique ocorreu no titulo da coluna com indice " + mColIndex);
-  }
-    }
-    
-    private void atualizaContagemLabelTabelaInstancia(){
+
+    private void atualizaContagemLabelTabelaInstancia() {
         int ctSelect = tabelaInstancia.getSelectedRow() + 1;
-            if(tabelaInstancia.getSelectedRowCount() > 1){
-                labelQtdCTs1.setText(tabelaInstancia.getSelectedRowCount()+ " selecionados." + "Total: " + tabelaInstancia.getRowCount());
-            }else{
-                if(tabelaInstancia.getSelectedRow() == 0){
-                    labelQtdCTs1.setText("Total: " + tabelaInstancia.getRowCount());
-                }else{
-                    labelQtdCTs1.setText(ctSelect + " de " + tabelaInstancia.getRowCount());
-                }
-                    
-                
+        if (tabelaInstancia.getSelectedRowCount() > 1) {
+            labelQtdCTs1.setText(tabelaInstancia.getSelectedRowCount() + " selecionados." + "Total: " + tabelaInstancia.getRowCount());
+        } else {
+            if (tabelaInstancia.getSelectedRow() == 0) {
+                labelQtdCTs1.setText("Total: " + tabelaInstancia.getRowCount());
+            } else {
+                labelQtdCTs1.setText(ctSelect + " de " + tabelaInstancia.getRowCount());
             }
+
+        }
     }
-    
-    private void atualizaLabelTabelaCt(){
+
+    private void atualizaLabelTabelaCt() {
         int ctSelect = tabelaCt.getSelectedRow() + 1;
-            if(tabelaCt.getSelectedRowCount() > 1){
-                labelQtdCTs.setText(tabelaCt.getSelectedRowCount() + " selecionados.");
-            }else{
-                labelQtdCTs.setText(ctSelect + " de " + tabelaCt.getRowCount());
-            }
+        if (tabelaCt.getSelectedRowCount() > 1) {
+            labelQtdCTs.setText(tabelaCt.getSelectedRowCount() + " selecionados.");
+        } else {
+            labelQtdCTs.setText(ctSelect + " de " + tabelaCt.getRowCount());
+        }
     }
-    
-    
-    public void atualizaDados(int hashCode, String valorNumeroCenario, String valorNumeroCT ){
-        
+
+    public void atualizaDados(int hashCode, String valorNumeroCenario, String valorNumeroCT) {
+
         //atualiza objeto
         for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
-                if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
-                    testPlan.getTestPlan().getTestCase().get(j).setNumeroCenario(valorNumeroCenario);
-                    testPlan.getTestPlan().getTestCase().get(j).setNumeroCt(valorNumeroCT);
-                }
+            if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                testPlan.getTestPlan().getTestCase().get(j).setNumeroCenario(valorNumeroCenario);
+                testPlan.getTestPlan().getTestCase().get(j).setNumeroCt(valorNumeroCT);
+            }
         }
-        
+
         //atualiza tabela
         for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
-                if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
-                    tabelaInstancia.setRowSelectionInterval(j, j);
-                    System.out.println("Linha "+j+": "+tabelaInstancia.getValueAt(j, 0));
-                    tabelaInstancia.setValueAt(valorNumeroCT,j,1);
-                    tabelaInstancia.setValueAt(valorNumeroCenario,j,0);                    
-                }
+            if (hashCode == Integer.parseInt(tabelaInstancia.getValueAt(j, 3).toString())) {
+                tabelaInstancia.setRowSelectionInterval(j, j);
+                System.out.println("Linha " + j + ": " + tabelaInstancia.getValueAt(j, 0));
+                tabelaInstancia.setValueAt(valorNumeroCT, j, 1);
+                tabelaInstancia.setValueAt(valorNumeroCenario, j, 0);
+            }
         }
-         DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
-         
+        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
+
         //atualiza model
-         for(int j = 0 ; j < modelPlan.getRowCount(); j++){
-                if(hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())){
-                    modelPlan.setValueAt(valorNumeroCenario,j,0);
-                    modelPlan.setValueAt(valorNumeroCenario,j,0);
-                }
+        for (int j = 0; j < modelPlan.getRowCount(); j++) {
+            if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
+                modelPlan.setValueAt(valorNumeroCenario, j, 0);
+                modelPlan.setValueAt(valorNumeroCenario, j, 0);
+            }
         }
     }
-    
-    public void atualizaDadosBoleanos(int hashCode, boolean valor, String campo ){
+
+    public void atualizaDadosBoleanos(int hashCode, boolean valor, String campo) {
         DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
-        switch(campo){
+        switch (campo) {
             case NAME_ITEM_CTS_PRIORITARIOS:
                 //atualiza objeto
                 for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
@@ -3367,8 +3430,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     }
                 }
 
-                
-
                 //atualiza model
                 for (int j = 0; j < modelPlan.getRowCount(); j++) {
                     if (hashCode == Integer.parseInt(modelPlan.getValueAt(j, 3).toString())) {
@@ -3378,9 +3439,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
 
                 break;
-            
+
             case NAME_ITEM_MASSA_DADOS:
-                 //atualiza objeto
+                //atualiza objeto
                 for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
                     if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
                         testPlan.getTestPlan().getTestCase().get(j).setData(valor);
@@ -3394,7 +3455,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tabelaInstancia.setValueAt(valor, j, 6);
 
                     }
-                }               
+                }
 
                 //atualiza model
                 for (int j = 0; j < modelPlan.getRowCount(); j++) {
@@ -3405,9 +3466,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
 
                 break;
-                
-                 case NAME_ITEM_RETRABALHO:
-                 //atualiza objeto
+
+            case NAME_ITEM_RETRABALHO:
+                //atualiza objeto
                 for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
                     if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
                         testPlan.getTestPlan().getTestCase().get(j).setRework(valor);
@@ -3421,7 +3482,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tabelaInstancia.setValueAt(valor, j, 7);
 
                     }
-                }               
+                }
 
                 //atualiza model
                 for (int j = 0; j < modelPlan.getRowCount(); j++) {
@@ -3432,9 +3493,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
 
                 break;
-                
-                 case NAME_ITEM_REGRESSAO:
-                 //atualiza objeto
+
+            case NAME_ITEM_REGRESSAO:
+                //atualiza objeto
                 for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
                     if (hashCode == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
                         testPlan.getTestPlan().getTestCase().get(j).setRegression(valor);
@@ -3448,7 +3509,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tabelaInstancia.setValueAt(valor, j, 8);
 
                     }
-                }               
+                }
 
                 //atualiza model
                 for (int j = 0; j < modelPlan.getRowCount(); j++) {
@@ -3460,20 +3521,16 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                 break;
         }
-                
-      
-        
-        
-        
+
     }
-    public void ordenarCTs(){
+
+    public void ordenarCTs() {
         if (tabelaInstancia.getRowCount() > 0) {
             tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
             DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
             int num1 = 0; //alterado de double para int para solução da CR 15112
             int num2 = 0; //alterado de double para int para solução da CR 15112
-            
-            
+
             for (int j = 0; j < tabelaInstancia.getRowCount(); j++) {
                 for (int i = 0; i < tabelaInstancia.getRowCount(); i++) {
                     //CR 15112
@@ -3482,7 +3539,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                     if (tabelaInstancia.getRowCount() - 1 != i) {
                         //CR 15112
-                        concatena = tabelaInstancia.getValueAt(i + 1, 0).toString()  + tabelaInstancia.getValueAt(i + 1, 1).toString();
+                        concatena = tabelaInstancia.getValueAt(i + 1, 0).toString() + tabelaInstancia.getValueAt(i + 1, 1).toString();
                         num2 = Integer.parseInt(concatena);
                     }
 
@@ -3501,37 +3558,35 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         }
     }
-    
-    private void addTextLabelStatus(String status){
-        
-         new SwingWorker() {
 
-                @Override
-                protected Object doInBackground() {
-                    LabelStatus.setText("Status:"+" "+status);
+    private void addTextLabelStatus(String status) {
 
-                    return null;
-                }
+        new SwingWorker() {
 
-                @Override
-                protected void done() {
+            @Override
+            protected Object doInBackground() {
+                LabelStatus.setText("Status:" + " " + status);
 
-                }
+                return null;
+            }
 
-            }.execute();
+            @Override
+            protected void done() {
+
+            }
+
+        }.execute();
     }
-    
-    private void exportPlan(TestPlanTSDao planTemp){
-       String nomeOriginalCT = "";
-        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
-        
 
-        
+    private void exportPlan(TestPlanTSDao planTemp) {
+        String nomeOriginalCT = "";
+        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
+
         try {
 //            testPlan.getTestPlan().setTestCase(listTestCasePlan);
             filterHeader.resetFilter();
             progress(true);
-            if (validFiledsExport()) {         
+            if (validFiledsExport()) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 planTemp.getTestPlan().setName("[PLAN-" + jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "] - " + testPlanName.getText());
                 planTemp.getTestPlan().setSti(testPlanSTI.getText());
@@ -3540,22 +3595,21 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 planTemp.getTestPlan().setRelease(FunctiosDates.dateToString(jDateChooserRelease.getDate(), "yyyy-MM"));
                 addTextLabelStatus("Setando valores do plano");
 //            String scriptName = "";
-                
 
                 for (int i = 0; i < planTemp.getTestPlan().getTestCase().size(); i++) {
                     for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {
                         //verifica se o valor do parâmetro está null; 
-                       addTextLabelStatus("Setando valores dos parâmetros "+j);
+                        addTextLabelStatus("Setando valores dos parâmetros " + j);
                         if (!planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue().equals("")) {
                             String parameterDesc = planTemp.getTestPlan().getTestCase().get(i).getStepDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">");
                             planTemp.getTestPlan().getTestCase().get(i).setStepDescription(parameterDesc);
 
                             String parameterResult = planTemp.getTestPlan().getTestCase().get(i).getExpectedResults().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">");
                             planTemp.getTestPlan().getTestCase().get(i).setExpectedResults(parameterResult);
-                            
+
                             String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">");
                             planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
-                            
+
 //                            for(int loopStep = 0 ; loopStep < planTemp.getTestPlan().getTestCase().get(i).getListStep().size(); loopStep++){
 //                                String descStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getDescStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">");
 //                                String resultStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getResultadoStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">");
@@ -3564,9 +3618,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                                planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).setResultadoStep(resultStep);
 //                                
 //                            }
-                                
-                            
-                            
                         }
 //                        else{
 //                            if(planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pre_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("pos_requisito") || planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName().equals("observacoes")){
@@ -3577,30 +3628,26 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     }
                 }
                 addTextLabelStatus("Parâmetros setados");
-              
-                
 
                 for (int i = 0; i < modelPlan.getRowCount(); i++) {
                     String scriptName = "";
 //                String nameTC = testPlan.getTestPlan().getTestCase().get(i).getTestScriptName();
                     String nameTC = modelPlan.getValueAt(i, 2).toString();
-                    nomeOriginalCT = 
-//                if(nameTC.indexOf("-") == -1){
-//                     scriptName = modelPlan.getValueAt(i, 0).toString()+"."+modelPlan.getValueAt(i, 1).toString()+"-"+nameTC;
-//                }else{
-//                     scriptName = modelPlan.getValueAt(i, 0).toString()+"."+modelPlan.getValueAt(i, 1).toString()+"-"+nameTC.substring(nameTC.indexOf("-")+1);
-//                }
-                    scriptName = modelPlan.getValueAt(i, 0).toString() + "." + modelPlan.getValueAt(i, 1).toString() + "-" + nameTC;
+                    nomeOriginalCT
+                            = //                if(nameTC.indexOf("-") == -1){
+                            //                     scriptName = modelPlan.getValueAt(i, 0).toString()+"."+modelPlan.getValueAt(i, 1).toString()+"-"+nameTC;
+                            //                }else{
+                            //                     scriptName = modelPlan.getValueAt(i, 0).toString()+"."+modelPlan.getValueAt(i, 1).toString()+"-"+nameTC.substring(nameTC.indexOf("-")+1);
+                            //                }
+                            scriptName = modelPlan.getValueAt(i, 0).toString() + "." + modelPlan.getValueAt(i, 1).toString() + "-" + nameTC;
                     planTemp.getTestPlan().getTestCase().get(i).setTestScriptName(scriptName);
 
 //                listTestCasePlan.get(i).setTestScriptName(scriptName);
                 }
-                
+
                 //ordenando lista conforme tabela
                 tabelaInstancia.editingStopped(null);
 //        DefaultTableModel modelPlan = (DefaultTableModel) tabelaInstancia.getModel();
-                
-                
 
                 for (int i = 0; i < tabelaInstancia.getRowCount(); i++) {
                     System.out.println("tabelaInstancia.getRowCount(); " + tabelaInstancia.getRowCount());
@@ -3615,38 +3662,35 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     }
 
                 }
-                
 
                 String nomePlanilha = "PLAN-" + testPlanSystem.getText() + "-" + jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "_" + "V1.xlsx";
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 final File destino = new File(selecionarPlanilha().getPath());
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                
-                if(radioAntiga.isSelected()){
+
+                if (radioAntiga.isSelected()) {
                     addTextLabelStatus("Gerando planilha antiga");
                     testCaseRN.createSheetExport(destino.getPath(), nomePlanilha, planTemp.getTestPlan());
-                }else{
+                } else {
                     addTextLabelStatus("Gerando planilha nova");
                     testCaseRN.createSpreadsheetTSNew(destino.getPath(), nomePlanilha, planTemp.getTestPlan());
-                   
+
                 }
                 addTextLabelStatus("Planilha gerada");
-                
-                
-                
+
                 //voltando valores dos parâmetros nos steps
                 for (int i = 0; i < planTemp.getTestPlan().getTestCase().size(); i++) {
-                    for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {              
-                      
-                            String parameterDesc = planTemp.getTestPlan().getTestCase().get(i).getStepDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setStepDescription(parameterDesc);
+                    for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {
 
-                            String parameterResult = planTemp.getTestPlan().getTestCase().get(i).getExpectedResults().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setExpectedResults(parameterResult);
-                            
-                            String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt); 
-                            
+                        String parameterDesc = planTemp.getTestPlan().getTestCase().get(i).getStepDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                        planTemp.getTestPlan().getTestCase().get(i).setStepDescription(parameterDesc);
+
+                        String parameterResult = planTemp.getTestPlan().getTestCase().get(i).getExpectedResults().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                        planTemp.getTestPlan().getTestCase().get(i).setExpectedResults(parameterResult);
+
+                        String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                        planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
+
 //                             for(int loopStep = 0 ; loopStep < planTemp.getTestPlan().getTestCase().get(i).getListStep().size(); loopStep++){
 //                                String descStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getDescStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
 //                                String resultStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getResultadoStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
@@ -3655,18 +3699,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                                planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).setResultadoStep(resultStep);
 //                                
 //                 }
-                
                     }
-                    
-                    
+
                 }
-                
-               
-                
+
                 for (int i = 0; i < modelPlan.getRowCount(); i++) {
                     planTemp.getTestPlan().getTestCase().get(i).setTestScriptName(modelPlan.getValueAt(i, 2).toString());
                 }
-                
 
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 if (JOptionPane.showConfirmDialog(this, "Gerar email com a planilha em anexo?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -3677,16 +3716,16 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
                 JOptionPane.showMessageDialog(this, "Plano criado com sucesso!", "CT Creator", JOptionPane.INFORMATION_MESSAGE);
 //            testPlan.getTestPlan().getTestCase().clear();
-               
-              Map<String,Object> parametros = new HashMap<String,Object>();  
-              parametros.put("NOME_PLANO", planTemp.getTestPlan().getName());
-              parametros.put("STI_PLANO", testPlanSTI.getText());
-              parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
-              if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                addTextLabelStatus("Gerando relatório");
-                BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(),  parametros, ProjectSettings.FILE_NAME_REPORT_PLANO);
-                addTextLabelStatus("Relatório gerado");
-              }
+
+                Map<String, Object> parametros = new HashMap<String, Object>();
+                parametros.put("NOME_PLANO", planTemp.getTestPlan().getName());
+                parametros.put("STI_PLANO", testPlanSTI.getText());
+                parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
+                if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    addTextLabelStatus("Gerando relatório");
+                    BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(), parametros, ProjectSettings.FILE_NAME_REPORT_PLANO);
+                    addTextLabelStatus("Relatório gerado");
+                }
 
             } else {
                 JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "CT Creator", JOptionPane.INFORMATION_MESSAGE);
@@ -3697,49 +3736,47 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                 planTemp.getTestPlan().getTestCase().get(i).setTestScriptName(name.replace(name, name.substring(name.indexOf("-") + 1)));
 //            }
             progress(false);
-            
+
         } catch (IOException ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
             returValues(planTemp, modelPlan);
-            addTextLabelStatus("Erro: "+ex.toString());
+            addTextLabelStatus("Erro: " + ex.toString());
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            logger.error("Erro ao exportar planilha",ex);
+            logger.error("Erro ao exportar planilha", ex);
             addExceptionTextArea(ex);
             JOptionPane.showMessageDialog(null, ex, "Erro", JOptionPane.ERROR_MESSAGE);
             progress(false);
-                 
-        } catch(Exception ex){
-            addTextLabelStatus("Erro: "+ex.toString());
-                                                           
+
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            addTextLabelStatus("Erro: " + ex.toString());
+
             addExceptionTextArea(ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             returValues(planTemp, modelPlan);
-           
-            logger.error("Erro ao exportar planilha",ex);
-             ex.printStackTrace();
+
+            logger.error("Erro ao exportar planilha", ex);
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, ex, "Erro", JOptionPane.ERROR_MESSAGE);
             progress(false);
         }
-        
-        
-        
-       
 
     }
-    
-    private void returValues(TestPlanTSDao planTemp, DefaultTableModel modelPlan){
-        //voltando valores dos parâmetros nos steps
-                for (int i = 0; i < planTemp.getTestPlan().getTestCase().size(); i++) {
-                    for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {              
-                      
-                            String parameterDesc = planTemp.getTestPlan().getTestCase().get(i).getStepDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setStepDescription(parameterDesc);
 
-                            String parameterResult = planTemp.getTestPlan().getTestCase().get(i).getExpectedResults().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setExpectedResults(parameterResult);
-                            
-                            String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
-                            planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt); 
-                            
+    private void returValues(TestPlanTSDao planTemp, DefaultTableModel modelPlan) {
+        //voltando valores dos parâmetros nos steps
+        for (int i = 0; i < planTemp.getTestPlan().getTestCase().size(); i++) {
+            for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {
+
+                String parameterDesc = planTemp.getTestPlan().getTestCase().get(i).getStepDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                planTemp.getTestPlan().getTestCase().get(i).setStepDescription(parameterDesc);
+
+                String parameterResult = planTemp.getTestPlan().getTestCase().get(i).getExpectedResults().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                planTemp.getTestPlan().getTestCase().get(i).setExpectedResults(parameterResult);
+
+                String parameterDescCt = planTemp.getTestPlan().getTestCase().get(i).getTestScriptDescription().replace("<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterValue() + ">", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
+                planTemp.getTestPlan().getTestCase().get(i).setTestScriptDescription(parameterDescCt);
+
 //                             for(int loopStep = 0 ; loopStep < planTemp.getTestPlan().getTestCase().get(i).getListStep().size(); loopStep++){
 //                                String descStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getDescStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
 //                                String resultStep = planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).getResultadoStep().replace("<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>", "<<<" + planTemp.getTestPlan().getTestCase().get(i).getParameters().get(j).getParameterName() + ">>>");
@@ -3748,30 +3785,25 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                                planTemp.getTestPlan().getTestCase().get(i).getListStep().get(loopStep).setResultadoStep(resultStep);
 //                                
 //                 }
-                
-                    }
-                    
-                    
-                }
-                
-               
-                
-                for (int i = 0; i < modelPlan.getRowCount(); i++) {
-                    planTemp.getTestPlan().getTestCase().get(i).setTestScriptName(modelPlan.getValueAt(i, 2).toString());
-                }
+            }
+
+        }
+
+        for (int i = 0; i < modelPlan.getRowCount(); i++) {
+            planTemp.getTestPlan().getTestCase().get(i).setTestScriptName(modelPlan.getValueAt(i, 2).toString());
+        }
     }
-    
-    
-    public void addExceptionTextArea(Exception ex){
-         StringWriter sw = new StringWriter();
-         PrintWriter pw = new PrintWriter(sw);
-         ex.printStackTrace(pw);
-         String exceptionText = sw.toString();                       
-         statusTextArea.setText(exceptionText);
+
+    public void addExceptionTextArea(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String exceptionText = sw.toString();
+        statusTextArea.setText(exceptionText);
     }
-    
-    public void progress(boolean run){
-      
+
+    public void progress(boolean run) {
+
 //        if (run) {
 //            task = new SwingWorker() {
 //                @Override
@@ -3802,11 +3834,67 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //        }
 //        
 //        task.execute();
-          
     }
-    
 
+    public void recuperaPlano(String name, String system) {
+        try {
+            
+            if(!name.contains(".plan")){
+                name = name + ".plan";
+            }
 
+            SavePlanRN save = new SavePlanRN();
+            save.download(name, system);
+
+            TestPlanTSDao temp = null;
+
+            FileInputStream restFile = new FileInputStream(ProjectSettings.PATH_FILE_SAVE + "/" + name);
+            ObjectInputStream stream = new ObjectInputStream(restFile);
+
+            // recupera o objeto
+            Object objeto = stream.readObject();
+            temp = (TestPlanTSDao) objeto;
+            stream.close();
+            
+           
+            this.testPlan = temp;
+
+            testPlanName.setText(this.testPlan.getTestPlan().getName());
+            testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
+            testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
+            jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
+            jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
+            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
+            DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
+            while (modelInstancia.getRowCount() > 0) {
+                modelInstancia.removeRow(0);
+            }
+
+            for (int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++) {
+
+                String namePlan = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
+
+                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(namePlan);
+
+                String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
+                if (!desc.contains("<<<pre_requisito>>>")) {
+                    desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
+                    desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
+                    desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
+                    this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
+                }
+
+                modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
+
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelStatus;
     private javax.swing.JProgressBar ProgressAguarde;
@@ -3825,6 +3913,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JButton bntReplace;
     private javax.swing.JButton bntResetFiltro;
     private javax.swing.JButton bntStatus;
+    private javax.swing.JButton btnCheckout;
+    private javax.swing.JButton btnPublicarPlano;
     private javax.swing.JDialog dialogLog;
     private javax.swing.JComboBox jComboBoxCR;
     private javax.swing.JComboBox jComboBoxTestFase;
@@ -3847,8 +3937,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private com.toedter.calendar.JMonthChooser jMonthChooser1;
     private javax.swing.JPopupMenu jPopupTabelaStep;
     private javax.swing.JScrollPane jScrollPane1;
