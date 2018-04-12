@@ -44,7 +44,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     /**
      * Creates new form ManageflowsScreenView
      */
-    public ManageflowsScreenView() throws IOException, SVNException {
+    public ManageflowsScreenView(String fase) throws IOException, SVNException {
         initComponents();
         
         this.fase = fase; 

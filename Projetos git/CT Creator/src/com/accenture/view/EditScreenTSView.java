@@ -94,7 +94,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         this.fase = fase;
         try {
             initComponents();
-             MyLogger.setup();
+//             MyLogger.setup();
              Log.setLevel(Level.INFO);
             Properties props = new Properties();
             props.load(new FileInputStream("log4j.properties"));
@@ -1424,7 +1424,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     public void callFilter() {
         FilterTestCaseScreenTSView1 dialogFiltro = null;
         try {
-            dialogFiltro = new FilterTestCaseScreenTSView1(this, null, true);
+            dialogFiltro = new FilterTestCaseScreenTSView1(this, null, true, this.fase);
         } catch (IOException ex) {
             logger.error("Erro ", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

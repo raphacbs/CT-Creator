@@ -571,7 +571,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            criaJanelaExportarTs();
+            criaJanelaExportarTs(ProjectSettings.FASE_TS);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (IOException ex) {
@@ -616,7 +616,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenuItemFuncionalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFuncionalidadeActionPerformed
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            criaJanelaFuncionalidade();
+            criaJanelaFuncionalidade(ProjectSettings.FASE_TS);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (IOException ex) {
@@ -818,8 +818,8 @@ public class MainScreenView extends javax.swing.JFrame {
 //        //guiFilterReportDeParaScreenView.centralizaJanela();
 //        guiFilterReportDeParaScreenView.setVisible(true);
 //    }
-    public void criaJanelaExportarTs() throws IOException, ClassNotFoundException, SQLException, SVNException {
-        guiInstaceTs =  InstanceScreenTSView.getInstance();
+    public void criaJanelaExportarTs(String fase) throws IOException, ClassNotFoundException, SQLException, SVNException {
+        guiInstaceTs =  InstanceScreenTSView.getInstance(fase);
         desktop.add(guiInstaceTs);
         guiInstaceTs.centralizaJanela();
         guiInstaceTs.setVisible(true);
@@ -963,8 +963,8 @@ public class MainScreenView extends javax.swing.JFrame {
 
     }
 
-    private void criaJanelaFuncionalidade() throws SQLException, ClassNotFoundException, IOException, SVNException {
-        guiManageflowsScreenView = new ManageflowsScreenView();
+    private void criaJanelaFuncionalidade(String fase) throws SQLException, ClassNotFoundException, IOException, SVNException {
+        guiManageflowsScreenView = new ManageflowsScreenView(fase);
         desktop.add(guiManageflowsScreenView);
         guiManageflowsScreenView.centralizaJanela();
 

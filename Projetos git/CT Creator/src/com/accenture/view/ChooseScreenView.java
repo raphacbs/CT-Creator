@@ -60,13 +60,15 @@ public class ChooseScreenView extends javax.swing.JDialog {
     private TableFilterHeader filterHeader;
     private String system;
     private ManageScriptsScreenView scriptView;
+    private String  fase;
 
     /**
      * Creates new form GUISelecionaCT
      */
-    public ChooseScreenView(String system, ManageScriptsScreenView scriptView, java.awt.Frame parent, boolean modal) throws ClassNotFoundException {
+    public ChooseScreenView(String system, ManageScriptsScreenView scriptView, java.awt.Frame parent, boolean modal, String fase) throws ClassNotFoundException {
         super(parent, modal);
         initComponents();
+        this.fase = fase;
 //        tabelaSelecioneCT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTitle("Selecionar os componentes para adiciona-los no script");
         this.system = system;
@@ -401,7 +403,7 @@ public class ChooseScreenView extends javax.swing.JDialog {
         }
         try {
 
-            SvnConnectionRN svn = new SvnConnectionRN("");
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
 
             List<TestCaseTSPropertiesBean> listTemp = svn.search(system, "");
             listProperties = listTemp;
@@ -458,7 +460,7 @@ public class ChooseScreenView extends javax.swing.JDialog {
             }
         }
 
-        new SvnConnectionRN("").exportFile(properties.getFolderTemplocal(), system, listProperties.get(indice).getDirEntry().getName(), this.hashCode(),"");
+        new SvnConnectionRN(this.fase).exportFile(properties.getFolderTemplocal(), system, listProperties.get(indice).getDirEntry().getName(), this.hashCode(),"");
         System.out.println("Teste posição: " + tabelaSelecioneComponentes.getValueAt(tabelaSelecioneComponentes.getSelectedRow(), 0));
 
         TesteCaseTSBean tc = new TestCaseTSRN("").readSheet(properties.getFolderTemplocal() + this.hashCode() + "\\" + system + "\\" + listProperties.get(indice).getDirEntry().getName()).get(0);

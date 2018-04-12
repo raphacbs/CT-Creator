@@ -49,9 +49,9 @@ this.fase = fase;
 
     }
 
-    public FilterTestCaseTSForPlanScreenView(final InstanceScreenTSView guiInstanceCT, java.awt.Frame parent, boolean modal) throws IOException, ClassNotFoundException, SQLException {
+    public FilterTestCaseTSForPlanScreenView(final InstanceScreenTSView guiInstanceCT, java.awt.Frame parent, boolean modal, String fase) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
-
+        this.fase = fase;
         this.setResizable(false);
         initComponents();
         loadComboTS();

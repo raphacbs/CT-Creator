@@ -50,9 +50,9 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
 
     }
 
-    public FilterTestCaseScreenTSView1(final EditScreenTSView guiEditCt, java.awt.Frame parent, boolean modal) throws IOException, ClassNotFoundException, SQLException {
+    public FilterTestCaseScreenTSView1(final EditScreenTSView guiEditCt, java.awt.Frame parent, boolean modal,String fase) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
-
+            this.fase = fase;
         this.setResizable(false);
         initComponents();
         loadComboTS();

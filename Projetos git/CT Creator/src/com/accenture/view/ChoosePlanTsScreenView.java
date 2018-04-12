@@ -287,7 +287,7 @@ public class ChoosePlanTsScreenView extends javax.swing.JDialog {
 
     private void bntCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCopiarActionPerformed
         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
-        InstanceScreenTSView.getInstance().recuperaPlano(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0).toString(),system);
+        InstanceScreenTSView.getInstance(this.fase).recuperaPlano(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0).toString(),system);
         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
          this.dispose();
     }//GEN-LAST:event_bntCopiarActionPerformed
