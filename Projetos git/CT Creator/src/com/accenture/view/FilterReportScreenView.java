@@ -30,10 +30,12 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public class FilterReportScreenView extends javax.swing.JInternalFrame {
     private ArrayList system;
+    private String fase ;
     /**
      * Creates new form FilterReportScreenView
      */
-    public FilterReportScreenView() {
+    public FilterReportScreenView(String fase) {
+        this.fase =fase;
         initComponents();
         loadComboTS();
         
@@ -184,7 +186,7 @@ public class FilterReportScreenView extends javax.swing.JInternalFrame {
     public void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             system = testCaseRN.systemsTestCase();
            
             for (int i = 0; i < system.size(); i++) {
@@ -201,7 +203,7 @@ public class FilterReportScreenView extends javax.swing.JInternalFrame {
     
     public void geraRelatorio() throws SVNException, IOException, JRException{
         List<TestCaseTSPropertiesBean> listTemp = new ArrayList<TestCaseTSPropertiesBean>();
-        SvnConnectionRN svn = new SvnConnectionRN();
+        SvnConnectionRN svn = new SvnConnectionRN(this.fase);
         if(jComboBoxSystem.getSelectedItem().toString().equalsIgnoreCase("TODOS")){
             for(int i = 0; i < system.size(); i++ ){
                 setTextLabelStatus("Coletando dados do "+system.get(i));

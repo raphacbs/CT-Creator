@@ -34,7 +34,7 @@ public class Fluxos {
 //        TestCaseTSRN tcRN = new TestCaseTSRN();
 //        tcRN.importSheetAllCts("C:\\Users\\raphael.da.silva\\Desktop\\Planos\\TS.xlsx", "Importando planos para o repositorio");
 
-        FlowRN workflowRN = new FlowRN();
+        FlowRN workflowRN = new FlowRN("");
         
 //        System.out.println("test.fluxo.Fluxos.main() - "+ workflowRN.getEntries());
         
@@ -59,7 +59,7 @@ public class Fluxos {
           wb.setTestCases(tcs);
           
           
-          workflowRN.saveFile(null, wb);
+          workflowRN.saveFile(null, wb,"");
         
     }
 }

@@ -36,12 +36,15 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
     private ManipulaDadosSQLite bd = new ManipulaDadosSQLite();
     private SVNPropertiesVOBean svnProperties = SVNPropertiesVOBean.getInstance();
     private MainScreenView desktop;
+    private String fase;
+
 
     /**
      * Creates new form GUIConfiguracoes
      */
-    public SettingsScreenView() throws SQLException, ClassNotFoundException, IOException {
+    public SettingsScreenView(String fase) throws SQLException, ClassNotFoundException, IOException {
         initComponents();
+        this.fase = fase;
         carregaCamposObrigatorios();
         carregaCamposALM();
         carregaCamposSvn();
@@ -512,14 +515,14 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         try {
             // TODO add your handling code here:
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            SettingsArquivesTiRN settings = new SettingsArquivesTiRN();
-            settings.updateSettingsRN();
+            SettingsArquivesTiRN settings = new SettingsArquivesTiRN(this.fase);
+            settings.updateSettingsRN(this.fase);
             carregaCamposSvn();
             UpdateFieldsMap(settings.getSettings().getSettings().getMandatoryFields());
             
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-            SettingsScreenView guiConfiguracoes = new SettingsScreenView();
+            SettingsScreenView guiConfiguracoes = new SettingsScreenView(this.fase);
 
             getDesktopPane().add(guiConfiguracoes);
             guiConfiguracoes.centralizaJanela();
@@ -789,7 +792,7 @@ public void centralizaJanela() {
         textUsuarioSvn.setText(svnProperties.getUser());
         textSenhaSvn.setText(svnProperties.getPass());
         textUrlSvn.setText(svnProperties.getUrl());
-        textDirSvn.setText(svnProperties.getDir());
+        textDirSvn.setText(svnProperties.getDir(this.fase));
         textAreaSistemaSvn.setText(svnProperties.getSystems().toString());
         
         

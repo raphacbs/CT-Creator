@@ -34,8 +34,8 @@ public class FlowRN {
     private FileInputStream file;
     private FlowDAO workflowDAO;
 
-    public FlowRN() throws IOException, SVNException {
-       workflowDAO = new FlowDAO();
+    public FlowRN(String fase) throws IOException, SVNException {
+       workflowDAO = new FlowDAO(fase);
     }
     
     
@@ -92,13 +92,13 @@ public class FlowRN {
     
     
     
-    public String saveFile(String fileName, FlowBean flowBean ) throws SVNException, IOException{
+    public String saveFile(String fileName, FlowBean flowBean, String fase) throws SVNException, IOException{
         
         //atualiza pasta com o fluxo
         workflowDAO.donwloadFluxos();
         
         if(fileName == null){
-            String id = createFile(flowBean);            
+            String id = createFile(flowBean, fase);            
             workflowDAO.save();
 //            workflowDAO.lockFile(id+".properties");
             return id+ProjectSettings.EXTENSION_FILE_PROPERTY;
@@ -111,8 +111,8 @@ public class FlowRN {
         }   
     }
     
-    private String  createFile(FlowBean workflowBean) throws FileNotFoundException, IOException, SVNException{
-        String id = generateId();
+    private String  createFile(FlowBean workflowBean, String fase) throws FileNotFoundException, IOException, SVNException{
+        String id = generateId(fase);
         File newFile = new File(ProjectSettings.PATH_FILE_FLUXO+"/"+id+ProjectSettings.EXTENSION_FILE_PROPERTY);
         FileOutputStream fileOut = new FileOutputStream(newFile);
         
@@ -199,8 +199,8 @@ public class FlowRN {
     }
         
     
-    private String generateId() throws SVNException, IOException{
-         List<SVNDirEntry> entries = workflowDAO.getEntriesWorkflow();
+    private String generateId(String fase) throws SVNException, IOException{
+         List<SVNDirEntry> entries = workflowDAO.getEntriesWorkflow(fase);
          Integer biggerID = 1;
           for (int i = 0; i < entries.size(); i++) {
             if (biggerID <= Integer.parseInt(entries.get(i).getName().replace(".properties", ""))) {
@@ -214,15 +214,15 @@ public class FlowRN {
         
     }
     
-    public List<SVNDirEntry> getEntries() throws SVNException, IOException{
-        return workflowDAO.getEntriesWorkflow();
+    public List<SVNDirEntry> getEntries(String fase) throws SVNException, IOException{
+        return workflowDAO.getEntriesWorkflow(fase);
     }
     
-    public String deleteFlow(List<FlowBean> flows) throws SVNException, IOException{
+    public String deleteFlow(List<FlowBean> flows, String fase) throws SVNException, IOException{
         List<String> flowNames = new ArrayList<String>();
         
              for (FlowBean flow : flows) {
-            if (verifyExistFile(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
+            if (verifyExistFile(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY,fase)) {
                 if (workflowDAO.isLock(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
                     if (unLockFile(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY)) {
                         flowNames.add(flow.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY);
@@ -243,9 +243,9 @@ public class FlowRN {
     }
     
 
-    public boolean verifyExistFile(String Filename) throws SVNException, IOException{
+    public boolean verifyExistFile(String Filename, String fase) throws SVNException, IOException{
         boolean exist = false;
-        List<SVNDirEntry> entries = getEntries();
+        List<SVNDirEntry> entries = getEntries(fase);
         
         for (SVNDirEntry entry : entries) {
             if(entry.getName().equalsIgnoreCase(Filename)){

@@ -121,9 +121,9 @@ public class SVNPropertiesVOBean {
         fileProperties.store(fileOut, null);
     }
 
-    public String getDir() {
+    public String getDir(String fase) {
         this.dir = fileProperties.getProperty("caminhoSVN");
-        return this.dir;
+        return this.dir + fase + "/";
     }
 
     public void setDir(String dir) throws IOException {

@@ -43,6 +43,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
     private final String NAME_ITEM_MASSA_DADOS = "Massa de Dados";
     private final String NAME_ITEM_RETRABALHO = "Passível de Re-Trabalho";
     private final String NAME_ITEM_REGRESSAO = "Regressão";
+    private String fase;
+
             
 
     /**
@@ -55,9 +57,9 @@ public class ReplaceScreenView extends java.awt.Dialog {
 
     }
 
-    public ReplaceScreenView(final InstanceScreenTSView guiInstanceCT, java.awt.Frame parent, boolean modal, List<TesteCaseTSBean> listTc) throws IOException, ClassNotFoundException, SQLException {
+    public ReplaceScreenView(final InstanceScreenTSView guiInstanceCT, java.awt.Frame parent, boolean modal, List<TesteCaseTSBean> listTc, String fase) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
-
+        this.fase = fase;
         this.setResizable(false);
         initComponents();
         this.listTc = listTc;
@@ -385,7 +387,7 @@ public class ReplaceScreenView extends java.awt.Dialog {
     public void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList<String> systems = testCaseRN.systemsTestCase();
 
             Collections.sort(systems, new Comparator<String>() {

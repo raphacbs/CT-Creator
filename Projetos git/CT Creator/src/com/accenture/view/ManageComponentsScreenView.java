@@ -42,15 +42,17 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     //variaveis locais
     private boolean editing = false;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        private String fase ;
+
 
     /**
      * Creates new form ManageflowsScreenView
      */
-    public ManageComponentsScreenView() throws IOException, SVNException {
+    public ManageComponentsScreenView(String fase) throws IOException, SVNException {
         initComponents();
         MyLogger.setup();
         Log.setLevel(Level.INFO);
-
+this.fase = fase;
         new SwingWorker() {
 
             @Override
@@ -115,7 +117,7 @@ public class ManageComponentsScreenView extends javax.swing.JInternalFrame {
     private void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();

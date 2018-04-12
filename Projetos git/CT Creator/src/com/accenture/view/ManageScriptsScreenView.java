@@ -45,6 +45,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private boolean editing = false;
     private static ManageScriptsScreenView instancia;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private String fase ;
 
     /**
      * Creates new form ManageflowsScreenView
@@ -53,7 +54,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
         initComponents();
         MyLogger.setup();
         Log.setLevel(Level.INFO);
-
+this.fase = fase;
         new SwingWorker() {
 
             @Override
@@ -120,7 +121,7 @@ public class ManageScriptsScreenView extends javax.swing.JInternalFrame {
     private void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();

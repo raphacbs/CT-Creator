@@ -52,7 +52,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
     
     
-    
+    private String fase ;
     private TestCaseTSRN testCaseRN;
     private List<TestCaseTSPropertiesBean> listProperties;
     private TableFilterHeader filterHeader;
@@ -60,8 +60,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
     /**
      * Creates new form GUISelecionaCT
      */
-    public ChooseTestCaseTsScreenView() throws SQLException, ClassNotFoundException {
-
+    public ChooseTestCaseTsScreenView(String fase) throws SQLException, ClassNotFoundException {
+this.fase = fase;
         initComponents();
         tabelaSelecioneCT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTitle("Copiar CT TS");
@@ -414,7 +414,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         }
         try {
 
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
 
             List<TestCaseTSPropertiesBean> listTemp = svn.search(jComboSistemasTS.getSelectedItem().toString(), textPesquisaCT.getText());
             listProperties = listTemp;
@@ -450,7 +450,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
     private void criaJanelaTelaCadCT() throws IOException, ClassNotFoundException, SQLException, SVNException {
 
-        guiJanelaRegCtTs = new RegisterScreenTSView();
+        guiJanelaRegCtTs = new RegisterScreenTSView(this.fase);
         this.getParent().add(guiJanelaRegCtTs);
 
         guiJanelaRegCtTs.centralizaJanela();
@@ -473,11 +473,11 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             }
         }
         
-        new SvnConnectionRN().exportFile(properties.getFolderTemplocal(), jComboSistemasTS.getSelectedItem().toString(), listProperties.get(indice).getDirEntry().getName(), this.hashCode());
+        new SvnConnectionRN(this.fase).exportFile(properties.getFolderTemplocal(), jComboSistemasTS.getSelectedItem().toString(), listProperties.get(indice).getDirEntry().getName(), this.hashCode(),this.fase);
         System.out.println("Teste posição: "+tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0));
         
         
-        TesteCaseTSBean tc = new TestCaseTSRN().readSheet(properties.getFolderTemplocal() + this.hashCode() +"\\"+ jComboSistemasTS.getSelectedItem().toString()+"\\"+ listProperties.get(indice).getDirEntry().getName()).get(0);
+        TesteCaseTSBean tc = new TestCaseTSRN(this.fase).readSheet(properties.getFolderTemplocal() + this.hashCode() +"\\"+ jComboSistemasTS.getSelectedItem().toString()+"\\"+ listProperties.get(indice).getDirEntry().getName()).get(0);
 //        new File(new SVNPropertiesVOBean().getFolderTemplocal() + tc.getProduct() + "\\" + listProperties.get(tabelaSelecioneCT.getSelectedRow()).getDirEntry().getName()).delete();
         testCaseRN.deleteDir(this.hashCode()+"");
         return tc;
@@ -493,7 +493,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
     public void loadComboTS() {
 
         try {
-            testCaseRN = new TestCaseTSRN();
+            testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             

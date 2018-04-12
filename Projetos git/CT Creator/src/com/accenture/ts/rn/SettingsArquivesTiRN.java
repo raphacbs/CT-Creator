@@ -19,9 +19,9 @@ public class SettingsArquivesTiRN {
     private SettingsArquivesTIDao settings;
     private SvnConnectionDao connection;
             
-    public SettingsArquivesTiRN() throws IOException, SVNException {
+    public SettingsArquivesTiRN(String fase) throws IOException, SVNException {
         settings= new SettingsArquivesTIDao();
-        connection = new SvnConnectionDao();
+        connection = new SvnConnectionDao(fase);
     }
 
     public SettingsArquivesTIDao getSettings() {
@@ -40,8 +40,8 @@ public class SettingsArquivesTiRN {
         this.connection = connection;
     }
     
-    public void updateSettingsRN () throws SVNException, IOException{
-        connection.exportFileOrFolder("remote_svn.properties","C:\\FastPlan\\temp\\", "conf");
+    public void updateSettingsRN (String fase) throws SVNException, IOException{
+        connection.exportFileOrFolder("remote_svn.properties","C:\\FastPlan\\temp\\", "conf",fase);
         settings.loadSettingsRemoteInLocal();
         settings.updateDataInLocal();
         settings.getSettings().loadFields();

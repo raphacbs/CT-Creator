@@ -39,11 +39,15 @@ import javax.swing.JDialog;
 public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     //variaveis locais
     private  boolean editing = false;
+        private String fase ;
+
     /**
      * Creates new form ManageflowsScreenView
      */
     public ManageflowsScreenView() throws IOException, SVNException {
         initComponents();
+        
+        this.fase = fase; 
         
         new SwingWorker() {
 
@@ -75,9 +79,9 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private void loadFlows(String name, String system){
         try{
             labelQtdFluxos.setText("Total de fluxos:  "+0);
-            FlowRN flowRN = new FlowRN();
+            FlowRN flowRN = new FlowRN(this.fase);
             DefaultListModel modelFlow = (DefaultListModel) listSelectTestCase.getModel();
-            List<SVNDirEntry> list = flowRN.getEntries();       
+            List<SVNDirEntry> list = flowRN.getEntries(this.fase);       
             List<FlowBean> flowBeans = new ArrayList<FlowBean>();
             refreshLabelStatus("Aguarde, atualizando lista de fluxos...");
             
@@ -127,7 +131,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
     private void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
@@ -822,13 +826,13 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         try {
             
 
-            FlowRN flowRN = new FlowRN();
+            FlowRN flowRN = new FlowRN(this.fase);
             DefaultListModel modelSelectTestCase = (DefaultListModel) listSelectTestCase.getModel();
             FlowBean fb = (FlowBean) modelSelectTestCase.getElementAt(listSelectTestCase.getSelectedIndex());
             String nameFile = fb.getId()+ProjectSettings.EXTENSION_FILE_PROPERTY;
             
             if(active){
-                if(flowRN.verifyExistFile(nameFile)){
+                if(flowRN.verifyExistFile(nameFile, this.fase)){
                 //tenta bloquear o arquivo
                 if(flowRN.lockFile(nameFile)){
                     setEnableComponents(active);
@@ -902,7 +906,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
         try {
             DefaultListModel model = (DefaultListModel) listTestCases.getModel();
             if(!fieldTextFlowName.getText().isEmpty() || model.isEmpty() ){
-            FlowRN flowRN = new FlowRN();
+            FlowRN flowRN = new FlowRN(this.fase);
             FlowBean fb = new FlowBean();
             
             DefaultListModel modelSelectionTestCase = (DefaultListModel) listSelectTestCase.getModel();
@@ -924,7 +928,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             if (fieldTextFlowId.getText() == null || fieldTextFlowId.getText().equals("")) {
                 refreshLabelStatus("Salvando novo fluxo...");
                 fb.setRegisterDate(FunctiosDates.getDateActual());
-                String id = flowRN.saveFile(null, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                String id = flowRN.saveFile(null, fb, this.fase).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
                     modelSelectionTestCase.clear();
                 }
@@ -948,7 +952,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
                 refreshLabelStatus("salvando alterações do fluxo.");
                 addLogTextArea("salvando alterações do fluxo."+fb.toString());
                 fb.setRegisterDate(((FlowBean)modelSelectionTestCase.getElementAt(listSelectTestCase.getSelectedIndex())).getRegisterDate());
-                flowRN.saveFile(fb.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY, fb).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
+                flowRN.saveFile(fb.getId() + ProjectSettings.EXTENSION_FILE_PROPERTY, fb, this.fase).replace(ProjectSettings.EXTENSION_FILE_PROPERTY, "");
                 if (listSelectTestCase.getModel().getSize() > 0) {
                     modelSelectionTestCase.clear();
                 }
@@ -1105,7 +1109,7 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
      private void openScreenAddCT(){
         try {
             refreshLabelStatus("Abrindo janela de cts...");
-            ChooseTestCaseTsToFlowScreenView view = new ChooseTestCaseTsToFlowScreenView(fieldComboboxFlowSystem.getSelectedItem().toString(), this,null,true);
+            ChooseTestCaseTsToFlowScreenView view = new ChooseTestCaseTsToFlowScreenView(fieldComboboxFlowSystem.getSelectedItem().toString(), this,null,true, this.fase);
 //            view.centralizaJanela();
 //            view.setVisible(true);
             
@@ -1165,9 +1169,9 @@ public class ManageflowsScreenView extends javax.swing.JInternalFrame {
             flows.add((FlowBean)obj);
         }    
         
-        FlowRN flowRN = new FlowRN();
+        FlowRN flowRN = new FlowRN(this.fase);
         
-        String retorno = flowRN.deleteFlow(flows);
+        String retorno = flowRN.deleteFlow(flows, this.fase);
         if(retorno!=null){
             refreshLabelStatus(retorno);
             addLogTextArea(retorno);

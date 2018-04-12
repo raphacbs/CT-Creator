@@ -66,14 +66,16 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     private int lineSelect = -1;
     private boolean headerColumnAll = false;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private String fase;
 
     /**
      * Creates new form guiCadTS
      */
-    public RegisterScreenTSView() throws IOException {
+    public RegisterScreenTSView(String fase) throws IOException {
 
         initComponents();
-        MyLogger.setup();
+        this.fase = fase;
+     //   MyLogger.setup();
         Log.setLevel(Level.INFO);
         listSteps = new ArrayList<Step>();
         final JFrame GUIPrincipal = (JFrame) getParent();
@@ -589,7 +591,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     private void bntCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCancelarMouseClicked
         if (JOptionPane.showConfirmDialog(this, "Ao sair da tela seus dados serão perdidos, deseja realmente sair?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
-                testCaseRN = new TestCaseTSRN();
+                testCaseRN = new TestCaseTSRN(this.fase);
                 testCaseRN.deleteDir(this.hashCode() + "");
 
                 dispose();
@@ -773,7 +775,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
 
     public void loadComboTS() throws IOException, SVNException {
 
-        testCaseRN = new TestCaseTSRN();
+        testCaseRN = new TestCaseTSRN(this.fase);
 //         JOptionPane.showMessageDialog(null, " testCaseRN = new TestCaseTSRN();", "Combo Sistema carregado!", JOptionPane.INFORMATION_MESSAGE);
         ArrayList systems = testCaseRN.systemsTestCase();
 //        JOptionPane.showMessageDialog(null, " ArrayList systems = testCaseRN.systemsTestCase();", "Combo Sistema carregado!", JOptionPane.INFORMATION_MESSAGE);
@@ -818,8 +820,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
 
             List<Step> listStep = new ArrayList<Step>();
 
-            testCaseRN = new TestCaseTSRN();
-            svnRN = new SvnConnectionRN();
+            testCaseRN = new TestCaseTSRN(this.fase);
+            svnRN = new SvnConnectionRN(this.fase);
             testCaseRN.getTsDao().getTestCase().setTestScriptName(jTextNameTS.getText());
             testCaseRN.getTsDao().getTestCase().setProduct(jComboSistemasTS.getSelectedItem().toString());
             testCaseRN.getTsDao().getTestCase().setComplexidade(jComboComplexidade.getSelectedItem().toString()); //add complexidade
@@ -838,9 +840,9 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             Log.info("SALVANDO CT : "+jTextNameTS.getText());
             
             
-            List<TestCaseTSPropertiesBean> listProperties = new SvnConnectionRN().search(testCaseRN.getTsDao().getTestCase().getProduct(), jTextNameTS.getText());
+            List<TestCaseTSPropertiesBean> listProperties = new SvnConnectionRN(this.fase).search(testCaseRN.getTsDao().getTestCase().getProduct(), jTextNameTS.getText());
             if (listProperties.isEmpty()) {
-                svnRN.addTestCaseSVN(testCaseRN.getTsDao().getTestCase(), "CT CADASTRADO VIA CT CREATOR", this.hashCode());
+                svnRN.addTestCaseSVN(testCaseRN.getTsDao().getTestCase(), "CT CADASTRADO VIA CT CREATOR", this.hashCode(), this.fase);
                 JOptionPane.showMessageDialog(null, "Caso de teste salvo com sucesso!", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
                 testCaseRN.deleteDir(this.hashCode() + "");
                  Log.info("CADASTRO DO CT : "+jTextNameTS.getText());
@@ -1031,7 +1033,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     private void isExistsCT(String system, String nameCT) {
         boolean exists = false;
         try {
-            svnRN = new SvnConnectionRN();
+            svnRN = new SvnConnectionRN(this.fase);
             List<TestCaseTSPropertiesBean> listCtProperties = svnRN.search(system, nameCT);
 
             for (int i = 0; i < listCtProperties.size(); i++) {

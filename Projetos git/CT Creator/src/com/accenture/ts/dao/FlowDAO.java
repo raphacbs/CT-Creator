@@ -33,9 +33,9 @@ public class FlowDAO extends FrameworkSvnManager{
     private SVNClientManager clientManager;
     
 
-    public FlowDAO() throws IOException, SVNException {
+    public FlowDAO(String fase) throws IOException, SVNException {
         properties = SVNPropertiesVOBean.getInstance();//new SVNPropertiesVOBean();
-        url = properties.getUrl()+properties.getDir()+"/fluxos";
+        url = properties.getUrl()+properties.getDir(fase)+"/fluxos";
         username = properties.getUser();
         password = properties.getPass();               
         repo =  getRepository(url, username, password);
@@ -52,8 +52,8 @@ public class FlowDAO extends FrameworkSvnManager{
         }
     }       
     
-    public List<SVNDirEntry> getEntriesWorkflow() throws SVNException, IOException{   
-        return getListEntries(SVNPropertiesVOBean.getInstance().getDir()+"fluxos", repo);       
+    public List<SVNDirEntry> getEntriesWorkflow(String fase) throws SVNException, IOException{   
+        return getListEntries(SVNPropertiesVOBean.getInstance().getDir(fase)+"fluxos", repo);       
     }
     
     public void save() throws SVNException{

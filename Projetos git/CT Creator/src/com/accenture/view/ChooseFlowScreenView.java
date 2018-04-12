@@ -35,16 +35,17 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
      */
     
     private InstanceScreenTSView instanceScreenTSView;
-    
+    private String fase;
     
     public ChooseFlowScreenView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    public ChooseFlowScreenView( InstanceScreenTSView instanceScreenTSView, java.awt.Frame parent, boolean modal) {
+    public ChooseFlowScreenView( InstanceScreenTSView instanceScreenTSView, java.awt.Frame parent, boolean modal, String fase) {
         super(parent, modal);
         initComponents();
+        this.fase = fase;
         new SwingWorker() {
 
                 @Override
@@ -300,7 +301,7 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
             modelFlow.clear();
         }
         cleanFilds();
-        loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString());
+        loadFlows(jTextFieldNome.getText(), jComboBoxSistemas.getSelectedItem().toString(),this.fase);
     }//GEN-LAST:event_bntSearchActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -326,12 +327,12 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
         }
     }
 
-    private void loadFlows(String name, String system) {
+    private void loadFlows(String name, String system, String fase) {
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            FlowRN flowRN = new FlowRN();
+            FlowRN flowRN = new FlowRN(fase);
             DefaultListModel modelFlow = (DefaultListModel) listSelectTestCase.getModel();
-            List<SVNDirEntry> list = flowRN.getEntries();
+            List<SVNDirEntry> list = flowRN.getEntries(fase);
             List<FlowBean> flowBeans = new ArrayList<FlowBean>();
 
             for (SVNDirEntry sVNDirEntry : list) {
@@ -396,7 +397,7 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
                     }
                 }
 
-                SvnConnectionRN svn = new SvnConnectionRN();
+                SvnConnectionRN svn = new SvnConnectionRN(this.fase);
 
                 for (String ct : cts) {
                     tempTestCase = svn.search(fieldComboboxFlowSystem.getSelectedItem().toString(), ct);;
@@ -424,7 +425,7 @@ public class ChooseFlowScreenView extends javax.swing.JDialog {
      private void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();

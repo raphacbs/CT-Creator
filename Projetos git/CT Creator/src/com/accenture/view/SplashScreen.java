@@ -11,6 +11,7 @@ import com.accenture.bean.StepPadrao;
 import com.accenture.control.ExtraiPlanilha;
 import com.accenture.log.MyLogger;
 import com.accenture.ts.dao.SvnConnectionDao;
+import com.accenture.util.ProjectSettings;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -55,11 +56,13 @@ public class SplashScreen extends JWindow {
     private String pass;
     private boolean erroSVN = false;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private static String fase;
 
-    public SplashScreen(int d) throws IOException {
+    public SplashScreen(int d, String fase) throws IOException {
 //        try {
+        this.fase = fase;
         duration = d;
-        MyLogger.setup();
+       // MyLogger.setup();
 //            filePropertiesLocal = new SVNPropertiesVOBean();
 //            if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
 //
@@ -188,7 +191,7 @@ public class SplashScreen extends JWindow {
                 if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
                     criaJanelaLoginSvn();
                 }
-                connection = new SvnConnectionDao();
+                connection = new SvnConnectionDao(this.fase);
             } catch (SVNException ex) {
                 Log.log(Level.SEVERE, "ERROR", ex);
                 if (ex.getMessage().contains("E170001")) {
@@ -277,7 +280,7 @@ public class SplashScreen extends JWindow {
     public static void main(String[] args) throws IOException {
 
         // Mostra uma imagem com o título da aplicação 
-        SplashScreen splash = new SplashScreen(10000);
+        SplashScreen splash = new SplashScreen(10000,ProjectSettings.FASE_TS);
         splash.showSplashAndExit();
     }
     ImportSheetScreenView guiImportaPlanilha;
@@ -328,7 +331,7 @@ public class SplashScreen extends JWindow {
 
             String path = "C:\\FastPlan\\temp\\conf\\remote_svn.properties";
             FileInputStream file;
-            connection.exportFileOrFolder("remote_svn.properties", "C:\\FastPlan\\temp\\", "conf");
+            connection.exportFileOrFolder("remote_svn.properties", "C:\\FastPlan\\temp\\", "conf", this.fase);
 
             Properties fileProperties = new Properties();
             file = new FileInputStream(path);

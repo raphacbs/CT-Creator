@@ -37,13 +37,15 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
     private ManipulaDadosSQLite banco = new ManipulaDadosSQLite();
     private EditScreenTSView guiEditCt;
     private ButtonIconBean icon;
+    private static String fase ;
 
     /**
      * Creates new form GUIFiltroCT
      */
-    public FilterTestCaseScreenTSView1(java.awt.Frame parent, boolean modal) throws SQLException, ClassNotFoundException {
+    public FilterTestCaseScreenTSView1(java.awt.Frame parent, boolean modal, String fase) throws SQLException, ClassNotFoundException {
+        
         super(parent, modal);
-
+        this.fase = fase;
         initComponents();
 
     }
@@ -334,7 +336,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             public void run() {
                 FilterTestCaseScreenTSView1 dialog = null;
                 try {
-                    dialog = new FilterTestCaseScreenTSView1(new java.awt.Frame(), true);
+                    dialog = new FilterTestCaseScreenTSView1(new java.awt.Frame(), true, fase);
                 } catch (SQLException ex) {
                     Logger.getLogger(FilterTestCaseScreenTSView1.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
@@ -378,7 +380,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
     public void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
 
             for (int i = 0; i < systems.size(); i++) {
@@ -395,7 +397,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
     private void searchCT(String id, String nameTC) {
         try {
             List<String> ct = new ArrayList<String>();
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
             String text = "";
             boolean isId = false;
 

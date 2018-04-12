@@ -401,7 +401,7 @@ public class ChooseScreenView extends javax.swing.JDialog {
         }
         try {
 
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN("");
 
             List<TestCaseTSPropertiesBean> listTemp = svn.search(system, "");
             listProperties = listTemp;
@@ -435,7 +435,7 @@ public class ChooseScreenView extends javax.swing.JDialog {
 
     private void criaJanelaTelaCadCT() throws IOException, ClassNotFoundException, SQLException, SVNException {
 
-        guiJanelaRegCtTs = new RegisterScreenTSView();
+        guiJanelaRegCtTs = new RegisterScreenTSView("");
         this.getParent().add(guiJanelaRegCtTs);
 
         guiJanelaRegCtTs.centralizaJanela();
@@ -458,10 +458,10 @@ public class ChooseScreenView extends javax.swing.JDialog {
             }
         }
 
-        new SvnConnectionRN().exportFile(properties.getFolderTemplocal(), system, listProperties.get(indice).getDirEntry().getName(), this.hashCode());
+        new SvnConnectionRN("").exportFile(properties.getFolderTemplocal(), system, listProperties.get(indice).getDirEntry().getName(), this.hashCode(),"");
         System.out.println("Teste posição: " + tabelaSelecioneComponentes.getValueAt(tabelaSelecioneComponentes.getSelectedRow(), 0));
 
-        TesteCaseTSBean tc = new TestCaseTSRN().readSheet(properties.getFolderTemplocal() + this.hashCode() + "\\" + system + "\\" + listProperties.get(indice).getDirEntry().getName()).get(0);
+        TesteCaseTSBean tc = new TestCaseTSRN("").readSheet(properties.getFolderTemplocal() + this.hashCode() + "\\" + system + "\\" + listProperties.get(indice).getDirEntry().getName()).get(0);
         testCaseRN.deleteDir(this.hashCode() + "");
         return tc;
     }

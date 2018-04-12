@@ -55,7 +55,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
 
     
     
-    
+    private String fase ;
     private TestCaseTSRN testCaseRN;
     private List<TestCaseTSPropertiesBean> listProperties;
     private TableFilterHeader filterHeader;
@@ -65,13 +65,14 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
     /**
      * Creates new form GUISelecionaCT
      */
-    public ChooseTestCaseTsToFlowScreenView(String system,ManageflowsScreenView flowView, java.awt.Frame parent, boolean modal) throws  ClassNotFoundException {
+    public ChooseTestCaseTsToFlowScreenView(String system,ManageflowsScreenView flowView, java.awt.Frame parent, boolean modal, String fase) throws  ClassNotFoundException {
         super(parent, modal);
         initComponents();
 //        tabelaSelecioneCT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTitle("Selecionar Caso de Teste para adiciona-lo no fluxo");
         this.system = system;
         this.flowView = flowView;
+        this.fase = fase;
         
         new SwingWorker() {
             @Override
@@ -401,7 +402,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
         }
         try {
 
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
 
             List<TestCaseTSPropertiesBean> listTemp = svn.search(system, "");
             listProperties = listTemp;
@@ -437,7 +438,7 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
 
     private void criaJanelaTelaCadCT() throws IOException, ClassNotFoundException, SQLException, SVNException {
 
-        guiJanelaRegCtTs = new RegisterScreenTSView();
+        guiJanelaRegCtTs = new RegisterScreenTSView(this.fase);
         this.getParent().add(guiJanelaRegCtTs);
 
         guiJanelaRegCtTs.centralizaJanela();
@@ -460,11 +461,11 @@ public class ChooseTestCaseTsToFlowScreenView extends javax.swing.JDialog {
             }
         }
         
-        new SvnConnectionRN().exportFile(properties.getFolderTemplocal(),system, listProperties.get(indice).getDirEntry().getName(), this.hashCode());
+        new SvnConnectionRN(this.fase).exportFile(properties.getFolderTemplocal(),system, listProperties.get(indice).getDirEntry().getName(), this.hashCode(),this.fase);
         System.out.println("Teste posição: "+tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0));
         
         
-        TesteCaseTSBean tc = new TestCaseTSRN().readSheet(properties.getFolderTemplocal() + this.hashCode() +"\\"+ system+"\\"+ listProperties.get(indice).getDirEntry().getName()).get(0);
+        TesteCaseTSBean tc = new TestCaseTSRN(this.fase).readSheet(properties.getFolderTemplocal() + this.hashCode() +"\\"+ system+"\\"+ listProperties.get(indice).getDirEntry().getName()).get(0);
         testCaseRN.deleteDir(this.hashCode()+"");
         return tc;
     }

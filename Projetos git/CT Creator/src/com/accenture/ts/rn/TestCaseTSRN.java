@@ -47,9 +47,9 @@ public class TestCaseTSRN {
     }
     private SvnConnectionDao svnDao;
 
-    public TestCaseTSRN() throws SVNException, IOException {
+    public TestCaseTSRN(String fase) throws SVNException, IOException {
         tsDao = new TesteCaseTSDAO();
-        svnDao = new SvnConnectionDao();
+        svnDao = new SvnConnectionDao(fase);
     }
 
     /**
@@ -59,7 +59,7 @@ public class TestCaseTSRN {
      * @param pathSheetFull : diretório completo commitMessege : Comentário que
      * será adicionado no SVN
      */
-    public void importSheetAllCts(String pathSheetFull, String commitMessege) throws IOException, SVNException {
+    public void importSheetAllCts(String pathSheetFull, String commitMessege, String fase) throws IOException, SVNException {
 
         String folderTemp = SVNPropertiesVOBean.getInstance().getFolderTemplocal();
         List<TesteCaseTSBean> listTS = tsDao.readSheet(pathSheetFull);
@@ -72,13 +72,13 @@ public class TestCaseTSRN {
             dirFull = folderTemp + systemFolder;
             String fileName = "";
             if (listTS.get(i).getTestScriptName().length() > 27) {
-                fileName = createId(listTS.get(i).getProduct()) + " - " + listTS.get(i).getTestScriptName().substring(0, 27) + ".xlsx";
+                fileName = createId(listTS.get(i).getProduct(), fase) + " - " + listTS.get(i).getTestScriptName().substring(0, 27) + ".xlsx";
             } else {
-                fileName = createId(listTS.get(i).getProduct()) + " - " + listTS.get(i).getTestScriptName() + ".xlsx";
+                fileName = createId(listTS.get(i).getProduct(), fase) + " - " + listTS.get(i).getTestScriptName() + ".xlsx";
             }
 
             if (!temp.equals(systemFolder)) {
-                new SvnConnectionDao().checkOutEmpytFolder(systemFolder);
+                new SvnConnectionDao(fase).checkOutEmpytFolder(systemFolder,fase);
                 tsDao.newTsSheet(dirFull, fileName, listTS.get(i));
                 svnDao.addFileOrFolder(systemFolder, commitMessege);
                 dirFull = "";
@@ -93,9 +93,9 @@ public class TestCaseTSRN {
 
     }
 
-    public String createId(String folder) throws SVNException, IOException {
+    public String createId(String folder, String fase) throws SVNException, IOException {
 
-        List<TestCaseTSPropertiesBean> list = new SvnConnectionDao().listAllTestCase(folder);
+        List<TestCaseTSPropertiesBean> list = new SvnConnectionDao(fase).listAllTestCase(folder);
         Integer biggerID = 1;
         for (int i = 0; i < list.size(); i++) {
             if (biggerID <= Integer.parseInt(list.get(i).getTesteCaseId())) {
@@ -127,8 +127,8 @@ public class TestCaseTSRN {
      * @param pathSheetFull : diretório completo commitMessege : Comentário que
      * será adicionado no SVN
      */
-    public String createSheet(TesteCaseTSBean testCase, String system) throws IOException, SVNException {
-        String nameSheet = createId(system) + testCase.getTestScriptName().toUpperCase();
+    public String createSheet(TesteCaseTSBean testCase, String system, String fase) throws IOException, SVNException {
+        String nameSheet = createId(system, fase) + testCase.getTestScriptName().toUpperCase();
         String pathSheet = SVNPropertiesVOBean.getInstance().getFolderTemplocal() + system;
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
@@ -137,8 +137,8 @@ public class TestCaseTSRN {
     }
 
     //CR
-    public String createSheet(TesteCaseTSBean testCase, String system, int hashCode) throws IOException, SVNException {
-        String nameSheet = createId(system) + testCase.getTestScriptName().toUpperCase();
+    public String createSheet(TesteCaseTSBean testCase, String system, int hashCode, String fase) throws IOException, SVNException {
+        String nameSheet = createId(system, fase) + testCase.getTestScriptName().toUpperCase();
         String pathSheet =SVNPropertiesVOBean.getInstance().getFolderTemplocal() + hashCode + "\\" + system;
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));

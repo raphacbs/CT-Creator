@@ -62,6 +62,10 @@ public class ProjectSettings {
     public final static String PATH_LOG_HTML = PATH_LOG + "C:/FastPlan/LOG_CT_CREATOR.html";
     
     
-    
+    //FASES
+    public final static String FASE_TS = "TS";
+    public final static String FASE_TI = "TI";
+    public final static String FASE_PKE = "PKE";
+    public final static String FASE_TRG = "TRG";
 
 }

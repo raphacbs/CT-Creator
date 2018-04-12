@@ -29,12 +29,12 @@ public class SvnConnectionBean {
     private SVNURL url;
     private SVNPropertiesVOBean svnProperties;
 
-    public SvnConnectionBean() throws SVNException, FileNotFoundException, IOException {
+    public SvnConnectionBean(String fase) throws SVNException, FileNotFoundException, IOException {
 
         this.svnProperties = SVNPropertiesVOBean.getInstance(); //new SVNPropertiesVOBean();
         DAVRepositoryFactory.setup();
         this.authManager = new BasicAuthenticationManager(this.svnProperties.getUser(), this.svnProperties.getPass());
-        this.url = SVNURL.parseURIDecoded(this.svnProperties.getUrl() + this.svnProperties.getDir());
+        this.url  = SVNURL.parseURIDecoded(this.svnProperties.getUrl() + this.svnProperties.getDir(fase));
         System.out.println("URL BEAN: " + url);
         repository = DAVRepositoryFactory.create(this.url);
     }

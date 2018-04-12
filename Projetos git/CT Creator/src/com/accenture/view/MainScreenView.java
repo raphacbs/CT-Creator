@@ -487,7 +487,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
     private void itemMenuConfiguracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuConfiguracoesActionPerformed
         try {
-            criaJanelaTelaConfiguracoes();
+            criaJanelaTelaConfiguracoes(ProjectSettings.FASE_TS);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
@@ -513,7 +513,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            criaJanelaEditScreenTSView();
+            criaJanelaEditScreenTSView(ProjectSettings.FASE_TS);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (SQLException ex) {
@@ -538,7 +538,7 @@ public class MainScreenView extends javax.swing.JFrame {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
                 aguarde.setModal(true);
-                criaJanelaRegisterScreenTSView();
+                criaJanelaRegisterScreenTSView(ProjectSettings.FASE_TS);
                 return null;
             }
 
@@ -558,7 +558,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            criaJanelaSelecionaCtTs();
+            criaJanelaSelecionaCtTs(ProjectSettings.FASE_TS);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (SQLException ex) {
@@ -598,7 +598,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         } else {
             try {
-                new TestCaseTSRN().deleteDir("");
+                new TestCaseTSRN(ProjectSettings.FASE_TS).deleteDir();
             } catch (IOException ex) {
                 System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
                 dispose();
@@ -632,7 +632,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
     private void menuItemCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCTActionPerformed
         try {
-            criaJanelaReport();
+            criaJanelaReport("");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
@@ -805,8 +805,8 @@ public class MainScreenView extends javax.swing.JFrame {
     ManageComponentsScreenView guiComponentsScreenView;
     ManageScriptsScreenView guiManageScriptsScreenView;
 
-    public void criaJanelaReport() throws IOException, ClassNotFoundException, SQLException, SVNException {
-        guiFilterReportScreenView = new FilterReportScreenView();
+    public void criaJanelaReport(String fase) throws IOException, ClassNotFoundException, SQLException, SVNException {
+        guiFilterReportScreenView = new FilterReportScreenView(fase);
         desktop.add(guiFilterReportScreenView);
         guiFilterReportScreenView.centralizaJanela();
         guiFilterReportScreenView.setVisible(true);
@@ -825,25 +825,25 @@ public class MainScreenView extends javax.swing.JFrame {
         guiInstaceTs.setVisible(true);
     }
 
-    public void criaJanelaEditScreenTSView() throws IOException, ClassNotFoundException, SQLException, SVNException {
+    public void criaJanelaEditScreenTSView(String fase) throws IOException, ClassNotFoundException, SQLException, SVNException {
 
-        guiEdit = new EditScreenTSView();
+        guiEdit = new EditScreenTSView(fase);
         desktop.add(guiEdit);
         guiEdit.centralizaJanela();
         guiEdit.setVisible(true);
     }
 
-    public void criaJanelaRegisterScreenTSView() throws IOException, ClassNotFoundException, SQLException, SVNException {
+    public void criaJanelaRegisterScreenTSView(String fase) throws IOException, ClassNotFoundException, SQLException, SVNException {
 
-        guiCadTS = new RegisterScreenTSView();
+        guiCadTS = new RegisterScreenTSView(fase);
         desktop.add(guiCadTS);
         guiCadTS.centralizaJanela();
         guiCadTS.setVisible(true);
     }
 
-    public void criaJanelaTelaConfiguracoes() throws IOException, ClassNotFoundException, SQLException {
+    public void criaJanelaTelaConfiguracoes(String fase) throws IOException, ClassNotFoundException, SQLException {
 
-        guiConfiguracoes = new SettingsScreenView();
+        guiConfiguracoes = new SettingsScreenView(fase);
         guiConfiguracoes.setDesktop(this);
         desktop.add(guiConfiguracoes);
         guiConfiguracoes.centralizaJanela();
@@ -905,9 +905,9 @@ public class MainScreenView extends javax.swing.JFrame {
 
     }
 
-    private void criaJanelaSelecionaCtTs() throws SQLException, ClassNotFoundException {
+    private void criaJanelaSelecionaCtTs(String fase) throws SQLException, ClassNotFoundException {
 
-        guiChooseTestCaseTsScreenView = new ChooseTestCaseTsScreenView();
+        guiChooseTestCaseTsScreenView = new ChooseTestCaseTsScreenView(fase);
         desktop.add(guiChooseTestCaseTsScreenView);
         guiChooseTestCaseTsScreenView.centralizaJanela();
         guiChooseTestCaseTsScreenView.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -973,7 +973,7 @@ public class MainScreenView extends javax.swing.JFrame {
     }
 
     private void criaJanelaComponentes() throws SQLException, ClassNotFoundException, IOException, SVNException {
-        guiComponentsScreenView = new ManageComponentsScreenView();
+        guiComponentsScreenView = new ManageComponentsScreenView("");
         desktop.add(guiComponentsScreenView);
         guiComponentsScreenView.centralizaJanela();
         guiComponentsScreenView.setVisible(true);

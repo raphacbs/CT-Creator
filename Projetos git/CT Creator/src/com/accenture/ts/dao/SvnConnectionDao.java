@@ -44,11 +44,11 @@ public class SvnConnectionDao {
     private SVNClientManager ourClientManager;
     private SVNURL urlFileSvn;
 
-    public SvnConnectionDao() throws SVNException, IOException {
+    public SvnConnectionDao(String fase) throws SVNException, IOException {
 
-        this.connection = new SvnConnectionBean();
+        this.connection = new SvnConnectionBean(fase);
         this.connection.toConnect();
-        this.systemFolder = connection.getSvnProperties().getDir() ;
+        this.systemFolder = connection.getSvnProperties().getDir(fase) ;
         this.ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
 
     }
@@ -61,9 +61,9 @@ public class SvnConnectionDao {
         this.urlFileSvn = urlFileSvn;
     }
 
-    public void checkOutEmpytFolder(String systemFolder) throws SVNException {
+    public void checkOutEmpytFolder(String systemFolder, String fase) throws SVNException {
 
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder;
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         File f = new File(connection.getSvnProperties().getFolderTemplocal() + systemFolder);
         SVNClientManager ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
@@ -74,9 +74,9 @@ public class SvnConnectionDao {
 
     }
     //INICIO CR 
-    public void checkOutEmpytFolder(String systemFolder, int hasdCode) throws SVNException {
+    public void checkOutEmpytFolder(String systemFolder, int hasdCode, String fase) throws SVNException {
 
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder;
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         File f = new File(connection.getSvnProperties().getFolderTemplocal() + hasdCode +"\\" + systemFolder);
         SVNClientManager ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
@@ -102,8 +102,8 @@ public class SvnConnectionDao {
 
     }
 
-    public void exportFileOrFolder(String fileNamme, String dirFile, String systemFolder) throws SVNException {
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder + "/" + fileNamme;
+    public void exportFileOrFolder(String fileNamme, String dirFile, String systemFolder, String fase) throws SVNException {
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder + "/" + fileNamme;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         File f = new File(dirFile + "\\" + systemFolder + "\\" + fileNamme);
         SVNClientManager ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
@@ -117,8 +117,8 @@ public class SvnConnectionDao {
     }
     
     //INICIO CR PERMITIR TRABALHAR COM VARIAS TELAS AO MESMO TEMPO 
-     public void exportFileOrFolder(String fileNamme, String dirFile, String systemFolder, int hashCode) throws SVNException {
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder + "/" + fileNamme;
+     public void exportFileOrFolder(String fileNamme, String dirFile, String systemFolder, int hashCode, String fase) throws SVNException {
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder + "/" + fileNamme;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         File f = new File(dirFile + "\\"+ hashCode + "\\" + systemFolder + "\\" + fileNamme);
         SVNClientManager ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
@@ -132,8 +132,8 @@ public class SvnConnectionDao {
     }
     //FIM CR
 
-    public void copyFileToLocal(String fileNamme, String dirFile, String systemFolder) throws SVNException {
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder + "/" + fileNamme;
+    public void copyFileToLocal(String fileNamme, String dirFile, String systemFolder, String fase) throws SVNException {
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder + "/" + fileNamme;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         SVNCopySource csrc = new SVNCopySource(SVNRevision.HEAD, SVNRevision.HEAD, urlSvn);
         File f = new File(dirFile + "\\" + systemFolder + "\\" + fileNamme);
@@ -188,8 +188,8 @@ public class SvnConnectionDao {
 
     }
 
-    public void addFile(String pathFile, String systemFolder) throws SVNException {
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder;
+    public void addFile(String pathFile, String systemFolder, String fase) throws SVNException {
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         SVNRepository repository = connection.getRepository();
         repository.setAuthenticationManager(connection.getRepository().getAuthenticationManager());
@@ -201,9 +201,9 @@ public class SvnConnectionDao {
         editor.addFile(pathFile, null, -1);
     }
 
-    public void deleteFileSVN(String systemFolder, String fileName, String commitMessage) throws SVNException {
+    public void deleteFileSVN(String systemFolder, String fileName, String commitMessage,String fase) throws SVNException {
         final SvnOperationFactory svnOperationFactory = new SvnOperationFactory();
-        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + systemFolder + "/" + fileName;
+        String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + systemFolder + "/" + fileName;
         SVNURL urlSvn = SVNURL.parseURIDecoded(url);
         unLonckFileOrFolder(urlSvn);
         try {
@@ -287,12 +287,12 @@ public class SvnConnectionDao {
     }
     //CR
 
-    public boolean moveToDeletados(String system, String oldName, String newName) throws SVNException {
+    public boolean moveToDeletados(String system, String oldName, String newName, String fase) throws SVNException {
         SVNClientManager ourClientManager = SVNClientManager.newInstance(null, connection.getRepository().getAuthenticationManager());
 
         final File file = new File(connection.getSvnProperties().getFolderTemplocal() + system + "\\" + oldName);
         final File renamedFile = new File(connection.getSvnProperties().getFolderTemplocal() + "deletados" + "\\" + oldName);
-        checkOutEmpytFolder("deletados");
+        checkOutEmpytFolder("deletados", fase);
         SVNMoveClient moveClient = ourClientManager.getMoveClient();
 //        updateFile(connection.getSvnProperties().getFolderTemplocal() + system + "\\" + oldName);
         moveClient.doMove(file, renamedFile);
@@ -341,6 +341,7 @@ public class SvnConnectionDao {
     public List<TestCaseTSPropertiesBean> listTestCaseByName(String systemFolder, String testCaseName) throws SVNException {
 
         String url = this.systemFolder + systemFolder;
+        url = url.replace("//", "/");
         dirEntries = connection.getRepository().getDir(url, -1, null, (Collection) null);
 
         List<TestCaseTSPropertiesBean> listTestCaseTSProperties = new ArrayList<TestCaseTSPropertiesBean>();

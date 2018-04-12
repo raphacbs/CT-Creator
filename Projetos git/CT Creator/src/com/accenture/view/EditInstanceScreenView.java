@@ -37,13 +37,14 @@ public class EditInstanceScreenView extends java.awt.Dialog {
     private ManipulaDadosSQLite banco = new ManipulaDadosSQLite();
     private EditScreenTSView guiEditCt;
     private ButtonIconBean icon;
+    private static String fase ;
 
     /**
      * Creates new form GUIFiltroCT
      */
-    public EditInstanceScreenView(java.awt.Frame parent, boolean modal) throws SQLException, ClassNotFoundException {
+    public EditInstanceScreenView(java.awt.Frame parent, boolean modal, String fase) throws SQLException, ClassNotFoundException {
         super(parent, modal);
-
+        this.fase = fase;
         initComponents();
 
     }
@@ -334,7 +335,7 @@ public class EditInstanceScreenView extends java.awt.Dialog {
             public void run() {
                 EditInstanceScreenView dialog = null;
                 try {
-                    dialog = new EditInstanceScreenView(new java.awt.Frame(), true);
+                    dialog = new EditInstanceScreenView(new java.awt.Frame(), true, fase);
                 } catch (SQLException ex) {
                     Logger.getLogger(EditInstanceScreenView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
@@ -378,7 +379,7 @@ public class EditInstanceScreenView extends java.awt.Dialog {
     public void loadComboTS() {
 
         try {
-            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
 
             for (int i = 0; i < systems.size(); i++) {
@@ -395,7 +396,7 @@ public class EditInstanceScreenView extends java.awt.Dialog {
     private void searchCT(String id, String nameTC) {
         try {
             List<String> ct = new ArrayList<String>();
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
             String text = "";
 
             if (!id.equals("") && !nameTC.equals("")) {

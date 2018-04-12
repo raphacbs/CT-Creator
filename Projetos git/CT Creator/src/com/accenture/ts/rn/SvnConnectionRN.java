@@ -28,8 +28,8 @@ public class SvnConnectionRN {
     private SvnConnectionDao connectionDao;
     private TesteCaseTSDAO tsDao;
 
-    public SvnConnectionRN() throws SVNException, IOException {
-        this.connectionDao = new SvnConnectionDao();
+    public SvnConnectionRN(String fase) throws SVNException, IOException {
+        this.connectionDao = new SvnConnectionDao(fase);
         this.tsDao = new TesteCaseTSDAO();
 
     }
@@ -44,19 +44,19 @@ public class SvnConnectionRN {
      * @throws org.tmatesoft.svn.core.SVNException
      * @throws java.io.IOException
      */
-    public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage) throws SVNException, IOException {
+    public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage,String fase) throws SVNException, IOException {
         tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal()));
-        connectionDao.checkOutEmpytFolder(testCase.getProduct());
-        new TestCaseTSRN().createSheet(testCase, testCase.getProduct());
+        connectionDao.checkOutEmpytFolder(testCase.getProduct(),fase);
+        new TestCaseTSRN(fase).createSheet(testCase, testCase.getProduct(), fase);
         connectionDao.addFileOrFolderSave(testCase.getProduct(), mensage);
 
         return true;
     }
     //INICIO CR 
-     public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage, int hashCode) throws SVNException, IOException {
+     public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage, int hashCode, String fase) throws SVNException, IOException {
 //        tsDao.deleteDir(new File(new SVNPropertiesVOBean().getFolderTemplocal()));
-        connectionDao.checkOutEmpytFolder(testCase.getProduct(), hashCode);
-        new TestCaseTSRN().createSheet(testCase, testCase.getProduct(), hashCode);
+        connectionDao.checkOutEmpytFolder(testCase.getProduct(), hashCode, fase);
+        new TestCaseTSRN(fase).createSheet(testCase, testCase.getProduct(), hashCode, fase);
         connectionDao.addFileOrFolderSave(testCase.getProduct(), mensage, hashCode);
 
         return true;
@@ -64,8 +64,8 @@ public class SvnConnectionRN {
     //FIM CR
    
 
-    public boolean editTestCaseSVN(TesteCaseTSBean testCase, String mensage) throws SVNException, IOException {
-        new TestCaseTSRN().createSheet(testCase, testCase.getProduct());
+    public boolean editTestCaseSVN(TesteCaseTSBean testCase, String mensage, String fase) throws SVNException, IOException {
+        new TestCaseTSRN(fase).createSheet(testCase, testCase.getProduct(),fase);
         connectionDao.addFileOrFolder(testCase.getProduct(), mensage);
 
         return true;
@@ -96,52 +96,52 @@ public class SvnConnectionRN {
     /*
      ** Método para modificar um arquivo já existente no repositório
      */
-    public void modify(String systemFolder, String fileName, String commitMessage) throws SVNException {
+    public void modify(String systemFolder, String fileName, String commitMessage, String fase) throws SVNException {
 
-        connectionDao.deleteFileSVN(systemFolder, fileName, commitMessage);
+        connectionDao.deleteFileSVN(systemFolder, fileName, commitMessage, fase);
         connectionDao.addFileOrFolder(systemFolder, commitMessage);
     }
 
     /*
      **Método para deletar um arquivo no repositório.
      */
-    public void delete(String systemFolder, String fileName, String commitMessage) throws SVNException {
+    public void delete(String systemFolder, String fileName, String commitMessage, String fase) throws SVNException {
 
-        connectionDao.deleteFileSVN(systemFolder, fileName, commitMessage);
+        connectionDao.deleteFileSVN(systemFolder, fileName, commitMessage, fase);
     }
 
     /*
      **Método para importar plano do repositório para máquina local
      */
-    public void importBySvnForLocalFolder(String dir, String folder, String fileName) throws SVNException {
+    public void importBySvnForLocalFolder(String dir, String folder, String fileName, String fase) throws SVNException {
 
-        connectionDao.checkOutEmpytFolder(folder);
+        connectionDao.checkOutEmpytFolder(folder, fase);
 
-        connectionDao.exportFileOrFolder(fileName, dir, folder);
+        connectionDao.exportFileOrFolder(fileName, dir, folder, fase);
 //        connectionDao.copyFileToLocal(fileName, dir, folder);
 
     }
     
-    public void importBySvnForLocalFolder(String dir, String folder, String fileName, int hashCode) throws SVNException {
+    public void importBySvnForLocalFolder(String dir, String folder, String fileName, int hashCode, String fase) throws SVNException {
 
-        connectionDao.checkOutEmpytFolder(folder, hashCode);
+        connectionDao.checkOutEmpytFolder(folder, hashCode, fase);
 
-        connectionDao.exportFileOrFolder(fileName, dir, folder, hashCode);
+        connectionDao.exportFileOrFolder(fileName, dir, folder, hashCode, fase);
 //        connectionDao.copyFileToLocal(fileName, dir, folder);
 
     }
     
-    public void checkOutEmpytFolder(String folder, int hashCode) throws SVNException {
-        connectionDao.checkOutEmpytFolder(folder, hashCode);
+    public void checkOutEmpytFolder(String folder, int hashCode, String fase) throws SVNException {
+        connectionDao.checkOutEmpytFolder(folder, hashCode, fase);
     }
     
-    public void exportFile(String dir, String folder, String fileName) throws SVNException{
-         connectionDao.exportFileOrFolder(fileName, dir, folder);
+    public void exportFile(String dir, String folder, String fileName, String fase) throws SVNException{
+         connectionDao.exportFileOrFolder(fileName, dir, folder, fase);
     }
     
     //INICIO CR PERMITIR TRABALHA COM VARIAS TELAS AO MESMO TEMPO 
-     public void exportFile(String dir, String folder, String fileName, int hashCode) throws SVNException{
-         connectionDao.exportFileOrFolder(fileName, dir, folder, hashCode);
+     public void exportFile(String dir, String folder, String fileName, int hashCode, String fase) throws SVNException{
+         connectionDao.exportFileOrFolder(fileName, dir, folder, hashCode, fase);
     }
     //FIM CR 
 
@@ -176,23 +176,23 @@ public class SvnConnectionRN {
     }
     //CR
 
-    public void updateCt(String system, String oldName, String newName, TesteCaseTSBean testCase) throws SVNException, IOException {
-        SvnConnectionBean connection = new SvnConnectionBean();
+    public void updateCt(String system, String oldName, String newName, TesteCaseTSBean testCase, String fase) throws SVNException, IOException {
+        SvnConnectionBean connection = new SvnConnectionBean(fase);
         final String tempOldName = testCase.getTestCaseProperties().getDirEntry().getName();
         testCase.getTestCaseProperties().getDirEntry().setName(tempOldName.replaceAll(oldName, newName));
         newName = testCase.getTestCaseProperties().getDirEntry().getName();
-        new TestCaseTSRN().writerSheet(system, newName, testCase);
+        new TestCaseTSRN(fase).writerSheet(system, newName, testCase);
         if (!tempOldName.equals(newName)) {
 //            connectionDao.moveToDeletados(system, tempOldName, newName);
-            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR CT VIA CT CREATOR.");
+            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR CT VIA CT CREATOR.", fase);
 //            connectionDao.checkOutEmpytFolder(system);
             new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + system + "\\" + tempOldName).delete();
             connectionDao.addFileOrFolder(system, "ADD CT MODIFICADO CT CREATOR.");
-            String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + system + "/" + newName;
+            String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + system + "/" + newName;
             SVNURL urlSvn = SVNURL.parseURIDecoded(url);
             connectionDao.lockFileOrFolder(urlSvn);
         } else {
-            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR(NOME) CT VIA CT CREATOR.");
+            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR(NOME) CT VIA CT CREATOR.", fase);
 //            new File(new SVNPropertiesVOBean().getFolderTemplocal()+system+"\\"+tempOldName).delete();
 //            connectionDao.checkOutEmpytFolder(system);
 
@@ -205,23 +205,23 @@ public class SvnConnectionRN {
 //          connectionDao.addFile(dirFile, system);
     }
     //CR PERMITIR VARIAS TELAS
-    public void updateCt(String system, String oldName, String newName, TesteCaseTSBean testCase, int hashCode) throws SVNException, IOException {
-        SvnConnectionBean connection = new SvnConnectionBean();
+    public void updateCt(String system, String oldName, String newName, TesteCaseTSBean testCase, int hashCode, String fase) throws SVNException, IOException {
+        SvnConnectionBean connection = new SvnConnectionBean(fase);
         final String tempOldName = testCase.getTestCaseProperties().getDirEntry().getName();
         testCase.getTestCaseProperties().getDirEntry().setName(tempOldName.replaceAll(oldName, newName));
         newName = testCase.getTestCaseProperties().getDirEntry().getName();
-        new TestCaseTSRN().writerSheet(system, newName, testCase,hashCode);
+        new TestCaseTSRN(fase).writerSheet(system, newName, testCase,hashCode);
         if (!tempOldName.equals(newName)) {
 //            connectionDao.moveToDeletados(system, tempOldName, newName);
-            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR(nome) CT VIA CT CREATOR.");
+            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR(nome) CT VIA CT CREATOR.", fase);
 //            connectionDao.checkOutEmpytFolder(system);
             new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() +hashCode+ "\\"+ system + "\\" + tempOldName).delete();
             connectionDao.addFileOrFolder(system, "ADD CT MODIFICADO CT CREATOR.", hashCode);
-            String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir() + system + "/" + newName;
+            String url = connection.getSvnProperties().getUrl() + connection.getSvnProperties().getDir(fase) + system + "/" + newName;
             SVNURL urlSvn = SVNURL.parseURIDecoded(url);
             connectionDao.lockFileOrFolder(urlSvn);
         } else {
-            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR CT VIA CT CREATOR.");
+            delete(system, tempOldName, "EXCLUINDO PARA MODIFICAR CT VIA CT CREATOR.", fase);
 //            new File(new SVNPropertiesVOBean().getFolderTemplocal()+system+"\\"+tempOldName).delete();
 //            connectionDao.checkOutEmpytFolder(system);
 

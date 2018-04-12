@@ -85,12 +85,13 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private Color c;
     private org.apache.log4j.Logger logger;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
+    private String fase ;
     /**
      * Creates new form guiCadTS
      */
-    public EditScreenTSView() {
+    public EditScreenTSView(String fase) {
 
+        this.fase = fase;
         try {
             initComponents();
              MyLogger.setup();
@@ -105,7 +106,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
             listTestCase = new ArrayList<TesteCaseTSBean>();
             ctBaixados = new ArrayList<String>();
-            svnRN = new SvnConnectionRN();
+            svnRN = new SvnConnectionRN(this.fase);
             bntSalvarCT.setVisible(false);
 
             blockedFieldBnt(false);
@@ -704,7 +705,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         try {
             if (lineSelectTableCt != -1) {
 
-                svnRN = new SvnConnectionRN();
+                svnRN = new SvnConnectionRN(this.fase);
                 svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
 
             }
@@ -811,7 +812,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             try {
                 if (lineSelectTableCt != -1) {
 
-                    svnRN = new SvnConnectionRN();
+                    svnRN = new SvnConnectionRN(this.fase);
                     svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
 
                 }
@@ -1007,7 +1008,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     public void loadComboTS() {
 
         try {
-            testCaseRN = new TestCaseTSRN();
+            testCaseRN = new TestCaseTSRN(this.fase);
             ArrayList systems = testCaseRN.systemsTestCase();
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
@@ -1057,8 +1058,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "//" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "//" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName()).delete();
             }
 
-            testCaseRN = new TestCaseTSRN();
-            svnRN = new SvnConnectionRN();
+            testCaseRN = new TestCaseTSRN(this.fase);
+            svnRN = new SvnConnectionRN(this.fase);
             listTestCase.get(0).setTestScriptName(jTextNameTS.getText());
             listTestCase.get(0).setProduct(jComboSistemasTS.getSelectedItem().toString());
             listTestCase.get(0).setComplexidade(jComboComplexidade.getSelectedItem().toString());
@@ -1077,9 +1078,9 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             listTestCase.get(0).setAutomatizado(jCheckBoxAutomatizado.isSelected());
 
-            List<TestCaseTSPropertiesBean> listProperties = new SvnConnectionRN().search(testCaseRN.getTsDao().getTestCase().getProduct(), jTextNameTS.getText());
+            List<TestCaseTSPropertiesBean> listProperties = new SvnConnectionRN(this.fase).search(testCaseRN.getTsDao().getTestCase().getProduct(), jTextNameTS.getText());
             if (listProperties.isEmpty()) {
-                svnRN.updateCt(jComboSistemasTS.getSelectedItem().toString(), oldName.toUpperCase(), listTestCase.get(0).getTestScriptName().toUpperCase(), listTestCase.get(0), this.hashCode());
+                svnRN.updateCt(jComboSistemasTS.getSelectedItem().toString(), oldName.toUpperCase(), listTestCase.get(0).getTestScriptName().toUpperCase(), listTestCase.get(0), this.hashCode(),this.fase);
                 updateProperties(listTestCase.get(0).getProduct());
 
 //                svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
@@ -1119,10 +1120,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 Log.info("Pasta do sistema deletada");
                 Log.info("Início do método: svnRN.checkOutEmpytFolder(jComboSistemasTS.getSelectedItem().toString(), this.hashCode()) ");
                 Log.info("Início do método: svnRN.checkOutEmpytFolder(jComboSistemasTS.getSelectedItem().toString(), this.hashCode()");
-                svnRN.checkOutEmpytFolder(jComboSistemasTS.getSelectedItem().toString(), this.hashCode());
+                svnRN.checkOutEmpytFolder(jComboSistemasTS.getSelectedItem().toString(), this.hashCode(),this.fase);
                 Log.info("Fim do método: svnRN.checkOutEmpytFolder(jComboSistemasTS.getSelectedItem().toString(), this.hashCode()) ");
                 Log.info("início do método: new TestCaseTSRN().writerSheet(jComboSistemasTS.getSelectedItem().toString(), listTestCase.get(0).getTestCaseProperties().getDirEntry().getName(), listTestCase.get(0),this.hashCode());");
-                new TestCaseTSRN().writerSheet(jComboSistemasTS.getSelectedItem().toString(), listTestCase.get(0).getTestCaseProperties().getDirEntry().getName(), listTestCase.get(0), this.hashCode());
+                new TestCaseTSRN(this.fase).writerSheet(jComboSistemasTS.getSelectedItem().toString(), listTestCase.get(0).getTestCaseProperties().getDirEntry().getName(), listTestCase.get(0), this.hashCode());
                 Log.info("Parâmetros: ");
                 Log.info("SISTEMA: " + jComboSistemasTS.getSelectedItem().toString());
                 Log.info("NOME CT: " + listTestCase.get(0).getTestScriptName().toUpperCase());
@@ -1317,7 +1318,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private void isExistsCT(String system, String nameCT) {
         boolean exists = false;
         try {
-            svnRN = new SvnConnectionRN();
+            svnRN = new SvnConnectionRN(this.fase);
             List<TestCaseTSPropertiesBean> listCtProperties = svnRN.search(system, nameCT);
 
             for (int i = 0; i < listCtProperties.size(); i++) {
@@ -1537,29 +1538,29 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 //Verifica se é o primeiro click na tabela e se o ct selecionado está bloqueado
                 if (ctbefore.equals("")) {
 
-                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(),this.fase);
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
                     blockedFieldBnt(true);
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
                     ctBaixados.add(ctbefore);
                 } else if (isDonwloadCt(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName())) {
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
                     blockedFieldBnt(true);
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
                     ctBaixados.add(ctbefore);
                 } else {
-                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.fase);
 //                    svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getURL());
 //                    listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelect).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getName());
                     if (svnRN.isLocked(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem())) {
                         SVNLock lock = svnRN.getLock(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem());
 
                         if (lock.getOwner().equals(SVNPropertiesVOBean.getInstance().getUser())) {
-                            listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                            listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                             loadFields(listTestCase.get(0));
                             blockedFieldBnt(true);
                             ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -1571,7 +1572,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
                     } else {
                         svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                        listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                        listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                         loadFields(listTestCase.get(0));
                         blockedFieldBnt(true);
                         ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -1633,7 +1634,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 //                    downloadCtSvn();
 //                } else {
                 logger.info("Início do método:svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode())");
-                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode());
+                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode(), this.fase);
                 logger.info("Parâmetros: \nPasta temp: " + SVNPropertiesVOBean.getInstance().getFolderTemplocal() + "\nSistema: " + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\nCT: " + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                 logger.info("Fim do método:svnRN.importBySvnForLocalFolder(new SVNPropertiesVOBean().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode())");
                 downloadCtSvn();
@@ -1740,7 +1741,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
                 if (lock.getOwner().equals(SVNPropertiesVOBean.getInstance().getUser())) {
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
                     blockedFieldBnt(true);
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -1751,7 +1752,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                     bntCancelar.setEnabled(true);
                     bntFiltrar.setEnabled(true);
 
-                    listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                    listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName()).delete();
                     loadFields(listTestCase.get(0));
                     JOptionPane.showMessageDialog(null, "O CT selecionado está bloqueado pelo usuário " + lock.getOwner() + ", não é possível edita-lo.", "SVN", JOptionPane.WARNING_MESSAGE);
@@ -1761,7 +1762,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             } else {
 
                 svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-                listTestCase = new TestCaseTSRN().readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
+                listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                 loadFields(listTestCase.get(0));
                 blockedFieldBnt(true);
                 ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
@@ -1827,7 +1828,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     private void updateProperties(String system) {
         try {
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
             int selectionActual = tabelaCt.getSelectedRow();
             logger.info("Método updateProperties : verificando se o nome foi alterado");
             if (!oldName.equalsIgnoreCase(jTextNameTS.getText())) {
@@ -1861,7 +1862,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     private void updatePropertiesDelete(String system) {
         try {
-            SvnConnectionRN svn = new SvnConnectionRN();
+            SvnConnectionRN svn = new SvnConnectionRN(this.fase);
 
             List<TestCaseTSPropertiesBean> listTemp = svn.search(system, getFiltro());
             int selectionActual = lineSelectTableCt;
@@ -1894,7 +1895,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private void deleteCT(String folder, String fileName, String msn) {
 
         try {
-            svnRN.delete(folder, fileName, msn);
+            svnRN.delete(folder, fileName, msn, this.fase);
             updatePropertiesDelete(folder);
             cleanFields();
         } catch (SVNException ex) {
