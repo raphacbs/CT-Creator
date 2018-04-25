@@ -16,7 +16,7 @@
     <Property name="closable" type="boolean" value="true"/>
     <Property name="iconifiable" type="boolean" value="true"/>
     <Property name="maximizable" type="boolean" value="true"/>
-    <Property name="title" type="java.lang.String" value="Edi&#xe7;&#xe3;o de CT TS"/>
+    <Property name="title" type="java.lang.String" value="Edi&#xe7;&#xe3;o de CT"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1150, 33]"/>
     </Property>

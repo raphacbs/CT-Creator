@@ -140,6 +140,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         try {
             this.fase =fase;
             initComponents();
+            this.setTitle("Edição de Plano de Teste "+fase);
 //            MyLogger.setup();
             Log.setLevel(Level.INFO);
             logger = org.apache.log4j.Logger.getLogger(TesteCaseTSDAO.class);
@@ -344,7 +345,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
-        setTitle("Edição de Plano de Teste TS");
+        setTitle("Edição de Plano de Teste");
         setMinimumSize(new java.awt.Dimension(1150, 33));
         setPreferredSize(new java.awt.Dimension(1200, 650));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -933,8 +934,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(btnPublicarPlano)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCheckout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnCheckout)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

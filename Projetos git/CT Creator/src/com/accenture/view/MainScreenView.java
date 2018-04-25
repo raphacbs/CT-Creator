@@ -11,6 +11,8 @@ import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.ProjectSettings;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -18,6 +20,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +35,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
@@ -41,6 +46,7 @@ class Background extends JPanel {
     private BufferedImage img = null;
     private final int x = 0;
     private final int y = 0;
+   
 
     public Background(String urlImg) throws IOException {
         this.img = ImageIO.read(new File(urlImg));
@@ -62,6 +68,7 @@ class Background extends JPanel {
 public class MainScreenView extends javax.swing.JFrame {
 
     private JDesktopPane desktop; // = new JDesktopPane();; 
+    private JLabel label;
 
     /**
      * Creates new form Principal
@@ -75,9 +82,9 @@ public class MainScreenView extends javax.swing.JFrame {
             try {
                 users = Arrays.asList(SVNPropertiesVOBean.getInstance().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
             } catch (NullPointerException e) {
-                              
+
                 users = Arrays.asList(SVNPropertiesVOBean.getInstance().getUsersAuto().split(ProjectSettings.DELIDELIMITER_COMMA));
-                
+
             }
             String userCurrent = SVNPropertiesVOBean.getInstance().getUser();
 
@@ -98,13 +105,33 @@ public class MainScreenView extends javax.swing.JFrame {
 
         //Background background = new Background("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png");
         //background.paint(g);
-        desktop = new JDesktopPane() {
-            Image im = (new ImageIcon("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png")).getImage();
+//        desktop = new JDesktopPane() {
+//            Image im = (new ImageIcon("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png")).getImage();
+//
+//            public void paintComponent(Graphics g) {
+//                g.drawImage(im, 0, 0, this);
+//            }
+//        };
+        try {
+            BufferedImage img = ImageIO.read(new File("C:\\FastPlan\\res\\bnt\\ic_BACKGROUND.png"));
 
-            public void paintComponent(Graphics g) {
-                g.drawImage(im, 0, 0, this);
-            }
-        };
+            // A specialized layered pane to be used with JInternalFrames
+            desktop = new JDesktopPane() {
+                @Override
+                protected void paintComponent(Graphics grphcs) {
+                    super.paintComponent(grphcs);
+                    grphcs.drawImage(img, 0, 0, null);
+                }
+
+                @Override
+                public Dimension getPreferredSize() {
+                    return new Dimension(img.getWidth(), img.getHeight());
+                }
+            };
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         setDesktop(desktop);
         desktop.setBackground(Color.LIGHT_GRAY);
         setContentPane(desktop);
@@ -130,18 +157,23 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         itemMenuNovoCT = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         itemMenuCTExistente = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         itemMenuPesquisaCT = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         itemMenuConsultaCTAlm = new javax.swing.JMenuItem();
         menuImportarExportar = new javax.swing.JMenu();
         itemMenuImportaStepPadrao = new javax.swing.JMenuItem();
         itemMenuImportaCT = new javax.swing.JMenuItem();
         itemMenuExportarPlanilhaTI = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItemFuncionalidade = new javax.swing.JMenuItem();
         menuMatrizRastreabilidade = new javax.swing.JMenu();
@@ -201,6 +233,14 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        jMenuItem8.setText("PKE");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem8);
+
         menuCT.add(jMenu1);
 
         jMenu2.setText("Novo a partir de existente");
@@ -222,6 +262,22 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem3);
 
+        jMenuItem10.setText("PKE");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem10);
+
+        jMenuItem11.setText("TS -> PKE");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem11);
+
         menuCT.add(jMenu2);
 
         jMenu3.setText("Pesquisar/Editar");
@@ -242,6 +298,14 @@ public class MainScreenView extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem4);
+
+        jMenuItem9.setText("PKE");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
 
         menuCT.add(jMenu3);
 
@@ -292,6 +356,14 @@ public class MainScreenView extends javax.swing.JFrame {
             }
         });
         menuImportarExportar.add(jMenuItem5);
+
+        jMenuItem12.setText("Instânciar CTs e exportar planilha PKE");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        menuImportarExportar.add(jMenuItem12);
 
         jMenuBar1.add(menuImportarExportar);
 
@@ -558,7 +630,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            criaJanelaSelecionaCtTs(ProjectSettings.FASE_TS);
+            criaJanelaSelecionaCtTs(ProjectSettings.FASE_TS, ProjectSettings.FASE_TS);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         } catch (SQLException ex) {
@@ -708,6 +780,89 @@ public class MainScreenView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        final JFrame GUIPrincipal = this;
+        new SwingWorker() {
+            JDialog aguarde = new WaitScreenView(GUIPrincipal, true);
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                aguarde.setLocationRelativeTo(GUIPrincipal);
+                aguarde.setVisible(true);
+                aguarde.setModal(true);
+                criaJanelaRegisterScreenTSView(ProjectSettings.FASE_PKE);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+//                aguarde.setModal(false);
+                aguarde.dispose();
+            }
+
+        }.execute();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            criaJanelaEditScreenTSView(ProjectSettings.FASE_PKE);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            criaJanelaSelecionaCtTs(ProjectSettings.FASE_PKE, ProjectSettings.FASE_PKE);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            criaJanelaSelecionaCtTs(ProjectSettings.FASE_TS, ProjectSettings.FASE_PKE);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            criaJanelaExportarTs(ProjectSettings.FASE_PKE);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SVNException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -769,12 +924,17 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenuItem jMenuItemFuncionalidade;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuCT;
@@ -819,7 +979,7 @@ public class MainScreenView extends javax.swing.JFrame {
 //        guiFilterReportDeParaScreenView.setVisible(true);
 //    }
     public void criaJanelaExportarTs(String fase) throws IOException, ClassNotFoundException, SQLException, SVNException {
-        guiInstaceTs =  InstanceScreenTSView.getInstance(fase);
+        guiInstaceTs = InstanceScreenTSView.getInstance(fase);
         desktop.add(guiInstaceTs);
         guiInstaceTs.centralizaJanela();
         guiInstaceTs.setVisible(true);
@@ -905,9 +1065,9 @@ public class MainScreenView extends javax.swing.JFrame {
 
     }
 
-    private void criaJanelaSelecionaCtTs(String fase) throws SQLException, ClassNotFoundException {
+    private void criaJanelaSelecionaCtTs(String faseDe, String fasePara) throws SQLException, ClassNotFoundException {
 
-        guiChooseTestCaseTsScreenView = new ChooseTestCaseTsScreenView(fase);
+        guiChooseTestCaseTsScreenView = new ChooseTestCaseTsScreenView(faseDe, fasePara);
         desktop.add(guiChooseTestCaseTsScreenView);
         guiChooseTestCaseTsScreenView.centralizaJanela();
         guiChooseTestCaseTsScreenView.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

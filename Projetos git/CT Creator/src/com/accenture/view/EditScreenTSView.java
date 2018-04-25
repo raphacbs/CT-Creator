@@ -99,6 +99,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             Properties props = new Properties();
             props.load(new FileInputStream("log4j.properties"));
             PropertyConfigurator.configure(props);
+            setTitle("Edição de CT "+fase);
 
             logger = org.apache.log4j.Logger.getLogger(EditScreenTSView.class);
 
@@ -201,7 +202,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
-        setTitle("Edição de CT TS");
+        setTitle("Edição de CT");
         setMinimumSize(new java.awt.Dimension(1150, 33));
         setPreferredSize(new java.awt.Dimension(1150, 650));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -730,7 +731,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     private void bntSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalvarActionPerformed
 
-        if (jTextNameTS.getText().length() >= 5 && jTextNameTS.getText().length() <= 70) {
+        if (jTextNameTS.getText().length() >= 5 && jTextNameTS.getText().length() <= 80) {
             final Frame GUIPrincipal = new MainScreenView();
             final JInternalFrame ji = this;
 
@@ -756,8 +757,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             }.execute();
         } else {
-            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem de 5 à 55 caracteres."
-                    + "\nSolução: Altere o nome caso de teste de 5 à 55 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem de 5 à 80 caracteres."
+                    + "\nSolução: Altere o nome caso de teste de 5 à 80 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_bntSalvarActionPerformed
 
