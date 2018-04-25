@@ -3589,7 +3589,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             progress(true);
             if (validFiledsExport()) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                planTemp.getTestPlan().setName("[PLAN-" + jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "] - " + testPlanName.getText());
+                planTemp.getTestPlan().setName("[PLAN-" +testPlanSystem.getText()+"-"+ jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "] - " + testPlanName.getText());
                 planTemp.getTestPlan().setSti(testPlanSTI.getText());
                 planTemp.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
                 planTemp.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
