@@ -96,6 +96,7 @@ import java.util.Map;
 
 import org.tmatesoft.svn.core.SVNLock;
 
+
 /**
  *
  * @author raphael.da.silva
@@ -132,15 +133,16 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     public static String NAME_PLAN_SVN = "";
     public static InstanceScreenTSView screen;
     private String fase;
+
     /**
      * Creates new form guiCadTS
      */
     private InstanceScreenTSView(String fase) {
 
         try {
-            this.fase =fase;
+            this.fase = fase;
             initComponents();
-            this.setTitle("Edição de Plano de Teste "+fase);
+            this.setTitle("Edição de Plano de Teste " + fase);
 //            MyLogger.setup();
             Log.setLevel(Level.INFO);
             logger = org.apache.log4j.Logger.getLogger(TesteCaseTSDAO.class);
@@ -223,16 +225,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //        });
     }
 
-    public static InstanceScreenTSView getInstance(String fase){
-        if(screen == null){
+    public static InstanceScreenTSView getInstance(String fase) {
+        if (screen == null) {
             screen = new InstanceScreenTSView(fase);
         }
-        
+
         return screen;
     }
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -303,6 +303,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jMenu1 = new javax.swing.JMenu();
         menuItemAbrirPlano = new javax.swing.JMenuItem();
         menuItemSalvarPlano = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menuItemExportarPlano = new javax.swing.JMenuItem();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -807,6 +808,15 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
         jMenu1.add(menuItemSalvarPlano);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Importar Arquivo .plan");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
         menuItemExportarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemExportarPlano.setText("Exportar Plano");
         menuItemExportarPlano.addActionListener(new java.awt.event.ActionListener() {
@@ -848,7 +858,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -940,7 +950,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelQtdCTs)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jScrollPane3)))
@@ -1509,39 +1519,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
     private void menuItemAbrirPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirPlanoActionPerformed
         try {
-            if (savePlan || isFirst) {
-                ProgressAguarde.setIndeterminate(true);
-                filterHeader.resetFilter();
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                tabelaInstancia.editingStopped(null);
-                loadFilePlan();
-                bntDeleteCt.setEnabled(true);
-                bntOrdenar.setEnabled(true);
-                bntDuplicate.setEnabled(true);
-                bntMudaStepDescer.setEnabled(true);
-                bntMudaStepSubir.setEnabled(true);
-                bntEditParameter.setEnabled(true);
-                bntReplace.setEnabled(true);
-                isFirst = false;
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                savePlan = true;
-            } else if (JOptionPane.showConfirmDialog(this, "Você ainda não salvou o plano atual, suas alterações serão perdidas, deseja continuar?", "Mensagem ao usuário", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                filterHeader.resetFilter();
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                tabelaInstancia.editingStopped(null);
-                loadFilePlan();
-                bntDeleteCt.setEnabled(true);
-                bntOrdenar.setEnabled(true);
-                bntDuplicate.setEnabled(true);
-                bntMudaStepDescer.setEnabled(true);
-                bntMudaStepSubir.setEnabled(true);
-                bntEditParameter.setEnabled(true);
-                bntReplace.setEnabled(true);
-
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                savePlan = true;
-                ProgressAguarde.setIndeterminate(false);
-            }
+            progress(true);
+            ChoosePlanView dialog = new ChoosePlanView(null,true);
+            dialog.setTitle("Abrir plano");
+            dialog.setVisible(true);
+            progress(false);
+               
+              
+            
         } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1748,11 +1733,94 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            view.centralizaJanela();            
             view.setVisible(true);
         } catch (SQLException ex) {
-           JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCheckoutActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+//       try {
+//            
+//                ProgressAguarde.setIndeterminate(true);
+//                filterHeader.resetFilter();
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                tabelaInstancia.editingStopped(null);
+//                
+//                //carrega arquivo
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//                TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
+//                testCaseRN.importPlanSheet(getFileSheetPlan().getPath());
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                
+//                
+//                bntDeleteCt.setEnabled(true);
+//                bntOrdenar.setEnabled(true);
+//                bntDuplicate.setEnabled(true);
+//                bntMudaStepDescer.setEnabled(true);
+//                bntMudaStepSubir.setEnabled(true);
+//                bntEditParameter.setEnabled(true);
+//                bntReplace.setEnabled(true);
+//                isFirst = false;
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//                savePlan = true;
+//            
+//        } catch (Exception ex) {
+//            Log.log(Level.SEVERE, "ERROR", ex);
+//            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            addExceptionTextArea(ex);
+//            logger.error("Erro ao abrir o arquivo: ", ex);
+//            ex.printStackTrace();
+//            ProgressAguarde.setIndeterminate(false);
+//
+//        }
+
+        try {
+            if (savePlan || isFirst) {
+                ProgressAguarde.setIndeterminate(true);
+                filterHeader.resetFilter();
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                tabelaInstancia.editingStopped(null);
+                loadFilePlan();
+                bntDeleteCt.setEnabled(true);
+                bntOrdenar.setEnabled(true);
+                bntDuplicate.setEnabled(true);
+                bntMudaStepDescer.setEnabled(true);
+                bntMudaStepSubir.setEnabled(true);
+                bntEditParameter.setEnabled(true);
+                bntReplace.setEnabled(true);
+                isFirst = false;
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                savePlan = true;
+            } else if (JOptionPane.showConfirmDialog(this, "Você ainda não salvou o plano atual, suas alterações serão perdidas, deseja continuar?", "Mensagem ao usuário", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                filterHeader.resetFilter();
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                tabelaInstancia.editingStopped(null);
+                loadFilePlan();
+                bntDeleteCt.setEnabled(true);
+                bntOrdenar.setEnabled(true);
+                bntDuplicate.setEnabled(true);
+                bntMudaStepDescer.setEnabled(true);
+                bntMudaStepSubir.setEnabled(true);
+                bntEditParameter.setEnabled(true);
+                bntReplace.setEnabled(true);
+
+                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                savePlan = true;
+                ProgressAguarde.setIndeterminate(false);
+            }
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            addExceptionTextArea(ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
+            ex.printStackTrace();
+            ProgressAguarde.setIndeterminate(false);
+
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
@@ -1828,6 +1896,39 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         chooserLayout.getLayoutComponent(BorderLayout.NORTH).setVisible(false);
         //aqui está o X da questão ;D
         fileChooser.getComponent(0).setVisible(false);
+
+        File diretorio = null;
+
+        fileChooser.setFileFilter(extensao);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(false);
+
+        int i = fileChooser.showOpenDialog(this);
+
+        if (i == 1) {
+            JOptionPane.showMessageDialog(null, "Nenhum arquivo foi selecionado! ", "Mensagem ao usuário", JOptionPane.WARNING_MESSAGE);
+            return null;
+        } else {
+
+            diretorio = fileChooser.getSelectedFile();
+            return diretorio;
+
+        }
+
+    }
+
+    public File getFileSheetPlan() {
+        FileFilter extensao = new FileNameExtensionFilter(" (*.xlsm)", "xlsm");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setDialogTitle("Selecione a planilha:");
+        fileChooser.setCurrentDirectory(new File("C:"));
+        fileChooser.setApproveButtonText("Open");
+
+        BorderLayout chooserLayout = (BorderLayout) fileChooser.getLayout();
+        chooserLayout.getLayoutComponent(BorderLayout.NORTH).setVisible(true);
+        //aqui está o X da questão ;D
+        //fileChooser.getComponent(0).setVisible(false);
 
         File diretorio = null;
 
@@ -2194,7 +2295,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 //Verifica se é o primeiro click na tabela e se o ct selecionado está bloqueado
                 if (ctbefore.equals("")) {
 
-                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(),this.fase);
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.fase);
                     svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
                     listTestCase = new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
                     loadFields(listTestCase.get(0));
@@ -2209,7 +2310,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                     ctbefore = modelCT.getValueAt(tabelaCt.getSelectedRow(), 1).toString();
                     ctBaixados.add(ctbefore);
                 } else {
-                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(),this.fase);
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.fase);
 //                    svnRN.lockFile(true, listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getURL());
 //                    listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelect).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelect).getDirEntry().getName());
                     if (svnRN.isLocked(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem())) {
@@ -2283,7 +2384,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 if (isDonwloadCt(listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName())) {
                     downloadCtSvn();
                 } else {
-                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode(),this.fase);
+                    svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), this.hashCode(), this.fase);
                     downloadCtSvn();
                 }
 
@@ -2326,7 +2427,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             List<TesteCaseTSBean> listTemp = new ArrayList<TesteCaseTSBean>();
 
             for (int i = 0; i < selecionados.length; i++) {
-                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem(), listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName(), this.hashCode(),this.fase);
+                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem(), listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName(), this.hashCode(), this.fase);
                 listTemp.add(new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(selecionados[i]).getDirEntry().getName()).get(0));
 
             }
@@ -2377,7 +2478,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             tabelaCt.getSelectionModel().setSelectionInterval(0, (listTestCaseTSPropertiesBean.size() - 1));
 
             for (int i = 0; i < listTestCaseTSPropertiesBean.size(); i++) {
-                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), system, listTestCaseTSPropertiesBean.get(i).getDirEntry().getName(), this.hashCode(),this.fase);
+                svnRN.importBySvnForLocalFolder(SVNPropertiesVOBean.getInstance().getFolderTemplocal(), system, listTestCaseTSPropertiesBean.get(i).getDirEntry().getName(), this.hashCode(), this.fase);
                 listTemp.add(new TestCaseTSRN(this.fase).readSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + listTestCaseTSPropertiesBean.get(i).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(i).getDirEntry().getName()).get(0));
 
             }
@@ -2485,7 +2586,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     public void callFilter() {
         FilterTestCaseTSForPlanScreenView dialogFiltro = null;
         try {
-            dialogFiltro = new FilterTestCaseTSForPlanScreenView(this, null, true,this.fase);
+            dialogFiltro = new FilterTestCaseTSForPlanScreenView(this, null, true, this.fase);
         } catch (IOException ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -2527,7 +2628,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
 
         try {
-            dialogReplace = new ReplaceScreenView(this, null, true, listTc,this.fase);
+            dialogReplace = new ReplaceScreenView(this, null, true, listTc, this.fase);
         } catch (IOException ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -2928,6 +3029,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 String nomeArquivo = "AUTOSAVE";
                 FileOutputStream saveFile = new FileOutputStream("C:\\FastPlan\\saves\\" + nomeArquivo + ".plan");
                 ObjectOutputStream stream = new ObjectOutputStream(saveFile);
+
+                try {
+                    FileWriter fw = new FileWriter("C:\\FastPlan\\saves\\" + nomeArquivo + ".plan");
+                } catch (IOException e) {
+                    System.out.println("File is open");
+                }
 
                 // salva o objeto
                 stream.writeObject(this.testPlan);
@@ -3589,7 +3696,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             progress(true);
             if (validFiledsExport()) {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                planTemp.getTestPlan().setName("[PLAN-" +testPlanSystem.getText()+"-"+ jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "] - " + testPlanName.getText());
+                planTemp.getTestPlan().setName("[PLAN-" + testPlanSystem.getText() + "-" + jComboBoxTestFase.getSelectedItem().toString() + "-" + testPlanSTI.getText() + "] - " + testPlanName.getText());
                 planTemp.getTestPlan().setSti(testPlanSTI.getText());
                 planTemp.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
                 planTemp.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
@@ -3839,8 +3946,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
     public void recuperaPlano(String name, String system) {
         try {
-            
-            if(!name.contains(".plan")){
+
+            if (!name.contains(".plan")) {
                 name = name + ".plan";
             }
 
@@ -3856,8 +3963,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             Object objeto = stream.readObject();
             temp = (TestPlanTSDao) objeto;
             stream.close();
-            
-           
+
             this.testPlan = temp;
 
             testPlanName.setText(this.testPlan.getTestPlan().getName());
@@ -3938,6 +4044,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private com.toedter.calendar.JMonthChooser jMonthChooser1;
     private javax.swing.JPopupMenu jPopupTabelaStep;
     private javax.swing.JScrollPane jScrollPane1;

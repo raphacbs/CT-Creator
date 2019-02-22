@@ -671,8 +671,31 @@ public class TesteCaseTSDAO {
         return sucess;
     }
     
-     public List<TesteCaseTSBean> readNewSheetTS(String pathSheetFull){
-        return null;
+     public TestPlanTSBean readPlanSheet(String pathSheetFull) throws FileNotFoundException, IOException{
+         TestPlanTSBean plan = new TestPlanTSBean();
+         
+        FileInputStream fileSheet = new FileInputStream(new File(pathSheetFull));
+        XSSFWorkbook workbook = new XSSFWorkbook(fileSheet);
+        XSSFSheet sheetTS = workbook.getSheetAt(0);
+
+        int linha = 2;
+
+        Row row = sheetTS.getRow(linha);
+        
+       
+        Cell planName = row.getCell(0);
+        Cell release  = row.getCell(1);
+        Cell sti = row.getCell(2);
+        Cell cr = row.getCell(3);
+        Cell testPhase = row.getCell(4);
+               
+        plan.setName(planName.getStringCellValue());
+        plan.setRelease(release.getStringCellValue());
+        plan.setSti(sti.getStringCellValue());
+        plan.setCrFase(cr.getStringCellValue());
+        plan.setTestPhase(testPhase.getStringCellValue());      
+       
+        return plan;
     }
     
     

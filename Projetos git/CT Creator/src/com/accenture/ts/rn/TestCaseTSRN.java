@@ -146,6 +146,11 @@ public class TestCaseTSRN {
         return pathSheet + "\\" + nameSheet;
     }
     //CR
+    
+    
+    public TestPlanTSBean importPlanSheet(String pathSheetFull) throws IOException{
+        return tsDao.readPlanSheet(pathSheetFull);
+    }
 
     public void createSheetExport(String pathSheet, String nameSheet, TestPlanTSBean testPlan) throws IOException, Exception {
         String fullDesc = "";
