@@ -5,20 +5,33 @@
  */
 package com.accenture.ts.rn;
 
+import com.accenture.bean.ParameterBean;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
+import com.accenture.ts.dao.ParameterDAO;
+import com.accenture.ts.dao.StepDAO;
 import com.accenture.ts.dao.SvnConnectionDao;
+import com.accenture.ts.dao.SystemDAO;
 import com.accenture.ts.dao.TesteCaseTSDAO;
+import com.accenture.view.RegisterScreenTIView;
+import com.accenture.view.RegisterScreenTSView;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -52,6 +65,10 @@ public class TestCaseTSRN {
         svnDao = new SvnConnectionDao(fase);
     }
 
+    public TestCaseTSRN() {
+        tsDao = new TesteCaseTSDAO();
+    }
+
     /**
      * Importa todos os CTs de uma planilha e salva no SVN cada CT em uma
      * planilha
@@ -78,7 +95,7 @@ public class TestCaseTSRN {
             }
 
             if (!temp.equals(systemFolder)) {
-                new SvnConnectionDao(fase).checkOutEmpytFolder(systemFolder,fase);
+                new SvnConnectionDao(fase).checkOutEmpytFolder(systemFolder, fase);
                 tsDao.newTsSheet(dirFull, fileName, listTS.get(i));
                 svnDao.addFileOrFolder(systemFolder, commitMessege);
                 dirFull = "";
@@ -139,16 +156,15 @@ public class TestCaseTSRN {
     //CR
     public String createSheet(TesteCaseTSBean testCase, String system, int hashCode, String fase) throws IOException, SVNException {
         String nameSheet = createId(system, fase) + testCase.getTestScriptName().toUpperCase();
-        String pathSheet =SVNPropertiesVOBean.getInstance().getFolderTemplocal() + hashCode + "\\" + system;
+        String pathSheet = SVNPropertiesVOBean.getInstance().getFolderTemplocal() + hashCode + "\\" + system;
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
         tsDao.newTsSheet(pathSheet, nameSheet, testCase);
         return pathSheet + "\\" + nameSheet;
     }
     //CR
-    
-    
-    public TestPlanTSBean importPlanSheet(String pathSheetFull) throws IOException{
+
+    public TestPlanTSBean importPlanSheet(String pathSheetFull) throws IOException {
         return tsDao.readPlanSheet(pathSheetFull);
     }
 
@@ -173,54 +189,45 @@ public class TestCaseTSRN {
 
         tsDao.newTsSheet(pathSheet, nameSheet, testPlan);
     }
-    
-    public void createSpreadsheetTSNew(String pathSheet, String nameSheet, TestPlanTSBean testPlan) throws FileNotFoundException, IOException, InterruptedException, Exception{
+
+    public void createSpreadsheetTSNew(String pathSheet, String nameSheet, TestPlanTSBean testPlan) throws FileNotFoundException, IOException, InterruptedException, Exception {
         nameSheet = nameSheet.replace("Siebel 6.3", "SBL6.3");
-        nameSheet = nameSheet.replace("Siebel 8", "SBL8");  
-        nameSheet = nameSheet.replace("STC DADOS", "STC");  
-        nameSheet = nameSheet.replace("STC VOZ", "STC");  
-        
-   
-        
-        
+        nameSheet = nameSheet.replace("Siebel 8", "SBL8");
+        nameSheet = nameSheet.replace("STC DADOS", "STC");
+        nameSheet = nameSheet.replace("STC VOZ", "STC");
+
         for (int i = 0; i < testPlan.getTestCase().size(); i++) {
             List<Step> steps = new ArrayList<>();
-             List<String> desc = new ArrayList<>();
-             List<String> result = new ArrayList<>();
-            
-                desc = breakTestCaseForStep(testPlan.getTestCase().get(i).getStepDescription());
-                result = breakTestCaseForStep(testPlan.getTestCase().get(i).getExpectedResults());                
-          
-            System.out.println("com.accenture.ts.rn.TestCaseTSRN.createSpreadsheetTSNew() - "+i);
-           
-               for(int s = 0 ; s <desc.size(); s++ ){
-                   
-                   if (!desc.equals("") || !result.equals("") ) {
-                       
-                    desc.set(s,  desc.get(s).substring(desc.get(s).indexOf("-") + 2));
-                    result.set(s,  result.get(s).substring(result.get(s).indexOf("-") + 2));
-                    
-                    
-                } 
-                   
-                  Step step = new Step();
-                  step.setDescStep(desc.get(s));
-                  step.setResultadoStep(result.get(s));
-                  
-                  steps.add(step);
-               }
-          
-            
+            List<String> desc = new ArrayList<>();
+            List<String> result = new ArrayList<>();
+
+            desc = breakTestCaseForStep(testPlan.getTestCase().get(i).getStepDescription());
+            result = breakTestCaseForStep(testPlan.getTestCase().get(i).getExpectedResults());
+
+            System.out.println("com.accenture.ts.rn.TestCaseTSRN.createSpreadsheetTSNew() - " + i);
+
+            for (int s = 0; s < desc.size(); s++) {
+
+                if (!desc.equals("") || !result.equals("")) {
+
+                    desc.set(s, desc.get(s).substring(desc.get(s).indexOf("-") + 2));
+                    result.set(s, result.get(s).substring(result.get(s).indexOf("-") + 2));
+
+                }
+
+                Step step = new Step();
+                step.setDescStep(desc.get(s));
+                step.setResultadoStep(result.get(s));
+
+                steps.add(step);
+            }
+
             testPlan.getTestCase().get(i).setListStep(steps);
-            
-            if(testPlan.getTestCase().get(i).getProduct().equals("STC VOZ") || testPlan.getTestCase().get(i).getProduct().equals("STC DADOS")){
+
+            if (testPlan.getTestCase().get(i).getProduct().equals("STC VOZ") || testPlan.getTestCase().get(i).getProduct().equals("STC DADOS")) {
                 testPlan.getTestCase().get(i).setProduct("STC");
             }
-                
-            
-                   
-            
-           
+
         }
 
         tsDao.createSpreadsheetTS(pathSheet, nameSheet, testPlan);
@@ -231,12 +238,12 @@ public class TestCaseTSRN {
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
         tsDao.updateTsSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + "\\" + pathSheet, nameSheet, testCase);
     }
-    
+
     //CR PERMITE VARIAS TELAS
     public void writerSheet(String pathSheet, String nameSheet, TesteCaseTSBean testCase, int hashCode) throws IOException {
         testCase.setStepDescription(addPipeStepDescription(testCase.getListStep(), true));
         testCase.setExpectedResults(addPipeExpectedResult(testCase.getListStep(), true));
-        tsDao.updateTsSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() +hashCode+ "\\" + pathSheet, nameSheet, testCase);
+        tsDao.updateTsSheet(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + hashCode + "\\" + pathSheet, nameSheet, testCase);
     }
     //CR
 
@@ -267,7 +274,7 @@ public class TestCaseTSRN {
 //                }
 //                listStep.add(s);
 //             }
-            
+
             list.get(i).setListStep(listStep);
         }
 
@@ -334,8 +341,8 @@ public class TestCaseTSRN {
     }
 
     /*
-		 * O método BreakTestCaseForStep, recebe uma string com um caso de teste completo e separa os steps,
-		 * idividualmente atribuindo-os à uma string e adicionando-os em um Array de strings que é retornado pelo método.
+     * O método BreakTestCaseForStep, recebe uma string com um caso de teste completo e separa os steps,
+     * idividualmente atribuindo-os à uma string e adicionando-os em um Array de strings que é retornado pelo método.
      */
     public ArrayList<String> breakTestCaseForStep(String testeCaseComplete) {
 
@@ -397,7 +404,7 @@ public class TestCaseTSRN {
     }
 
     public ArrayList<String> faseCRTestCase() throws IOException {
-        String temp =SVNPropertiesVOBean.getInstance().getFaseCR();
+        String temp = SVNPropertiesVOBean.getInstance().getFaseCR();
         return breakTestCaseForStep(temp);
     }
 
@@ -405,8 +412,8 @@ public class TestCaseTSRN {
         String temp = SVNPropertiesVOBean.getInstance().getTestPhaseTS();
         return breakTestCaseForStep(temp);
     }
-    
-    public ArrayList<String> complexidade() throws IOException{
+
+    public ArrayList<String> complexidade() throws IOException {
         String temp = SVNPropertiesVOBean.getInstance().getComplexidade();
         return breakTestCaseForStep(temp);
     }
@@ -416,7 +423,211 @@ public class TestCaseTSRN {
     }
 
     public void deleteDir(String folder) throws IOException {
-        tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal()+folder));
+        tsDao.deleteDir(new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + folder));
+    }
+
+    ///banco
+    public TesteCaseTSBean saveTestCaseTSBD(TesteCaseTSBean testCase) {
+
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date d = new Date(System.currentTimeMillis());
+            testCase.setModifiedBy(SVNPropertiesVOBean.getInstance().getUser());
+            testCase.setModifyDate(d);
+            testCase.setDataPlanejada(d);
+
+//        List<Integer> IdsSteps = new ArrayList<>();
+//        List<Integer> IdsParametros = new ArrayList<>();
+//        List<Step> steps = new ArrayList<>();
+//        steps = testCase.getListStep();
+        //capturando steps e parametros
+//        for (int i = 0; i < steps.size(); i++) {
+//            List<String> parameters = tsDao.getParameter(steps.get(i).getDescStep());
+//            parameters.addAll(tsDao.getParameter(steps.get(i).getResultadoStep()));
+//            List<ParameterBean> listParameters = new ArrayList<>();
+//            for (int j = 0; j < parameters.size(); j++) {
+//
+//                ParameterBean pb = new ParameterBean();
+//                pb.setApllyToAll(false);
+//                pb.setParameterName(parameters.get(j));
+//                pb.setParameterValue("");
+//                listParameters.add(pb);
+//
+//            }
+//            steps.get(i).setParameters(listParameters);
+//        }
+            //salvando CT
+            if (testCase.getId() == 0) {
+
+                testCase.setCreatedBy(SVNPropertiesVOBean.getInstance().getUser());
+                testCase.setCreateDate(d);
+                testCase = tsDao.insert(testCase);
+
+                if (testCase == null) {
+                    return null;
+                }
+
+                StepDAO stepDAO = new StepDAO();
+                final int idTestcase = testCase.getId();
+                AtomicInteger counter = new AtomicInteger(0);
+                testCase.getListStep().stream().forEach(s -> {s.setOrdem(counter.getAndIncrement()); s.setIdTesteCaseTSBean(idTestcase); s = stepDAO.insert(s); });
+                //s.setIdTesteCaseTSBean(testCase.getId())
+                boolean erro = testCase.getListStep().stream().anyMatch(s -> s == null);
+
+                if (erro) {
+                    tsDao.delete(testCase.getId());
+                    return null;
+                }
+
+                // steps = new ArrayList<>();
+//        for (int i = 0; i < testCase.getListStep().size(); i++) {
+//            testCase.getListStep().get(i).setIdTesteCaseTSBean(testCase.getId());
+//            List<ParameterBean> listParameters = testCase.getListStep().get(i).getParameters();
+//            Step step = stepDAO.insert(testCase.getListStep().get(i));
+//
+//            if (step == null) {
+//                //TODO delete ct   
+//                for (Integer id : IdsSteps) {
+//                    stepDAO.delete(id);
+//                }
+//                return null;
+//            } else {
+//                IdsSteps.add(step.getId());
+//                steps.add(step);
+//            }
+//            //salvando parâmetros
+//            ParameterDAO parameterDAO = new ParameterDAO();
+//            for (ParameterBean parameter : listParameters) {
+//                parameter.setIdStep(step.getId());
+//                ParameterBean pb = parameterDAO.insert(parameter);
+//                if (pb == null) {
+//                    for (Integer id : IdsSteps) {
+//                        stepDAO.delete(id);
+//                    }
+//                    for (Integer id : IdsParametros) {
+//                        parameterDAO.delete(id);
+//                    }
+//                    return null;
+//                } else {
+//                    IdsParametros.add(pb.getId());
+//
+//                }
+//            }
+//
+//            steps.get(i).setParameters(listParameters);
+//
+//        }
+//
+//        testCase.setListStep(steps);
+                return testCase;
+
+            } else {
+                
+                int idTestcase = testCase.getId();
+                TesteCaseTSBean testCaseBD = getTesteCaseTSBeanById(idTestcase);
+                AtomicInteger counter = new AtomicInteger(0);
+                //atualizando lista de steps
+                testCase.getListStep().stream().forEach(s -> { s.setNomeStep("Step "+counter.getAndIncrement());s.setOrdem(counter.get()); s.setIdTesteCaseTSBean(idTestcase); });
+                List<Step> updateStep = new ArrayList<>();
+                List<Step> insertStep = new ArrayList<>();
+                List<Step> deleteStep = new ArrayList<>();
+
+                List<Integer> idsBD = testCaseBD.getListStep().stream().map(Step::getId).collect(Collectors.toList());
+                List<Integer> ids = testCase.getListStep().stream().map(Step::getId).collect(Collectors.toList());
+
+                updateStep = testCase.getListStep().stream().filter(s -> idsBD.contains(s.getId())).collect(Collectors.toList());
+                deleteStep = testCaseBD.getListStep().stream().filter(s -> !ids.contains(s.getId())).collect(Collectors.toList());
+                insertStep = testCase.getListStep().stream().filter(s -> s.getId() == 0).collect(Collectors.toList());
+
+                int idTestCase = testCase.getId();
+                StepDAO stepDAO = new StepDAO();
+                updateStep.stream().forEach(s -> stepDAO.update(s));
+                deleteStep.stream().forEach(s -> stepDAO.delete(s.getId()));
+                insertStep.stream().forEach(s -> {s.setIdTesteCaseTSBean(idTestCase); stepDAO.insert(s);});
+
+                testCase = tsDao.update(testCase);
+                List<Step> steps = new ArrayList<>();
+                steps.addAll(updateStep);
+                steps.addAll(insertStep);
+                
+                
+                if(testCase == null){
+                    return null;
+                }
+                
+                testCase.setListStep(steps);
+
+                return testCase;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+    
+    public boolean delete(TesteCaseTSBean testCase){
+        StepDAO stepDAO = new StepDAO();
+        
+       // testCase.getListStep().stream().forEach(s-> { stepDAO.delete(s.getId());});
+        List<Boolean> b = testCase.getListStep().stream().map(s-> stepDAO.delete(s.getId())).collect(Collectors.toList());               
+        
+        if(!b.contains(false)){
+            return tsDao.delete(testCase.getId());
+        }
+        
+        return false;
+    }
+
+    public List<SystemBean> getSystemsBD() {
+
+        return new SystemDAO().getAll();
+    }
+
+    public List<TesteCaseTSBean> getTesteCaseTSBeanBD() {
+        return tsDao.getAll();
+    }
+
+    public List<TesteCaseTSBean> getTesteCaseTSBeanBySystemBeanBD(SystemBean sb) {
+        return tsDao.getBySystemBean(sb);
+    }
+
+    public List<TesteCaseTSBean> getTesteCaseTSBeanBySystemNameBD(int IdSystem, String name, String id) {
+        String fieldId = id.isEmpty() ? "" : "AND [Id] =  " + id;
+        List<TesteCaseTSBean> list = tsDao.getByFields("IdSystem = " + IdSystem + " AND [TestScriptName] LIKE '%" + name + "%' " + fieldId);
+
+        return list;
+
+    }
+
+    public TesteCaseTSBean getTesteCaseTSBeanById(int Id) {
+
+        TesteCaseTSBean testeCaseTSBean = tsDao.getById(Id);
+
+        if (testeCaseTSBean != null) {
+            StepDAO stepDAO = new StepDAO();
+            ParameterDAO pd = new ParameterDAO();
+
+            List<Step> steps = stepDAO.getByTestCaseBean(testeCaseTSBean.getId());
+
+            List<Integer> ids = steps.stream().map(Step::getId).collect(Collectors.toList());
+
+            if (ids.size() > 0) {
+                List<ParameterBean> pbs = pd.getByIdStep(ids);
+                steps.stream().forEach(u -> u.setParameters(pbs.stream().filter(x -> x.getIdStep() == u.getId()).collect(Collectors.toList())));
+            }
+//            for (Step s : steps) {
+//                s.setParameters(pbs.stream().filter(x-> x.getIdStep() == s.getId()).collect(Collectors.toList()));
+//            }
+
+            testeCaseTSBean.setListStep(steps);
+
+            return testeCaseTSBean;
+
+        } else {
+            return null;
+        }
+
     }
 
 }

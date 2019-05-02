@@ -178,14 +178,14 @@ public class SvnConnectionDao {
     }
     
     public void addFileOrFolderSave(String systemFolder, String commitMessage, int hasdCode) throws SVNException {
-        File f = new File(connection.getSvnProperties().getFolderTemplocal()+ hasdCode +"\\"  + systemFolder);
+       
+        File f = new File(connection.getSvnProperties().getFolderTemplocal()+ hasdCode + "\\" + systemFolder);
         ourClientManager.getWCClient().doCleanup(f);
         SVNUpdateClient clientUpdate = ourClientManager.getUpdateClient();
-//        clientUpdate.doUpdate(f, SVNRevision.PREVIOUS, SVNDepth.EMPTY, true, true);
+//      clientUpdate.doUpdate(f, SVNRevision.PREVIOUS, SVNDepth.EMPTY, true, true);
         ourClientManager.getWCClient().doAdd(f, true, true, true, SVNDepth.FILES, true, true, true);
-
         ourClientManager.getCommitClient().doCommit(new File[]{f}, true, commitMessage, true, true);
-
+    
     }
 
     public void addFile(String pathFile, String systemFolder, String fase) throws SVNException {

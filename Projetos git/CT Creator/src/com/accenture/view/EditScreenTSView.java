@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.log.MyLogger;
@@ -44,6 +45,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.scene.control.TableSelectionModel;
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -54,6 +57,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -86,6 +91,12 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private org.apache.log4j.Logger logger;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private String fase ;
+    
+    private List<TesteCaseTSBean> listTesteCaseTSBean;
+    private TesteCaseTSBean testeCaseCurrent;
+    private TesteCaseTSBean testeCaseSelect;
+    private int rowBefore;
+    private int rowAfter;
     /**
      * Creates new form guiCadTS
      */
@@ -94,8 +105,11 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         this.fase = fase;
         try {
             initComponents();
+            
+            
+            
 //             MyLogger.setup();
-             Log.setLevel(Level.INFO);
+            Log.setLevel(Level.INFO);
             Properties props = new Properties();
             props.load(new FileInputStream("log4j.properties"));
             PropertyConfigurator.configure(props);
@@ -104,11 +118,11 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             logger = org.apache.log4j.Logger.getLogger(EditScreenTSView.class);
 
             listSteps = new ArrayList<Step>();
-            listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
-            listTestCase = new ArrayList<TesteCaseTSBean>();
-            ctBaixados = new ArrayList<String>();
-            svnRN = new SvnConnectionRN(this.fase);
-            bntSalvarCT.setVisible(false);
+            //listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
+            //listTestCase = new ArrayList<TesteCaseTSBean>();
+            //ctBaixados = new ArrayList<String>();
+            //svnRN = new SvnConnectionRN(this.fase);
+            //bntSalvarCT.setVisible(false);
 
             blockedFieldBnt(false);
             bntCancelar.setEnabled(true);
@@ -122,7 +136,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 protected Object doInBackground() {
                     renderTableStep();
                     callFilter();
-                    loadComboTS();
+//                    loadComboTS();
+                    loadComboTSDB();
 
                     return null;
                 }
@@ -133,11 +148,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 }
 
             }.run();
-        } catch (SVNException ex) {
-            Log.log(Level.SEVERE, "ERROR", ex);
-            logger.error("Erro SVN", ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             logger.error("Erro ", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -155,12 +166,12 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPopupTabelaStep = new javax.swing.JPopupMenu();
-        jComboSistemasTS = new javax.swing.JComboBox<>();
+        jComboSistemasTS = new javax.swing.JComboBox<SystemBean>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextNameTS = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboFaseCR = new javax.swing.JComboBox<>();
+        jComboFaseCR = new javax.swing.JComboBox<String>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDescriptionTS = new javax.swing.JTextArea();
@@ -181,7 +192,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         bntSalvarCT = new javax.swing.JButton();
         labelQtdCT = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jComboComplexidade = new javax.swing.JComboBox<>();
+        jComboComplexidade = new javax.swing.JComboBox<String>();
         jCheckBoxAutomatizado = new javax.swing.JCheckBox();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -296,14 +307,14 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Step", "Descrição", "Resultado Esperado", "Todos"
+                "Step", "Descrição", "Resultado Esperado", "id", "Todos"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -333,7 +344,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             tabelaSteps.getColumnModel().getColumn(0).setMinWidth(0);
             tabelaSteps.getColumnModel().getColumn(0).setMaxWidth(100);
             tabelaSteps.getColumnModel().getColumn(3).setMinWidth(0);
-            tabelaSteps.getColumnModel().getColumn(3).setMaxWidth(80);
+            tabelaSteps.getColumnModel().getColumn(3).setPreferredWidth(0);
+            tabelaSteps.getColumnModel().getColumn(3).setMaxWidth(0);
+            tabelaSteps.getColumnModel().getColumn(4).setMinWidth(0);
+            tabelaSteps.getColumnModel().getColumn(4).setMaxWidth(80);
         }
         tabelaSteps.getColumnModel().getColumn(1).setCellEditor(new TextAreaCellEditor(this));
         tabelaSteps.getColumnModel().getColumn(2).setCellEditor(new TextAreaCellEditor(this));
@@ -419,6 +433,14 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         jScrollPane3.setHorizontalScrollBar(new JScrollBar(0));
         tabelaCt.setAutoResizeMode (tabelaCt.AUTO_RESIZE_OFF);
         tabelaCt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabelaCt.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    rowBefore = lse.getFirstIndex();
+                    rowAfter = lse.getLastIndex();
+                }
+            }
+        });
 
         bntFiltrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -469,16 +491,6 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(bntSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(labelQtdCT))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(bntAddStep)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -503,7 +515,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                                         .addComponent(bntCopiar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(bntColar)))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 297, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,8 +524,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jComboSistemasTS, 0, 216, Short.MAX_VALUE)
                                             .addComponent(jComboFaseCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -522,16 +534,27 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel5)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jComboComplexidade, 0, 196, Short.MAX_VALUE))
+                                                .addComponent(jComboComplexidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jCheckBoxAutomatizado)
-                                                .addGap(0, 0, Short.MAX_VALUE))))
-                                    .addComponent(jScrollPane1)
-                                    .addComponent(jTextNameTS))
-                                .addGap(56, 56, 56))))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2)
-                .addGap(56, 56, 56))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(10, 10, 10))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jTextNameTS, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane1))
+                                        .addContainerGap())))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(bntSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(labelQtdCT))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -605,25 +628,25 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             System.out.println("x: " + evt.getX() + " y: " + evt.getY());
             jPopupTabelaStep.show(tabelaSteps, evt.getX(), evt.getY());
 
-        } else if (column != 3) {
+        } else if (column != 4) {
 
             if (true) {
                 for (int i = 0; i < tabelaSteps.getRowCount(); i++) {
-                    model.setValueAt(false, i, 3);
+                    model.setValueAt(false, i, 4);
 
                 }
             }
             //verifica se existe alguma linha selecionada
             if (lineSelect != -1) {
                 //caso exista linha selecionada o checkbox e desmarcado 
-                model.setValueAt(false, lineSelect, 3);
+                model.setValueAt(false, lineSelect, 4);
                 lineSelect = tabelaSteps.getSelectedRow();
                 //é marcado o checkbox da linha atual
-                model.setValueAt(true, lineSelect, 3);
+                model.setValueAt(true, lineSelect, 4);
             } else {
                 //marca checkbox da linha atual
 
-                model.setValueAt(true, row, 3);
+                model.setValueAt(true, row, 4);
                 lineSelect = row;
             }
 
@@ -648,18 +671,45 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntFiltrarActionPerformed
 
     private void bntExcluirCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExcluirCTActionPerformed
-        if (JOptionPane.showConfirmDialog(null, "Confirma a exclusão do CT " + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName() + "?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            fileDeletedSvn = true;
-            deleteCT(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRow()).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), "CT EXCLUIDO VIA CT CREATOR");
-//            updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
-            if (tabelaCt.getRowCount() > 0) {
-                tabelaCt.addRowSelectionInterval(0, 0);
-            }
-            fileDeletedSvn = false;
-            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        }
+//        if (JOptionPane.showConfirmDialog(null, "Confirma a exclusão do CT " + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getTestCaseName() + "?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//            fileDeletedSvn = true;
+//            deleteCT(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRow()).getSystem(), listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName(), "CT EXCLUIDO VIA CT CREATOR");
+////            updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
+//            if (tabelaCt.getRowCount() > 0) {
+//                tabelaCt.addRowSelectionInterval(0, 0);
+//            }
+//            fileDeletedSvn = false;
+//            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//        }
+         if (JOptionPane.showConfirmDialog(null, "Confirma a exclusão do CT " + testeCaseSelect.getTestScriptName() + "?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+             
+            final Frame GUIPrincipal = new MainScreenView();
+            final JInternalFrame ji = this;
 
+            new SwingWorker() {
+                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
+
+                @Override
+                protected Object doInBackground() throws Exception, SVNException, IOException {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    aguarde.setLocationRelativeTo(GUIPrincipal);
+                    aguarde.setVisible(true);
+                    blockedFieldBnt(false);
+                    delete();
+                    blockedFieldBnt(true);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    aguarde.dispose();
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+
+            }.execute();
+         }
+        
 
     }//GEN-LAST:event_bntExcluirCTActionPerformed
 
@@ -673,30 +723,31 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     private void tabelaCtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaCtKeyReleased
         if ((evt.getKeyCode() == KeyEvent.VK_UP) || (evt.getKeyCode() == KeyEvent.VK_DOWN && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR)) {
-            int line = lineSelectTableCt;
-            if (isEditing()) {
-                if (JOptionPane.showConfirmDialog(null, "Deseja selecionar outro CT? Suas modificações atuais seram perdidas!", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-                    c = tabelaCt.getSelectionBackground();
-                    lineSelect = -1;
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
-                    lineSelect = -1;
-                    try {
-                        new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
-                    } catch (IOException ex) {
-                        logger.error("Erro ao deletar arquivo", ex);
-                    }
-                    loadCT2();
-                    setEditing(false);
-
-                } else {
-                    tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
-                    tabelaCt.removeRowSelectionInterval(0, tabelaCt.getRowCount() - 1);
-                    tabelaCt.addRowSelectionInterval(lineSelectTableCt, lineSelectTableCt);
-
-                }
-            }
+//            int line = lineSelectTableCt;
+//            if (isEditing()) {
+//                if (JOptionPane.showConfirmDialog(null, "Deseja selecionar outro CT? Suas modificações atuais seram perdidas!", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//
+//                    c = tabelaCt.getSelectionBackground();
+//                    lineSelect = -1;
+//                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                    updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
+//                    lineSelect = -1;
+//                    try {
+//                        new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
+//                    } catch (IOException ex) {
+//                        logger.error("Erro ao deletar arquivo", ex);
+//                    }
+//                    loadCT2();
+//                    setEditing(false);
+//
+//                } else {
+//                    tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
+//                    tabelaCt.removeRowSelectionInterval(0, tabelaCt.getRowCount() - 1);
+//                    tabelaCt.addRowSelectionInterval(lineSelectTableCt, lineSelectTableCt);
+//
+//                }
+//            }
+            verifyEdition();
         }
 
 
@@ -744,7 +795,9 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                     aguarde.setLocationRelativeTo(GUIPrincipal);
                     aguarde.setVisible(true);
                     blockedFieldBnt(false);
-                    editCtSVN();
+                    //editCtSVN();
+                    saveTestCaseBD();
+                    loadCTDB();
                     blockedFieldBnt(true);
                     return null;
                 }
@@ -763,71 +816,77 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntSalvarActionPerformed
 
     private void tabelaCtMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCtMouseReleased
-        if (evt.getClickCount() == 1 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
-            int line = lineSelectTableCt;
-            if (isEditing()) {
-
-                if (JOptionPane.showConfirmDialog(null, "Deseja selecionar outro CT? Suas modificações atuais seram perdidas!", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-                    c = tabelaCt.getSelectionBackground();
-                    lineSelect = -1;
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
-                    lineSelect = -1;
-                    try {
-                        new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
-                    } catch (IOException ex) {
-                        logger.error("Erro ao deletar arquivo", ex);
-                    }
-                    loadCT2();
-                    setEditing(false);
-
-                } else {
-                    tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
-                    tabelaCt.removeRowSelectionInterval(0, tabelaCt.getRowCount() - 1);
-                    tabelaCt.addRowSelectionInterval(lineSelectTableCt, lineSelectTableCt);
-
-                }
-
-            } else {
-
-                c = tabelaCt.getSelectionBackground();
-//                try {
-//                    if(line != -1)
-//                    new File(new SVNPropertiesVOBean().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
-//                } catch (IOException ex) {
-//                    logger.error("Erro ao deletar arquivo", ex);
+//        if (evt.getClickCount() == 1 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
+//            int line = lineSelectTableCt;
+//            if (isEditing()) {
+//
+//                if (JOptionPane.showConfirmDialog(null, "Deseja selecionar outro CT? Suas modificações atuais seram perdidas!", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//
+//                    c = tabelaCt.getSelectionBackground();
+//                    lineSelect = -1;
+//                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                    updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
+//                    lineSelect = -1;
+//                    try {
+//                        new File(SVNPropertiesVOBean.getInstance().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
+//                    } catch (IOException ex) {
+//                        logger.error("Erro ao deletar arquivo", ex);
+//                    }
+//                    loadCT2();
+//                    setEditing(false);
+//
+//                } else {
+//                    tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
+//                    tabelaCt.removeRowSelectionInterval(0, tabelaCt.getRowCount() - 1);
+//                    tabelaCt.addRowSelectionInterval(lineSelectTableCt, lineSelectTableCt);
+//
 //                }
-                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
-                loadCT2();
+//
+//            } else {
+//
+//                c = tabelaCt.getSelectionBackground();
+////                try {
+////                    if(line != -1)
+////                    new File(new SVNPropertiesVOBean().getFolderTemplocal() + this.hashCode() + "\\" + jComboSistemasTS.getSelectedItem().toString() + "\\" + listTestCaseTSPropertiesBean.get(line).getDirEntry().getName()).delete();
+////                } catch (IOException ex) {
+////                    logger.error("Erro ao deletar arquivo", ex);
+////                }
+//                getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                updateProperties(listTestCaseTSPropertiesBean.get(0).getSystem());
+//                loadCT2();
+//
+//            }
 
-            }
+//        }
+        
+        if (evt.getClickCount() == 1 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
 
+           verifyEdition();
         }
     }//GEN-LAST:event_tabelaCtMouseReleased
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
-        if (JOptionPane.showConfirmDialog(this, "Ao sair da tela seus dados serão perdidos, deseja realmente sair?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-            try {
-                if (lineSelectTableCt != -1) {
-
-                    svnRN = new SvnConnectionRN(this.fase);
-                    svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-
-                }
-                testCaseRN.deleteDir(this.hashCode() + "");
-            } catch (SVNException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                logger.error("Erro SVN", ex);
-                exceptionSVN(ex.getMessage());
-            } catch (IOException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                logger.error("Erro ", ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+//        if (JOptionPane.showConfirmDialog(this, "Ao sair da tela seus dados serão perdidos, deseja realmente sair?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//
+//            try {
+//                if (lineSelectTableCt != -1) {
+//
+//                    svnRN = new SvnConnectionRN(this.fase);
+//                    svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
+//
+//                }
+//                testCaseRN.deleteDir(this.hashCode() + "");
+//            } catch (SVNException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                logger.error("Erro SVN", ex);
+//                exceptionSVN(ex.getMessage());
+//            } catch (IOException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                logger.error("Erro ", ex);
+//                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+        verifyChangeToClose();
     }//GEN-LAST:event_bntCancelarActionPerformed
 
     private void bntAddStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddStepActionPerformed
@@ -838,8 +897,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             //model da tabela step
             DefaultTableModel model = (DefaultTableModel) tabelaSteps.getModel();
             //add nova linha na tabela
-            model.addRow(new String[]{"Step " + 1, "<<<parametro>>>", "<<<paramentro>>>"});
-            model.setValueAt(false, tabelaSteps.getRowCount() - 1, 3);
+            model.addRow(new String[]{"Step " + 1, "<<<parametro>>>", "<<<paramentro>>>", "0"});
+            model.setValueAt(false, tabelaSteps.getRowCount() - 1, 4);
 
             //ordena a numeração dos steps
             int numLinhas = model.getRowCount();
@@ -873,7 +932,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         String nomeStepSelecionado = null;
 
         for (int i = 0; i < countRow; i++) {
-            if (tabelaSteps.getValueAt(i, 3) != null && model.getValueAt(i, 3).toString().equals("true")) {
+            if (tabelaSteps.getValueAt(i, 4) != null && model.getValueAt(i, 4).toString().equals("true")) {
                 qtdSelecionados++;
                 nomeStepSelecionado = model.getValueAt(i, 0).toString();
 
@@ -886,7 +945,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
                 if (JOptionPane.showConfirmDialog(this, "Deseja excluir o " + nomeStepSelecionado + "?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     for (int i = 0; i < tabelaSteps.getRowCount(); i++) {
-                        if (tabelaSteps.getValueAt(i, 3) != null && model.getValueAt(i, 3).toString().equals("true")) {
+                        if (tabelaSteps.getValueAt(i, 4) != null && model.getValueAt(i, 4).toString().equals("true")) {
                             tabelaSteps.editingStopped(null);
                             model.removeRow(i);
 
@@ -899,7 +958,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             } else if (JOptionPane.showConfirmDialog(this, "Deseja excluir os steps selecionados?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 for (int i = countRow - 1; i >= 0; i--) {
-                    if (tabelaSteps.getValueAt(i, 3) != null && model.getValueAt(i, 3).toString().equals("true")) {
+                    if (tabelaSteps.getValueAt(i, 4) != null && model.getValueAt(i, 4).toString().equals("true")) {
                         tabelaSteps.editingStopped(null);
                         model.removeRow(i);
 
@@ -948,7 +1007,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         listSteps.clear();
         for (int i = 0; i < countRow; i++) {
             Step s = new Step();
-            if (tabelaSteps.getValueAt(i, 3) != null && model.getValueAt(i, 3).toString().equals("true")) {
+            if (tabelaSteps.getValueAt(i, 4) != null && model.getValueAt(i, 4).toString().equals("true")) {
                 s.setNomeStep(model.getValueAt(i, 0).toString());
                 s.setDescStep(model.getValueAt(i, 1).toString());
                 s.setResultadoStep(model.getValueAt(i, 2).toString());
@@ -967,7 +1026,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "O CT não pode ter mais de 25 Steps.", "Qtd Máxima de Steps", JOptionPane.INFORMATION_MESSAGE);
         } else {
             for (int i = 0; i < listSteps.size(); i++) {
-                model.addRow(new Object[]{"Step " + 1, listSteps.get(i).getDescStep(), listSteps.get(i).getResultadoStep(), false});
+                model.addRow(new Object[]{"Step " + 1, listSteps.get(i).getDescStep(), listSteps.get(i).getResultadoStep(), "0", false});
 
                 //ordena a numeração dos steps
                 int numLinhas = model.getRowCount();
@@ -1014,7 +1073,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
             for (int i = 0; i < systems.size(); i++) {
-                jComboSistemasTS.addItem(systems.get(i).toString());
+//                jComboSistemasTS.addItem(systems.get(i).toString());
             }
             for (int i = 0; i < fases.size(); i++) {
                 jComboFaseCR.addItem(fases.get(i).toString());
@@ -1033,6 +1092,40 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+    
+    public void loadComboTSDB() {
+
+        try {
+            testCaseRN = new TestCaseTSRN();
+            List<SystemBean> systems = testCaseRN.getSystemsBD();
+
+            for (int i = 0; i < systems.size(); i++) {
+                jComboSistemasTS.addItem(systems.get(i));
+            }
+
+            ArrayList fases = testCaseRN.faseCRTestCase();
+            ArrayList complexidades = testCaseRN.complexidade();
+
+            for (int i = 0; i < fases.size(); i++) {
+                jComboFaseCR.addItem(fases.get(i).toString());
+            }
+
+            for (int i = 0; i < complexidades.size(); i++) {
+                jComboComplexidade.addItem(complexidades.get(i).toString());
+            }
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            logger.error("Erro ", ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    public void refreshTableCT(){
+        List<TesteCaseTSBean> list = testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem());
+        //tabelaCt.getModel().getRowCount()
+        
     }
 
     private void organizaNumeracaoStep(int numLinhas, DefaultTableModel model) {
@@ -1242,8 +1335,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }
 
     public void blockedFieldBnt(boolean b) {
-//        jComboFaseCR.setEnabled(b);
-//        jComboSistemasTS.setEnabled(b);
+       jComboFaseCR.setEnabled(b);
+        jComboSistemasTS.setEnabled(b);
         jTextNameTS.setEnabled(b);
         jTextAreaDescriptionTS.setEnabled(b);
         bntAddStep.setEnabled(b);
@@ -1267,7 +1360,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         int qtdSelect = 0;
         List<Integer> lines = new ArrayList<Integer>();
         for (int i = 0; i < countRow; i++) {
-            if (((Boolean) tabelaSteps.getValueAt(i, 3)).booleanValue() ? true : false) {
+            if (((Boolean) tabelaSteps.getValueAt(i, 4)).booleanValue() ? true : false) {
                 qtdSelect++;
                 lines.add(i);
             }
@@ -1295,7 +1388,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         int qtdSelect = 0;
         List<Integer> lines = new ArrayList<Integer>();
         for (int i = 0; i < countRow; i++) {
-            if (((Boolean) tabelaSteps.getValueAt(i, 3)).booleanValue() ? true : false) {
+            if (((Boolean) tabelaSteps.getValueAt(i, 4)).booleanValue() ? true : false) {
                 qtdSelect++;
                 lines.add(i);
             }
@@ -1422,6 +1515,52 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     }
 
+     public void loadTableCtDB(List<TesteCaseTSBean> listTesteCaseTSBean) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
+            DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+            
+            this.listTesteCaseTSBean = listTesteCaseTSBean;
+           
+            while (model.getRowCount() > 0) {
+                model.removeRow(0);
+            }
+
+            if (this.listTesteCaseTSBean.size() == 0) {
+                blockedFieldBnt(false);
+                bntFiltrar.setEnabled(true);
+//            limpaCampos();
+                while (modelStep.getRowCount() > 0) {
+                    modelStep.removeRow(0);
+                }
+            }
+
+            String nameCT = "";
+            String id = "";
+            String modifyBy = "";
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+            for (int i = 0; i < this.listTesteCaseTSBean.size(); i++) {
+                id = this.listTesteCaseTSBean.get(i).getId()+"";
+                nameCT = this.listTesteCaseTSBean.get(i).getTestScriptName();
+                modifyBy = this.listTesteCaseTSBean.get(i).getModifiedBy();
+                
+                String dataFormatada = sdf.format(this.listTesteCaseTSBean.get(i).getModifyDate());
+
+                model.addRow(new String[]{id, nameCT, modifyBy, dataFormatada});
+
+            }
+            tabelaCt.setEnabled(true);
+
+            labelQtdCT.setText("Quantidade de CTs: " + tabelaCt.getRowCount());
+        } catch (Exception ex) {
+            logger.error("Erro", ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
     public void callFilter() {
         FilterTestCaseScreenTSView1 dialogFiltro = null;
         try {
@@ -1513,6 +1652,36 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     }
 
+    public void loadFieldsDB(TesteCaseTSBean testCase) {
+        DefaultTableModel model = (DefaultTableModel) tabelaSteps.getModel();
+        jTextNameTS.setText(testCase.getTestScriptName());
+        jComboFaseCR.setSelectedItem(testCase.getFase());
+        jComboComplexidade.setSelectedItem(testCase.getComplexidade());
+        for(int i = 0; i < jComboSistemasTS.getItemCount(); i++){
+            if(testCase.getIdSystem() == jComboSistemasTS.getItemAt(i).getId()){
+                jComboSistemasTS.setSelectedIndex(i);
+            }
+        }
+        
+        jTextAreaDescriptionTS.setText(testCase.getTestScriptDescription().replace("\n\nPré-Requisito: <<<pre_requisito>>>\n\nPós-Requisito:<<<pos_requisito>>>\n\nObservações:<<<observacoes>>>", ""));
+
+        for (int i = 0; i < testCase.getListStep().size(); i++) {
+            model.addRow(new String[]{"Step " + 1, testCase.getListStep().get(i).getDescStep(), testCase.getListStep().get(i).getResultadoStep(), testCase.getListStep().get(i).getId()+"" });
+            model.setValueAt(false, tabelaSteps.getRowCount() - 1, 4);
+        }
+
+        //ordena a numeração dos steps
+        int numLinhas = model.getRowCount();
+        for (int j = 0; j < numLinhas; j++) {
+            numeroStep = j + 1;
+            model.setValueAt("Step " + numeroStep, j, 0);
+        }
+
+        //campo automatizado
+        jCheckBoxAutomatizado.setSelected(testCase.isAutomatizado());
+
+    }
+    
     private void loadCT() {
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1689,7 +1858,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         }
         jTextNameTS.setText("");
         jComboFaseCR.setSelectedItem("");
-        jComboSistemasTS.setSelectedItem("");
+//        jComboSistemasTS.setSelectedItem("");
         jTextAreaDescriptionTS.setText("");
     }
 
@@ -1922,7 +2091,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox jCheckBoxAutomatizado;
     private javax.swing.JComboBox<String> jComboComplexidade;
     private javax.swing.JComboBox<String> jComboFaseCR;
-    private javax.swing.JComboBox<String> jComboSistemasTS;
+    private javax.swing.JComboBox<SystemBean> jComboSistemasTS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1938,5 +2107,233 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JTable tabelaCt;
     private javax.swing.JTable tabelaSteps;
     // End of variables declaration//GEN-END:variables
+
+    private void verifyEdition(){
+        if (rowBefore != rowAfter) {
+                if (isChangeTC()) {
+                    if(JOptionPane.showConfirmDialog(this, "Deseja salvar suas alterações?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        saveTestCaseBD();
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//                        loadCTDB();
+                    }
+                    
+                    
+                    loadCTDB();
+//                    else{
+//                        tabelaCt.getSelectionModel().setSelectionInterval(rowBefore, rowBefore);
+//                    }
+                }else{
+                    loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem()));
+                   
+                    loadCTDB();
+                }
+            } else {
+                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem()));
+                
+                loadCTDB();
+            }
+    }
+    
+    private void verifyChangeToClose(){
+         if (rowBefore != rowAfter) {
+                if (isChangeTC()) {
+                    if(JOptionPane.showConfirmDialog(this, "Deseja salvar suas alterações?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        saveTestCaseBD();
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    }
+                     this.dispose();
+
+                }else{
+                    this.dispose();
+                }
+            } else {
+               this.dispose();
+            }
+    }
+        
+    
+    
+    
+    private void loadCTDB() {
+        blockedFieldBnt(false);
+        try {     
+            
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
+            
+            //compare cts
+            DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
+
+            DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+            
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
+          // int row = tabelaCt.getSelectedRow();
+
+            int id = Integer.parseInt((String) model.getValueAt(rowAfter, 0));
+
+            testeCaseSelect = testCaseRN.getTesteCaseTSBeanById(id);
+            loadFieldsDB(testeCaseSelect);
+            
+        } catch (Exception ex) {
+            logger.error(ex);
+        } finally {
+            blockedFieldBnt(true);
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+
+    }
+    
+    private boolean isChangeTC() {
+        boolean change = false;
+        TesteCaseTSBean tcEditing = getEditingTestCase();
+
+        if (!tcEditing.getComplexidade().equals(testeCaseSelect.getComplexidade())) {
+            return true;
+        }
+        if (!tcEditing.getTestScriptName().equals(testeCaseSelect.getTestScriptName())) {
+            return true;
+        }
+        if (!tcEditing.getProduct().equals(testeCaseSelect.getProduct())) {
+            return true;
+        }
+        if (!tcEditing.getTestScriptDescription().equalsIgnoreCase(testeCaseSelect.getTestScriptDescription())) {
+            return true;
+        }
+        if (!tcEditing.isAutomatizado() == testeCaseSelect.isAutomatizado()) {
+            return true;
+        }
+        if (!tcEditing.getTestScriptName().equals(testeCaseSelect.getTestScriptName())) {
+            return true;
+        }
+        if (!tcEditing.getFase().equals(testeCaseSelect.getFase())) {
+            return true;
+        }
+        if (!(tcEditing.getListStep().size() == testeCaseSelect.getListStep().size())) {
+            return true;
+        };
+
+        for (int i = 0; i < tcEditing.getListStep().size(); i++) {
+            if (!tcEditing.getListStep().get(i).getDescStep().equals(testeCaseSelect.getListStep().get(i).getDescStep())) {
+                return true;
+            }
+
+            if (!tcEditing.getListStep().get(i).getResultadoStep().equals(testeCaseSelect.getListStep().get(i).getResultadoStep())) {
+                return true;
+            }
+
+        }
+        return change;
+       
+        
+
+    }
+    
+  
+    private TesteCaseTSBean getEditingTestCase() {
+        
+        TesteCaseTSBean tc = new TesteCaseTSBean();
+        DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
+        DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date d = new Date(System.currentTimeMillis());
+
+
+        tc.setTestScriptName(jTextNameTS.getText());
+        tc.setProduct(jComboSistemasTS.getSelectedItem().toString());
+        tc.setComplexidade(jComboComplexidade.getSelectedItem().toString());
+        tc.setTestScriptDescription(jTextAreaDescriptionTS.getText() + "\n\nPré-Requisito: <<<pre_requisito>>>\n\nPós-Requisito:<<<pos_requisito>>>\n\nObservações:<<<observacoes>>>");
+        tc.setDataPlanejada(d);
+        tc.setListStep(new ArrayList<Step>());
+        tc.setAutomatizado(jCheckBoxAutomatizado.isSelected());
+        tc.setFase(jComboFaseCR.getSelectedItem().toString());
+        tc.setTestScriptName(jTextNameTS.getText());
+        tc.setIdSystem(((SystemBean)jComboSistemasTS.getSelectedItem()).getId());
+        int id = Integer.parseInt(modelCT.getValueAt(rowAfter,0).toString());
+        tc.setId(id);
+        
+        tc.setCreateDate(testeCaseSelect.getCreateDate());
+        tc.setCreatedBy(testeCaseSelect.getCreatedBy());
+        
+        tabelaSteps.editingStopped(null);
+        for (int cont = 0; cont < tabelaSteps.getRowCount(); cont++) {
+            Step step = new Step();
+            step.setNomeStep((tabelaSteps.getValueAt(cont, 0)).toString());
+            step.setDescStep((tabelaSteps.getValueAt(cont, 1)).toString());
+            step.setResultadoStep((tabelaSteps.getValueAt(cont, 2)).toString());
+            int idStep = Integer.parseInt(tabelaSteps.getValueAt(cont, 3).toString());
+            step.setId(idStep);
+            tc.getListStep().add(step);
+        }
+
+        return tc;
+        
+    }
+    
+    public void messageError(String error){
+        JOptionPane.showMessageDialog(null,error,"Erro", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void messageInfo(String info){
+        JOptionPane.showMessageDialog(null,info,"Informação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void messageWarnnig(String warnning){
+        JOptionPane.showMessageDialog(null,warnning,"Alerta", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public int getRowBefore() {
+        return rowBefore;
+    }
+
+    public void setRowBefore(int rowBefore) {
+        this.rowBefore = rowBefore;
+    }
+
+    public int getRowAfter() {
+        return rowAfter;
+    }
+
+    public void setRowAfter(int rowAfter) {
+        this.rowAfter = rowAfter;
+    }
+    
+    private void saveTestCaseBD(){
+        
+        TesteCaseTSBean tc = getEditingTestCase();
+        TestCaseTSRN caseTSRN = new TestCaseTSRN();
+        tc = caseTSRN.saveTestCaseTSBD(tc);
+        if(tc != null){
+             testeCaseSelect = tc;
+             messageInfo("CT salvo com sucesso!");
+             rowBefore = 0;
+             rowAfter = 0; 
+        }else{
+            
+             messageError("Erro ao salvar CT.");
+             
+        }
+       
+        
+        
+    }
+    
+    private  void delete(){
+        if(testCaseRN.delete(testeCaseSelect)){
+            messageInfo("CT excluir com sucesso!");
+            List<TesteCaseTSBean> listTestCaseTSPropertiesBean = testCaseRN.getTesteCaseTSBeanBySystemBeanBD(((SystemBean)jComboSistemasTS.getSelectedItem()));
+            cleanFields();
+            loadTableCtDB(listTestCaseTSPropertiesBean);
+        }else{
+            messageError("Erro ao excluir o CT");
+        }
+    }
+        
+    
+    
 
 }

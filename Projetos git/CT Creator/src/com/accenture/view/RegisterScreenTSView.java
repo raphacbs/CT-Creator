@@ -7,6 +7,7 @@ package com.accenture.view;
 
 import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.Step;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.log.MyLogger;
@@ -75,8 +76,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
 
         initComponents();
         this.fase = fase;
-        setTitle("Cadastro de CT "+fase);
-     //   MyLogger.setup();
+        setTitle("Cadastro de CT " + fase);
+        //  MyLogger.setup();
         Log.setLevel(Level.INFO);
         listSteps = new ArrayList<Step>();
         final JFrame GUIPrincipal = (JFrame) getParent();
@@ -87,11 +88,12 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
 
                 try {
 //                JOptionPane.showMessageDialog(null, "Iniciando carregamento do combobox", "IOException", JOptionPane.ERROR_MESSAGE);
-                    loadComboTS();
+//                    loadComboTS();
+                    loadComboTSBanco();
 //                    JOptionPane.showMessageDialog(null, "carregamento ok combobox", "IOException", JOptionPane.ERROR_MESSAGE);
                     addIconInButton();
 
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage() + " \nCausa: Desconhecida"
                             + "\nSolução: Deconhecida", "IOException", JOptionPane.ERROR_MESSAGE);
                     exceptionSVN(ex.getMessage());
@@ -158,7 +160,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextNameTS = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboFaseCR = new javax.swing.JComboBox<>();
+        jComboFaseCR = new javax.swing.JComboBox<String>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDescriptionTS = new javax.swing.JTextArea();
@@ -173,7 +175,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         bntColar = new javax.swing.JButton();
         bntCopiar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboComplexidade = new javax.swing.JComboBox<>();
+        jComboComplexidade = new javax.swing.JComboBox<String>();
         jCheckBoxAutomatizado = new javax.swing.JCheckBox();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -301,6 +303,11 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         bntSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntSalvarMouseClicked(evt);
+            }
+        });
+        bntSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntSalvarActionPerformed(evt);
             }
         });
 
@@ -548,40 +555,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntMudaStepDescerMouseClicked
 
     private void bntSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntSalvarMouseClicked
-        //CR 15125 - INICIO - DIMINUIDO O TAMANHO MÍNIMO E AUMENTADO O TAMANHO MÁXIMO
-        if (jTextNameTS.getText().length() >= 5 && jTextNameTS.getText().length() <= 80) {
-            final Frame GUIPrincipal = new MainScreenView();
-            final JInternalFrame ji = this;
-
-            new SwingWorker() {
-                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
-
-                @Override
-                protected Object doInBackground() throws Exception, SVNException, IOException {
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    aguarde.setLocationRelativeTo(GUIPrincipal);
-                    aguarde.setVisible(true);
-                    blockedFieldBnt(false);
-                    addTCSVN();
-
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    aguarde.dispose();
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-
-            }.execute();
-        } else if (jTextNameTS.getText().length() < 5) {
-            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem menos de 5 caracteres."
-                    + "\nSolução: Altere o nome caso de teste com mais de 5 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem mais de 80 caracteres."
-                    + "\nSolução: Altere o nome caso de teste com menos de 80 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
-
-        }
+      
 
 
     }//GEN-LAST:event_bntSalvarMouseClicked
@@ -589,13 +563,12 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     private void bntCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCancelarMouseClicked
         if (JOptionPane.showConfirmDialog(this, "Ao sair da tela seus dados serão perdidos, deseja realmente sair?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
-                testCaseRN = new TestCaseTSRN(this.fase);
-                testCaseRN.deleteDir(this.hashCode() + "");
+               // testCaseRN = new TestCaseTSRN(this.fase);
+               // testCaseRN.deleteDir(this.hashCode() + "");
 
                 dispose();
-            } catch (SVNException ex) {
-                JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getErrorMessage(), "ERRO SVN", JOptionPane.ERROR_MESSAGE);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
+                
                 JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "ERRO", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -753,6 +726,44 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jCheckBoxAutomatizadoActionPerformed
 
+    private void bntSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalvarActionPerformed
+          //CR 15125 - INICIO - DIMINUIDO O TAMANHO MÍNIMO E AUMENTADO O TAMANHO MÁXIMO
+        if (jTextNameTS.getText().length() >= 5 && jTextNameTS.getText().length() <= 80) {
+            final Frame GUIPrincipal = new MainScreenView();
+            final JInternalFrame ji = this;
+
+            new SwingWorker() {
+                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
+
+                @Override
+                protected Object doInBackground() throws Exception, SVNException, IOException {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    aguarde.setLocationRelativeTo(GUIPrincipal);
+                    aguarde.setVisible(true);
+                    blockedFieldBnt(false);
+                    //addTCSVN();
+                    addTCBD();
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    aguarde.dispose();
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+
+            }.execute();
+        } else if (jTextNameTS.getText().length() < 5) {
+            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem menos de 5 caracteres."
+                    + "\nSolução: Altere o nome caso de teste com mais de 5 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: O nome do caso de teste tem mais de 80 caracteres."
+                    + "\nSolução: Altere o nome caso de teste com menos de 80 caracteres.", "Alerta", JOptionPane.WARNING_MESSAGE);
+
+        }
+    }//GEN-LAST:event_bntSalvarActionPerformed
+
     private void openScreenAddScript() {
         try {
 
@@ -771,6 +782,32 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }
 
+    public void loadComboTSBanco() {
+        try {
+            testCaseRN = new TestCaseTSRN();
+            List<SystemBean> systems = testCaseRN.getSystemsBD();
+
+            for (int i = 0; i < systems.size(); i++) {
+                jComboSistemasTS.addItem(systems.get(i));
+            }
+
+            ArrayList fases = testCaseRN.faseCRTestCase();
+            ArrayList complexidades = testCaseRN.complexidade();
+
+            for (int i = 0; i < fases.size(); i++) {
+                jComboFaseCR.addItem(fases.get(i).toString());
+            }
+
+            for (int i = 0; i < complexidades.size(); i++) {
+                jComboComplexidade.addItem(complexidades.get(i).toString());
+            }
+
+        }catch (Exception ex) {
+            Logger.getLogger(RegisterScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \n"+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public void loadComboTS() throws IOException, SVNException {
 
         testCaseRN = new TestCaseTSRN(this.fase);
@@ -782,10 +819,9 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         ArrayList complexidades = testCaseRN.complexidade();
 //        JOptionPane.showMessageDialog(null, "  ArrayList complexidades = testCaseRN.complexidade();", "Combo Sistema carregado!", JOptionPane.INFORMATION_MESSAGE);
 
-        for (int i = 0; i < systems.size(); i++) {
-            jComboSistemasTS.addItem(systems.get(i).toString());
-        }
-
+//        for (int i = 0; i < systems.size(); i++) {
+//            jComboSistemasTS.addItem(systems.get(i).toString());
+//        }
 //        JOptionPane.showMessageDialog(null, systems, "Combo Sistema carregado!", JOptionPane.INFORMATION_MESSAGE);
         for (int i = 0; i < fases.size(); i++) {
             jComboFaseCR.addItem(fases.get(i).toString());
@@ -808,6 +844,54 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             //                   numeroStep = Integer.parseInt(numStepTemp.substring(5,6));
 
         }
+    }
+
+    private void addTCBD() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date d = new Date(System.currentTimeMillis());
+        List<Step> listStep = new ArrayList<Step>();
+
+        tabelaSteps.editingStopped(null);
+        for (int cont = 0; cont < tabelaSteps.getRowCount(); cont++) {
+            Step step = new Step();
+            step.setNomeStep((tabelaSteps.getValueAt(cont, 0)).toString());
+            step.setDescStep((tabelaSteps.getValueAt(cont, 1)).toString());
+            step.setResultadoStep((tabelaSteps.getValueAt(cont, 2)).toString());
+            step.setOrdem(cont+1);
+            listStep.add(step);
+        }
+
+        try {
+            testCaseRN = new TestCaseTSRN(this.fase);
+            TesteCaseTSBean ct = new TesteCaseTSBean();
+            ct.setTestScriptName(jTextNameTS.getText());
+            ct.setProduct(jComboSistemasTS.getSelectedItem().toString());
+            ct.setComplexidade(jComboComplexidade.getSelectedItem().toString()); //add complexidade
+            ct.setTestScriptDescription(jTextAreaDescriptionTS.getText()+ "\n\nPré-Requisito: <<<pre_requisito>>>\n\nPós-Requisito:<<<pos_requisito>>>\n\nObservações:<<<observacoes>>>");
+            ct.setAutomatizado(jCheckBoxAutomatizado.isSelected());
+            ct.setDataPlanejada(d);
+            ct.setListStep(listStep);
+            ct.setIdSystem(((SystemBean) jComboSistemasTS.getSelectedItem()).getId());
+            ct.setFase(jComboFaseCR.getSelectedItem().toString());
+
+            TesteCaseTSBean tc = testCaseRN.saveTestCaseTSBD(ct);
+            
+            if(tc == null){
+                messageError("Infelizmente não foi possível salva o Caso de Teste, para mais detalhes verifique o log e tente novamente.");
+            }else{
+                messageInfo("O Caso de teste foi salvo com sucesso com o Id:"+tc.getId());
+                if (JOptionPane.showConfirmDialog(this, "Deseja realiza novo cadastro?", "Cadastro", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                cleanFields();
+                blockedFieldBnt(true);
+            } else {
+                this.dispose();
+            }
+            }    
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro desconhecido.\n " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void addTCSVN() {
@@ -835,15 +919,14 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
                 listStep.add(step);
             }
             testCaseRN.getTsDao().getTestCase().setListStep(listStep);
-            Log.info("SALVANDO CT : "+jTextNameTS.getText());
-            
-            
+            Log.info("SALVANDO CT : " + jTextNameTS.getText());
+
             List<TestCaseTSPropertiesBean> listProperties = new SvnConnectionRN(this.fase).search(testCaseRN.getTsDao().getTestCase().getProduct(), jTextNameTS.getText());
             if (listProperties.isEmpty()) {
                 svnRN.addTestCaseSVN(testCaseRN.getTsDao().getTestCase(), "CT CADASTRADO VIA CT CREATOR", this.hashCode(), this.fase);
                 JOptionPane.showMessageDialog(null, "Caso de teste salvo com sucesso!", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
                 testCaseRN.deleteDir(this.hashCode() + "");
-                 Log.info("CADASTRO DO CT : "+jTextNameTS.getText());
+                Log.info("CADASTRO DO CT : " + jTextNameTS.getText());
                 if (JOptionPane.showConfirmDialog(this, "Deseja realiza novo cadastro?", "Cadastro", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     cleanFields();
                     blockedFieldBnt(true);
@@ -855,7 +938,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
                 for (int i = 0; i < listProperties.size(); i++) {
                     String s = listProperties.get(i).getTestCaseName();
                     if (s.equalsIgnoreCase(jTextNameTS.getText())) {
-                         Log.info("Mensagem: Não é possível salvar o Caso de teste. \nCausa: Já existe um caso de teste com o mesmo nome na base de dados."
+                        Log.info("Mensagem: Não é possível salvar o Caso de teste. \nCausa: Já existe um caso de teste com o mesmo nome na base de dados."
                                 + "\nSolução: Altere o nome caso de teste ou vá para a tela edição para editar-lo.");
                         JOptionPane.showMessageDialog(null, "Mensagem: Não é possível salvar o Caso de teste. \nCausa: Já existe um caso de teste com o mesmo nome na base de dados."
                                 + "\nSolução: Altere o nome caso de teste ou vá para a tela edição para editar-lo.", "Infomarção", JOptionPane.WARNING_MESSAGE);
@@ -1080,7 +1163,12 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     }
 
     public void loadFields(TesteCaseTSBean tc) {
-        jComboSistemasTS.setSelectedItem(tc.getProduct());
+
+        for(int i = 0; i < jComboSistemasTS.getItemCount(); i++){
+            if(tc.getIdSystem() == jComboSistemasTS.getItemAt(i).getId()){
+                jComboSistemasTS.setSelectedIndex(i);
+            }
+        }
         jTextNameTS.setText(tc.getTestScriptName() + "-Cópia");
         jTextAreaDescriptionTS.setText(tc.getTestScriptDescription().replace("\n\nPré-Requisito: <<<pre_requisito>>>\n\nPós-Requisito:<<<pos_requisito>>>\n\nObservações:<<<observacoes>>>", ""));
         jComboComplexidade.setSelectedItem(tc.getComplexidade());
@@ -1130,7 +1218,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox jCheckBoxAutomatizado;
     private javax.swing.JComboBox<String> jComboComplexidade;
     private javax.swing.JComboBox<String> jComboFaseCR;
-    private javax.swing.JComboBox<String> jComboSistemasTS;
+    private javax.swing.JComboBox<SystemBean> jComboSistemasTS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1166,13 +1254,13 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             TesteCaseTSBean testCase;
             File tempDir = new File("C:\\FastPlan\\tempTestCase");
             tempDir.mkdir();
-            
+
             File temp = new File("C:\\FastPlan\\tempTestCase\\RecoveredTestCase.testcase");
-                      
-            if(temp.exists()){
-                
-                if(JOptionPane.showConfirmDialog(this, "Foi recuperado um caso de teste que não foi salvo com sucesso, deseja recupera-lo?\nCaso escolha não o mesmo será pedido." , "Recuperação de caso de teste", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                
+
+            if (temp.exists()) {
+
+                if (JOptionPane.showConfirmDialog(this, "Foi recuperado um caso de teste que não foi salvo com sucesso, deseja recupera-lo?\nCaso escolha não o mesmo será pedido.", "Recuperação de caso de teste", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
                     FileInputStream restFile = new FileInputStream(temp);
                     ObjectInputStream stream = new ObjectInputStream(restFile);
                     Object objeto = null;
@@ -1191,15 +1279,27 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
                         model.addRow(new String[]{"Step " + 1, testCase.getListStep().get(i).getDescStep(), testCase.getListStep().get(i).getResultadoStep()});
                         model.setValueAt(false, tabelaSteps.getRowCount() - 1, 3);
                     }
-                
+
                 }
-                
+
                 temp.delete();
-                
+
             }
 
         } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
         }
+    }
+    
+    public void messageError(String error){
+        JOptionPane.showMessageDialog(null,error,"Erro", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void messageInfo(String info){
+        JOptionPane.showMessageDialog(null,info,"Informação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void messageWarnnig(String warnning){
+        JOptionPane.showMessageDialog(null,warnning,"Alerta", JOptionPane.WARNING_MESSAGE);
     }
 }

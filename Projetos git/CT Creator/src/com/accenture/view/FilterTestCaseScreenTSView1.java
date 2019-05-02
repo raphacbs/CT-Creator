@@ -8,6 +8,7 @@ package com.accenture.view;
 import com.accenture.bean.ButtonIconBean;
 import com.accenture.control.ManipulaDadosSQLite;
 import com.accenture.bean.Plano;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.ts.rn.SvnConnectionRN;
@@ -55,7 +56,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             this.fase = fase;
         this.setResizable(false);
         initComponents();
-        loadComboTS();
+        //loadComboTS();
+        loadComboTSDB();
         this.guiEditCt = guiEditCt;
         new SwingWorker() {
             JDialog aguarde;
@@ -100,7 +102,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         jLabel50 = new javax.swing.JLabel();
         textNomeCT = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
-        jComboSistemasTS = new javax.swing.JComboBox();
+        jComboSistemasTS = new javax.swing.JComboBox<>();
         jLabel34 = new javax.swing.JLabel();
         textId = new javax.swing.JTextField();
         bntCancelar = new javax.swing.JButton();
@@ -251,7 +253,11 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-                searchCT(textId.getText(), textNomeCT.getText());
+                
+                
+                
+               //searchCT(textId.getText(), textNomeCT.getText());
+                searchCTDB(textId.getText(), textNomeCT.getText());
 
                 return null;
 
@@ -356,7 +362,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCancelar;
     private javax.swing.JButton bntPesquisar;
-    private javax.swing.JComboBox jComboSistemasTS;
+    private javax.swing.JComboBox<SystemBean> jComboSistemasTS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
@@ -384,11 +390,28 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             ArrayList systems = testCaseRN.systemsTestCase();
 
             for (int i = 0; i < systems.size(); i++) {
-                jComboSistemasTS.addItem(systems.get(i).toString());
+         //       jComboSistemasTS.addItem(systems.get(i).toString());
             }
         } catch (SVNException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    
+        public void loadComboTSDB() {
+
+        try {
+            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            List<SystemBean> systems = testCaseRN.getSystemsBD();
+
+            for (int i = 0; i < systems.size(); i++) {
+                jComboSistemasTS.addItem(systems.get(i));
+            }
+       
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -426,6 +449,27 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         } catch (SVNException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    private void searchCTDB(String id, String nameTC) {
+        try {
+            List<String> ct = new ArrayList<String>();
+            
+           TestCaseTSRN caseTSRN = new TestCaseTSRN();
+           int IdSystem = ((SystemBean) jComboSistemasTS.getSelectedItem()).getId();
+            List<TesteCaseTSBean> listTestCaseTSPropertiesBean = caseTSRN.getTesteCaseTSBeanBySystemNameBD(IdSystem, nameTC, id);
+          
+            //guiEditCt.cleanFields();            
+            //guiEditCt.loadTableCt(listTestCaseTSPropertiesBean);
+            guiEditCt.setRowAfter(0);
+            guiEditCt.setRowBefore(0);
+            guiEditCt.loadTableCtDB(listTestCaseTSPropertiesBean);
+            //guiEditCt.setFiltro(text);
+       
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 

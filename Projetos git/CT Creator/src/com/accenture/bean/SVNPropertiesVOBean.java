@@ -41,8 +41,14 @@ public class SVNPropertiesVOBean {
     private String usersAuto;
     private static SVNPropertiesVOBean sVNPropertiesVOBean = null;
     private File fileSVNProperties;
+    
+    private String hostBD;
+    private String portBD;
+    private String databaseNameBD;
+    private String userBD;
+    private String passwordBD;
 
-    private SVNPropertiesVOBean() throws IOException {
+    public SVNPropertiesVOBean() throws IOException {
         loadFileProperties();
 
     }
@@ -55,6 +61,30 @@ public class SVNPropertiesVOBean {
         return sVNPropertiesVOBean;
     }
 
+    public String getHostBD() {
+        return hostBD = fileProperties.getProperty("host_bd");
+    }
+
+    public String getPortBD() {
+        return portBD = fileProperties.getProperty("port_bd");
+    }
+
+    public String getUserBD() {
+        return userBD  = fileProperties.getProperty("user_bd");
+    }
+
+    public String getPasswordBD() {
+        return passwordBD = fileProperties.getProperty("password_bd");
+    }
+    
+     public String getDatabaseNameBD() {
+        return databaseNameBD = fileProperties.getProperty("databaseName_bd");
+    }
+    
+
+  
+    
+    
     public double getVersion() {
         return this.version = Double.parseDouble(fileProperties.getProperty("version"));
     }

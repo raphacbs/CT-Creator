@@ -6,20 +6,24 @@
 package com.accenture.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
  * @author Raphael
  */
 public class Step implements Serializable {
-    private int id;
+    private int Id;
     private String nomeStep;
     private String descStep;
     private String resultadoStep;
     private int idPlano;
+    private int IdTesteCaseTSBean;
+    private int Ordem;
+    private List<ParameterBean> parameters;
 
     public Step(int id, String nomeStep, String descStep, String resultadoStep, int idPlano) {
-        this.id = id;
+        this.Id = id;
         this.nomeStep = nomeStep;
         this.descStep = descStep;
         this.resultadoStep = resultadoStep;
@@ -31,13 +35,13 @@ public class Step implements Serializable {
     }
 
     public int getId() {
-        return id;
+        return Id;
     }
     
 
 
     public void setId(int id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public String getNomeStep() {
@@ -71,6 +75,32 @@ public class Step implements Serializable {
     public void setIdPlano(int idPlano) {
         this.idPlano = idPlano;
     }
+
+    public int getIdTesteCaseTSBean() {
+        return IdTesteCaseTSBean;
+    }
+
+    public void setIdTesteCaseTSBean(int IdTesteCaseTSBean) {
+        this.IdTesteCaseTSBean = IdTesteCaseTSBean;
+    }
+
+    public int getOrdem() {
+        return Ordem;
+    }
+
+    public void setOrdem(int Ordem) {
+        this.Ordem = Ordem;
+    }
+
+    public List<ParameterBean> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<ParameterBean> parameters) {
+        this.parameters = parameters;
+    }
+    
+    
     
     
 }

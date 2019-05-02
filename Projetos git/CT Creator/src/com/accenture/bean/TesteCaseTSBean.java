@@ -42,6 +42,13 @@ public class TesteCaseTSBean implements Serializable {
     private boolean regression;
     private boolean data;
     
+    private int idSystem;
+    private int Id;
+    private String createdBy;
+    private String modifiedBy;
+    private Date createDate;
+    private Date modifyDate;
+    
 //
     public TesteCaseTSBean(TestCaseTSPropertiesBean testCaseProperties) {
         super();
@@ -153,6 +160,15 @@ public class TesteCaseTSBean implements Serializable {
         this.testCaseProperties = testCaseProperties;
     }
 
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int Id) {
+        this.Id = Id;
+    }
+
+    
     
     public String getProduct() {
         return product;
@@ -248,6 +264,46 @@ public class TesteCaseTSBean implements Serializable {
 
     public void setData(boolean data) {
         this.data = data;
+    }
+
+    public int getIdSystem() {
+        return idSystem;
+    }
+
+    public void setIdSystem(int idSystem) {
+        this.idSystem = idSystem;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
     
     

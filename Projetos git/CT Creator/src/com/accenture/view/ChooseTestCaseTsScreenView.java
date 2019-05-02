@@ -6,6 +6,7 @@
 package com.accenture.view;
 
 import com.accenture.bean.SVNPropertiesVOBean;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.filter.AutoChoices;
@@ -73,7 +74,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             @Override
             protected Object doInBackground() throws Exception {
 //                atualizaTabelaCT();
-                loadComboTS();
+               // loadComboTS();
+                loadComboTSBanco();
                 return null;
             }
 
@@ -107,7 +109,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         bntCancelar = new javax.swing.JButton();
         textPesquisaCT = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboSistemasTS = new javax.swing.JComboBox();
+        jComboSistemasTS = new javax.swing.JComboBox<>();
         jLabel33 = new javax.swing.JLabel();
         bntPesquisar = new javax.swing.JButton();
 
@@ -151,7 +153,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             tabelaSelecioneCT.getColumnModel().getColumn(0).setPreferredWidth(60);
             tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(170);
             tabelaSelecioneCT.getColumnModel().getColumn(2).setPreferredWidth(90);
-            tabelaSelecioneCT.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tabelaSelecioneCT.getColumnModel().getColumn(3).setMinWidth(120);
+            tabelaSelecioneCT.getColumnModel().getColumn(3).setPreferredWidth(130);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setMinWidth(0);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setPreferredWidth(0);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setMaxWidth(0);
@@ -167,6 +170,11 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntCopiarMouseClicked(evt);
+            }
+        });
+        bntCopiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntCopiarActionPerformed(evt);
             }
         });
 
@@ -202,32 +210,32 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel33))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel33))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(textPesquisaCT)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 122, Short.MAX_VALUE)
-                                .addComponent(bntPesquisar)
-                                .addGap(171, 171, 171))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(textPesquisaCT)
-                                    .addComponent(jComboSistemasTS, 0, 335, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(196, 196, 196))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bntCopiar)
-                .addGap(18, 18, 18)
-                .addComponent(bntCancelar)
-                .addGap(133, 133, 133))
+                                .addComponent(jLabel1)
+                                .addGap(196, 196, 196))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(bntCopiar)
+                                .addGap(42, 42, 42)
+                                .addComponent(bntCancelar)
+                                .addGap(232, 232, 232))))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(212, 212, 212)
+                .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,9 +249,9 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(textPesquisaCT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addComponent(bntPesquisar)
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -261,38 +269,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
     private void bntCopiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCopiarMouseClicked
 
-        new SwingWorker() {
-            DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
-            JDialog aguarde;
-            final Frame GUIPrincipal = new MainScreenView();
-
-            {
-                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
-            }
-
-            @Override
-            protected Object doInBackground() throws Exception {
-                aguarde.setLocationRelativeTo(GUIPrincipal);
-                aguarde.setVisible(true);
-                if (tabelaSelecioneCT.getSelectedRowCount() == 0) {
-                    aguarde.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-
-                    
-
-                    criaJanelaTelaCadCT(fasePara);
-
-                }
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                aguarde.dispose();
-            }
-
-        }.execute();
+      
 
 //            DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
 //
@@ -348,16 +325,53 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
     private void bntPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntPesquisarActionPerformed
         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        atualizaTabelaCT();
+        //atualizaTabelaCT();
+        atualizaTabelaCTDB();
         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_bntPesquisarActionPerformed
+
+    private void bntCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCopiarActionPerformed
+         new SwingWorker() {
+            DefaultTableModel tabelaCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
+            JDialog aguarde;
+            final Frame GUIPrincipal = new MainScreenView();
+
+            {
+                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
+            }
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                aguarde.setLocationRelativeTo(GUIPrincipal);
+                aguarde.setVisible(true);
+                if (tabelaSelecioneCT.getSelectedRowCount() == 0) {
+                    aguarde.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
+                    String id  = (String) model.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0);
+
+                    //criaJanelaTelaCadCT(fasePara);
+                    carregaTestCaseTS(Integer.parseInt(id));
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                aguarde.dispose();
+            }
+
+        }.execute();
+    }//GEN-LAST:event_bntCopiarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCancelar;
     private javax.swing.JButton bntCopiar;
     private javax.swing.JButton bntPesquisar;
-    private javax.swing.JComboBox jComboSistemasTS;
+    private javax.swing.JComboBox<SystemBean> jComboSistemasTS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel33;
@@ -448,6 +462,45 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         }
 
     }
+    public void atualizaTabelaCTDB() {
+
+        DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
+
+        if (model.getRowCount() != 0) {
+            int numLinhas = model.getRowCount();
+            for (int i = 0; i <= model.getRowCount(); i++) {
+                //                model.removeRow(0);
+                model.setRowCount(0);
+            }
+
+        }
+        try {
+            String nameCT = "";
+            String id = "";
+            String modifyBy = "";
+            String hashCode = "";
+            String data = "";
+
+           List<TesteCaseTSBean> listTemp = testCaseRN.getTesteCaseTSBeanBySystemNameBD(((SystemBean)jComboSistemasTS.getSelectedItem()).getId(),textPesquisaCT.getText(),"");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+            for (int i = 0; i < listTemp.size(); i++) {
+//            id = listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().replace(".xlsx","").substring(0,listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().indexOf("-"));
+//            nameCT = listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().replace(".xlsx","").substring(listTestCaseTSPropertiesBean.get(i).getDirEntry().getName().indexOf("-")+1);
+                id = listTemp.get(i).getId()+"";
+                nameCT = listTemp.get(i).getTestScriptName();
+                modifyBy = listTemp.get(i).getModifiedBy();
+                data = listTemp.get(i).getModifyDate() != null ? sdf.format(listTemp.get(i).getModifyDate()) : "";
+                hashCode = "";
+                model.addRow(new String[]{id, nameCT, modifyBy, data, hashCode});
+//            System.out.println(listStep.get(i).getCasoTeste());
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
     RegisterScreenTSView guiJanelaRegCtTs;
 
     private void criaJanelaTelaCadCT(String fasePara) throws IOException, ClassNotFoundException, SQLException, SVNException {
@@ -461,6 +514,28 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         guiJanelaRegCtTs.loadFields(downloadCT());
         guiJanelaRegCtTs.setVisible(true);
         this.dispose();
+
+    }
+    
+    private void carregaTestCaseTS(int id) throws Exception {
+
+        TestCaseTSRN tcRN = new TestCaseTSRN();
+        
+        TesteCaseTSBean caseTSBean = tcRN.getTesteCaseTSBeanById(id);
+        
+        if(caseTSBean != null){
+            guiJanelaRegCtTs = new RegisterScreenTSView("");
+            this.getParent().add(guiJanelaRegCtTs);
+
+            guiJanelaRegCtTs.centralizaJanela();
+
+            guiJanelaRegCtTs.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+            guiJanelaRegCtTs.loadFields(caseTSBean);
+            guiJanelaRegCtTs.setVisible(true);
+            this.dispose();
+        }else{
+            messageError("Erro ao ao carregar o Caso de Teste");
+        }
 
     }
 
@@ -506,9 +581,9 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                 }
             });
             
-            for (int i = 0; i < systems.size(); i++) {
-                jComboSistemasTS.addItem(systems.get(i).toString());
-            }
+//            for (int i = 0; i < systems.size(); i++) {
+//                jComboSistemasTS.addItem(systems.get(i).toString());
+//            }
 
         } catch (SVNException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -517,10 +592,42 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         }
     }
     
+    public void loadComboTSBanco() {
+        try {
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            testCaseRN = new TestCaseTSRN(this.faseDe);
+            List<SystemBean> systems = testCaseRN.getSystemsBD();
+
+            for (int i = 0; i < systems.size(); i++) {
+                jComboSistemasTS.addItem(systems.get(i));
+            }
+
+            ArrayList fases = testCaseRN.faseCRTestCase();
+            ArrayList complexidades = testCaseRN.complexidade();
+
+          getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        } catch (Exception ex) {
+            Logger.getLogger(RegisterScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+    }
+    
     private void downloadCtSvn() {
         DefaultTableModel modelCT = (DefaultTableModel) tabelaSelecioneCT.getModel();
 //        listTestCase = new TestCaseTSRN().readSheet(new SVNPropertiesVOBean().getFolderTemplocal() + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getSystem() + "\\" + listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getName());
     }
     
+    public void messageError(String error){
+        JOptionPane.showMessageDialog(null,error,"Erro", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void messageInfo(String info){
+        JOptionPane.showMessageDialog(null,info,"Informação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void messageWarnnig(String warnning){
+        JOptionPane.showMessageDialog(null,warnning,"Alerta", JOptionPane.WARNING_MESSAGE);
+    }
 
 }

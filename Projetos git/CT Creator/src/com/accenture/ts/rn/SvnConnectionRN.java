@@ -55,10 +55,14 @@ public class SvnConnectionRN {
     //INICIO CR 
      public boolean addTestCaseSVN(TesteCaseTSBean testCase, String mensage, int hashCode, String fase) throws SVNException, IOException {
 //        tsDao.deleteDir(new File(new SVNPropertiesVOBean().getFolderTemplocal()));
+         try{
         connectionDao.checkOutEmpytFolder(testCase.getProduct(), hashCode, fase);
         new TestCaseTSRN(fase).createSheet(testCase, testCase.getProduct(), hashCode, fase);
         connectionDao.addFileOrFolderSave(testCase.getProduct(), mensage, hashCode);
-
+        }catch(Exception ex){
+           System.out.printf("Erro ao adicionar o CT {0}, erro:", testCase.getTestScriptName(), ex.getStackTrace());
+           return false;
+       }
         return true;
     }
     //FIM CR
