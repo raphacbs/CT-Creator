@@ -1123,8 +1123,26 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }
     
     public void refreshTableCT(){
-        List<TesteCaseTSBean> list = testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem());
-        //tabelaCt.getModel().getRowCount()
+         DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
+         int idTestCase = Integer.parseInt((String) model.getValueAt(rowAfter, 0));
+         int line = 0;
+         loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem()));
+         
+        for(int i =0 ; i < model.getRowCount(); i++){
+            int idTestCaseTemp = Integer.parseInt((String) model.getValueAt(i, 0));
+            if(idTestCase == idTestCaseTemp){
+                line = i;
+                break;
+            }
+        }
+        tabelaCt.setRowSelectionInterval(line, line);
+        rowAfter = line;
+        
+        rowBefore = line;
+        
+        
+                    
+                    
         
     }
 
@@ -2108,31 +2126,21 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JTable tabelaSteps;
     // End of variables declaration//GEN-END:variables
 
-    private void verifyEdition(){
+    private void verifyEdition() {
+        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         if (rowBefore != rowAfter) {
-                if (isChangeTC()) {
-                    if(JOptionPane.showConfirmDialog(this, "Deseja salvar suas alterações?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                        saveTestCaseBD();
-                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-//                        loadCTDB();
-                    }
-                    
-                    
-                    loadCTDB();
-//                    else{
-//                        tabelaCt.getSelectionModel().setSelectionInterval(rowBefore, rowBefore);
-//                    }
-                }else{
-                    loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem()));
-                   
-                    loadCTDB();
+            if (isChangeTC()) {
+                if (JOptionPane.showConfirmDialog(this, "Deseja salvar suas alterações?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+                    saveTestCaseBD();
                 }
-            } else {
-                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean)jComboSistemasTS.getSelectedItem()));
-                
-                loadCTDB();
+
             }
+        }
+
+        refreshTableCT();
+        loadCTDB();
+        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     private void verifyChangeToClose(){
@@ -2171,9 +2179,9 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             while (modelStep.getRowCount() > 0) {
                 modelStep.removeRow(0);
             }
-          // int row = tabelaCt.getSelectedRow();
+            int row = tabelaCt.getSelectedRow();
 
-            int id = Integer.parseInt((String) model.getValueAt(rowAfter, 0));
+            int id = Integer.parseInt((String) model.getValueAt(row, 0));
 
             testeCaseSelect = testCaseRN.getTesteCaseTSBeanById(id);
             loadFieldsDB(testeCaseSelect);
@@ -2190,7 +2198,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     
     private boolean isChangeTC() {
         boolean change = false;
-        TesteCaseTSBean tcEditing = getEditingTestCase();
+        TesteCaseTSBean tcEditing = getEditingTestCase(rowAfter);
 
         if (!tcEditing.getComplexidade().equals(testeCaseSelect.getComplexidade())) {
             return true;
@@ -2234,7 +2242,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }
     
   
-    private TesteCaseTSBean getEditingTestCase() {
+    private TesteCaseTSBean getEditingTestCase(int row) {
         
         TesteCaseTSBean tc = new TesteCaseTSBean();
         DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
@@ -2253,7 +2261,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         tc.setFase(jComboFaseCR.getSelectedItem().toString());
         tc.setTestScriptName(jTextNameTS.getText());
         tc.setIdSystem(((SystemBean)jComboSistemasTS.getSelectedItem()).getId());
-        int id = Integer.parseInt(modelCT.getValueAt(rowAfter,0).toString());
+        int id = Integer.parseInt(modelCT.getValueAt(row,0).toString());
         tc.setId(id);
         
         tc.setCreateDate(testeCaseSelect.getCreateDate());
@@ -2304,14 +2312,13 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     
     private void saveTestCaseBD(){
         
-        TesteCaseTSBean tc = getEditingTestCase();
+        TesteCaseTSBean tc = getEditingTestCase(rowAfter);
         TestCaseTSRN caseTSRN = new TestCaseTSRN();
         tc = caseTSRN.saveTestCaseTSBD(tc);
         if(tc != null){
              testeCaseSelect = tc;
              messageInfo("CT salvo com sucesso!");
-             rowBefore = 0;
-             rowAfter = 0; 
+             rowBefore = rowAfter ; 
         }else{
             
              messageError("Erro ao salvar CT.");
