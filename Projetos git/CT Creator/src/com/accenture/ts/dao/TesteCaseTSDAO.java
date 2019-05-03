@@ -1276,7 +1276,8 @@ public class TesteCaseTSDAO {
         Pattern r = Pattern.compile(pattern);  // Now create matcher object.
         Matcher m = r.matcher(descStep);
         while (m.find()) {
-            parameters.add(m.group(1));
+            if(!parameters.contains(m.group(1)))
+                  parameters.add(m.group(1));
         }
         return parameters;
     }

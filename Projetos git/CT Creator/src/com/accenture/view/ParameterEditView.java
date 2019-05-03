@@ -7,6 +7,7 @@ package com.accenture.view;
 
 import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.ParameterBean;
+import com.accenture.bean.Step;
 import com.accenture.control.Validacao;
 import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.rn.ParameterRN;
@@ -18,6 +19,7 @@ import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
@@ -114,14 +116,14 @@ public class ParameterEditView extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Parâmetro", "Valor", "Aplicar a todos?"
+                "Parâmetro", "Valor", "Aplicar a todos?", "idstep", "id", "idTestCase"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, true, true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -141,6 +143,15 @@ public class ParameterEditView extends javax.swing.JDialog {
         if (tabelaParametros.getColumnModel().getColumnCount() > 0) {
             tabelaParametros.getColumnModel().getColumn(1).setCellEditor(new TextAreaCellEditor());
             tabelaParametros.getColumnModel().getColumn(1).setCellRenderer(new TextAreaCellRenderer());
+            tabelaParametros.getColumnModel().getColumn(3).setMinWidth(0);
+            tabelaParametros.getColumnModel().getColumn(3).setPreferredWidth(0);
+            tabelaParametros.getColumnModel().getColumn(3).setMaxWidth(0);
+            tabelaParametros.getColumnModel().getColumn(4).setMinWidth(0);
+            tabelaParametros.getColumnModel().getColumn(4).setPreferredWidth(0);
+            tabelaParametros.getColumnModel().getColumn(4).setMaxWidth(0);
+            tabelaParametros.getColumnModel().getColumn(5).setMinWidth(0);
+            tabelaParametros.getColumnModel().getColumn(5).setPreferredWidth(0);
+            tabelaParametros.getColumnModel().getColumn(5).setMaxWidth(0);
         }
         //addTableListener();
 
@@ -366,12 +377,14 @@ public class ParameterEditView extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
         bntNext.setEnabled(true);
         if (lineSelectTableInstance != 0) {
-            saveParameter();
+           // saveParameter();
+            saveParameterDB(lineSelectTableInstance);
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
             lineSelectTableInstance = lineSelectTableInstance - 1;
-            loadParameterTable(this.plan, lineSelectTableInstance);
+            //loadParameterTable(this.plan, lineSelectTableInstance);
+             loadParameterTableDB(this.plan, lineSelectTableInstance);
         } else {
             bntPrevious.setEnabled(false);
         }
@@ -382,12 +395,14 @@ public class ParameterEditView extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
         bntPrevious.setEnabled(true);
         if (lineSelectTableInstance != this.plan.getTestPlan().getTestCase().size() - 1) {
-            saveParameter();
+//            saveParameter();
+            saveParameterDB(lineSelectTableInstance);
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
             lineSelectTableInstance = lineSelectTableInstance + 1;
-            loadParameterTable(this.plan, lineSelectTableInstance);
+//            loadParameterTable(this.plan, lineSelectTableInstance);
+             loadParameterTableDB(this.plan, lineSelectTableInstance);
         } else {
             bntNext.setEnabled(false);
         }
@@ -581,6 +596,52 @@ public class ParameterEditView extends javax.swing.JDialog {
         for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().size(); i++) {
             model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
+            
+        }
+
+        //apaga linhas da tabela steps
+        while (modelStep.getRowCount() > 0) {
+            modelStep.removeRow(0);
+        }
+        for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().size(); i++) {
+            modelStep.addRow(new String[]{"Step " + 1, this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().get(i).getDescStep(), this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().get(i).getResultadoStep()});
+            System.out.print(modelStep.getValueAt(i, 1));
+        }
+        int numeroStep = 0;
+        //ordena a numeração dos steps
+        int numLinhas = modelStep.getRowCount();
+        for (int j = 0; j < numLinhas; j++) {
+            numeroStep = j + 1;
+            modelStep.setValueAt("Step " + numeroStep, j, 0);
+        }
+        
+        refreshLabelQtdCt();
+
+    }
+    
+    public void loadParameterTableDB(TestPlanTSDao plan, int lineSelect) {
+        this.plan = plan;
+        lineSelectTableInstance = lineSelect;
+        
+        DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+        DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
+        String nameTemp = "";
+        jTextFieldCT.setText(plan.getTestPlan().getTestCase().get(lineSelect).getTestScriptName());
+        jTextFieldSystem.setText(plan.getTestPlan().getTestCase().get(lineSelect).getProduct());
+        jTextFieldNumeroCenario.setText(plan.getTestPlan().getTestCase().get(lineSelect).getNumeroCenario() + "");
+        jTextFieldNumeroCt.setText(plan.getTestPlan().getTestCase().get(lineSelect).getNumeroCt() + "");
+        jTextAreaDescriptionTS.setText(plan.getTestPlan().getTestCase().get(lineSelect).getTestScriptDescription());
+        
+//        List<ParameterBean> parameters = new ArrayList<>();
+//        this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().stream().forEach(s->{parameters.addAll(s.getParameters());});
+        
+        
+      
+        for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().size(); i++) {
+            model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getParameterName(), this.plan.getListTc().get(lineSelectTableInstance).getParameters().get(i).getParameterValue()});
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).isApllyToAll(), i, 2);
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getIdStep(), i, 3);
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getId(), i, 4);
         }
 
         //apaga linhas da tabela steps
@@ -653,6 +714,48 @@ public class ParameterEditView extends javax.swing.JDialog {
 
         instance.upddateTableInstance();
     }
+    
+     public void saveParameterDB(int row) {
+        tabelaParametros.editingStopped(new ChangeEvent(tabelaParametros));
+        int idCT =  this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getId();
+        for(int i = 0 ; i < tabelaParametros.getRowCount(); i++){
+            boolean aplly = (boolean) tabelaParametros.getValueAt(i, 2);
+            String value = (String) tabelaParametros.getValueAt(i, 1);
+            String name = (String) tabelaParametros.getValueAt(i, 0);
+            
+             for(int j = 0; j< this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().size(); j++){
+                 
+                   List<ParameterBean> ps =   this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(j).getParameters().stream().filter(pb->pb.getParameterName().contains(name)).collect(Collectors.toList());
+                   ps.stream().forEach(param-> param.setParameterValue(value));
+             }
+        }
+        
+
+           
+        
+//        for(int i = 0; i< this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().size(); i++){
+//            int idstep = (int) tabelaParametros.getValueAt(0, 3);
+//            if(idstep == this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(i).getId()){
+//                for(int j = 0 ; j < this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(i).getParameters().size(); j++){
+//                    String name = (String) tabelaParametros.getValueAt(j, 0);
+//                    if(name.equals(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(i).getParameters().get(j).getParameterName()) ){
+//                        boolean aplly = (boolean) tabelaParametros.getValueAt(j, 2);
+//                        String value = (String) tabelaParametros.getValueAt(j, 1);
+//                        this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(i).getParameters().get(j).setApllyToAll(aplly);
+//                        this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getListStep().get(i).getParameters().get(j).setParameterValue(value);
+//                        if(!aplly){
+//                            break;
+//                        }
+//                    }
+//                }
+//                break;
+//            }
+//        }
+
+        instance.upddateTableInstance();
+    }
+    
+    
 
     public void centralizaJanelaDialogo() {
         Toolkit tk = Toolkit.getDefaultToolkit();

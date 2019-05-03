@@ -6,8 +6,10 @@
 package com.accenture.view;
 
 import com.accenture.bean.ButtonIconBean;
+import com.accenture.bean.SystemBean;
 import com.accenture.control.ManipulaDadosSQLite;
 import com.accenture.bean.TestCaseTSPropertiesBean;
+import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
 import java.awt.Dimension;
@@ -54,7 +56,8 @@ this.fase = fase;
         this.fase = fase;
         this.setResizable(false);
         initComponents();
-        loadComboTS();
+        //loadComboTS();
+        loadComboTSBanco();
         this.guiInstanceCT = guiInstanceCT;
         new SwingWorker() {
             JDialog aguarde;
@@ -138,7 +141,7 @@ this.fase = fase;
         jLabel50 = new javax.swing.JLabel();
         textNomeCT = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
-        jComboSistemasTS = new javax.swing.JComboBox();
+        jComboSistemasTS = new javax.swing.JComboBox<>();
         jLabel34 = new javax.swing.JLabel();
         textId = new javax.swing.JTextField();
         bntCancelar = new javax.swing.JButton();
@@ -295,8 +298,8 @@ this.fase = fase;
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-                searchCT();
-
+               // searchCT();
+                searchCTDB(textNomeCT.getText(), textId.getText());
                 return null;
 
             }
@@ -344,7 +347,7 @@ this.fase = fase;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCancelar;
     private javax.swing.JButton bntPesquisar;
-    private javax.swing.JComboBox jComboSistemasTS;
+    private javax.swing.JComboBox<SystemBean> jComboSistemasTS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
@@ -384,9 +387,9 @@ this.fase = fase;
             });
 
             for (int i = 0; i < systems.size(); i++) {
-                jComboSistemasTS.addItem(systems.get(i).toString());
+              //  jComboSistemasTS.addItem(systems.get(i).toString());
                 if (systems.get(i).toString().equals("STC DADOS")) {
-                    jComboSistemasTS.addItem("STC(DADOS/VOZ)");
+                 //   jComboSistemasTS.addItem("STC(DADOS/VOZ)");
                 }
             }
 
@@ -397,7 +400,25 @@ this.fase = fase;
         }
 
     }
+    
+    public void loadComboTSBanco() {
+        try {
+            TestCaseTSRN testCaseRN = new TestCaseTSRN();
+            List<SystemBean> systems = testCaseRN.getSystemsBD();
 
+            for (int i = 0; i < systems.size(); i++) {
+                jComboSistemasTS.addItem(systems.get(i));
+            }
+
+            ArrayList fases = testCaseRN.faseCRTestCase();
+            ArrayList complexidades = testCaseRN.complexidade();
+
+          
+        }catch (Exception ex) {
+            Logger.getLogger(RegisterScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao desconhecido, \n"+ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void searchCT() {
         try {
             List<String> ct = new ArrayList<String>();
@@ -443,6 +464,27 @@ this.fase = fase;
         } catch (SVNException ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+      private void searchCTDB(String nameTC, String id) {
+        try {
+            List<String> ct = new ArrayList<String>();
+            
+           TestCaseTSRN caseTSRN = new TestCaseTSRN();
+           int IdSystem = ((SystemBean) jComboSistemasTS.getSelectedItem()).getId();
+            List<TesteCaseTSBean> listTestCaseTSPropertiesBean = caseTSRN.getTesteCaseTSBeanBySystemNameBD(IdSystem, nameTC, id);
+          
+            //guiEditCt.cleanFields();            
+            //guiEditCt.loadTableCt(listTestCaseTSPropertiesBean);
+            guiInstanceCT.cleanFields();
+            guiInstanceCT.loadTableCtBD(listTestCaseTSPropertiesBean);
+           
+            //guiEditCt.setFiltro(text);
+       
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 

@@ -52,8 +52,8 @@ public class ParameterRN {
         m = p.matcher(texto);
 
         while (m.find()) {
-            System.out.println(m.group(2));
-            paramentros.add(m.group(2));
+            System.out.println(m.group(1));
+            paramentros.add(m.group(1));
         }
 
         return paramentros;

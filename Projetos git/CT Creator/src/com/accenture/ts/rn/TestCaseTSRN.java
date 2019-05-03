@@ -444,7 +444,7 @@ public class TestCaseTSRN {
         //capturando steps e parametros
 //        for (int i = 0; i < steps.size(); i++) {
 //            List<String> parameters = tsDao.getParameter(steps.get(i).getDescStep());
-//            parameters.addAll(tsDao.getParameter(steps.get(i).getResultadoStep()));
+//            parameters.addAll(C);
 //            List<ParameterBean> listParameters = new ArrayList<>();
 //            for (int j = 0; j < parameters.size(); j++) {
 //
@@ -599,6 +599,61 @@ public class TestCaseTSRN {
         return list;
 
     }
+    
+    public List<TesteCaseTSBean> getTesteCaseTSBeanById(int... id) {
+        StringBuilder sbids = new StringBuilder();
+        for(int i =0 ; i < id.length; i++){
+            sbids.append(id[i]);
+            if(i  != id.length-1){
+                sbids.append(",");
+            }               
+                
+        }
+        
+        List<TesteCaseTSBean> list = tsDao.getByFields("Id in ( " + sbids.toString() + ")");
+        AtomicInteger cont = new AtomicInteger(0);
+        list.stream().forEach(tc-> {
+                
+            if (tc != null) {
+                    StepDAO stepDAO = new StepDAO();
+                    ParameterDAO pd = new ParameterDAO();
+
+                    List<Step> steps = stepDAO.getByTestCaseBean(tc.getId());    
+
+                    for (int i = 0; i < steps.size(); i++) {
+                         List<ParameterBean> listParameters = new ArrayList<>();
+                           List<String> parameterNames = tsDao.getParameter(steps.get(i).getDescStep());
+                           parameterNames.addAll(tsDao.getParameter(steps.get(i).getResultadoStep()));
+                        for (int j = 0; j < parameterNames.size(); j++) {
+
+                            
+                            ParameterBean pb = new ParameterBean();
+                            pb.setApllyToAll(false);
+                            pb.setParameterName(parameterNames.get(j));
+                            pb.setParameterValue("");
+                            pb.setIdStep(steps.get(i).getId());
+                            if(!listParameters.stream().anyMatch(p-> p.getParameterName().equals(pb.getParameterName()))){
+                               listParameters.add(pb);
+                            }
+                           
+
+                        }
+                        steps.get(i).setParameters(listParameters);
+                    }
+                    
+                    tc.setListStep(steps);
+                };
+    
+    
+         });
+        
+              
+        
+        
+
+        return list;
+
+    }
 
     public TesteCaseTSBean getTesteCaseTSBeanById(int Id) {
 
@@ -611,11 +666,39 @@ public class TestCaseTSRN {
             List<Step> steps = stepDAO.getByTestCaseBean(testeCaseTSBean.getId());
 
             List<Integer> ids = steps.stream().map(Step::getId).collect(Collectors.toList());
+            
+            List<String> parameterNames = steps.stream().map(Step::getDescStep).collect(Collectors.toList());
+            parameterNames.addAll(steps.stream().map(Step::getResultadoStep).collect(Collectors.toList()));
+            
+            
+            for (int i = 0; i < steps.size(); i++) {
+                 List<ParameterBean> listParameters = new ArrayList<>();
+                for (int j = 0; j < parameterNames.size(); j++) {
 
-            if (ids.size() > 0) {
-                List<ParameterBean> pbs = pd.getByIdStep(ids);
-                steps.stream().forEach(u -> u.setParameters(pbs.stream().filter(x -> x.getIdStep() == u.getId()).collect(Collectors.toList())));
+                    ParameterBean pb = new ParameterBean();
+                    pb.setApllyToAll(false);
+                    pb.setParameterName(parameterNames.get(j));
+                    pb.setParameterValue("");
+                    listParameters.add(pb);
+
+                }
+                steps.get(i).setParameters(listParameters);
             }
+
+
+//
+//                ParameterBean pb = new ParameterBean();
+//                pb.setApllyToAll(false);
+//                pb.setParameterName(parameters.get(j));
+//                pb.setParameterValue("");
+//                listParameters.add(pb);
+//
+//            }
+
+//            if (ids.size() > 0) {
+//                List<ParameterBean> pbs = pd.getByIdStep(ids);
+//                steps.stream().forEach(u -> u.setParameters(pbs.stream().filter(x -> x.getIdStep() == u.getId()).collect(Collectors.toList())));
+//            }
 //            for (Step s : steps) {
 //                s.setParameters(pbs.stream().filter(x-> x.getIdStep() == s.getId()).collect(Collectors.toList()));
 //            }

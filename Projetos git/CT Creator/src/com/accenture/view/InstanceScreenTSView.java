@@ -146,20 +146,20 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            MyLogger.setup();
             Log.setLevel(Level.INFO);
             logger = org.apache.log4j.Logger.getLogger(TesteCaseTSDAO.class);
-            timerTask = new TimerTask() {
+//            timerTask = new TimerTask() {
+//
+//                @Override
+//                public void run() {
+//
+//                    testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
+//                    testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+//
+//                    salvaPlanoFile(testPlan, true);
+//
+//                }
+//            };
 
-                @Override
-                public void run() {
-
-                    testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
-                    testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
-
-                    salvaPlanoFile(testPlan, true);
-
-                }
-            };
-
-            timer.scheduleAtFixedRate(timerTask, tempo, tempo);
+//            timer.scheduleAtFixedRate(timerTask, tempo, tempo);
 
             listSteps = new ArrayList<Step>();
             listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
@@ -209,6 +209,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        
+        
         testPlan = new TestPlanTSDao();
         addIconInButton();
 
@@ -1199,7 +1201,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            addCtInTestPlan();
 //        }else{
 
-                loadListCT();
+               // loadListCT();
+                addCTList();
             }
 
             atualizaContagemLabelTabelaInstancia();
@@ -1290,7 +1293,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             progress(true);
             DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
             if (evt.getClickCount() == 2 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
-                loadCT2();
+                //loadCT2();
+                showSteps();
             } else {
 
 //            if(tabelaCt.getSelectedRowCount() > 1){
@@ -1306,7 +1310,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             addExceptionTextArea(ex);
-            logger.error("Erro ao abrir o arquivo: ", ex);
+            logger.error("erro ", ex);
             ex.printStackTrace();
             progress(false);
 
@@ -1449,6 +1453,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
 
                         this.testPlan.getTestPlan().addTestCase(tc);
+                        
+                        this.testPlan.getTestPlan().addTestCase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]));
 
                         model.addRow(new Object[]{tc.getNumeroCenario(), tc.getNumeroCt(), tc.getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(), tc.isRework(), tc.isRegression()});
 
@@ -2247,6 +2253,51 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         labelQtdCTs.setText("Qtd CTs: " + tabelaCt.getRowCount());
 
     }
+    
+     public void loadTableCtBD(List<TesteCaseTSBean> listTesteCaseTSBean) {
+        DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
+        DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+        
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        if (listTesteCaseTSBean.size() == 0) {
+//            blockedFieldBnt(false);
+//            limpaCampos();
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
+        }
+
+        String nameCT = "";
+        String id = "";
+        String modifyBy = "";
+        Date dateModify;
+        SimpleDateFormat sdf;
+
+        for (int i = 0; i < listTesteCaseTSBean.size(); i++) {
+            id = listTesteCaseTSBean.get(i).getId()+"";
+            nameCT = listTesteCaseTSBean.get(i).getTestScriptName();
+            modifyBy = listTesteCaseTSBean.get(i).getModifiedBy();
+            dateModify = listTesteCaseTSBean.get(i).getModifyDate();
+            sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String dataFormatada = sdf.format(dateModify);
+            String system = listTesteCaseTSBean.get(i).getProduct();
+            model.addRow(new String[]{id, nameCT, modifyBy, dataFormatada, system});
+//            System.out.println(listStep.get(i).getCasoTeste());
+        }
+        tabelaCt.setEnabled(true);
+
+        if (!isEmptyTableTastCase(model)) {
+            bntAddCTInPlan.setEnabled(true);
+        } else {
+            bntAddCTInPlan.setEnabled(false);
+        }
+
+        labelQtdCTs.setText("Qtd CTs: " + tabelaCt.getRowCount());
+
+    }
 
     public void loadFields(TesteCaseTSBean testCase) {
         DefaultTableModel model = (DefaultTableModel) tabelaSteps.getModel();
@@ -2663,7 +2714,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            }else{
 //                dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
 //            }
-        dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
+        //dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
+        dialogParameter.loadParameterTableDB(testPlan, tabelaInstancia.getSelectedRow());
 
         dialogParameter.setVisible(true);
 
@@ -2909,6 +2961,237 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
     }
 
+    public void addCtInTestPlanDB(List<TesteCaseTSBean> list) {
+        try {
+            boolean first = true;
+            int cont = 0;
+            Validacao v = new Validacao();
+            DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
+            DefaultTableModel modelCt = (DefaultTableModel) tabelaCt.getModel();
+
+            if (!list.isEmpty()) {
+                while (first) {
+
+                    String qtd = "";
+                    qtd = JOptionPane.showInputDialog(this, "Digite a quantidade: ", "Quantidade de CTs", JOptionPane.CLOSED_OPTION);
+
+                    if (qtd == null || qtd.isEmpty()) {
+                        cont = 0;
+                        break;
+                    }
+
+                    if (isDigit(qtd)) {
+                        cont = Integer.parseInt(qtd);
+                        first = false;
+                    }
+                }
+
+                for (int i = 0; i < cont; i++) {
+                    for (int j = 0; j < list.size(); j++) {
+
+                        list.get(j).setNumeroCenario("00");
+                        list.get(j).setNumeroCt("00");
+                        TesteCaseTSBean tc = new TesteCaseTSBean();
+                        tc.setExpectedResults(list.get(j).getExpectedResults());
+                            tc.setStepDescription(list.get(j).getStepDescription());
+                            tc.setDataPlanejada(list.get(j).getDataPlanejada());
+                            tc.setFase(list.get(j).getFase());
+                            
+                            ///steps
+                            List<Step> steps = new ArrayList<>();
+                            
+                            for(int s = 0; s < list.get(j).getListStep().size(); s++){
+                                steps.add(new Step(list.get(j).getListStep().get(s).getId(), list.get(j).getListStep().get(s).getNomeStep(), list.get(j).getListStep().get(s).getDescStep(), list.get(j).getListStep().get(s).getResultadoStep(),list.get(j).getId()));
+                            }
+                            tc.setListStep(steps);
+                            tc.setProduct(list.get(j).getProduct());
+                            tc.setProduct(list.get(j).getProduct());
+                            tc.setSTIPRJ(list.get(j).getSTIPRJ());
+                            tc.setTestCaseProperties(list.get(j).getTestCaseProperties());
+                            tc.setTestPhase(list.get(j).getTestPhase());
+                            tc.setTestPlan(list.get(j).getTestPlan());
+                            tc.setTestScriptDescription(list.get(j).getTestScriptDescription());
+                            tc.setTestScriptName(list.get(j).getTestScriptName());
+                            tc.setNumeroCenario("00");
+                            tc.setNumeroCt("00");
+                            
+                            tc.setParameters(getParameters(tc));
+                            
+                          //  tc.setParameters(addParameter(tc));
+                            tc.setHashCode(tc.hashCode());
+                            tc.setDataPlanejada(new Date(System.currentTimeMillis()));
+                            tc.setComplexidade(list.get(j).getComplexidade());
+                            tc.setAutomatizado(list.get(j).isAutomatizado());
+
+                            tc.setPriority(false);
+                            tc.setData(false);
+                            tc.setRework(false);
+                            tc.setRegression(false);
+                        
+                            testPlan.getTestPlan().addTestCase(tc);
+
+                        model.addRow(new Object[]{list.get(j).getNumeroCenario(), list.get(j).getNumeroCt(), list.get(j).getTestScriptName(), list.get(j).getHashCode(), list.get(j).getDataPlanejada(), list.get(j).isPriority(), list.get(j).isData(), list.get(j).isRework(), list.get(j).isRegression()});
+
+                    }
+                }
+
+                if (!IsEmptyTablePlan(model)) {
+                    bntDeleteCt.setEnabled(true);
+                    bntOrdenar.setEnabled(true);
+                    bntDuplicate.setEnabled(true);
+                    bntMudaStepDescer.setEnabled(true);
+                    bntMudaStepSubir.setEnabled(true);
+                    bntEditParameter.setEnabled(true);
+                    bntReplace.setEnabled(true);
+                    bntGenereteDate.setEnabled(true);
+//                            for(int i = 0; i < model.getRowCount(); i++){
+//                            tabelaInstancia.editingStopped(null);
+//                            tabelaInstancia.setValueAt("0", i, 0);
+//                            tabelaInstancia.editingStopped(null);
+//                            tabelaInstancia.setValueAt("0", i, 1);
+//                            }
+                }
+
+            }
+        } catch (Exception ex) {
+            logger.error(ex);
+            ex.printStackTrace();
+        }
+    }
+            
+//            for (int i = 0; i < cont; i++) {
+//
+//                String testCase = "";
+//                for (int j = 0; j < list.size(); j++) {
+//                    testPlanSystem.setText(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
+//
+//                    if (!list.isEmpty()) {
+//                        list.get(j).setProduct(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
+//                        if (IsEmptyTablePlan(model, list.get(j)) || validSystem(list.get(j))) {
+//
+//                            int[] cenario = new int[cont];
+//
+//                            int qtd = 1;
+//                            if (model.getRowCount() != 0) {
+//                                qtd = Integer.parseInt(model.getValueAt(model.getRowCount() - 1, 1).toString());
+//                            }
+//                            if (!list.get(j).getTestScriptName().equals(testCase)) {
+////                            callViewParameter(list.get(j).getStepDescription(),list.get(j).getExpectedResults(),list.get(j).getTestScriptName());
+//                                testCase = list.get(j).getTestScriptName();
+//                            }
+//
+////                    testPlan.getTestPlan().addTestCase(listTestCase.get(0));
+//                            TesteCaseTSBean tc = new TesteCaseTSBean();
+//
+//                            tc.setExpectedResults(list.get(j).getExpectedResults());
+//                            tc.setStepDescription(list.get(j).getStepDescription());
+//                            tc.setDataPlanejada(list.get(j).getDataPlanejada());
+//                            tc.setFase(list.get(j).getFase());
+//                            tc.setListStep(list.get(j).getListStep());
+////                            tc.setProduct(list.get(j).getProduct());
+//                            tc.setProduct(listTestCaseTSPropertiesBean.get(tabelaCt.getSelectedRows()[j]).getSystem());
+//                            tc.setSTIPRJ(list.get(j).getSTIPRJ());
+//                            tc.setTestCaseProperties(list.get(j).getTestCaseProperties());
+//                            tc.setTestPhase(list.get(j).getTestPhase());
+//                            tc.setTestPlan(list.get(j).getTestPlan());
+//                            tc.setTestScriptDescription(list.get(j).getTestScriptDescription());
+//                            tc.setTestScriptName(list.get(j).getTestScriptName());
+//                            tc.setNumeroCenario("00");
+//                            tc.setNumeroCt("00");
+//                            tc.setParameters(addParameter(tc));
+//                            tc.setHashCode(tc.hashCode());
+//                            tc.setDataPlanejada(new Date(System.currentTimeMillis()));
+//                            tc.setComplexidade(list.get(j).getComplexidade());
+//                            tc.setAutomatizado(list.get(j).isAutomatizado());
+//
+//                            tc.setPriority(false);
+//                            tc.setData(false);
+//                            tc.setRework(false);
+//                            tc.setRegression(false);
+//
+//                            switch (list.get(j).getComplexidade()) {
+//
+//                                case "Muito Alta":
+//                                    tc.setComplexidade("Muito Alto");
+//                                    break;
+//
+//                                case "Alto":
+//                                    tc.setComplexidade("Alto");
+//                                    break;
+//
+//                                case "Media":
+//                                    tc.setComplexidade("Medio");
+//                                    break;
+//
+//                                case "M\\u00E9dia":
+//                                    tc.setComplexidade("Medio");
+//                                    break;
+//
+//                                case "Medio":
+//                                    tc.setComplexidade("Medio");
+//                                    break;
+//
+//                                case "Baixa":
+//                                    tc.setComplexidade("Baixo");
+//                                    break;
+//                                case "Muito Baixa":
+//                                    tc.setComplexidade("Muito Baixo");
+//                                    break;
+//
+//                                default:
+//                                    tc.setComplexidade(list.get(j).getComplexidade());
+//                            }
+//
+//                            System.out.println("hashCode: " + tc.hashCode());
+//
+//                            testPlan.getTestPlan().addTestCase(tc);
+////                    listTestCasePlan.add(tc);
+//
+////                            model.addRow(new String[]{"00", "00", list.get(j).getTestScriptName(),tc.getHashCode()+""});
+//                            model.addRow(new Object[]{"00", "00", list.get(j).getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(), tc.isRework(), tc.isRegression()});
+//
+////                            model.setValueAt(tc.getDataPlanejada(), i, 4);
+//                            qtd++;
+//
+//                            if (!IsEmptyTablePlan(model)) {
+//                                bntDeleteCt.setEnabled(true);
+//                                bntOrdenar.setEnabled(true);
+//                                bntDuplicate.setEnabled(true);
+//                                bntMudaStepDescer.setEnabled(true);
+//                                bntMudaStepSubir.setEnabled(true);
+//                                bntEditParameter.setEnabled(true);
+//                                bntReplace.setEnabled(true);
+//                                bntGenereteDate.setEnabled(true);
+////                            for(int i = 0; i < model.getRowCount(); i++){
+////                            tabelaInstancia.editingStopped(null);
+////                            tabelaInstancia.setValueAt("0", i, 0);
+////                            tabelaInstancia.editingStopped(null);
+////                            tabelaInstancia.setValueAt("0", i, 1);
+////                            }
+//                            }
+//
+//                        } else {
+//                            JOptionPane.showMessageDialog(null, "Você está tentando inserir CTs de mais de um sistema no Plano de teste.\n"
+//                                    + "Favor esvazie o plano de teste antes de inseri-los.", "Erro", JOptionPane.WARNING_MESSAGE);
+//                        }
+//                    } else {
+//
+//                        JOptionPane.showMessageDialog(null, "Por favor selecione um Caso de teste à "
+//                                + "ser inserido no Plano de teste", "Erro", JOptionPane.WARNING_MESSAGE);
+//                    }
+//                }
+//            }
+//            first = true;
+//        } catch (SQLException ex) {
+//            Log.log(Level.SEVERE, "ERROR", ex);
+//            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ClassNotFoundException ex) {
+//            Log.log(Level.SEVERE, "ERROR", ex);
+//            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    
+    
+    
     public boolean IsEmptyTablePlan(DefaultTableModel table) {
 
         boolean result = false;
@@ -2925,6 +3208,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
 
         return result;
+    }
+    
+       public boolean IsEmptyTablePlanDB(DefaultTableModel table) {
+
+        return table.getRowCount() == 0;
     }
 
     public boolean IsEmptyTablePlan(DefaultTableModel table, TesteCaseTSBean test) {
@@ -3215,6 +3503,46 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         this.testPlan = plan;
     }
 
+    public List<ParameterBean> getParameters(TesteCaseTSBean tc) {
+
+        List<ParameterBean> listParameters = new ArrayList<>();
+        TesteCaseTSDAO tsDao = new TesteCaseTSDAO();
+        for (int i = 0; i < tc.getListStep().size(); i++) {
+            List<String> parameterNames = tsDao.getParameter(tc.getListStep().get(i).getDescStep());
+            parameterNames.addAll(tsDao.getParameter(tc.getListStep().get(i).getResultadoStep()));
+            for (int j = 0; j < parameterNames.size(); j++) {
+
+                ParameterBean pb = new ParameterBean();
+                pb.setApllyToAll(false);
+                pb.setParameterName(parameterNames.get(j));
+                pb.setParameterValue("");
+                pb.setIdStep(tc.getListStep().get(i).getId());
+                
+                if (!listParameters.stream().anyMatch(p -> p.getParameterName().equals(pb.getParameterName()))) {
+                    listParameters.add(pb);
+                }
+
+            }
+        }
+        
+         List<String> parameterNames = tsDao.getParameter(tc.getTestScriptDescription());
+        for (int j = 0; j < parameterNames.size(); j++) {
+
+                ParameterBean pb = new ParameterBean();
+                pb.setApllyToAll(false);
+                pb.setParameterName(parameterNames.get(j));
+                pb.setParameterValue("");
+                pb.setIdStep(0);
+                if (!listParameters.stream().anyMatch(p -> p.getParameterName().equals(pb.getParameterName()))) {
+                    listParameters.add(pb);
+                }
+
+            }
+        
+        
+        return listParameters;
+    }
+    
     public List<ParameterBean> addParameter(TesteCaseTSBean tc) {
         ParameterRN rn = new ParameterRN();
         List<ParameterBean> parameters = new ArrayList<ParameterBean>();
@@ -4002,6 +4330,90 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
+    private void loadCTDB() {
+        
+        try {     
+            
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
+            
+            //compare cts
+            DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
+
+            DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+            
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
+            int row = tabelaCt.getSelectedRow();
+
+            int id = Integer.parseInt((String) model.getValueAt(row, 0));
+
+            TesteCaseTSBean testeCaseSelect = testCaseRN.getTesteCaseTSBeanById(id);
+            
+            
+        } catch (Exception ex) {
+            logger.error(ex);
+        } finally {
+           
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+
+    }
+    
+    private void showSteps() {
+        DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+        while (modelStep.getRowCount() > 0) {
+            modelStep.removeRow(0);
+        }
+        int id = Integer.parseInt(tabelaCt.getValueAt(tabelaCt.getSelectedRow(),0).toString());
+        TestCaseTSRN tcrn = new TestCaseTSRN();
+        TesteCaseTSBean tc = tcrn.getTesteCaseTSBeanById(id);
+        
+        loadFields(tc);
+    }
+    
+    private void addCTList() {
+        try {
+            TestCaseTSRN tcrn = new TestCaseTSRN();
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            DefaultTableModel modelCT = (DefaultTableModel) tabelaCt.getModel();
+            DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
+
+            int[] selecionados = tabelaCt.getSelectedRows();
+            int [] ids  = new  int [selecionados.length];
+            for(int i =0; i<selecionados.length; i++){
+                ids[i] = Integer.parseInt(modelCT.getValueAt(selecionados[i], 0).toString());
+            }
+            // verifica se a linha clicada é a que está selecionada
+
+            //apaga linhas da tabela steps
+            while (modelStep.getRowCount() > 0) {
+                modelStep.removeRow(0);
+            }
+
+            //captra linha selecioanda
+            List<TesteCaseTSBean> listTemp = tcrn.getTesteCaseTSBeanById(ids);
+
+            
+            //addCtInTestPlan(listTemp);
+            addCtInTestPlanDB(listTemp);
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+       
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelStatus;
     private javax.swing.JProgressBar ProgressAguarde;

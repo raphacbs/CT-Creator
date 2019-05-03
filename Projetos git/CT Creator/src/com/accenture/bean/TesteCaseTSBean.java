@@ -48,7 +48,7 @@ public class TesteCaseTSBean implements Serializable {
     private String modifiedBy;
     private Date createDate;
     private Date modifyDate;
-    
+    private int ordem;
 //
     public TesteCaseTSBean(TestCaseTSPropertiesBean testCaseProperties) {
         super();
@@ -304,6 +304,14 @@ public class TesteCaseTSBean implements Serializable {
 
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public int getOrdem() {
+        return ordem;
+    }
+
+    public void setOrdem(int ordem) {
+        this.ordem = ordem;
     }
     
     
