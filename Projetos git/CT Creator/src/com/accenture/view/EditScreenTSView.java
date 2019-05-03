@@ -19,7 +19,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNException; 
 import com.accenture.util.TextAreaCellEditor;
 import com.accenture.util.TextAreaCellRenderer;
 import java.awt.Color;
