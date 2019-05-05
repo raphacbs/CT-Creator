@@ -25,6 +25,7 @@ public class SQLServerConnection implements IConnection{
     private static String connectionUrl = "jdbc:sqlserver://<server>:<port>;databaseName=AdventureWorks;user=<user>;password=<password>";
     private static SQLServerConnection instance;
     private SVNPropertiesVOBean config;
+    private static Connection con;
     
     private SQLServerConnection(){
         try {
@@ -44,9 +45,6 @@ public class SQLServerConnection implements IConnection{
     
     @Override
     public Connection getConnection() {
-        
-       Connection con;
-       
        try
 	{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -65,7 +63,9 @@ public class SQLServerConnection implements IConnection{
        ds.setPassword(config.getPasswordBD());
        
        try{
-          con = ds.getConnection();
+           if(con == null || con.isClosed())
+                con = ds.getConnection();
+           
          return con;
        }catch(SQLException e){
            try { 

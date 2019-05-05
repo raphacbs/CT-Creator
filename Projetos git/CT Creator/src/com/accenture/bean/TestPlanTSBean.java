@@ -8,6 +8,7 @@ package com.accenture.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,13 @@ public class TestPlanTSBean implements Serializable {
     private List<TesteCaseTSBean> testCases;
     private List<ParameterBean> parameters;
     private String release;
+    private int Id;
+    private String createdBy ;
+    private String modifiedBy ;
+    private Date createDate ;
+    private Date modifyDate ;
+    
+    	
     private static final long serialVersionUID = -7932047122858971692L;
 //    private static final long serialVersionUID = -7932047122858971692L; -1432622747367978334
 
@@ -101,6 +109,66 @@ public class TestPlanTSBean implements Serializable {
     public void setRelease(String release) {
         this.release = release;
     }
+
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int Id) {
+        this.Id = Id;
+    }
+
+    public List<ParameterBean> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<ParameterBean> parameters) {
+        this.parameters = parameters;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public List<TesteCaseTSBean> getTestCases() {
+        return testCases;
+    }
+
+    public void setTestCases(List<TesteCaseTSBean> testCases) {
+        this.testCases = testCases;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+ 
+
 
    
     

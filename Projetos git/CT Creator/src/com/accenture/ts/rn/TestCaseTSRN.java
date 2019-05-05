@@ -12,11 +12,18 @@ import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
+import com.accenture.connection.ConnectionFactory;
+import static com.accenture.connection.EnumConnection.MSSQL;
 import com.accenture.ts.dao.ParameterDAO;
+import com.accenture.ts.dao.ParameterInstanceDAO;
+import com.accenture.ts.dao.RevisionDAO;
 import com.accenture.ts.dao.StepDAO;
+import com.accenture.ts.dao.StepInstanceDAO;
 import com.accenture.ts.dao.SvnConnectionDao;
 import com.accenture.ts.dao.SystemDAO;
+import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.dao.TesteCaseTSDAO;
+import com.accenture.ts.dao.TesteCaseTSInstanceDAO;
 import com.accenture.view.RegisterScreenTIView;
 import com.accenture.view.RegisterScreenTSView;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
@@ -25,12 +32,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import org.tmatesoft.svn.core.SVNException;
@@ -429,98 +439,63 @@ public class TestCaseTSRN {
     ///banco
     public TesteCaseTSBean saveTestCaseTSBD(TesteCaseTSBean testCase) {
 
+        TesteCaseTSDAO tSDAO = new TesteCaseTSDAO();
+            StepDAO stepDAO = new StepDAO();
         try {
-
+            
+            ;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date d = new Date(System.currentTimeMillis());
             testCase.setModifiedBy(SVNPropertiesVOBean.getInstance().getUser());
             testCase.setModifyDate(d);
             testCase.setDataPlanejada(d);
+            testCase.setIdTestCaseType(1);
+            
+             RevisionDAO revisionDAO = new RevisionDAO();
+                int Idrevision = revisionDAO.insert(testCase);
+                if(Idrevision == 0){
+                    return null;
+                }
+                testCase.setIdRevision(Idrevision);
 
-//        List<Integer> IdsSteps = new ArrayList<>();
-//        List<Integer> IdsParametros = new ArrayList<>();
-//        List<Step> steps = new ArrayList<>();
-//        steps = testCase.getListStep();
-        //capturando steps e parametros
-//        for (int i = 0; i < steps.size(); i++) {
-//            List<String> parameters = tsDao.getParameter(steps.get(i).getDescStep());
-//            parameters.addAll(C);
-//            List<ParameterBean> listParameters = new ArrayList<>();
-//            for (int j = 0; j < parameters.size(); j++) {
-//
-//                ParameterBean pb = new ParameterBean();
-//                pb.setApllyToAll(false);
-//                pb.setParameterName(parameters.get(j));
-//                pb.setParameterValue("");
-//                listParameters.add(pb);
-//
-//            }
-//            steps.get(i).setParameters(listParameters);
-//        }
             //salvando CT
             if (testCase.getId() == 0) {
-
+                ConnectionFactory cf = new ConnectionFactory(MSSQL);
+                cf.getConnection().setAutoCommit(false);
+                
+               
+                
                 testCase.setCreatedBy(SVNPropertiesVOBean.getInstance().getUser());
                 testCase.setCreateDate(d);
                 testCase = tsDao.insert(testCase);
 
                 if (testCase == null) {
+                    cf.getConnection().rollback();
                     return null;
                 }
 
-                StepDAO stepDAO = new StepDAO();
+                
                 final int idTestcase = testCase.getId();
                 AtomicInteger counter = new AtomicInteger(0);
-                testCase.getListStep().stream().forEach(s -> {s.setOrdem(counter.getAndIncrement()); s.setIdTesteCaseTSBean(idTestcase); s = stepDAO.insert(s); });
+                testCase.getListStep().stream().forEach(s -> {s.setOrdem(counter.getAndIncrement()); s.setIdRevision(Idrevision); s.setIdTesteCaseTSBean(idTestcase); s = stepDAO.insert(s); });
                 //s.setIdTesteCaseTSBean(testCase.getId())
                 boolean erro = testCase.getListStep().stream().anyMatch(s -> s == null);
 
                 if (erro) {
-                    tsDao.delete(testCase.getId());
+                    cf.getConnection().rollback();
                     return null;
                 }
-
-                // steps = new ArrayList<>();
-//        for (int i = 0; i < testCase.getListStep().size(); i++) {
-//            testCase.getListStep().get(i).setIdTesteCaseTSBean(testCase.getId());
-//            List<ParameterBean> listParameters = testCase.getListStep().get(i).getParameters();
-//            Step step = stepDAO.insert(testCase.getListStep().get(i));
-//
-//            if (step == null) {
-//                //TODO delete ct   
-//                for (Integer id : IdsSteps) {
-//                    stepDAO.delete(id);
-//                }
-//                return null;
-//            } else {
-//                IdsSteps.add(step.getId());
-//                steps.add(step);
-//            }
-//            //salvando parâmetros
-//            ParameterDAO parameterDAO = new ParameterDAO();
-//            for (ParameterBean parameter : listParameters) {
-//                parameter.setIdStep(step.getId());
-//                ParameterBean pb = parameterDAO.insert(parameter);
-//                if (pb == null) {
-//                    for (Integer id : IdsSteps) {
-//                        stepDAO.delete(id);
-//                    }
-//                    for (Integer id : IdsParametros) {
-//                        parameterDAO.delete(id);
-//                    }
+                
+                cf.getConnection().commit();
+                
+//                //criando revision
+//                int testCaseRevisionId = tSDAO.createTestCaseRevision(testCase.getId());
+//                if (testCaseRevisionId == 0){
 //                    return null;
-//                } else {
-//                    IdsParametros.add(pb.getId());
-//
 //                }
-//            }
+//                boolean revision = stepDAO.createStepRevision(testCaseRevisionId);
 //
-//            steps.get(i).setParameters(listParameters);
-//
-//        }
-//
-//        testCase.setListStep(steps);
-                return testCase;
+//                return testCase;
 
             } else {
                 
@@ -541,15 +516,18 @@ public class TestCaseTSRN {
                 insertStep = testCase.getListStep().stream().filter(s -> s.getId() == 0).collect(Collectors.toList());
 
                 int idTestCase = testCase.getId();
-                StepDAO stepDAO = new StepDAO();
-                updateStep.stream().forEach(s -> stepDAO.update(s));
-                deleteStep.stream().forEach(s -> stepDAO.delete(s.getId()));
-                insertStep.stream().forEach(s -> {s.setIdTesteCaseTSBean(idTestCase); stepDAO.insert(s);});
+                
+                updateStep.stream().forEach(s ->{ s.setIdRevision(Idrevision); stepDAO.update(s);});
+                deleteStep.stream().forEach(s ->{s.setIdRevision(Idrevision); stepDAO.delete(s.getId());});
+                insertStep.stream().forEach(s -> {s.setIdRevision(Idrevision); s.setIdTesteCaseTSBean(idTestCase); stepDAO.insert(s);});
 
                 testCase = tsDao.update(testCase);
                 List<Step> steps = new ArrayList<>();
                 steps.addAll(updateStep);
                 steps.addAll(insertStep);
+                
+                
+              
                 
                 
                 if(testCase == null){
@@ -558,8 +536,19 @@ public class TestCaseTSRN {
                 
                 testCase.setListStep(steps);
 
-                return testCase;
+                
             }
+            
+               //criando revision
+                int testCaseRevisionId = tSDAO.createTestCaseRevision(testCase.getId());
+                if (testCaseRevisionId == 0){
+                    return null;
+                }
+                boolean revision = stepDAO.createStepRevision(testCase.getId(),Idrevision,testCaseRevisionId);
+                
+                return testCase;
+            
+            
         } catch (Exception ex) {
             return null;
         }

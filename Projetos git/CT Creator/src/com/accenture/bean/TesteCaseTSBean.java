@@ -48,7 +48,10 @@ public class TesteCaseTSBean implements Serializable {
     private String modifiedBy;
     private Date createDate;
     private Date modifyDate;
-    private int ordem;
+    private int order;
+    private int IdTestPlanTS;
+    private int IdRevision;
+    private int IdTestCaseType;
 //
     public TesteCaseTSBean(TestCaseTSPropertiesBean testCaseProperties) {
         super();
@@ -306,13 +309,38 @@ public class TesteCaseTSBean implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public int getOrdem() {
-        return ordem;
+    public int getOrder() {
+        return order;
     }
 
-    public void setOrdem(int ordem) {
-        this.ordem = ordem;
+    public void setOrder(int ordem) {
+        this.order = ordem;
     }
+
+    public int getIdTestPlanTS() {
+        return IdTestPlanTS;
+    }
+
+    public void setIdTestPlanTS(int IdTestPlanTS) {
+        this.IdTestPlanTS = IdTestPlanTS;
+    }
+
+    public int getIdRevision() {
+        return IdRevision;
+    }
+
+    public void setIdRevision(int IdRevision) {
+        this.IdRevision = IdRevision;
+    }
+
+    public int getIdTestCaseType() {
+        return IdTestCaseType;
+    }
+
+    public void setIdTestCaseType(int IdTestCaseType) {
+        this.IdTestCaseType = IdTestCaseType;
+    }
+    
     
     
     

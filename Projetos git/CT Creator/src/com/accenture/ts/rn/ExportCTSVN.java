@@ -21,7 +21,7 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public class ExportCTSVN {
     public static void main(String[] agrs) throws Exception{
-        convertSheetInObject(new File("C:\\Users\\automacao\\Documents\\CTs"));
+        convertSheetInObject(new File("C:\\Users\\automacao\\Documents\\CTs\\Siebel 6.3"));
     }
     
     

@@ -19,7 +19,10 @@ public class Step implements Serializable {
     private String resultadoStep;
     private int idPlano;
     private int IdTesteCaseTSBean;
+    private int IdTesteCaseTSBeaninstance;
     private int Ordem;
+    private int IdRevision;
+    
     private List<ParameterBean> parameters;
 
     public Step(int id, String nomeStep, String descStep, String resultadoStep, int idPlano) {
@@ -98,6 +101,22 @@ public class Step implements Serializable {
 
     public void setParameters(List<ParameterBean> parameters) {
         this.parameters = parameters;
+    }
+
+    public int getIdTesteCaseTSBeaninstance() {
+        return IdTesteCaseTSBeaninstance;
+    }
+
+    public void setIdTesteCaseTSBeaninstance(int IdTesteCaseTSBeaninstance) {
+        this.IdTesteCaseTSBeaninstance = IdTesteCaseTSBeaninstance;
+    }
+
+    public int getIdRevision() {
+        return IdRevision;
+    }
+
+    public void setIdRevision(int IdRevision) {
+        this.IdRevision = IdRevision;
     }
     
     

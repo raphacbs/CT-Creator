@@ -467,6 +467,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             guiEditCt.setRowAfter(0);
             guiEditCt.setRowBefore(0);
             guiEditCt.loadTableCtDB(listTestCaseTSPropertiesBean);
+            
             //guiEditCt.setFiltro(text);
        
         } catch (Exception ex) {

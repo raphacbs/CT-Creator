@@ -10,6 +10,7 @@ import com.accenture.bean.ParameterBean;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
 import com.accenture.bean.TestCaseTSPropertiesBean;
+import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.control.Validacao;
 import com.accenture.filter.AutoChoices;
@@ -23,6 +24,7 @@ import com.accenture.ts.rn.ParameterRN;
 import com.accenture.ts.rn.SavePlanRN;
 import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
+import com.accenture.ts.rn.TestPlanTSRN;
 import com.accenture.util.CabecalhoJTableCheckBox;
 import com.accenture.util.FunctiosDates;
 import com.accenture.util.JDateChooserRenderer;
@@ -93,6 +95,9 @@ import java.io.FileNotFoundException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import org.tmatesoft.svn.core.SVNLock;
 
@@ -1496,20 +1501,54 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
     private void menuItemSalvarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarPlanoActionPerformed
         try {
-            ProgressAguarde.setIndeterminate(true);
-            filterHeader.resetFilter();
-            testPlan.getTestPlan().setName(testPlanName.getText());
-            testPlan.getTestPlan().setSti(testPlanSTI.getText());
-            testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
-            testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+            final java.awt.Frame GUIPrincipal = new MainScreenView();
+            final JInternalFrame ji = this;
 
-//        testPlan.getTestPlan().setSti(testPlanSystem.getText());
-            if (salvaPlanoFile(testPlan, false)) {
-                savePlan = true;
-                JOptionPane.showMessageDialog(null, "Plano salvo com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
-                ProgressAguarde.setIndeterminate(false);
-            }
+            new SwingWorker() {
+                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
+
+                @Override
+                protected Object doInBackground() throws Exception, SVNException, IOException {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    aguarde.setLocationRelativeTo(GUIPrincipal);
+                    aguarde.setVisible(true);
+                    ProgressAguarde.setIndeterminate(true);
+                    filterHeader.resetFilter();
+                    testPlan.getTestPlan().setName(testPlanName.getText());
+                    testPlan.getTestPlan().setSti(testPlanSTI.getText());
+                    testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
+                    testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+
+                    testPlan.getTestPlan().setRelease(sdf.format(jDateChooserRelease.getDate()));
+                    TestPlanTSRN testcasern = new TestPlanTSRN();
+                    addTextLabelStatus("Salvando o plano aguarde...");
+                    TestPlanTSBean plano = testcasern.savePlanDB(testPlan.getTestPlan());
+                    if (plano != null) {
+                        testPlan.setTestPlan(plano);
+                        addTextLabelStatus("O plano foi salvo com sucesso.");
+                        JOptionPane.showMessageDialog(null, "Plano salvo com sucesso! Id:" + plano.getId(), "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    aguarde.dispose();
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+
+            }.execute();
+
             ProgressAguarde.setIndeterminate(false);
+//        testPlan.getTestPlan().setSti(testPlanSystem.getText());
+//            if (salvaPlanoFile(testPlan, false)) {
+//                savePlan = true;
+//                JOptionPane.showMessageDialog(null, "Plano salvo com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+//                ProgressAguarde.setIndeterminate(false);
+//            }
+
         } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -2680,13 +2719,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         try {
             dialogReplace = new ReplaceScreenView(this, null, true, listTc, this.fase);
-        } catch (IOException ex) {
-            Log.log(Level.SEVERE, "ERROR", ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (ClassNotFoundException ex) {
-            Log.log(Level.SEVERE, "ERROR", ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -3005,7 +3038,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             }
                             tc.setListStep(steps);
                             tc.setProduct(list.get(j).getProduct());
-                            tc.setProduct(list.get(j).getProduct());
                             tc.setSTIPRJ(list.get(j).getSTIPRJ());
                             tc.setTestCaseProperties(list.get(j).getTestCaseProperties());
                             tc.setTestPhase(list.get(j).getTestPhase());
@@ -3014,7 +3046,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                             tc.setTestScriptName(list.get(j).getTestScriptName());
                             tc.setNumeroCenario("00");
                             tc.setNumeroCt("00");
-                            
+                            tc.setIdSystem(list.get(j).getIdSystem());
+                            tc.setCreateDate(list.get(j).getCreateDate());
+                            tc.setCreatedBy(list.get(j).getCreatedBy());
+                            tc.setModifiedBy(list.get(j).getModifiedBy());
+                            tc.setModifyDate(list.get(j).getModifyDate());
                             tc.setParameters(getParameters(tc));
                             
                           //  tc.setParameters(addParameter(tc));
@@ -3309,6 +3345,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         Collections.sort(data, new ColumnSorter(colIndex, ascending));
         model.fireTableStructureChanged();
     }        // Este comparador é usado classificar vetores dos dados
+    
+    
 
     private boolean salvaPlanoFile(TestPlanTSDao testPlan, boolean autoSave) {
         try {

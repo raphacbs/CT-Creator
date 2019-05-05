@@ -19,6 +19,7 @@ public class ParameterBean implements Serializable {
     private boolean apllyToAll;
     private int Id;
     private int IdStep;
+    private int idTestCaseInstance;
     
     
     public ParameterBean(){
@@ -73,6 +74,14 @@ public class ParameterBean implements Serializable {
 
     public void setIdStep(int IdStep) {
         this.IdStep = IdStep;
+    }
+
+    public int getIdTestCaseInstance() {
+        return idTestCaseInstance;
+    }
+
+    public void setIdTestCaseInstance(int idTestCaseInstance) {
+        this.idTestCaseInstance = idTestCaseInstance;
     }
 
    

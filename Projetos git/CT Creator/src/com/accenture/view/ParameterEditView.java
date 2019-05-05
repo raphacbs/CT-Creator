@@ -377,14 +377,14 @@ public class ParameterEditView extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
         bntNext.setEnabled(true);
         if (lineSelectTableInstance != 0) {
-           // saveParameter();
-            saveParameterDB(lineSelectTableInstance);
+           saveParameter();
+            //saveParameterDB(lineSelectTableInstance);
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
             lineSelectTableInstance = lineSelectTableInstance - 1;
-            //loadParameterTable(this.plan, lineSelectTableInstance);
-             loadParameterTableDB(this.plan, lineSelectTableInstance);
+            loadParameterTable(this.plan, lineSelectTableInstance);
+            // loadParameterTableDB(this.plan, lineSelectTableInstance);
         } else {
             bntPrevious.setEnabled(false);
         }
@@ -395,14 +395,14 @@ public class ParameterEditView extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
         bntPrevious.setEnabled(true);
         if (lineSelectTableInstance != this.plan.getTestPlan().getTestCase().size() - 1) {
-//            saveParameter();
-            saveParameterDB(lineSelectTableInstance);
+            saveParameter();
+           // saveParameterDB(lineSelectTableInstance);
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
             lineSelectTableInstance = lineSelectTableInstance + 1;
-//            loadParameterTable(this.plan, lineSelectTableInstance);
-             loadParameterTableDB(this.plan, lineSelectTableInstance);
+            loadParameterTable(this.plan, lineSelectTableInstance);
+          //   loadParameterTableDB(this.plan, lineSelectTableInstance);
         } else {
             bntNext.setEnabled(false);
         }
@@ -596,7 +596,9 @@ public class ParameterEditView extends javax.swing.JDialog {
         for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().size(); i++) {
             model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
-            
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getIdStep(), i, 3);
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getId(), i, 4);
         }
 
         //apaga linhas da tabela steps
@@ -635,15 +637,15 @@ public class ParameterEditView extends javax.swing.JDialog {
 //        List<ParameterBean> parameters = new ArrayList<>();
 //        this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().stream().forEach(s->{parameters.addAll(s.getParameters());});
         
-        
-      
-        for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().size(); i++) {
-            model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getParameterName(), this.plan.getListTc().get(lineSelectTableInstance).getParameters().get(i).getParameterValue()});
+        for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().size(); i++) {
+            model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).isApllyToAll(), i, 2);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getIdStep(), i, 3);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getId(), i, 4);
         }
-
+      
+    
         //apaga linhas da tabela steps
         while (modelStep.getRowCount() > 0) {
             modelStep.removeRow(0);

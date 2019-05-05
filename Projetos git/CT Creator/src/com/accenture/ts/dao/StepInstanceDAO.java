@@ -21,22 +21,21 @@ import org.apache.log4j.Logger;
  *
  * @author automacao
  */
-public class StepDAO {
+public class StepInstanceDAO {
 
-    private final static Logger logger = LogManager.getLogger(StepDAO.class.getName());
+    private final static Logger logger = LogManager.getLogger(StepInstanceDAO.class.getName());
     private final EnumConnection BD = MSSQL;
 
     public Step getById(int id) {
         Step step = new Step();
         String SQL_SELECT_BY_ID = "SELECT [Id], "
-                + "[NomeStep],"
+                + " [NomeStep],"
                 + " [DescStep],"
                 + " [ResultadoStep],"
                 + " [Ordem], "
-                + "[IdTesteCaseTSBean],"
-                + ",[IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] "
-                + "WHERE Id = ? ";
+                + " [IdTesteCaseTSBeanInstance]"
+                + " FROM [CTCreatorDB].[dbo].[StepInstance] "
+                + " WHERE Id = ? ";
         try {
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_BY_ID);
@@ -49,9 +48,8 @@ public class StepDAO {
                 step.setDescStep(rs.getString("DescStep"));
                 step.setNomeStep(rs.getString("NomeStep"));
                 step.setResultadoStep(rs.getString("ResultadoStep"));
-                step.setIdTesteCaseTSBean(rs.getInt("IdTesteCaseTSBean"));
+                step.setIdTesteCaseTSBeaninstance(rs.getInt("IdTesteCaseTSBeanInstance"));
                 step.setOrdem(rs.getInt("Ordem"));
-                step.setIdRevision(rs.getInt("IdRevision"));
 
             }
             rs.close();
@@ -71,10 +69,9 @@ public class StepDAO {
                 + " [DescStep],"
                 + " [ResultadoStep],"
                 + " [Ordem], "
-                + " [IdTesteCaseTSBean],"
-                + " [IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] "
-                + "WHERE IdTesteCaseTSBean = ? ORDER BY [Ordem] ASC";
+                + "[IdTesteCaseTSBeanInstance]"
+                + " FROM [CTCreatorDB].[dbo].[StepInstance] "
+                + "WHERE IdTesteCaseTSBeanInstance = ? ORDER BY [Ordem] ASC";
         try {
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_BY_ID);
@@ -86,10 +83,9 @@ public class StepDAO {
                 step.setDescStep(rs.getString("DescStep"));
                 step.setNomeStep(rs.getString("NomeStep"));
                 step.setResultadoStep(rs.getString("ResultadoStep"));
-                step.setIdTesteCaseTSBean(rs.getInt("IdTesteCaseTSBean"));
+                step.setIdTesteCaseTSBeaninstance(rs.getInt("IdTesteCaseTSBeanInstance"));
                 step.setOrdem(rs.getInt("Ordem"));
-                 step.setIdRevision(rs.getInt("IdRevision"));
-
+                
                 steps.add(step);
             }
             rs.close();
@@ -106,13 +102,12 @@ public class StepDAO {
     
     
     public Step update(Step step) {
-        String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[Step] SET "
+        String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[StepInstance] SET "
                 + "[NomeStep] = ? ,"
                 + "[DescStep] = ?, "
                 + "[ResultadoStep] = ?, "
                 + "[Ordem] = ?, "
-                + "[IdTesteCaseTSBean] = ? ,"
-                + "[IdRevision] = ? "
+                + "[IdTesteCaseTSBeanInstance] = ? "
                 + "WHERE Id = ?";
         try {
             ConnectionFactory cf = new ConnectionFactory(BD);
@@ -121,10 +116,9 @@ public class StepDAO {
             ps.setString(2, step.getDescStep());
             ps.setString(3, step.getResultadoStep());
             ps.setInt(4, step.getOrdem());
-            ps.setInt(5, step.getIdTesteCaseTSBean());
-            ps.setInt(6,step.getIdRevision());
-            ps.setInt(7, step.getId());
-
+            ps.setInt(5, step.getIdTesteCaseTSBean());            
+            ps.setInt(6, step.getId());
+            
             int row = ps.executeUpdate();
             ps.close();
             if (row <= 1) {
@@ -142,9 +136,9 @@ public class StepDAO {
     }
 
     public Step insert(Step step) {
-        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[Step]"
-                + "([NomeStep], [DescStep], [ResultadoStep], [Ordem], [IdTesteCaseTSBean], [IdRevision])"
-                + "VALUES(?,?,?,?,?,?)";
+        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[StepInstance]"
+                + "([NomeStep], [DescStep], [ResultadoStep], [Ordem], [IdTesteCaseTSBeanInstance])"
+                + "VALUES(?,?,?,?,?)";
         try {
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -152,12 +146,11 @@ public class StepDAO {
             ps.setString(2, step.getDescStep());
             ps.setString(3, step.getResultadoStep());
             ps.setInt(4, step.getOrdem());
-            ps.setInt(5, step.getIdTesteCaseTSBean());
-            ps.setInt(6,step.getIdRevision());
+            ps.setInt(5, step.getIdTesteCaseTSBeaninstance());
 
             int row = ps.executeUpdate();
 
-            if (row >= 1) {
+            if (row <= 1) {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
 
@@ -182,7 +175,7 @@ public class StepDAO {
     }
 
     public boolean delete(int Id) {
-        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[Step] "
+        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[StepInstance] "
                 + "WHERE Id = ?";
         try {
             ConnectionFactory cf = new ConnectionFactory(BD);
@@ -203,39 +196,6 @@ public class StepDAO {
             return false;
         }
 
-    }
-    
-     public boolean createStepRevision(int IdTesteCaseTSBean, int idRevision, int IdTesteCaseTSBeanRevision){
-        String SQL_STEP_REVISION = "INSERT INTO [CTCreatorDB].[dbo].[StepRevision] "
-                + "SELECT [Id] ,"
-                + "[NomeStep] ,"
-                + "[DescStep] ,"
-                + "[ResultadoStep] ,"
-                + "[Ordem] ,"
-                + " '"+IdTesteCaseTSBeanRevision+"' [IdTesteCaseTSBean] ,"
-                + " '"+idRevision+"' [IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] WHERE IdTesteCaseTSBean = ?" ;
-        
-        ConnectionFactory cf = new ConnectionFactory(MSSQL);       
-        PreparedStatement ps = null;
-        try {
-            ps = cf.getConnection().prepareStatement(SQL_STEP_REVISION);
-            ps.setInt(1, IdTesteCaseTSBean);
-             int affectedRows = ps.executeUpdate();
-             
-            if (affectedRows == 0) {
-                return false;
-            } 
-            
-            return true;
-            
-            } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.print(ex.getMessage());
-            logger.error("Erro ao gerar revisão do Step", ex);
-            return false;
-        
-        }
     }
 
 }

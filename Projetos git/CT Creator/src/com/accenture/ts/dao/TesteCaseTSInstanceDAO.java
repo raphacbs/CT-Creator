@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author raphael.da.silva
  */
-public class TesteCaseTSDAO {
+public class TesteCaseTSInstanceDAO {
 
     private TesteCaseTSBean testCase;
     private final String sheetDefault = "C:\\FastPlan\\sheets\\TS.xlsx";
@@ -61,17 +62,17 @@ public class TesteCaseTSDAO {
     private File sourceStheet;
     private File destinationSheet;
     //  private org.apache.log4j.Logger logger;
-    private final static Logger logger = Logger.getLogger(TesteCaseTSDAO.class);
+    private final static Logger logger = Logger.getLogger(TesteCaseTSInstanceDAO.class);
 
-    public TesteCaseTSDAO() {
+    public TesteCaseTSInstanceDAO() {
         //sourceStheet = new File(sheetDefault);
         //testCase = new TesteCaseTSBean();
         // logger = org.apache.log4j.Logger.getLogger(TesteCaseTSDAO.class);
-        try{
-         Properties props = new Properties();
+        try {
+            Properties props = new Properties();
             props.load(new FileInputStream("log4j.properties"));
             PropertyConfigurator.configure(props);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             System.err.println(ex.getMessage());
         }
@@ -792,9 +793,9 @@ public class TesteCaseTSDAO {
                     + "[modifiedBy],"
                     + "[createDate],"
                     + "[modifyDate],"
-                    + "[IdRevision],"
-                    + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]";
+                    + "[Order],"
+                    + "[IdTestPlanTS]"
+                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance]";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             Statement statement = cf.getConnection().createStatement();
@@ -828,8 +829,9 @@ public class TesteCaseTSDAO {
                 tc.setModifiedBy(rs.getString("modifiedBy"));
                 tc.setCreateDate(rs.getTimestamp("createDate"));
                 tc.setModifyDate(rs.getTimestamp("modifyDate"));
-                tc.setIdRevision(rs.getInt("IdRevision"));
-                tc.setIdTestCaseType(rs.getInt("IdTestCaseType"));
+                tc.setOrder(rs.getInt("Order"));
+                tc.setIdTestPlanTS(rs.getInt("IdTestPlanTS"));
+
                 caseTSBeans.add(tc);
             }
             logger.info(testCase);
@@ -842,10 +844,10 @@ public class TesteCaseTSDAO {
         }
 
     }
-    
+
     public TesteCaseTSBean getById(int id) {
         try {
-           
+
             String SQL_SELECT_TC = "SELECT "
                     + "[Id],"
                     + "[TestPlan],"
@@ -872,21 +874,21 @@ public class TesteCaseTSDAO {
                     + "[modifiedBy],"
                     + "[createDate],"
                     + "[modifyDate],"
-                    + "[IdRevision],"
-                    + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] "
+                    + "[Order],"
+                    + "[IdTestPlanTS]"
+                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] "
                     + "WHERE [Id] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_TC);
             ps.setInt(1, id);
-            
+
             ResultSet rs = ps.executeQuery();
 
             TesteCaseTSBean tc = new TesteCaseTSBean();
-            
+
             while (rs.next()) {
-                
+
                 tc.setId(rs.getInt("Id"));
                 tc.setTestPlan(rs.getString("TestPlan"));
                 tc.setSTIPRJ(rs.getString("STIPRJ"));
@@ -912,10 +914,9 @@ public class TesteCaseTSDAO {
                 tc.setModifiedBy(rs.getString("modifiedBy"));
                 tc.setCreateDate(rs.getTimestamp("createDate"));
                 tc.setModifyDate(rs.getTimestamp("modifyDate"));
-                 tc.setIdRevision(rs.getInt("IdRevision"));
-                tc.setIdTestCaseType(rs.getInt("IdTestCaseType"));
+                tc.setOrder(rs.getInt("Order"));
+                tc.setIdTestPlanTS(rs.getInt("IdTestPlanTS"));
 
-             
             }
 
             return tc;
@@ -957,10 +958,10 @@ public class TesteCaseTSDAO {
                     + "[modifiedBy],"
                     + "[createDate],"
                     + "[modifyDate],"
-                    + "[IdRevision],"
-                    + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]"
-                    + "WHERE [IdSystem] = ?";
+                    + "[Order],"
+                    + "[IdTestPlanTS]"
+                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] "
+                    + "WHERE [Id] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_TC);
@@ -995,8 +996,8 @@ public class TesteCaseTSDAO {
                 tc.setModifiedBy(rs.getString("modifiedBy"));
                 tc.setCreateDate(rs.getTimestamp("createDate"));
                 tc.setModifyDate(rs.getTimestamp("modifyDate"));
-                   tc.setIdRevision(rs.getInt("IdRevision"));
-                tc.setIdTestCaseType(rs.getInt("IdTestCaseType"));
+                tc.setOrder(rs.getInt("Order"));
+                tc.setIdTestPlanTS(rs.getInt("IdTestPlanTS"));
 
                 caseTSBeans.add(tc);
             }
@@ -1039,10 +1040,9 @@ public class TesteCaseTSDAO {
                     + "[modifiedBy],"
                     + "[createDate],"
                     + "[modifyDate],"
-                    + "[modifyDate],"
-                    + "[IdRevision],"
-                    + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]"
+                    + "[Order],"
+                    + "[IdTestPlanTS]"
+                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance]"
                     + "WHERE " + fields;
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -1077,8 +1077,8 @@ public class TesteCaseTSDAO {
                 tc.setModifiedBy(rs.getString("modifiedBy"));
                 tc.setCreateDate(rs.getTimestamp("createDate"));
                 tc.setModifyDate(rs.getTimestamp("modifyDate"));
-                  tc.setIdRevision(rs.getInt("IdRevision"));
-                tc.setIdTestCaseType(rs.getInt("IdTestCaseType"));
+                tc.setOrder(rs.getInt("Order"));
+                tc.setIdTestPlanTS(rs.getInt("IdTestPlanTS"));
 
                 caseTSBeans.add(tc);
             }
@@ -1093,13 +1093,11 @@ public class TesteCaseTSDAO {
 
     }
 
-    public TesteCaseTSBean insert(TesteCaseTSBean testCase) throws SQLException {
-        
-        
+    public TesteCaseTSBean insert(TesteCaseTSBean testCase) {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
-        PreparedStatement ps = null;
-        
-        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBean] ([TestPlan],"
+
+        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] ("
+                + "[TestPlan],"
                 + "[STIPRJ],"
                 + "[Fase],"
                 + "[TestPhase],"
@@ -1123,13 +1121,13 @@ public class TesteCaseTSDAO {
                 + "[modifiedBy],"
                 + "[createDate],"
                 + "[modifyDate],"
-                + "[IdRevision],"
-                + "[IdTestCaseType]"
+                + "[Order],"
+                + "[IdTestPlanTS]"
                 + ")"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
 
-            ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, testCase.getTestPlan());
             ps.setString(2, testCase.getSTIPRJ());
@@ -1155,48 +1153,159 @@ public class TesteCaseTSDAO {
             ps.setString(22, testCase.getModifiedBy());
             ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
             ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
-            ps.setInt(25, testCase.getIdRevision());
-            ps.setInt(26, testCase.getIdTestCaseType());
+            ps.setInt(25, testCase.getOrder());
+            ps.setInt(26, testCase.getIdTestPlanTS());
 
             int affectedRows = ps.executeUpdate();
-             
+
             if (affectedRows == 0) {
                 return null;
             } else {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id = generatedKeys.getInt(1);
-                    testCase.setId(id);                    
-                    
-                   generatedKeys.close();
+                    testCase.setId(id);
+                    ps.close();
+                    generatedKeys.close();
                     return testCase;
                 }
                 return null;
             }
 
         } catch (Exception ex) {
-            
             ex.printStackTrace();
             System.out.print(ex.getMessage());
             logger.error("Erro ao salvar CT", ex);
             return null;
-       }finally{
-            ps.close();
-                    
-            
         }
-
 
     }
 
-    public TesteCaseTSBean update(TesteCaseTSBean testCase) throws Exception {
+    public List<TesteCaseTSBean> insert(List<TesteCaseTSBean> testCases) {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
-       
-        PreparedStatement ps = null;
+
+        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] ("
+                + "[TestPlan],"
+                + "[STIPRJ],"
+                + "[Fase],"
+                + "[TestPhase],"
+                + "[TestScriptName],"
+                + "[TestScriptDescription],"
+                + "[StepDescription],"
+                + "[ExpectedResults],"
+                + "[Product],"
+                + "[DataPlanejada],"
+                + "[NumeroCenario],"
+                + "[NumeroCt],"
+                + "[Complexidade],"
+                + "[Automatizado],"
+                + "[Cenario],"
+                + "[Rework],"
+                + "[Priority],"
+                + "[Regression],"
+                + "[Data],"
+                + "[IdSystem],"
+                + "[createdBy],"
+                + "[modifiedBy],"
+                + "[createDate],"
+                + "[modifyDate],"
+                + "[Order],"
+                + "[IdTestPlanTS]"
+                + ")"
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            cf.getConnection().setAutoCommit(false);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
+
+            final int batchSize = 1000;
+            int count = 0;
+
+            for (TesteCaseTSBean testCase : testCases) {
+                ps.setString(1, testCase.getTestPlan());
+                ps.setString(2, testCase.getSTIPRJ());
+                ps.setString(3, testCase.getFase());
+                ps.setString(4, testCase.getTestPhase());
+                ps.setString(5, testCase.getTestScriptName());
+                ps.setString(6, testCase.getTestScriptDescription());
+                ps.setString(7, testCase.getStepDescription());
+                ps.setString(8, testCase.getExpectedResults());
+                ps.setString(9, testCase.getProduct());
+                ps.setTimestamp(10, new java.sql.Timestamp(testCase.getDataPlanejada().getTime()));
+                ps.setString(11, testCase.getNumeroCenario());
+                ps.setString(12, testCase.getNumeroCt());
+                ps.setString(13, testCase.getComplexidade());
+                ps.setBoolean(14, testCase.isAutomatizado());
+                ps.setString(15, testCase.getCenario());
+                ps.setBoolean(16, testCase.isRework());
+                ps.setBoolean(17, testCase.isPriority());
+                ps.setBoolean(18, testCase.isRegression());
+                ps.setBoolean(19, testCase.isData());
+                ps.setInt(20, testCase.getIdSystem());
+                ps.setString(21, testCase.getCreatedBy());
+                ps.setString(22, testCase.getModifiedBy());
+                ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
+                ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
+                ps.setInt(25, testCase.getOrder());
+                ps.setInt(26, testCase.getIdTestPlanTS());
+                ps.addBatch();
         
 
+//                if (++count % batchSize == 0) {
+//                    int[] row = ps.executeBatch();
+//                    ResultSet rs = ps.getGeneratedKeys();
+//                    while (rs.next()) {
+//                        logger.info(" IN Generate Keys");
+//                        java.sql.ResultSetMetaData rsMetaData = rs.getMetaData();
+//                        int columnCount = rsMetaData.getColumnCount();
+//
+//                        for (int i = 1; i <= columnCount; i++) {
+//                            String key = rs.getString(i);
+//                            System.out.println("key " + i + " is " + key);
+//                        }
+//                        logger.info(" IN Generate Keys End ");
+//                    }
+//                    
+//                   
+//                }
+            }
 
-        String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TesteCaseTSBean] SET "
+            int[] row = ps.executeBatch();
+
+            try{
+                ResultSet rs = ps.getGeneratedKeys(); //<-- Only the last key retrieved
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+
+            ps.close();
+            
+            cf.getConnection().commit();
+            cf.getConnection().close();
+            return testCases;
+
+
+        } catch (Exception ex) {
+            try {
+                cf.getConnection().rollback();
+                cf.getConnection().close();
+                ex.printStackTrace();
+                System.out.print(ex.getMessage());
+                logger.error("Erro ao salvar CT", ex);
+                return null;
+            } catch (SQLException ex1) {
+                 ex1.printStackTrace();
+                java.util.logging.Logger.getLogger(TesteCaseTSInstanceDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return null;
+
+    }
+
+    public TesteCaseTSBean update(TesteCaseTSBean testCase) {
+        ConnectionFactory cf = new ConnectionFactory(MSSQL);
+
+        String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] SET "
                 + "[TestPlan] = ?,"
                 + "[STIPRJ] = ?,"
                 + "[Fase] = ?,"
@@ -1221,12 +1330,12 @@ public class TesteCaseTSDAO {
                 + "[modifiedBy] = ?,"
                 + "[createDate] = ?,"
                 + "[modifyDate] = ?, "
-                + "[IdRevision] = ?,"
-                + "[IdTestCaseType] = ? "
+                + "[Order] = ?,"
+                + "[IdTestPlanTS] = ?"
                 + "WHERE [Id] = ?";
         try {
 
-            ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
 
             ps.setString(1, testCase.getTestPlan());
             ps.setString(2, testCase.getSTIPRJ());
@@ -1252,9 +1361,9 @@ public class TesteCaseTSDAO {
             ps.setString(22, testCase.getModifiedBy());
             ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
             ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
-            ps.setInt(25, testCase.getIdRevision());
-            ps.setInt(26, testCase.getIdTestCaseType());
-            ps.setInt(27, testCase.getId());
+            ps.setInt(25, testCase.getId());
+            ps.setInt(25, testCase.getOrder());
+            ps.setInt(26, testCase.getIdTestPlanTS());
 
             int affectedRows = ps.executeUpdate();
 
@@ -1269,27 +1378,26 @@ public class TesteCaseTSDAO {
             System.out.print(ex.getMessage());
             logger.error("Erro ao salvar CT", ex);
             return null;
-       }
+        }
     }
-    
-    public boolean delete(int id){
-         String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] WHERE [Id] = ?";
+
+    public boolean delete(int id) {
+        String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] WHERE [Id] = ?";
         try {
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_DELETE_TC);
-            
+
             ps.setInt(1, id);
-            
+
             int row = ps.executeUpdate();
-            
-            if(row > 0 ){
+
+            if (row > 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-            
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
             logger.error("Erro ao salvar CT", ex);
@@ -1312,92 +1420,11 @@ public class TesteCaseTSDAO {
         Pattern r = Pattern.compile(pattern);  // Now create matcher object.
         Matcher m = r.matcher(descStep);
         while (m.find()) {
-            if(!parameters.contains(m.group(1)))
-                  parameters.add(m.group(1));
+            if (!parameters.contains(m.group(1))) {
+                parameters.add(m.group(1));
+            }
         }
         return parameters;
-    }
-    
-    public int generateRevision(TesteCaseTSBean testCase) {
-        ConnectionFactory cf = new ConnectionFactory(MSSQL);       
-        PreparedStatement ps = null;
-        try {
-            RevisionDAO revisionDAO = new RevisionDAO();
-            int idRevision = revisionDAO.insert(testCase);
-            if (idRevision == 0) {
-                return 0;
-            }
-            testCase.setIdRevision(idRevision);
-            return idRevision;
-            
-            
-            
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.print(ex.getMessage());
-            logger.error("Erro ao gerar revisão do CT", ex);
-            return 0;
-        }
-    }
-    
-    public int createTestCaseRevision(int idTestCase){
-        String SQL_TESTCASE_REVISION = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] "
-                + "SELECT [Id]"
-                + " ,[TestPlan] "
-                + ",[STIPRJ] "
-                + ",[Fase] "
-                + ",[TestPhase] "
-                + ",[TestScriptName] "
-                + ",[TestScriptDescription] "
-                + ",[StepDescription] "
-                + ",[ExpectedResults] "
-                + ",[Product] "
-                + ",[DataPlanejada] "
-                + ",[NumeroCenario] "
-                + ",[NumeroCt] "
-                + ",[Complexidade] "
-                + ",[Automatizado] "
-                + ",[Cenario] "
-                + ",[Rework] "
-                + ",[Priority] "
-                + ",[Regression] "
-                + ",[Data] "
-                + ",[IdSystem] "
-                + ",[createdBy] "
-                + ",[modifiedBy] "
-                + ",[createDate] "
-                + ",[modifyDate] "
-                + ",[IdRevision] "
-                + ",[IdTestCaseType] "
-                + "FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] WHERE Id = ?";
-        
-          ConnectionFactory cf = new ConnectionFactory(MSSQL);       
-        PreparedStatement ps = null;
-        try {
-            ps = cf.getConnection().prepareStatement(SQL_TESTCASE_REVISION, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, idTestCase);
-             int affectedRows = ps.executeUpdate();
-             
-            if (affectedRows == 0) {
-                return 0;
-            } else {
-                ResultSet generatedKeys = ps.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int id = generatedKeys.getInt(1);
-                   generatedKeys.close();
-                    return id;
-                }
-                return 0;
-            }
-            
-            } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.print(ex.getMessage());
-            logger.error("Erro ao gerar revisão do CT", ex);
-            return 0;
-        
-        }
     }
 
 }

@@ -665,7 +665,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
 
             @Override
             protected Object doInBackground() throws Exception, SVNException, IOException {
-                isExistsCT(jComboSistemasTS.getSelectedItem().toString(), jTextNameTS.getText());
+             //   isExistsCT(jComboSistemasTS.getSelectedItem().toString(), jTextNameTS.getText());
 
                 return null;
             }
@@ -862,7 +862,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         }
 
         try {
-            testCaseRN = new TestCaseTSRN(this.fase);
+            testCaseRN = new TestCaseTSRN();
             TesteCaseTSBean ct = new TesteCaseTSBean();
             ct.setTestScriptName(jTextNameTS.getText());
             ct.setProduct(jComboSistemasTS.getSelectedItem().toString());
