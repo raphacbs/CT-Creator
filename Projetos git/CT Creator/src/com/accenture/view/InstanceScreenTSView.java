@@ -101,7 +101,6 @@ import javax.swing.JInternalFrame;
 
 import org.tmatesoft.svn.core.SVNLock;
 
-
 /**
  *
  * @author raphael.da.silva
@@ -165,7 +164,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            };
 
 //            timer.scheduleAtFixedRate(timerTask, tempo, tempo);
-
             listSteps = new ArrayList<Step>();
             listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
             listTestCase = new ArrayList<TesteCaseTSBean>();
@@ -214,8 +212,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
-        
         testPlan = new TestPlanTSDao();
         addIconInButton();
 
@@ -1206,7 +1202,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            addCtInTestPlan();
 //        }else{
 
-               // loadListCT();
+                // loadListCT();
                 addCTList();
             }
 
@@ -1458,7 +1454,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
 
                         this.testPlan.getTestPlan().addTestCase(tc);
-                        
+
                         this.testPlan.getTestPlan().addTestCase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]));
 
                         model.addRow(new Object[]{tc.getNumeroCenario(), tc.getNumeroCt(), tc.getTestScriptName(), tc.getHashCode(), tc.getDataPlanejada(), tc.isPriority(), tc.isData(), tc.isRework(), tc.isRegression()});
@@ -1565,13 +1561,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private void menuItemAbrirPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirPlanoActionPerformed
         try {
             progress(true);
-            ChoosePlanView dialog = new ChoosePlanView(null,true);
+            ChoosePlanView dialog = new ChoosePlanView(null, true);
             dialog.setTitle("Abrir plano");
             dialog.setVisible(true);
             progress(false);
-               
-              
-            
+
         } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -2292,11 +2286,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         labelQtdCTs.setText("Qtd CTs: " + tabelaCt.getRowCount());
 
     }
-    
-     public void loadTableCtBD(List<TesteCaseTSBean> listTesteCaseTSBean) {
+
+    public void loadTableCtBD(List<TesteCaseTSBean> listTesteCaseTSBean) {
         DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
         DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
-        
+
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
@@ -2316,7 +2310,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         SimpleDateFormat sdf;
 
         for (int i = 0; i < listTesteCaseTSBean.size(); i++) {
-            id = listTesteCaseTSBean.get(i).getId()+"";
+            id = listTesteCaseTSBean.get(i).getId() + "";
             nameCT = listTesteCaseTSBean.get(i).getTestScriptName();
             modifyBy = listTesteCaseTSBean.get(i).getModifiedBy();
             dateModify = listTesteCaseTSBean.get(i).getModifyDate();
@@ -3025,46 +3019,49 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         list.get(j).setNumeroCenario("00");
                         list.get(j).setNumeroCt("00");
                         TesteCaseTSBean tc = new TesteCaseTSBean();
-                        tc.setExpectedResults(list.get(j).getExpectedResults());
-                            tc.setStepDescription(list.get(j).getStepDescription());
-                            tc.setDataPlanejada(list.get(j).getDataPlanejada());
-                            tc.setFase(list.get(j).getFase());
-                            
-                            ///steps
-                            List<Step> steps = new ArrayList<>();
-                            
-                            for(int s = 0; s < list.get(j).getListStep().size(); s++){
-                                steps.add(new Step(list.get(j).getListStep().get(s).getId(), list.get(j).getListStep().get(s).getNomeStep(), list.get(j).getListStep().get(s).getDescStep(), list.get(j).getListStep().get(s).getResultadoStep(),list.get(j).getId()));
-                            }
-                            tc.setListStep(steps);
-                            tc.setProduct(list.get(j).getProduct());
-                            tc.setSTIPRJ(list.get(j).getSTIPRJ());
-                            tc.setTestCaseProperties(list.get(j).getTestCaseProperties());
-                            tc.setTestPhase(list.get(j).getTestPhase());
-                            tc.setTestPlan(list.get(j).getTestPlan());
-                            tc.setTestScriptDescription(list.get(j).getTestScriptDescription());
-                            tc.setTestScriptName(list.get(j).getTestScriptName());
-                            tc.setNumeroCenario("00");
-                            tc.setNumeroCt("00");
-                            tc.setIdSystem(list.get(j).getIdSystem());
-                            tc.setCreateDate(list.get(j).getCreateDate());
-                            tc.setCreatedBy(list.get(j).getCreatedBy());
-                            tc.setModifiedBy(list.get(j).getModifiedBy());
-                            tc.setModifyDate(list.get(j).getModifyDate());
-                            tc.setParameters(getParameters(tc));
-                            
-                          //  tc.setParameters(addParameter(tc));
-                            tc.setHashCode(tc.hashCode());
-                            tc.setDataPlanejada(new Date(System.currentTimeMillis()));
-                            tc.setComplexidade(list.get(j).getComplexidade());
-                            tc.setAutomatizado(list.get(j).isAutomatizado());
+                        tc.setId(list.get(j).getId());
+                        tc.setIdRevision(list.get(j).getIdRevision());
 
-                            tc.setPriority(false);
-                            tc.setData(false);
-                            tc.setRework(false);
-                            tc.setRegression(false);
-                        
-                            testPlan.getTestPlan().addTestCase(tc);
+                        tc.setExpectedResults(list.get(j).getExpectedResults());
+                        tc.setStepDescription(list.get(j).getStepDescription());
+                        tc.setDataPlanejada(list.get(j).getDataPlanejada());
+                        tc.setFase(list.get(j).getFase());
+
+                        ///steps
+                        List<Step> steps = new ArrayList<>();
+
+                        for (int s = 0; s < list.get(j).getListStep().size(); s++) {
+                            steps.add(new Step(list.get(j).getListStep().get(s).getId(), list.get(j).getListStep().get(s).getNomeStep(), list.get(j).getListStep().get(s).getDescStep(), list.get(j).getListStep().get(s).getResultadoStep(), list.get(j).getId()));
+                        }
+                        tc.setListStep(steps);
+                        tc.setProduct(list.get(j).getProduct());
+                        tc.setSTIPRJ(list.get(j).getSTIPRJ());
+                        tc.setTestCaseProperties(list.get(j).getTestCaseProperties());
+                        tc.setTestPhase(list.get(j).getTestPhase());
+                        tc.setTestPlan(list.get(j).getTestPlan());
+                        tc.setTestScriptDescription(list.get(j).getTestScriptDescription());
+                        tc.setTestScriptName(list.get(j).getTestScriptName());
+                        tc.setNumeroCenario("00");
+                        tc.setNumeroCt("00");
+                        tc.setIdSystem(list.get(j).getIdSystem());
+                        tc.setCreateDate(list.get(j).getCreateDate());
+                        tc.setCreatedBy(list.get(j).getCreatedBy());
+                        tc.setModifiedBy(list.get(j).getModifiedBy());
+                        tc.setModifyDate(list.get(j).getModifyDate());
+                        tc.setParameters(getParameters(tc));
+                        tc.setOrder(j+1);
+                        //  tc.setParameters(addParameter(tc));
+                        tc.setHashCode(tc.hashCode());
+                        tc.setDataPlanejada(new Date(System.currentTimeMillis()));
+                        tc.setComplexidade(list.get(j).getComplexidade());
+                        tc.setAutomatizado(list.get(j).isAutomatizado());
+
+                        tc.setPriority(false);
+                        tc.setData(false);
+                        tc.setRework(false);
+                        tc.setRegression(false);
+
+                        testPlan.getTestPlan().addTestCase(tc);
 
                         model.addRow(new Object[]{list.get(j).getNumeroCenario(), list.get(j).getNumeroCt(), list.get(j).getTestScriptName(), list.get(j).getHashCode(), list.get(j).getDataPlanejada(), list.get(j).isPriority(), list.get(j).isData(), list.get(j).isRework(), list.get(j).isRegression()});
 
@@ -3094,7 +3091,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
     }
-            
+
 //            for (int i = 0; i < cont; i++) {
 //
 //                String testCase = "";
@@ -3225,9 +3222,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //            Log.log(Level.SEVERE, "ERROR", ex);
 //            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-    
-    
-    
     public boolean IsEmptyTablePlan(DefaultTableModel table) {
 
         boolean result = false;
@@ -3245,8 +3239,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         return result;
     }
-    
-       public boolean IsEmptyTablePlanDB(DefaultTableModel table) {
+
+    public boolean IsEmptyTablePlanDB(DefaultTableModel table) {
 
         return table.getRowCount() == 0;
     }
@@ -3345,8 +3339,6 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         Collections.sort(data, new ColumnSorter(colIndex, ascending));
         model.fireTableStructureChanged();
     }        // Este comparador é usado classificar vetores dos dados
-    
-    
 
     private boolean salvaPlanoFile(TestPlanTSDao testPlan, boolean autoSave) {
         try {
@@ -3555,32 +3547,31 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 pb.setParameterName(parameterNames.get(j));
                 pb.setParameterValue("");
                 pb.setIdStep(tc.getListStep().get(i).getId());
-                
+
                 if (!listParameters.stream().anyMatch(p -> p.getParameterName().equals(pb.getParameterName()))) {
                     listParameters.add(pb);
                 }
 
             }
         }
-        
-         List<String> parameterNames = tsDao.getParameter(tc.getTestScriptDescription());
+
+        List<String> parameterNames = tsDao.getParameter(tc.getTestScriptDescription());
         for (int j = 0; j < parameterNames.size(); j++) {
 
-                ParameterBean pb = new ParameterBean();
-                pb.setApllyToAll(false);
-                pb.setParameterName(parameterNames.get(j));
-                pb.setParameterValue("");
-                pb.setIdStep(0);
-                if (!listParameters.stream().anyMatch(p -> p.getParameterName().equals(pb.getParameterName()))) {
-                    listParameters.add(pb);
-                }
-
+            ParameterBean pb = new ParameterBean();
+            pb.setApllyToAll(false);
+            pb.setParameterName(parameterNames.get(j));
+            pb.setParameterValue("");
+            pb.setIdStep(0);
+            if (!listParameters.stream().anyMatch(p -> p.getParameterName().equals(pb.getParameterName()))) {
+                listParameters.add(pb);
             }
-        
-        
+
+        }
+
         return listParameters;
     }
-    
+
     public List<ParameterBean> addParameter(TesteCaseTSBean tc) {
         ParameterRN rn = new ParameterRN();
         List<ParameterBean> parameters = new ArrayList<ParameterBean>();
@@ -4368,20 +4359,19 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
+
     private void loadCTDB() {
-        
-        try {     
-            
+
+        try {
+
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             tabelaSteps.editingStopped(new ChangeEvent(tabelaSteps));
-            
+
             //compare cts
             DefaultTableModel model = (DefaultTableModel) tabelaCt.getModel();
 
             DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
-            
+
             while (modelStep.getRowCount() > 0) {
                 modelStep.removeRow(0);
             }
@@ -4390,30 +4380,28 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             int id = Integer.parseInt((String) model.getValueAt(row, 0));
 
             TesteCaseTSBean testeCaseSelect = testCaseRN.getTesteCaseTSBeanById(id);
-            
-            
+
         } catch (Exception ex) {
             logger.error(ex);
         } finally {
-           
 
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
     }
-    
+
     private void showSteps() {
         DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
         while (modelStep.getRowCount() > 0) {
             modelStep.removeRow(0);
         }
-        int id = Integer.parseInt(tabelaCt.getValueAt(tabelaCt.getSelectedRow(),0).toString());
+        int id = Integer.parseInt(tabelaCt.getValueAt(tabelaCt.getSelectedRow(), 0).toString());
         TestCaseTSRN tcrn = new TestCaseTSRN();
         TesteCaseTSBean tc = tcrn.getTesteCaseTSBeanById(id);
-        
+
         loadFields(tc);
     }
-    
+
     private void addCTList() {
         try {
             TestCaseTSRN tcrn = new TestCaseTSRN();
@@ -4422,8 +4410,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             DefaultTableModel modelStep = (DefaultTableModel) tabelaSteps.getModel();
 
             int[] selecionados = tabelaCt.getSelectedRows();
-            int [] ids  = new  int [selecionados.length];
-            for(int i =0; i<selecionados.length; i++){
+            int[] ids = new int[selecionados.length];
+            for (int i = 0; i < selecionados.length; i++) {
                 ids[i] = Integer.parseInt(modelCT.getValueAt(selecionados[i], 0).toString());
             }
             // verifica se a linha clicada é a que está selecionada
@@ -4436,14 +4424,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             //captra linha selecioanda
             List<TesteCaseTSBean> listTemp = tcrn.getTesteCaseTSBeanById(ids);
 
-            
             //addCtInTestPlan(listTemp);
             addCtInTestPlanDB(listTemp);
 
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-       
+
         } catch (Exception ex) {
             Log.log(Level.SEVERE, "ERROR", ex);
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -4451,7 +4438,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelStatus;
     private javax.swing.JProgressBar ProgressAguarde;

@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -204,6 +205,47 @@ public class ParameterInstanceDAO {
 
     }
 
+    
+      public boolean insert(List<ParameterBean> parameterBeans) {
+        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[ParameterBeanInstance]"
+                + "([ParameterName], [ParameterValue], [ApllyToAll], [idTestCaseInstance])"
+                + "VALUES(?,?,?,?)";
+        try {
+            ConnectionFactory cf = new ConnectionFactory(BD);
+            AtomicInteger cont = new AtomicInteger(1);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT);
+            
+            
+            final int batchSize = 1000;
+            int count = 0;
+            
+            for(ParameterBean parameterBean : parameterBeans){
+                ps.setString(cont.getAndIncrement(), parameterBean.getParameterName());
+                ps.setString(cont.getAndIncrement(), parameterBean.getParameterValue());
+                ps.setBoolean(cont.getAndIncrement(), parameterBean.isApllyToAll());
+                ps.setInt(cont.getAndIncrement(), parameterBean.getIdTestCaseInstance());
+                ps.addBatch();
+                
+                cont.set(1);
+                
+                if (++count % batchSize == 0) {
+                    int[] row = ps.executeBatch();
+                }
+            
+            }
+            
+            int [] row = ps.executeBatch();
+
+            return true;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex);
+            return false;
+        }
+
+    }
+    
     public boolean delete(int Id) {
         String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
                 + "WHERE Id = ?";

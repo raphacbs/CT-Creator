@@ -52,6 +52,7 @@ public class TesteCaseTSBean implements Serializable {
     private int IdTestPlanTS;
     private int IdRevision;
     private int IdTestCaseType;
+    private int IdTesteCaseTSBeanInstance;
 //
     public TesteCaseTSBean(TestCaseTSPropertiesBean testCaseProperties) {
         super();
@@ -339,6 +340,14 @@ public class TesteCaseTSBean implements Serializable {
 
     public void setIdTestCaseType(int IdTestCaseType) {
         this.IdTestCaseType = IdTestCaseType;
+    }
+
+    public int getIdTesteCaseTSBeanInstance() {
+        return IdTesteCaseTSBeanInstance;
+    }
+
+    public void setIdTesteCaseTSBeanInstance(int IdTesteCaseTSBeanInstance) {
+        this.IdTesteCaseTSBeanInstance = IdTesteCaseTSBeanInstance;
     }
     
     

@@ -49,13 +49,10 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public class TestPlanTSRN {
 
-
-
     public TestPlanTSRN() {
-      
+
     }
 
-      
     public TestPlanTSBean savePlanDB(TestPlanTSBean plano) {
 
         try {
@@ -87,13 +84,13 @@ public class TestPlanTSRN {
                 final int idplano = plano.getId();
                 AtomicInteger counter = new AtomicInteger(0);
                 plano.getTestCase().stream().forEach(tc -> {
-                    final int id = Integer.parseInt(idplano+""+tc.getIdRevision());
-                    tc.setId(id);
                     tc.setOrder(counter.getAndIncrement());
+                    final int id = Integer.parseInt(idplano + "" + tc.getIdRevision()+ "" + tc.getOrder());
+                    tc.setIdTesteCaseTSBeanInstance(id);                    
                     tc.setIdTestPlanTS(idplano);
-                    tc = tcInstanceDao.insert(tc);
+                   // tc = tcInstanceDao.insert(tc);
                 });
-                
+
                 tcInstanceDao.insert(plano.getTestCase());
 
                 boolean erro = plano.getTestCase().stream().anyMatch(testecase -> testecase == null);
@@ -101,85 +98,58 @@ public class TestPlanTSRN {
                     return null;
                 }
 
-//                for (TesteCaseTSBean tc : plano.getTestCase()) {
-//
-//                    tc.setOrder(counter.getAndIncrement());
-//                    tc.setIdTestPlanTS(idplano);
-//
-//                    final int idTc = tc.getId();
-//                     AtomicInteger ordemStep = new AtomicInteger(1);
-//                    tc.getListStep().forEach(step -> {
-//                        step.setIdTesteCaseTSBeaninstance(idTc);
-//                        step.setOrdem(ordemStep.getAndIncrement());
-//                        step = stepInstanceDAO.insert(step);
-//                    });
-//
-//                    erro = tc.getListStep().stream().anyMatch(testecase -> testecase == null);
-//                    if (erro) {
-//                        return null;
-//                    }
-//
-//                }
-
                 //add parametros
                 List<ParameterBean> parameters = new ArrayList<>();
                 List<String> parameterNames = new ArrayList<String>();
                 AtomicInteger count = new AtomicInteger(0);
-                
-        
-                
+
                 for (TesteCaseTSBean tc : plano.getTestCase()) {
-                    final int idTc = tc.getId();
+                    final int idTc = tc.getIdTesteCaseTSBeanInstance();
                    // parameterNames.addAll(tc.getParameters().stream().map(ParameterBean::getParameterName).collect(Collectors.toList()));
 //                    if (tc.getParameters().stream().anyMatch(p -> !parameterNames.contains(p.getParameterName()))) {
 //                        tc.getParameters().forEach(pb -> pb.setIdTestCaseInstance(idTc));
 //                        parameters.addAll(tc.getParameters());
 //                        parameterNames.addAll(tc.getParameters().stream().map(ParameterBean::getParameterName).collect(Collectors.toList()));
 //                    }
-                                        
-                    for(ParameterBean pb : tc.getParameters()){
+
+                    for (ParameterBean pb : tc.getParameters()) {
                         pb.setIdTestCaseInstance(idTc);
-                        Predicate <ParameterBean> contains = p -> p.getParameterName().equals(pb.getParameterName()) && p.getIdTestCaseInstance() == pb.getIdTestCaseInstance();
+                        Predicate<ParameterBean> contains = p -> p.getParameterName().equals(pb.getParameterName()) && p.getIdTestCaseInstance() == pb.getIdTestCaseInstance();
                         boolean noExist = !parameters.stream().anyMatch(contains);
-                         
+
 //                        boolean condition1 = parameters.stream().anyMatch(p-> p.getParameterName().equals(pb.getParameterName()));
 //                        boolean condition2 = parameters.stream().anyMatch(p-> p.getIdTestCaseInstance() == pb.getIdTestCaseInstance());
-                        if(noExist || count.getAndIncrement()==0){                           
+                        if (noExist || count.getAndIncrement() == 0) {
                             parameters.add(pb);
                         }
                     }
-                        
 
                 }
 
-                parameters.stream().forEach(param -> param = parameterDAO.insert(param));
+                parameterDAO.insert(parameters);
 
-                erro = parameters.stream().anyMatch(param -> param == null);
-                if (erro) {
-                    return null;
-                }            
-                
                 return plano;
+
             } else {
                 plano.getTestCase().stream().forEach(tc -> {
                     tc = tcInstanceDao.update(tc);
                 });
-                
-               boolean erro = plano.getTestCase().stream().anyMatch(ct -> ct == null);
+
+                boolean erro = plano.getTestCase().stream().anyMatch(ct -> ct == null);
                 if (erro) {
                     return null;
                 }
                 final int idPlano = plano.getId();
                 AtomicInteger counter = new AtomicInteger(0);
-                
-                
-                
-                plano.getTestCase().stream().forEach(tc-> {tc.setIdTestPlanTS(idPlano); tc.setOrder(counter.getAndIncrement());});
+
+                plano.getTestCase().stream().forEach(tc -> {
+                    tc.setIdTestPlanTS(idPlano);
+                    tc.setOrder(counter.getAndIncrement());
+                });
                 List<TesteCaseTSBean> update = new ArrayList<>();
                 List<TesteCaseTSBean> insert = new ArrayList<>();
                 List<TesteCaseTSBean> delete = new ArrayList<>();
-                
-                
+
 //
 //                List<Integer> idsBD = plano.getTestCase().stream().map(TesteCaseTSBean::getId).collect(Collectors.toList());
 //                List<Integer> ids = testCase.getListStep().stream().map(Step::getId).collect(Collectors.toList());
@@ -193,28 +163,12 @@ public class TestPlanTSRN {
 //                updateStep.stream().forEach(s -> stepDAO.update(s));
 //                deleteStep.stream().forEach(s -> stepDAO.delete(s.getId()));
 //                insertStep.stream().forEach(s -> {s.setIdTesteCaseTSBean(idTestCase); stepDAO.insert(s);});
-
-             
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
 //
 //                boolean erro = plano.getTestCase().stream().anyMatch(testecase -> testecase == null);
 //                if (erro) {
 //                    return null;
 //                }
 //                
-                
-                
-                
-                
                 return plano;
             }
         } catch (IOException ex) {

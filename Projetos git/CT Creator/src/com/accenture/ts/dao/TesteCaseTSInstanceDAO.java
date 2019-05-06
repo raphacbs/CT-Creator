@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1185,6 +1186,8 @@ public class TesteCaseTSInstanceDAO {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
 
         String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] ("
+                + "[IdTesteCaseTSBeanInstance],"
+                + "[Id],"
                 + "[TestPlan],"
                 + "[STIPRJ],"
                 + "[Fase],"
@@ -1210,74 +1213,62 @@ public class TesteCaseTSInstanceDAO {
                 + "[createDate],"
                 + "[modifyDate],"
                 + "[Order],"
-                + "[IdTestPlanTS]"
+                + "[IdTestPlanTS],"
+                + "[IdTestCaseType],"
+                + "[IdRevision]"
                 + ")"
-                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
+            AtomicInteger index = new AtomicInteger(1);
             cf.getConnection().setAutoCommit(false);
-            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC);
 
             final int batchSize = 1000;
             int count = 0;
 
             for (TesteCaseTSBean testCase : testCases) {
-                ps.setString(1, testCase.getTestPlan());
-                ps.setString(2, testCase.getSTIPRJ());
-                ps.setString(3, testCase.getFase());
-                ps.setString(4, testCase.getTestPhase());
-                ps.setString(5, testCase.getTestScriptName());
-                ps.setString(6, testCase.getTestScriptDescription());
-                ps.setString(7, testCase.getStepDescription());
-                ps.setString(8, testCase.getExpectedResults());
-                ps.setString(9, testCase.getProduct());
-                ps.setTimestamp(10, new java.sql.Timestamp(testCase.getDataPlanejada().getTime()));
-                ps.setString(11, testCase.getNumeroCenario());
-                ps.setString(12, testCase.getNumeroCt());
-                ps.setString(13, testCase.getComplexidade());
-                ps.setBoolean(14, testCase.isAutomatizado());
-                ps.setString(15, testCase.getCenario());
-                ps.setBoolean(16, testCase.isRework());
-                ps.setBoolean(17, testCase.isPriority());
-                ps.setBoolean(18, testCase.isRegression());
-                ps.setBoolean(19, testCase.isData());
-                ps.setInt(20, testCase.getIdSystem());
-                ps.setString(21, testCase.getCreatedBy());
-                ps.setString(22, testCase.getModifiedBy());
-                ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
-                ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
-                ps.setInt(25, testCase.getOrder());
-                ps.setInt(26, testCase.getIdTestPlanTS());
+                ps.setInt(index.getAndIncrement(), testCase.getIdTesteCaseTSBeanInstance());
+                ps.setInt(index.getAndIncrement(), testCase.getId());
+                ps.setString(index.getAndIncrement(), testCase.getTestPlan());
+                ps.setString(index.getAndIncrement(), testCase.getSTIPRJ());
+                ps.setString(index.getAndIncrement(), testCase.getFase());
+                ps.setString(index.getAndIncrement(), testCase.getTestPhase());
+                ps.setString(index.getAndIncrement(), testCase.getTestScriptName());
+                ps.setString(index.getAndIncrement(), testCase.getTestScriptDescription());
+                ps.setString(index.getAndIncrement(), testCase.getStepDescription());
+                ps.setString(index.getAndIncrement(), testCase.getExpectedResults());
+                ps.setString(index.getAndIncrement(), testCase.getProduct());
+                ps.setTimestamp(index.getAndIncrement(), new java.sql.Timestamp(testCase.getDataPlanejada().getTime()));
+                ps.setString(index.getAndIncrement(), testCase.getNumeroCenario());
+                ps.setString(index.getAndIncrement(), testCase.getNumeroCt());
+                ps.setString(index.getAndIncrement(), testCase.getComplexidade());
+                ps.setBoolean(index.getAndIncrement(), testCase.isAutomatizado());
+                ps.setString(index.getAndIncrement(), testCase.getCenario());
+                ps.setBoolean(index.getAndIncrement(), testCase.isRework());
+                ps.setBoolean(index.getAndIncrement(), testCase.isPriority());
+                ps.setBoolean(index.getAndIncrement(), testCase.isRegression());
+                ps.setBoolean(index.getAndIncrement(), testCase.isData());
+                ps.setInt(index.getAndIncrement(), testCase.getIdSystem());
+                ps.setString(index.getAndIncrement(), testCase.getCreatedBy());
+                ps.setString(index.getAndIncrement(), testCase.getModifiedBy());
+                ps.setTimestamp(index.getAndIncrement(), new java.sql.Timestamp(testCase.getModifyDate().getTime()));
+                ps.setTimestamp(index.getAndIncrement(), new java.sql.Timestamp(testCase.getCreateDate().getTime()));
+                ps.setInt(index.getAndIncrement(), testCase.getOrder());
+                ps.setInt(index.getAndIncrement(), testCase.getIdTestPlanTS());
+                ps.setInt(index.getAndIncrement(), testCase.getIdTestCaseType());
+                ps.setInt(index.getAndIncrement(), testCase.getIdRevision());
                 ps.addBatch();
         
+                index.set(1);
 
-//                if (++count % batchSize == 0) {
-//                    int[] row = ps.executeBatch();
-//                    ResultSet rs = ps.getGeneratedKeys();
-//                    while (rs.next()) {
-//                        logger.info(" IN Generate Keys");
-//                        java.sql.ResultSetMetaData rsMetaData = rs.getMetaData();
-//                        int columnCount = rsMetaData.getColumnCount();
-//
-//                        for (int i = 1; i <= columnCount; i++) {
-//                            String key = rs.getString(i);
-//                            System.out.println("key " + i + " is " + key);
-//                        }
-//                        logger.info(" IN Generate Keys End ");
-//                    }
-//                    
-//                   
-//                }
+                if (++count % batchSize == 0) {
+                    int[] row = ps.executeBatch();
+                }
             }
 
             int[] row = ps.executeBatch();
 
-            try{
-                ResultSet rs = ps.getGeneratedKeys(); //<-- Only the last key retrieved
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-
+           
             ps.close();
             
             cf.getConnection().commit();

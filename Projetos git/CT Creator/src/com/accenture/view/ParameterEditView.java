@@ -157,7 +157,7 @@ public class ParameterEditView extends javax.swing.JDialog {
 
         jLabel1.setText("Nome do CT: ");
 
-        bntSalvar.setText("Salvar");
+        bntSalvar.setText("Salvar e Sair");
         bntSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntSalvarActionPerformed(evt);
@@ -360,6 +360,7 @@ public class ParameterEditView extends javax.swing.JDialog {
     
     private void bntSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalvarActionPerformed
         saveParameter();
+        this.dispose();
         JOptionPane.showMessageDialog(null, "Edição salva", "Parâmetros", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_bntSalvarActionPerformed
 
