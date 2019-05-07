@@ -38,7 +38,6 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
     private MainScreenView desktop;
     private String fase;
 
-
     /**
      * Creates new form GUIConfiguracoes
      */
@@ -46,7 +45,8 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         initComponents();
         this.fase = fase;
         carregaCamposObrigatorios();
-        carregaCamposALM();
+        carregaCamposDb();
+        //carregaCamposALM();
         carregaCamposSvn();
 
     }
@@ -86,9 +86,9 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         jSeparator2 = new javax.swing.JSeparator();
         bntSalsar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        textUsuarioALM = new javax.swing.JTextField();
+        textUsuarioDB = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        textSenhaALM = new javax.swing.JPasswordField();
+        textSenhaDB = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
@@ -209,12 +209,17 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         checkProduto.setText("PRODUTO");
         checkProduto.setEnabled(false);
 
-        jLabel3.setText("ALM");
+        jLabel3.setText("BANCO");
 
         bntSalsar.setText("Salvar Alterações");
         bntSalsar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntSalsarMouseClicked(evt);
+            }
+        });
+        bntSalsar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntSalsarActionPerformed(evt);
             }
         });
 
@@ -337,8 +342,8 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(textUsuarioALM)
-                                .addComponent(textSenhaALM, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                                .addComponent(textUsuarioDB)
+                                .addComponent(textSenhaDB, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -424,11 +429,11 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(textUsuarioALM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textUsuarioDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(textSenhaALM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textSenhaDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6)
@@ -469,6 +474,9 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jLabel3.getAccessibleContext().setAccessibleName("BANCO");
+        jLabel3.getAccessibleContext().setAccessibleDescription("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -494,7 +502,7 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-                if (atualizaUsuarioALM() && atualizaDadosSvn()) {
+                if (atualizaUsuarioALM() && atualizaDadosSvn() && atualizaDadosDb()) {
 
                     JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso! ", "Configurações", JOptionPane.INFORMATION_MESSAGE);
                 };
@@ -519,7 +527,7 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
             settings.updateSettingsRN(this.fase);
             carregaCamposSvn();
             UpdateFieldsMap(settings.getSettings().getSettings().getMandatoryFields());
-            
+
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
             SettingsScreenView guiConfiguracoes = new SettingsScreenView(this.fase);
@@ -552,6 +560,10 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_formInternalFrameClosed
+
+    private void bntSalsarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalsarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bntSalsarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -597,10 +609,10 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextArea textAreaSistemaSvn;
     private javax.swing.JTextField textDirSvn;
-    private javax.swing.JPasswordField textSenhaALM;
+    private javax.swing.JPasswordField textSenhaDB;
     private javax.swing.JPasswordField textSenhaSvn;
     private javax.swing.JTextField textUrlSvn;
-    private javax.swing.JTextField textUsuarioALM;
+    private javax.swing.JTextField textUsuarioDB;
     private javax.swing.JTextField textUsuarioSvn;
     // End of variables declaration//GEN-END:variables
 public void centralizaJanela() {
@@ -764,8 +776,8 @@ public void centralizaJanela() {
 
     public boolean atualizaUsuarioALM() {
         UsuarioALM usuarioALM = new UsuarioALM();
-        usuarioALM.setUsuario(textUsuarioALM.getText());
-        usuarioALM.setSenha(new String(textSenhaALM.getPassword()));
+        usuarioALM.setUsuario(textUsuarioDB.getText());
+        usuarioALM.setSenha(new String(textSenhaDB.getPassword()));
 
         try {
             bd.insertUsuarioAlm(usuarioALM);
@@ -780,11 +792,18 @@ public void centralizaJanela() {
     public void carregaCamposALM() {
         try {
             UsuarioALM usuarioALM = bd.getUsuarioALM();
-            textUsuarioALM.setText(usuarioALM.getUsuario());
-            textSenhaALM.setText(usuarioALM.getSenha());
+            textUsuarioDB.setText(usuarioALM.getUsuario());
+            textSenhaDB.setText(usuarioALM.getSenha());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Ocorreu o erro: " + ex.getMessage() + ex.getLocalizedMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void carregaCamposDb() {
+
+        textUsuarioDB.setText(svnProperties.getUserBD());
+        textSenhaDB.setText(svnProperties.getPasswordBD());
+
     }
 
     public void carregaCamposSvn() {
@@ -794,8 +813,6 @@ public void centralizaJanela() {
         textUrlSvn.setText(svnProperties.getUrl());
         textDirSvn.setText(svnProperties.getDir(this.fase));
         textAreaSistemaSvn.setText(svnProperties.getSystems().toString());
-        
-        
 
     }
 
@@ -805,10 +822,25 @@ public void centralizaJanela() {
             svnProperties.setUser(textUsuarioSvn.getText());
             svnProperties.setPass(new String(textSenhaSvn.getPassword()));
             svnProperties.setUrl(textUrlSvn.getText());
-            svnProperties.setDir(textDirSvn.getText());
+            //svnProperties.setDir(textDirSvn.getText());
             svnProperties.setSystems(textAreaSistemaSvn.getText());
             svnProperties.setComplexidade("Muito Alto|Alto|Medio|Baixo|Muito Baixo");
-            
+
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Arquivo de propriedades não foi encontrado", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Ocorreu o erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean atualizaDadosDb() {
+        try {
+
+            svnProperties.setUserBD(textUsuarioDB.getText());
+            svnProperties.setPasswordBD(new String(textSenhaDB.getPassword()));
 
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Arquivo de propriedades não foi encontrado", "Erro", JOptionPane.ERROR_MESSAGE);

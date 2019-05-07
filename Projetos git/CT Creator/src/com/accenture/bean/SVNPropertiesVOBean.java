@@ -5,6 +5,7 @@
  */
 package com.accenture.bean;
 
+import com.accenture.util.Criptografia;
 import com.accenture.util.ProjectSettings;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,7 @@ public class SVNPropertiesVOBean {
     private String usersAuto;
     private static SVNPropertiesVOBean sVNPropertiesVOBean = null;
     private File fileSVNProperties;
-    
+
     private String hostBD;
     private String portBD;
     private String databaseNameBD;
@@ -70,21 +71,30 @@ public class SVNPropertiesVOBean {
     }
 
     public String getUserBD() {
-        return userBD  = fileProperties.getProperty("user_bd");
+        return userBD = fileProperties.getProperty("user_bd");
+    }
+
+    public void setUserBD(String userDb) throws FileNotFoundException, IOException {
+        fileOut = new FileOutputStream(fileSVNProperties);
+        fileProperties.setProperty("password_bd", userDb);
+        fileProperties.store(fileOut, null);
     }
 
     public String getPasswordBD() {
-        return passwordBD = fileProperties.getProperty("password_bd");
+        passwordBD = fileProperties.getProperty("password_bd");
+        return Criptografia.Decripto(passwordBD);
     }
-    
-     public String getDatabaseNameBD() {
+
+    public void setPasswordBD(String passDb) throws FileNotFoundException, IOException {
+        fileOut = new FileOutputStream(fileSVNProperties);
+        fileProperties.setProperty("password_bd", Criptografia.Cripto(passDb));
+        fileProperties.store(fileOut, null);
+    }
+
+    public String getDatabaseNameBD() {
         return databaseNameBD = fileProperties.getProperty("databaseName_bd");
     }
-    
 
-  
-    
-    
     public double getVersion() {
         return this.version = Double.parseDouble(fileProperties.getProperty("version"));
     }
@@ -131,12 +141,12 @@ public class SVNPropertiesVOBean {
 
     public String getPass() {
         this.pass = fileProperties.getProperty("senhaSvn");
-        return this.pass;
+        return Criptografia.Decripto(this.pass);
     }
 
     public void setPass(String pass) throws IOException {
         fileOut = new FileOutputStream(fileSVNProperties);
-        fileProperties.setProperty("senhaSvn", pass);
+        fileProperties.setProperty("senhaSvn", Criptografia.Cripto(pass));
         fileProperties.store(fileOut, null);
     }
 
@@ -238,11 +248,11 @@ public class SVNPropertiesVOBean {
         if (getFileUpdateSVN().exists()) {
             fileSVNProperties = new File(ProjectSettings.PATH_FILE_SVN_UPDATE_PROPERTIES);
             file = new FileInputStream(fileSVNProperties);
-            
+
         } else {
             fileSVNProperties = new File(ProjectSettings.PATH_FILE_SVN_PROPERTIES);
             file = new FileInputStream(fileSVNProperties);
-            
+
         }
 
         fileProperties.load(file);
