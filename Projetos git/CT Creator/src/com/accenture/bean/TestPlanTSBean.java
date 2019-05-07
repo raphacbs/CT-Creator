@@ -30,6 +30,7 @@ public class TestPlanTSBean implements Serializable {
     private String modifiedBy ;
     private Date createDate ;
     private Date modifyDate ;
+    private String product ;
     
     	
     private static final long serialVersionUID = -7932047122858971692L;
@@ -167,7 +168,15 @@ public class TestPlanTSBean implements Serializable {
         this.modifyDate = modifyDate;
     }
 
- 
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    
 
 
    

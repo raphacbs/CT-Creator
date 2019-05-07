@@ -6,11 +6,16 @@
 package com.accenture.ts.rn;
 
 import com.accenture.bean.ParameterBean;
+import com.accenture.bean.TestPlanTSBean;
+import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.ts.dao.ParameterDAO;
+import com.accenture.ts.dao.ParameterInstanceDAO;
+import com.accenture.ts.dao.TestPlanTSDao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -57,6 +62,28 @@ public class ParameterRN {
         }
 
         return paramentros;
+    }
+    
+       public List<TesteCaseTSBean> getByListTestCaseTSBeanInstance(List<TesteCaseTSBean> tcs) {
+        
+        List<Integer> ids = tcs.stream().map(TesteCaseTSBean::getIdTesteCaseTSBeanInstance).collect(Collectors.toList());
+        ParameterInstanceDAO paramDAO = new ParameterInstanceDAO();
+        List<ParameterBean> list = paramDAO.getByIdTestCaseInstance(ids);
+        List<Integer> idsParametros = list.stream().map(ParameterBean::getIdTestCaseInstance).collect(Collectors.toList());
+        
+        tcs.forEach(tc->{
+            if(idsParametros.stream().anyMatch(id-> id == tc.getIdTesteCaseTSBeanInstance())){
+                tc.setParameters(list.stream().filter(pb-> tc.getIdTesteCaseTSBeanInstance() == pb.getIdTestCaseInstance()).collect(Collectors.toList()));
+            }
+        });
+        
+        
+        
+        
+      
+        
+        return tcs;
+
     }
 
 

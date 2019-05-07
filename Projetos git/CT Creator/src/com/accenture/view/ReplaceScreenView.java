@@ -415,7 +415,7 @@ public class ReplaceScreenView extends java.awt.Dialog {
     public void replaceData() {
         String numeroCenario = "";
         String numeroCT = "";
-        int hashCode = 0;
+        int order = 0;
         if (textSubstituir.getText().length() < 2) {
             textSubstituir.setText("0" + textSubstituir.getText());
         }
@@ -432,8 +432,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
                         }
                     }
                     numeroCT = listTc.get(i).getNumeroCt();
-                    hashCode = listTc.get(i).getHashCode();
-                    guiInstanceCT.atualizaDados(hashCode, numeroCenario, numeroCT);
+                    order = listTc.get(i).getOrder();
+                    guiInstanceCT.atualizaDados(order, numeroCenario, numeroCT);
 //                    }
                 }
                 break;
@@ -449,8 +449,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
                             numeroCT = "0" + numeroCT;
                         }
                     }
-                    hashCode = listTc.get(i).getHashCode();
-                    guiInstanceCT.atualizaDados(hashCode, numeroCenario, numeroCT);
+                    order = listTc.get(i).getOrder();
+                    guiInstanceCT.atualizaDados(order, numeroCenario, numeroCT);
 //                    }
                 }
                 break;
@@ -464,8 +464,8 @@ public class ReplaceScreenView extends java.awt.Dialog {
                         valor = true;
                     }
                     
-                    hashCode = listTc.get(i).getHashCode();
-                    guiInstanceCT.atualizaDadosBoleanos(hashCode, valor, jComboCampos.getSelectedItem().toString());
+                    order = listTc.get(i).getOrder();
+                    guiInstanceCT.atualizaDadosBoleanos(order, valor, jComboCampos.getSelectedItem().toString());
 
                 }
                 break;

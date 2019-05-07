@@ -1042,7 +1042,9 @@ public class TesteCaseTSInstanceDAO {
                     + "[createDate],"
                     + "[modifyDate],"
                     + "[Order],"
-                    + "[IdTestPlanTS]"
+                    + "[IdTestPlanTS],"
+                    + "[IdTesteCaseTSBeanInstance],"
+                    + "[IdRevision]"
                     + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance]"
                     + "WHERE " + fields;
 
@@ -1080,6 +1082,8 @@ public class TesteCaseTSInstanceDAO {
                 tc.setModifyDate(rs.getTimestamp("modifyDate"));
                 tc.setOrder(rs.getInt("Order"));
                 tc.setIdTestPlanTS(rs.getInt("IdTestPlanTS"));
+                tc.setIdTesteCaseTSBeanInstance(rs.getInt("IdTesteCaseTSBeanInstance"));
+                tc.setIdRevision(rs.getInt("IdRevision"));
 
                 caseTSBeans.add(tc);
             }
@@ -1123,9 +1127,11 @@ public class TesteCaseTSInstanceDAO {
                 + "[createDate],"
                 + "[modifyDate],"
                 + "[Order],"
-                + "[IdTestPlanTS]"
+                + "[IdTestPlanTS],"
+                + "[IdTesteCaseTSBeanInstance],"
+                + "[Id]"
                 + ")"
-                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
@@ -1156,6 +1162,8 @@ public class TesteCaseTSInstanceDAO {
             ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
             ps.setInt(25, testCase.getOrder());
             ps.setInt(26, testCase.getIdTestPlanTS());
+            ps.setInt(27, testCase.getIdTesteCaseTSBeanInstance());
+            ps.setInt(28, testCase.getId());
 
             int affectedRows = ps.executeUpdate();
 
@@ -1257,6 +1265,7 @@ public class TesteCaseTSInstanceDAO {
                 ps.setInt(index.getAndIncrement(), testCase.getIdTestPlanTS());
                 ps.setInt(index.getAndIncrement(), testCase.getIdTestCaseType());
                 ps.setInt(index.getAndIncrement(), testCase.getIdRevision());
+                
                 ps.addBatch();
         
                 index.set(1);
@@ -1323,7 +1332,7 @@ public class TesteCaseTSInstanceDAO {
                 + "[modifyDate] = ?, "
                 + "[Order] = ?,"
                 + "[IdTestPlanTS] = ?"
-                + "WHERE [Id] = ?";
+                + " WHERE [IdTesteCaseTSBeanInstance] = ?";
         try {
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
@@ -1352,9 +1361,9 @@ public class TesteCaseTSInstanceDAO {
             ps.setString(22, testCase.getModifiedBy());
             ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
             ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
-            ps.setInt(25, testCase.getId());
             ps.setInt(25, testCase.getOrder());
             ps.setInt(26, testCase.getIdTestPlanTS());
+            ps.setInt(27, testCase.getIdTesteCaseTSBeanInstance());
 
             int affectedRows = ps.executeUpdate();
 
@@ -1373,7 +1382,7 @@ public class TesteCaseTSInstanceDAO {
     }
 
     public boolean delete(int id) {
-        String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] WHERE [Id] = ?";
+        String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] WHERE [IdTesteCaseTSBeanInstance] = ?";
         try {
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_DELETE_TC);

@@ -74,15 +74,15 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu1ActionPerformed"/>
           </Events>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menuItemAbrirPlano">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+O"/>
+                  <KeyStroke key="Ctrl+P"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Abrir Plano"/>
+                <Property name="text" type="java.lang.String" value="Pesquisar Plano"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemAbrirPlanoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemSalvarPlano">
@@ -94,17 +94,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemSalvarPlanoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+I"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Importar Arquivo .plan"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemExportarPlano">
@@ -169,8 +158,8 @@
                       <Component id="LabelStatus" min="-2" pref="367" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bntStatus" min="-2" pref="23" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
-                      <Component id="bntExportar" min="-2" pref="105" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+                      <Component id="bntExportar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="bntCancelar" min="-2" pref="105" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -475,7 +464,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="16" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Exportar"/>
+        <Property name="text" type="java.lang.String" value="Salvar e Exportar"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bntExportarMouseClicked"/>
@@ -600,7 +589,7 @@
         <Component class="javax.swing.JTable" name="tabelaInstancia">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="9" rowCount="0">
+              <Table columnCount="10" rowCount="0">
                 <Column editable="true" title="N&#xba; Cen&#xe1;rio" type="java.lang.String"/>
                 <Column editable="true" title="N&#xba; Caso de Teste" type="java.lang.String"/>
                 <Column editable="false" title="Test Script Name" type="java.lang.String"/>
@@ -610,6 +599,7 @@
                 <Column editable="true" title="Massa de Dados" type="java.lang.Boolean"/>
                 <Column editable="true" title="Pass&#xed;vel de Re-Trabalho" type="java.lang.Boolean"/>
                 <Column editable="true" title="Regress&#xe3;o" type="java.lang.Boolean"/>
+                <Column editable="false" title="order" type="java.lang.Integer"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());&#xa;tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){&#xa;   public void mouseMoved(MouseEvent e){&#xa;        Point p = e.getPoint(); &#xa;        int row = tabelaInstancia.rowAtPoint(p);&#xa;        int column = tabelaInstancia.columnAtPoint(p);&#xa;        tabelaInstancia.setToolTipText(String.valueOf(tabelaInstancia.getValueAt(row,column)));&#xa;    }//end MouseMoved&#xa;});">
@@ -659,6 +649,11 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="100" minWidth="30" prefWidth="70" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="30" minWidth="30" prefWidth="30" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -960,7 +955,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnPublicarPlano">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Publicar Plano"/>
+        <Property name="text" type="java.lang.String" value="Pesquisar Plano"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPublicarPlanoActionPerformed"/>

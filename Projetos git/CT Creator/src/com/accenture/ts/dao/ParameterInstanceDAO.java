@@ -44,15 +44,14 @@ public class ParameterInstanceDAO {
     }
 
     public List<ParameterBean> getByIdTestCaseInstance(int idTestCaseInstance) {
-        String SQL_SELECT_BY_IDSTEP = "SELECT "
-                + "   pb.[Id]"
-                + " ,[ParameterName]"
-                + " ,[ParameterValue]"
-                + " ,[ApllyToAll]"
-                + " ,[idTestCaseInstance]"
-                + " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
-                + " JOIN [CTCreatorDB].[dbo].[TesteCaseTSBeanInstance] s on s.Id = pb.[idTestCaseInstance] "
-                + " WHERE idTestCaseInstance = ?";
+        String SQL_SELECT_BY_IDSTEP = "SELECT "+ 
+                 "  [Id]" +
+                 " ,[ParameterName]" +
+                 " ,[ParameterValue]" +
+                 " ,[ApllyToAll]" +
+                 " ,[idTestCaseInstance]" +
+                 " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance]" +
+                 " WHERE idTestCaseInstance = ?";
         try {
             List<ParameterBean> parameters = new ArrayList<>();
 
@@ -66,7 +65,7 @@ public class ParameterInstanceDAO {
                 ParameterBean pb = new ParameterBean();
                 pb.setId(rs.getInt("Id"));
                 pb.setApllyToAll(rs.getBoolean("ApllyToAll"));
-                pb.setIdStep(rs.getInt("idTestCaseInstance"));
+                pb.setIdTestCaseInstance(rs.getInt("idTestCaseInstance"));
                 pb.setParameterName(rs.getString("ParameterName"));
                 pb.setParameterValue(rs.getString("ParameterValue"));
 
@@ -82,6 +81,55 @@ public class ParameterInstanceDAO {
         }
     }
 
+    
+    public List<ParameterBean> getByIdTestCaseInstance(List<Integer> ids) {
+        StringBuilder sb = new StringBuilder();
+        for(int i =0; i < ids.size(); i++){
+            if(i+1 == ids.size()){
+                sb.append(""+ids.get(i));
+            }else{
+                sb.append(""+ids.get(i)+",");
+            }
+        }
+        
+        String SQL_SELECT_BY_IDS = "SELECT "
+                + "  [Id]"
+                + " ,[ParameterName]"
+                + " ,[ParameterValue]"
+                + " ,[ApllyToAll]"
+                + " ,[idTestCaseInstance]"
+                + " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
+                + " WHERE idTestCaseInstance IN ("+sb.toString()+")";
+        try {
+            List<ParameterBean> parameters = new ArrayList<>();
+
+            ConnectionFactory cf = new ConnectionFactory(BD);
+            Statement s = cf.getConnection().createStatement();
+           
+
+            ResultSet rs = s.executeQuery(SQL_SELECT_BY_IDS);
+
+            while (rs.next()) {
+                ParameterBean pb = new ParameterBean();
+                pb.setId(rs.getInt("Id"));
+                pb.setApllyToAll(rs.getBoolean("ApllyToAll"));
+                pb.setIdStep(rs.getInt("idTestCaseInstance"));
+                pb.setIdTestCaseInstance(rs.getInt("idTestCaseInstance"));
+                pb.setParameterName(rs.getString("ParameterName"));
+                pb.setParameterValue(rs.getString("ParameterValue"));
+
+                parameters.add(pb);
+            }
+
+            return parameters;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error("Erro ao selecionar os parâmetros", ex);
+            return null;
+
+        }
+    }
+    
 //    public List<ParameterBean> getByIdStep(List<Integer> idStep) {
 //        String SQL_SELECT_BY_IDSTEP = "SELECT "
 //                + "  [Id]"
@@ -253,6 +301,7 @@ public class ParameterInstanceDAO {
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
             ps.setInt(1, Id);
+            
 
             int row = ps.executeUpdate();
             ps.close();
@@ -261,6 +310,59 @@ public class ParameterInstanceDAO {
             } else {
                 return false;
             }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex);
+            return false;
+        }
+    }
+    
+     public boolean deleteByTestCaseInstanceBean(int Id) {
+        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
+                + "WHERE [idTestCaseInstance] = ?";
+        try {
+            ConnectionFactory cf = new ConnectionFactory(BD);
+            PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
+            ps.setInt(1, Id);
+            
+
+            int row = ps.executeUpdate();
+            ps.close();
+            if (row == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex);
+            return false;
+        }
+    }
+        public boolean delete(List<ParameterBean> pbs) {
+        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
+                + "WHERE Id = ?";
+        try {
+            ConnectionFactory cf = new ConnectionFactory(BD);
+            PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
+            final int batchSize = 1000;
+            int count = 0;
+            
+            for(ParameterBean pb : pbs){
+                ps.setInt(1, pb.getId());
+                ps.addBatch();
+                
+                
+                 if (++count % batchSize == 0) {
+                    int[] row = ps.executeBatch();
+                }
+            }
+            
+          int[] row = ps.executeBatch();
+
+          return true;
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -295,6 +397,46 @@ public class ParameterInstanceDAO {
              ex.printStackTrace();
              logger.error(ex);
              return null;
+         }
+         
+     }
+     
+     public boolean update(List<ParameterBean> parameterBeans){
+         String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[ParameterBeanInstance] SET "
+                  + " [ParameterName] = ? , [ParameterValue] = ?, [ApllyToAll] = ?, [idTestCaseInstance] = ?"
+                 + " WHERE Id = ?";
+         try{
+         ConnectionFactory cf = new ConnectionFactory(BD);
+         
+         AtomicInteger index = new AtomicInteger(1);
+         final int batchSize = 1000;
+            int count = 0;
+          PreparedStatement ps = cf.getConnection().prepareCall(SQL_UPDATE_BY_ID);
+             for (ParameterBean pb : parameterBeans) {
+                
+                 ps.setString(index.getAndIncrement(), pb.getParameterName());
+                 ps.setString(index.getAndIncrement(), pb.getParameterValue());
+                 ps.setBoolean(index.getAndIncrement(), pb.isApllyToAll());
+                 ps.setInt(index.getAndIncrement(), pb.getIdTestCaseInstance());
+                 ps.setInt(index.getAndIncrement(), pb.getId());
+                 ps.addBatch();
+                 index.set(1);
+                
+                if (++count % batchSize == 0) {
+                    int[] row = ps.executeBatch();
+                }
+             }
+         
+
+         
+         int[] row = ps.executeBatch();
+         ps.close();
+         return true;
+         
+         }catch(Exception ex){
+             ex.printStackTrace();
+             logger.error(ex);
+             return false;
          }
          
      }

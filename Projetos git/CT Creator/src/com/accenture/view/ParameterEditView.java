@@ -642,7 +642,7 @@ public class ParameterEditView extends javax.swing.JDialog {
             model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).isApllyToAll(), i, 2);
-            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getIdStep(), i, 3);
+            model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getIdTestCaseInstance(), i, 3);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getId(), i, 4);
         }
       
@@ -677,6 +677,24 @@ public class ParameterEditView extends javax.swing.JDialog {
             p.setParameterValue(tabelaParametros.getValueAt(i, 1).toString());
 //            p.setApllyToAll(Boolean.parseBoolean(tabelaParametros.getValueAt(i, 2).toString()));
             p.setApllyToAll(false);
+            
+            final String name = tabelaParametros.getValueAt(i, 0).toString();
+            final String value = tabelaParametros.getValueAt(i, 1).toString();
+            
+                        
+            this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().stream().forEach(pb->{
+                        
+                    if(pb.getParameterName().equalsIgnoreCase(name)){
+                        pb.setParameterValue(value);
+                    }
+                    
+                    
+                    });
+            
+            
+            
+            
+            
 
             if (Boolean.parseBoolean(tabelaParametros.getValueAt(i, 2).toString())) {
                 DefaultTableModel model = (DefaultTableModel) tabelaParametros.getModel();
@@ -710,7 +728,7 @@ public class ParameterEditView extends javax.swing.JDialog {
             jTextFieldNumeroCt.setText("0" + jTextFieldNumeroCt.getText());
         }
         //CR 15112- fim
-        this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).setParameters(listP);
+       // this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).setParameters(listP);
         this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).setNumeroCenario(jTextFieldNumeroCenario.getText());
         this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).setNumeroCt(jTextFieldNumeroCt.getText());
         instance.setPlanInstance(this.plan);

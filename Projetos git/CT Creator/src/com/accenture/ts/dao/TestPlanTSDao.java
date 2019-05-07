@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 /**
@@ -82,6 +83,7 @@ public class TestPlanTSDao implements Serializable {
                     + "[modifiedBy],"
                     + "[createDate],"
                     + "[modifyDate],"
+                    + "[product]"
                     + " FROM [CTCreatorDB].[dbo].[TestPlanTSBean] "
                     + "WHERE [Id] = ?";
 
@@ -103,6 +105,7 @@ public class TestPlanTSDao implements Serializable {
                 plano.setModifiedBy("modifiedBy");
                 plano.setCreateDate(new java.sql.Timestamp(plano.getCreateDate().getTime()));
                 plano.setModifyDate(new java.sql.Timestamp(plano.getModifyDate().getTime()));
+                plano.setProduct("createdBy");
             }
 
             return plano;
@@ -114,6 +117,64 @@ public class TestPlanTSDao implements Serializable {
         }
 
     }
+    
+    public List<TestPlanTSBean> getByFields(String fields) {
+        try {
+           
+            String SQL_SELECT = "SELECT "
+                    + "[Id],"
+                    + "[Name],"
+                    + "[Sti],"
+                    + "[CrFase],"
+                    + "[TestPhase],"
+                    + "[Release],"
+                    + "[createdBy],"
+                    + "[modifiedBy],"
+                    + "[createDate],"
+                    + "[modifyDate],"
+                    + "[product]"
+                    + " FROM [CTCreatorDB].[dbo].[TestPlanTSBean] "
+                   + "WHERE " + fields;
+
+            ConnectionFactory cf = new ConnectionFactory(MSSQL);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT);
+          
+            
+            ResultSet rs = ps.executeQuery();
+            
+            List<TestPlanTSBean> planos= new ArrayList<TestPlanTSBean>();
+            
+            
+            while (rs.next()) {
+                TestPlanTSBean plano = new TestPlanTSBean();
+                plano.setId(rs.getInt("Id"));
+                plano.setName(rs.getString("Name"));
+                plano.setSti(rs.getString("Sti"));
+                plano.setCrFase(rs.getString("CrFase"));
+                plano.setTestPhase(rs.getString("TestPhase"));
+                plano.setRelease(rs.getString("Release"));
+                plano.setCreatedBy(rs.getString("createdBy"));
+                plano.setModifiedBy(rs.getString("modifiedBy"));
+                plano.setCreateDate(rs.getTimestamp("createDate"));
+                plano.setModifyDate(rs.getTimestamp("modifyDate"));
+                plano.setProduct(rs.getString("createdBy"));
+                plano.setProduct(rs.getString("product"));
+                
+//                TesteCaseTSInstanceDAO instanceDAO = new TesteCaseTSInstanceDAO();
+//                plano.setTestCase(instanceDAO.getByFields(" [IdTestPlanTS] = "+ plano.getId()));
+                planos.add(plano);
+            }
+
+            return planos;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            logger.error("Erro ao recuperar os CTs", ex);
+            return null;
+        }
+
+    }
+    
     
     public TestPlanTSBean insert(TestPlanTSBean plano)  {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -127,23 +188,24 @@ public class TestPlanTSDao implements Serializable {
                 + "[createdBy],"
                 + "[modifiedBy],"
                 + "[createDate],"
-                + "[modifyDate]"
+                + "[modifyDate],"
+                + "[product]"
                 + ")"
-                + " VALUES(?,?,?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?,?,?,?)";
         try {
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setString(1, plano.getName());
-            ps.setString(2, plano.getSti());
-            ps.setString(3, plano.getCrFase());
-            ps.setString(4, plano.getTestPhase());
-            ps.setString(5, plano.getRelease());
-            ps.setString(6, plano.getCreatedBy());
-            ps.setString(7, plano.getModifiedBy());
-            ps.setTimestamp(8, new java.sql.Timestamp(plano.getCreateDate().getTime()));
-            ps.setTimestamp(9, new java.sql.Timestamp(plano.getModifyDate().getTime()));
- 
+            AtomicInteger cont = new AtomicInteger(1);
+            ps.setString(cont.getAndIncrement(), plano.getName());
+            ps.setString(cont.getAndIncrement(), plano.getSti());
+            ps.setString(cont.getAndIncrement(), plano.getCrFase());
+            ps.setString(cont.getAndIncrement(), plano.getTestPhase());
+            ps.setString(cont.getAndIncrement(), plano.getRelease());
+            ps.setString(cont.getAndIncrement(), plano.getCreatedBy());
+            ps.setString(cont.getAndIncrement(), plano.getModifiedBy());
+            ps.setTimestamp(cont.getAndIncrement(), new java.sql.Timestamp(plano.getCreateDate().getTime()));
+            ps.setTimestamp(cont.getAndIncrement(), new java.sql.Timestamp(plano.getModifyDate().getTime()));
+            ps.setString(cont.getAndIncrement(), plano.getProduct());
 
             int affectedRows = ps.executeUpdate();
 
@@ -172,7 +234,7 @@ public class TestPlanTSDao implements Serializable {
 
     }
     
-      public TestPlanTSBean update(TestPlanTSBean plano) throws Exception {
+      public TestPlanTSBean update(TestPlanTSBean plano){
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
 
         String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TestPlanTSBean] SET "
@@ -180,26 +242,28 @@ public class TestPlanTSDao implements Serializable {
                 + "[Sti] = ?,"
                 + "[CrFase] = ?,"
                 + "[TestPhase] = ?,"
-                + "[Realease] = ?,"
+                + "[Release] = ?,"
                 + "[createdBy]= ?,"
                 + "[modifiedBy]= ?,"
                 + "[createDate]= ?,"
-                + "[modifyDate]= ?"
+                + "[modifyDate]= ?,"
+                + "[product] = ?"
                 + " WHERE [Id] = ?";
         try {
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
-
-            ps.setString(1, plano.getName());
-            ps.setString(2, plano.getSti());
-            ps.setString(3, plano.getCrFase());
-            ps.setString(4, plano.getTestPhase());
-            ps.setString(5, plano.getRelease());
-            ps.setString(6, plano.getCreatedBy());
-            ps.setString(7, plano.getModifiedBy());
-            ps.setTimestamp(8, new java.sql.Timestamp(plano.getCreateDate().getTime()));
-            ps.setTimestamp(9, new java.sql.Timestamp(plano.getModifyDate().getTime()));
-            
+            AtomicInteger cont = new AtomicInteger(1);
+            ps.setString(cont.getAndIncrement(), plano.getName());
+            ps.setString(cont.getAndIncrement(), plano.getSti());
+            ps.setString(cont.getAndIncrement(), plano.getCrFase());
+            ps.setString(cont.getAndIncrement(), plano.getTestPhase());
+            ps.setString(cont.getAndIncrement(), plano.getRelease());
+            ps.setString(cont.getAndIncrement(), plano.getCreatedBy());
+            ps.setString(cont.getAndIncrement(), plano.getModifiedBy());
+            ps.setTimestamp(cont.getAndIncrement(), new java.sql.Timestamp(plano.getCreateDate().getTime()));
+            ps.setTimestamp(cont.getAndIncrement(), new java.sql.Timestamp(plano.getModifyDate().getTime()));
+            ps.setString(cont.getAndIncrement(), plano.getProduct());
+            ps.setInt(cont.getAndIncrement(), plano.getId());
             
             int affectedRows = ps.executeUpdate();
 
@@ -241,6 +305,8 @@ public class TestPlanTSDao implements Serializable {
             return false;
         }
     }
+         
+         
     
     
 }

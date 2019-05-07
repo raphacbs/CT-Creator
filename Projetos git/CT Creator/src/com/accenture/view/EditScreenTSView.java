@@ -1567,9 +1567,9 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 }
             }
             
-            if (model.getRowCount() == 0) {
-                isFirst = true;
-            }
+//            if (model.getRowCount() == 0) {
+//                isFirst = true;
+//            }
 
             String nameCT = "";
             String id = "";
@@ -1612,6 +1612,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             columnModel.getColumn(1).setPreferredWidth((int) (tableSize.getWidth() * 0.70));
             columnModel.getColumn(2).setPreferredWidth((int) (tableSize.getWidth() * 0.50));
             columnModel.getColumn(3).setPreferredWidth((int) (tableSize.getWidth() * 0.50));
+            
+            if (model.getRowCount() == 0) {
+                isFirst = true;
+            }
 
             if (!isFirst) {
                 tabelaCt.setRowSelectionInterval(this.rowAfter, this.rowAfter);

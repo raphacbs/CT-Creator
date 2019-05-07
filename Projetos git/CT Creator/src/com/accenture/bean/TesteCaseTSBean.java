@@ -48,7 +48,7 @@ public class TesteCaseTSBean implements Serializable {
     private String modifiedBy;
     private Date createDate;
     private Date modifyDate;
-    private int order;
+    private Integer order;
     private int IdTestPlanTS;
     private int IdRevision;
     private int IdTestCaseType;

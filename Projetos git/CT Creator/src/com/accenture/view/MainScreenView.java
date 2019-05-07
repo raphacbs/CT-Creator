@@ -282,7 +282,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenu3.setText("Pesquisar/Editar");
 
-        itemMenuPesquisaCT.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuPesquisaCT.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         itemMenuPesquisaCT.setText("TI");
         itemMenuPesquisaCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

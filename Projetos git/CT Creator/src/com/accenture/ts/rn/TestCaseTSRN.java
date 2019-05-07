@@ -206,39 +206,39 @@ public class TestCaseTSRN {
         nameSheet = nameSheet.replace("STC DADOS", "STC");
         nameSheet = nameSheet.replace("STC VOZ", "STC");
 
-        for (int i = 0; i < testPlan.getTestCase().size(); i++) {
-            List<Step> steps = new ArrayList<>();
-            List<String> desc = new ArrayList<>();
-            List<String> result = new ArrayList<>();
+//        for (int i = 0; i < testPlan.getTestCase().size(); i++) {
+//            List<Step> steps = new ArrayList<>();
+//            List<String> desc = new ArrayList<>();
+//            List<String> result = new ArrayList<>();
+//
+//            desc = breakTestCaseForStep(testPlan.getTestCase().get(i).getStepDescription());
+//            result = breakTestCaseForStep(testPlan.getTestCase().get(i).getExpectedResults());
+//
+//            System.out.println("com.accenture.ts.rn.TestCaseTSRN.createSpreadsheetTSNew() - " + i);
+//
+//            for (int s = 0; s < desc.size(); s++) {
+//
+//                if (!desc.equals("") || !result.equals("")) {
+//
+//                    desc.set(s, desc.get(s).substring(desc.get(s).indexOf("-") + 2));
+//                    result.set(s, result.get(s).substring(result.get(s).indexOf("-") + 2));
+//
+//                }
+//
+//                Step step = new Step();
+//                step.setDescStep(desc.get(s));
+//                step.setResultadoStep(result.get(s));
+//
+//                steps.add(step);
+//            }
+//
+//            testPlan.getTestCase().get(i).setListStep(steps);
 
-            desc = breakTestCaseForStep(testPlan.getTestCase().get(i).getStepDescription());
-            result = breakTestCaseForStep(testPlan.getTestCase().get(i).getExpectedResults());
-
-            System.out.println("com.accenture.ts.rn.TestCaseTSRN.createSpreadsheetTSNew() - " + i);
-
-            for (int s = 0; s < desc.size(); s++) {
-
-                if (!desc.equals("") || !result.equals("")) {
-
-                    desc.set(s, desc.get(s).substring(desc.get(s).indexOf("-") + 2));
-                    result.set(s, result.get(s).substring(result.get(s).indexOf("-") + 2));
-
-                }
-
-                Step step = new Step();
-                step.setDescStep(desc.get(s));
-                step.setResultadoStep(result.get(s));
-
-                steps.add(step);
-            }
-
-            testPlan.getTestCase().get(i).setListStep(steps);
-
-            if (testPlan.getTestCase().get(i).getProduct().equals("STC VOZ") || testPlan.getTestCase().get(i).getProduct().equals("STC DADOS")) {
-                testPlan.getTestCase().get(i).setProduct("STC");
-            }
-
-        }
+//            if (testPlan.getTestCase().get(i).getProduct().equals("STC VOZ") || testPlan.getTestCase().get(i).getProduct().equals("STC DADOS")) {
+//                testPlan.getTestCase().get(i).setProduct("STC");
+//            }
+//
+//        }
 
         tsDao.createSpreadsheetTS(pathSheet, nameSheet, testPlan);
     }
@@ -501,7 +501,7 @@ public class TestCaseTSRN {
                 
                 int idTestcase = testCase.getId();
                 TesteCaseTSBean testCaseBD = getTesteCaseTSBeanById(idTestcase);
-                AtomicInteger counter = new AtomicInteger(0);
+                AtomicInteger counter = new AtomicInteger(1);
                 //atualizando lista de steps
                 testCase.getListStep().stream().forEach(s -> { s.setNomeStep("Step "+counter.getAndIncrement());s.setOrdem(counter.get()); s.setIdTesteCaseTSBean(idTestcase); });
                 List<Step> updateStep = new ArrayList<>();
