@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -356,7 +357,11 @@ public class SearchPlanView extends java.awt.Dialog {
 
     private void tabelaSelecionePlanoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaSelecionePlanoMouseClicked
         if (evt.getClickCount() == 2) {
-              abrirPlano();
+            try {
+                abrirPlano();
+            } catch (ParseException ex) {
+                Logger.getLogger(SearchPlanView.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_tabelaSelecionePlanoMouseClicked
 
@@ -364,7 +369,7 @@ public class SearchPlanView extends java.awt.Dialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_bntAbrirMouseClicked
 
-    private void abrirPlano(){
+    private void abrirPlano() throws ParseException{
         TestPlanTSRN planTSRN = new TestPlanTSRN();
 
                         String id = tabelaSelecionePlano.getValueAt(tabelaSelecionePlano.getSelectedRow(), 0).toString();
@@ -383,7 +388,11 @@ public class SearchPlanView extends java.awt.Dialog {
             
             
                      
-               abrirPlano();
+        try {
+            abrirPlano();
+        } catch (ParseException ex) {
+            Logger.getLogger(SearchPlanView.class.getName()).log(Level.SEVERE, null, ex);
+        }
                
         
        

@@ -234,6 +234,8 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuItem8.setText("PKE");
+        jMenuItem8.setVisible(false);
+        jMenuItem8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem8ActionPerformed(evt);
@@ -263,6 +265,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu2.add(jMenuItem3);
 
         jMenuItem10.setText("PKE");
+        jMenuItem10.setVisible(false);
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem10ActionPerformed(evt);
@@ -271,6 +274,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu2.add(jMenuItem10);
 
         jMenuItem11.setText("TS -> PKE");
+        jMenuItem11.setVisible(false);
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem11ActionPerformed(evt);
@@ -300,6 +304,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu3.add(jMenuItem4);
 
         jMenuItem9.setText("PKE");
+        jMenuItem9.setVisible(false);
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem9ActionPerformed(evt);
@@ -310,6 +315,7 @@ public class MainScreenView extends javax.swing.JFrame {
         menuCT.add(jMenu3);
 
         itemMenuConsultaCTAlm.setText("Consultar CT no ALM (beta)");
+        itemMenuConsultaCTAlm.setVisible(false);
         itemMenuConsultaCTAlm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemMenuConsultaCTAlmActionPerformed(evt);
@@ -358,6 +364,7 @@ public class MainScreenView extends javax.swing.JFrame {
         menuImportarExportar.add(jMenuItem5);
 
         jMenuItem12.setText("Instânciar CTs e exportar planilha PKE");
+        jMenuItem12.setVisible(false);
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem12ActionPerformed(evt);

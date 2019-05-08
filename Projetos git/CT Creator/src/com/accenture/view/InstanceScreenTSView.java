@@ -93,6 +93,7 @@ import java.awt.Point;
 import java.awt.event.MouseMotionAdapter;
 import java.io.FileNotFoundException;
 import java.io.StringWriter;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -3500,17 +3501,20 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }
 
     
-    public void loadPlan(TestPlanTSBean plano)  {
+    public void loadPlan(TestPlanTSBean plano) throws ParseException  {
        
-            testPlan.setTestPlan(plano);
+        testPlan.setTestPlan(plano);
 
-            testPlanName.setText(this.testPlan.getTestPlan().getName());
-            testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
-            testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
-            jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
-            jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
+        testPlanName.setText(this.testPlan.getTestPlan().getName());
+        testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
+        testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
+        jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
+        jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
+
+        String date = this.testPlan.getTestPlan().getRelease();
+        Date release = new SimpleDateFormat("MM/yyyy").parse(date);
+        jDateChooserRelease.setDate(release);
             
-            jDateChooserRelease.setDateFormatString(this.testPlan.getTestPlan().getRelease());
 //            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
             DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
             while (modelInstancia.getRowCount() > 0) {

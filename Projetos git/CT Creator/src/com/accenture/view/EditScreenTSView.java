@@ -92,6 +92,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private org.apache.log4j.Logger logger;
     private final static Logger Log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private String fase;
+    private int idSistema;
 
     private List<TesteCaseTSBean> listTesteCaseTSBean;
     private TesteCaseTSBean testeCaseCurrent;
@@ -1131,6 +1132,13 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 jComboSistemasTS.addItem(systems.get(i));
             }
 
+            for (int i = 0; i < jComboSistemasTS.getItemCount(); i++) {
+                if (idSistema == jComboSistemasTS.getItemAt(i).getId()) {
+                    jComboSistemasTS.setSelectedIndex(i);
+                    break;
+                }
+            }
+
             ArrayList fases = testCaseRN.faseCRTestCase();
             ArrayList complexidades = testCaseRN.complexidade();
 
@@ -1551,7 +1559,9 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             this.listTesteCaseTSBean = listTesteCaseTSBean;
 
-            
+             if (model.getRowCount() == 0) {
+                isFirst = true;
+            }
 
 //            while (model.getRowCount() > 0) {
 //                model.removeRow(0);
@@ -1634,6 +1644,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     public void callFilter() {
         FilterTestCaseScreenTSView1 dialogFiltro = null;
         try {
+         
             dialogFiltro = new FilterTestCaseScreenTSView1(this, null, true, this.fase);
         } catch (IOException ex) {
             logger.error("Erro ", ex);
@@ -1730,6 +1741,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         for (int i = 0; i < jComboSistemasTS.getItemCount(); i++) {
             if (testCase.getIdSystem() == jComboSistemasTS.getItemAt(i).getId()) {
                 jComboSistemasTS.setSelectedIndex(i);
+                break;
             }
         }
 
@@ -2132,6 +2144,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         this.filtro = filtro;
     }
 
+    public void setIdSistema(int idSistema){
+        this.idSistema = idSistema;
+    }
+    
     private void deleteCT(String folder, String fileName, String msn) {
 
         try {

@@ -242,7 +242,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         SwingWorker sw = new SwingWorker() {
             JDialog aguarde;
             final Frame GUIPrincipal = new MainScreenView();
-
+            
             {
                 this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
             }
@@ -460,10 +460,12 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             
            TestCaseTSRN caseTSRN = new TestCaseTSRN();
            int IdSystem = ((SystemBean) jComboSistemasTS.getSelectedItem()).getId();
+           
             List<TesteCaseTSBean> listTestCaseTSPropertiesBean = caseTSRN.getTesteCaseTSBeanBySystemNameBD(IdSystem, nameTC, id);
           
             //guiEditCt.cleanFields();            
             //guiEditCt.loadTableCt(listTestCaseTSPropertiesBean);
+            guiEditCt.setIdSistema(IdSystem);
             guiEditCt.setRowAfter(0);
             guiEditCt.setRowBefore(0);
             guiEditCt.loadTableCtDB(listTestCaseTSPropertiesBean);
