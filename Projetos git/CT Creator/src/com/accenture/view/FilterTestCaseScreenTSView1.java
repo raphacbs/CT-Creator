@@ -465,10 +465,12 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
           
             //guiEditCt.cleanFields();            
             //guiEditCt.loadTableCt(listTestCaseTSPropertiesBean);
-            guiEditCt.setIdSistema(IdSystem);
+           
+            
             guiEditCt.setRowAfter(0);
             guiEditCt.setRowBefore(0);
             guiEditCt.loadTableCtDB(listTestCaseTSPropertiesBean);
+            guiEditCt.setIdSistema(IdSystem);
             
             //guiEditCt.setFiltro(text);
        

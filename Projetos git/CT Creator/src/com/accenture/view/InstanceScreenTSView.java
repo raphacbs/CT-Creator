@@ -1590,7 +1590,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntReplaceActionPerformed
 
     private void menuItemSalvarPlanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarPlanoActionPerformed
-        try {
+            try {
             final java.awt.Frame GUIPrincipal = new MainScreenView();
             final JInternalFrame ji = this;
 

@@ -2144,8 +2144,14 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         this.filtro = filtro;
     }
 
-    public void setIdSistema(int idSistema){
+    public void setIdSistema(int idSistema) {
         this.idSistema = idSistema;
+        for (int i = 0; i < jComboSistemasTS.getItemCount(); i++) {
+            if (idSistema == jComboSistemasTS.getItemAt(i).getId()) {
+                jComboSistemasTS.setSelectedIndex(i);
+                break;
+            }
+        }
     }
     
     private void deleteCT(String folder, String fileName, String msn) {
