@@ -6,6 +6,7 @@
 package com.accenture.ts.dao;
 
 import com.accenture.bean.ParameterBean;
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
 import com.accenture.connection.ConnectionFactory;
 import com.accenture.connection.EnumConnection;
@@ -44,15 +45,16 @@ public class ParameterInstanceDAO {
     }
 
     public List<ParameterBean> getByIdTestCaseInstance(int idTestCaseInstance) {
+        try {
         String SQL_SELECT_BY_IDSTEP = "SELECT "+ 
                  "  [Id]" +
                  " ,[ParameterName]" +
                  " ,[ParameterValue]" +
                  " ,[ApllyToAll]" +
                  " ,[idTestCaseInstance]" +
-                 " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance]" +
+                 " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance]" +
                  " WHERE idTestCaseInstance = ?";
-        try {
+        
             List<ParameterBean> parameters = new ArrayList<>();
 
             ConnectionFactory cf = new ConnectionFactory(BD);
@@ -91,16 +93,16 @@ public class ParameterInstanceDAO {
                 sb.append(""+ids.get(i)+",");
             }
         }
-        
+        try {
         String SQL_SELECT_BY_IDS = "SELECT "
                 + "  [Id]"
                 + " ,[ParameterName]"
                 + " ,[ParameterValue]"
                 + " ,[ApllyToAll]"
                 + " ,[idTestCaseInstance]"
-                + " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
+                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
                 + " WHERE idTestCaseInstance IN ("+sb.toString()+")";
-        try {
+       
             List<ParameterBean> parameters = new ArrayList<>();
 
             ConnectionFactory cf = new ConnectionFactory(BD);
@@ -137,8 +139,8 @@ public class ParameterInstanceDAO {
 //                + " ,[ParameterValue]"
 //                + " ,[ApllyToAll]"
 //                + " ,[IdStep]"
-//                + " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
-//               // + " JOIN [CTCreatorDB].[dbo].[Step] s on s.Id = pb.[IdStep] "
+//                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
+//               // + " JOIN "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] s on s.Id = pb.[IdStep] "
 //                + " WHERE IdStep in (IDS_STEPS)";
 //        try {
 //            String ids = "";
@@ -180,15 +182,16 @@ public class ParameterInstanceDAO {
 
     
     public ParameterBean getById(int id) {
+        try {
         String SQL_SELECT_BY_ID = "SELECT "
                 + "  [Id]"
                 + " ,[ParameterName]"
                 + " ,[ParameterValue]"
                 + " ,[ApllyToAll]"
                 + " ,[idTestCaseInstance]"
-                + " FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
+                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
                 + " WHERE Id = ?";
-        try {
+        
             ParameterBean pb = new ParameterBean();
 
             ConnectionFactory cf = new ConnectionFactory(BD);
@@ -217,10 +220,11 @@ public class ParameterInstanceDAO {
     }
 
     public ParameterBean insert(ParameterBean parameterBean) {
-        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[ParameterBeanInstance]"
+        try {
+        String SQL_INSERT = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance]"
                 + "([ParameterName], [ParameterValue], [ApllyToAll], [idTestCaseInstance])"
                 + "VALUES(?,?,?,?)";
-        try {
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, parameterBean.getParameterName());
@@ -255,10 +259,11 @@ public class ParameterInstanceDAO {
 
     
       public boolean insert(List<ParameterBean> parameterBeans) {
-        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[ParameterBeanInstance]"
+        try {
+          String SQL_INSERT = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance]"
                 + "([ParameterName], [ParameterValue], [ApllyToAll], [idTestCaseInstance])"
                 + "VALUES(?,?,?,?)";
-        try {
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             AtomicInteger cont = new AtomicInteger(1);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT);
@@ -295,9 +300,10 @@ public class ParameterInstanceDAO {
     }
     
     public boolean delete(int Id) {
-        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
-                + "WHERE Id = ?";
         try {
+        String SQL_DELETE_BY_ID = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
+                + "WHERE Id = ?";
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
             ps.setInt(1, Id);
@@ -319,9 +325,10 @@ public class ParameterInstanceDAO {
     }
     
      public boolean deleteByTestCaseInstanceBean(int Id) {
-        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
-                + "WHERE [idTestCaseInstance] = ?";
         try {
+         String SQL_DELETE_BY_ID = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
+                + "WHERE [idTestCaseInstance] = ?";
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
             ps.setInt(1, Id);
@@ -342,9 +349,10 @@ public class ParameterInstanceDAO {
         }
     }
         public boolean delete(List<ParameterBean> pbs) {
-        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[ParameterBeanInstance] "
-                + "WHERE Id = ?";
         try {
+            String SQL_DELETE_BY_ID = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] "
+                + "WHERE Id = ?";
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
             final int batchSize = 1000;
@@ -373,10 +381,11 @@ public class ParameterInstanceDAO {
     }
     
      public ParameterBean update(ParameterBean parameterBean){
-         String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[ParameterBeanInstance]"
+         try {
+         String SQL_UPDATE_BY_ID = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance]"
                   + "[ParameterName] = ? , [ParameterValue] = ?, [ApllyToAll] = ?, [idTestCaseInstance] = ?"
                  + "WHERE Id = ?";
-         try{
+    
          ConnectionFactory cf = new ConnectionFactory(BD);
          PreparedStatement ps = cf.getConnection().prepareCall(SQL_UPDATE_BY_ID);
          ps.setString(1, parameterBean.getParameterName());
@@ -402,10 +411,11 @@ public class ParameterInstanceDAO {
      }
      
      public boolean update(List<ParameterBean> parameterBeans){
-         String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[ParameterBeanInstance] SET "
+         try {
+         String SQL_UPDATE_BY_ID = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[ParameterBeanInstance] SET "
                   + " [ParameterName] = ? , [ParameterValue] = ?, [ApllyToAll] = ?, [idTestCaseInstance] = ?"
                  + " WHERE Id = ?";
-         try{
+         
          ConnectionFactory cf = new ConnectionFactory(BD);
          
          AtomicInteger index = new AtomicInteger(1);

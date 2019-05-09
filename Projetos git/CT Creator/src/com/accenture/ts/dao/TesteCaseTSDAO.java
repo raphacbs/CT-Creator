@@ -7,6 +7,7 @@ package com.accenture.ts.dao;
 
 import com.accenture.bean.ParameterBean;
 import com.accenture.bean.Plano;
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
 import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestPlanTSBean;
@@ -794,7 +795,7 @@ public class TesteCaseTSDAO {
                     + "[modifyDate],"
                     + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]";
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean]";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             Statement statement = cf.getConnection().createStatement();
@@ -835,7 +836,7 @@ public class TesteCaseTSDAO {
             logger.info(testCase);
             return caseTSBeans;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -874,7 +875,7 @@ public class TesteCaseTSDAO {
                     + "[modifyDate],"
                     + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] "
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean] "
                     + "WHERE [Id] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -920,7 +921,7 @@ public class TesteCaseTSDAO {
 
             return tc;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -959,7 +960,7 @@ public class TesteCaseTSDAO {
                     + "[modifyDate],"
                     + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]"
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean]"
                     + "WHERE [IdSystem] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -1003,7 +1004,7 @@ public class TesteCaseTSDAO {
 
             return caseTSBeans;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -1042,7 +1043,7 @@ public class TesteCaseTSDAO {
                     + "[modifyDate],"
                     + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBean]"
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean]"
                     + "WHERE " + fields;
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -1085,7 +1086,7 @@ public class TesteCaseTSDAO {
 
             return caseTSBeans;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -1098,8 +1099,8 @@ public class TesteCaseTSDAO {
         
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
         PreparedStatement ps = null;
-        
-        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBean] ([TestPlan],"
+        try{
+        String SQL_INSERT_TC = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean] ([TestPlan],"
                 + "[STIPRJ],"
                 + "[Fase],"
                 + "[TestPhase],"
@@ -1127,7 +1128,7 @@ public class TesteCaseTSDAO {
                 + "[IdTestCaseType]"
                 + ")"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        try {
+       
 
             ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
 
@@ -1196,7 +1197,7 @@ public class TesteCaseTSDAO {
         
 
 
-        String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TesteCaseTSBean] SET "
+        String SQL_UPDATE_TC = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean] SET "
                 + "[TestPlan] = ?,"
                 + "[STIPRJ] = ?,"
                 + "[Fase] = ?,"
@@ -1273,8 +1274,9 @@ public class TesteCaseTSDAO {
     }
     
     public boolean delete(int id){
-         String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] WHERE [Id] = ?";
-        try {
+        try{
+         String SQL_DELETE_TC = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean] WHERE [Id] = ?";
+      
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_DELETE_TC);
             
@@ -1342,7 +1344,8 @@ public class TesteCaseTSDAO {
     }
     
     public int createTestCaseRevision(int idTestCase){
-        String SQL_TESTCASE_REVISION = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] "
+        try{
+        String SQL_TESTCASE_REVISION = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision] "
                 + "SELECT [Id]"
                 + " ,[TestPlan] "
                 + ",[STIPRJ] "
@@ -1370,11 +1373,11 @@ public class TesteCaseTSDAO {
                 + ",[modifyDate] "
                 + ",[IdRevision] "
                 + ",[IdTestCaseType] "
-                + "FROM [CTCreatorDB].[dbo].[TesteCaseTSBean] WHERE Id = ?";
+                + "FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBean] WHERE Id = ?";
         
           ConnectionFactory cf = new ConnectionFactory(MSSQL);       
         PreparedStatement ps = null;
-        try {
+        
             ps = cf.getConnection().prepareStatement(SQL_TESTCASE_REVISION, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, idTestCase);
              int affectedRows = ps.executeUpdate();

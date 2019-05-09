@@ -5,6 +5,7 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.connection.ConnectionFactory;
 import static com.accenture.connection.EnumConnection.MSSQL;
 import java.sql.PreparedStatement;
@@ -30,8 +31,10 @@ public class RevisionDAO {
         ConnectionFactory cf = null;
         PreparedStatement ps = null;
         try {
-            String INSERT_REVISION = "INSERT INTO [CTCreatorDB].[dbo].[Revision] ([CreatedAt], [EntityType]) VALUES (?,?)";
+            String databasename = SVNPropertiesVOBean.getInstance().getDatabaseNameBD();
+            String INSERT_REVISION = "INSERT INTO "+databasename+".[dbo].[Revision] ([CreatedAt], [EntityType]) VALUES (?,?)";
             cf = new ConnectionFactory(MSSQL);
+            
             
             ps = cf.getConnection().prepareStatement(INSERT_REVISION, Statement.RETURN_GENERATED_KEYS);
             ps.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()));

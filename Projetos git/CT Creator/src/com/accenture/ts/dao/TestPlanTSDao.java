@@ -5,6 +5,7 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.connection.ConnectionFactory;
@@ -84,7 +85,7 @@ public class TestPlanTSDao implements Serializable {
                     + "[createDate],"
                     + "[modifyDate],"
                     + "[product]"
-                    + " FROM [CTCreatorDB].[dbo].[TestPlanTSBean] "
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TestPlanTSBean] "
                     + "WHERE [Id] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -110,7 +111,7 @@ public class TestPlanTSDao implements Serializable {
 
             return plano;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -133,7 +134,7 @@ public class TestPlanTSDao implements Serializable {
                     + "[createDate],"
                     + "[modifyDate],"
                     + "[product]"
-                    + " FROM [CTCreatorDB].[dbo].[TestPlanTSBean] "
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TestPlanTSBean] "
                    + "WHERE " + fields;
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -167,7 +168,7 @@ public class TestPlanTSDao implements Serializable {
 
             return planos;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -178,8 +179,8 @@ public class TestPlanTSDao implements Serializable {
     
     public TestPlanTSBean insert(TestPlanTSBean plano)  {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
-
-        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TestPlanTSBean] ("
+try {
+        String SQL_INSERT_TC = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TestPlanTSBean] ("
                 + "[Name],"
                 + "[Sti],"
                 + "[CrFase],"
@@ -192,7 +193,7 @@ public class TestPlanTSDao implements Serializable {
                 + "[product]"
                 + ")"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?)";
-        try {
+        
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
             AtomicInteger cont = new AtomicInteger(1);
@@ -236,8 +237,8 @@ public class TestPlanTSDao implements Serializable {
     
       public TestPlanTSBean update(TestPlanTSBean plano){
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
-
-        String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TestPlanTSBean] SET "
+try {
+        String SQL_UPDATE_TC = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TestPlanTSBean] SET "
                 + "[Name] = ?,"
                 + "[Sti] = ?,"
                 + "[CrFase] = ?,"
@@ -249,7 +250,7 @@ public class TestPlanTSDao implements Serializable {
                 + "[modifyDate]= ?,"
                 + "[product] = ?"
                 + " WHERE [Id] = ?";
-        try {
+        
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
             AtomicInteger cont = new AtomicInteger(1);
@@ -282,8 +283,8 @@ public class TestPlanTSDao implements Serializable {
     }
       
          public boolean delete(int id){
-         String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TestPlanTSBean] WHERE [Id] = ?";
-        try {
+         try { String SQL_DELETE_TC = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TestPlanTSBean] WHERE [Id] = ?";
+       
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_DELETE_TC);
             

@@ -5,6 +5,7 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.SystemBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.connection.ConnectionFactory;
@@ -56,7 +57,7 @@ public class TestCaseTSRevisionDAO {
                     + "[modifyDate],"
                     + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] "
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision] "
                     + "WHERE [Id] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -102,7 +103,7 @@ public class TestCaseTSRevisionDAO {
 
             return tc;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -141,7 +142,7 @@ public class TestCaseTSRevisionDAO {
                     + "[modifyDate],"
                        + "[IdRevision],"
                     + "[IdTestCaseType]"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision]"
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision]"
                     + "WHERE [IdSystem] = ?";
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -185,7 +186,7 @@ public class TestCaseTSRevisionDAO {
 
             return caseTSBeans;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -223,7 +224,7 @@ public class TestCaseTSRevisionDAO {
                     + "[modifyDate],"
                      + "[modifyDate],"
                        + "[IdRevision],"
-                    + " FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision]"
+                    + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision]"
                     + "WHERE " + fields;
 
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
@@ -266,7 +267,7 @@ public class TestCaseTSRevisionDAO {
 
             return caseTSBeans;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Erro ao recuperar os CTs", ex);
             return null;
@@ -279,8 +280,8 @@ public class TestCaseTSRevisionDAO {
         
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
         PreparedStatement ps = null;
-        
-        String SQL_INSERT_TC = "INSERT INTO [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] ([TestPlan],"
+        try{
+        String SQL_INSERT_TC = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision] ([TestPlan],"
                 + "[STIPRJ],"
                 + "[Fase],"
                 + "[TestPhase],"
@@ -308,7 +309,7 @@ public class TestCaseTSRevisionDAO {
                 + "[IdTestCaseType]"
                 + ")"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        try {
+       
                        
             ps = cf.getConnection().prepareStatement(SQL_INSERT_TC, Statement.RETURN_GENERATED_KEYS);
 
@@ -377,7 +378,7 @@ public class TestCaseTSRevisionDAO {
         
 
 
-        String SQL_UPDATE_TC = "UPDATE [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] SET "
+        String SQL_UPDATE_TC = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision] SET "
                 + "[TestPlan] = ?,"
                 + "[STIPRJ] = ?,"
                 + "[Fase] = ?,"
@@ -454,8 +455,9 @@ public class TestCaseTSRevisionDAO {
     }
     
     public boolean delete(int id){
-         String SQL_DELETE_TC = "DELETE FROM [CTCreatorDB].[dbo].[TesteCaseTSBeanRevision] WHERE [Id] = ?";
-        try {
+        try { 
+            String SQL_DELETE_TC = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanRevision] WHERE [Id] = ?";
+        
             ConnectionFactory cf = new ConnectionFactory(MSSQL);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_DELETE_TC);
             

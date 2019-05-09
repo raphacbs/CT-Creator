@@ -5,17 +5,21 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
 import com.accenture.connection.ConnectionFactory;
 import com.accenture.connection.EnumConnection;
 import static com.accenture.connection.EnumConnection.MSSQL;
+import java.io.FileInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
@@ -26,8 +30,23 @@ public class StepDAO {
     private final static Logger logger = LogManager.getLogger(StepDAO.class.getName());
     private final EnumConnection BD = MSSQL;
 
+    public StepDAO() {
+    try{
+         Properties props = new Properties();
+            props.load(new FileInputStream("log4j.properties"));
+            PropertyConfigurator.configure(props);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    
+    
+
     public Step getById(int id) {
         Step step = new Step();
+        try {
         String SQL_SELECT_BY_ID = "SELECT [Id], "
                 + "[NomeStep],"
                 + " [DescStep],"
@@ -35,9 +54,9 @@ public class StepDAO {
                 + " [Ordem], "
                 + "[IdTesteCaseTSBean],"
                 + ",[IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] "
+                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] "
                 + "WHERE Id = ? ";
-        try {
+        
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_BY_ID);
             ps.setInt(1, id);
@@ -66,6 +85,7 @@ public class StepDAO {
 
     public List<Step> getByTestCaseBean(int idTestCaseBean) {
         List<Step> steps = new ArrayList<>();
+        try {
         String SQL_SELECT_BY_ID = "SELECT [Id], "
                 + "[NomeStep],"
                 + " [DescStep],"
@@ -73,9 +93,9 @@ public class StepDAO {
                 + " [Ordem], "
                 + " [IdTesteCaseTSBean],"
                 + " [IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] "
+                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] "
                 + "WHERE IdTesteCaseTSBean = ? ORDER BY [Ordem] ASC";
-        try {
+     
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_BY_ID);
             ps.setInt(1, idTestCaseBean);
@@ -106,7 +126,8 @@ public class StepDAO {
     
     
     public Step update(Step step) {
-        String SQL_UPDATE_BY_ID = "UPDATE [CTCreatorDB].[dbo].[Step] SET "
+           try {
+        String SQL_UPDATE_BY_ID = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] SET "
                 + "[NomeStep] = ? ,"
                 + "[DescStep] = ?, "
                 + "[ResultadoStep] = ?, "
@@ -114,7 +135,7 @@ public class StepDAO {
                 + "[IdTesteCaseTSBean] = ? ,"
                 + "[IdRevision] = ? "
                 + "WHERE Id = ?";
-        try {
+       
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_UPDATE_BY_ID);
             ps.setString(1, step.getNomeStep());
@@ -142,10 +163,11 @@ public class StepDAO {
     }
 
     public Step insert(Step step) {
-        String SQL_INSERT = "INSERT INTO [CTCreatorDB].[dbo].[Step]"
+           try {
+        String SQL_INSERT = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step]"
                 + "([NomeStep], [DescStep], [ResultadoStep], [Ordem], [IdTesteCaseTSBean], [IdRevision])"
                 + "VALUES(?,?,?,?,?,?)";
-        try {
+      
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, step.getNomeStep());
@@ -182,9 +204,9 @@ public class StepDAO {
     }
 
     public boolean delete(int Id) {
-        String SQL_DELETE_BY_ID = "DELETE FROM [CTCreatorDB].[dbo].[Step] "
-                + "WHERE Id = ?";
-        try {
+           try {
+        String SQL_DELETE_BY_ID = "DELETE FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] "
+         + "WHERE Id = ?";
             ConnectionFactory cf = new ConnectionFactory(BD);
             PreparedStatement ps = cf.getConnection().prepareCall(SQL_DELETE_BY_ID);
             ps.setInt(1, Id);
@@ -206,7 +228,8 @@ public class StepDAO {
     }
     
      public boolean createStepRevision(int IdTesteCaseTSBean, int idRevision, int IdTesteCaseTSBeanRevision){
-        String SQL_STEP_REVISION = "INSERT INTO [CTCreatorDB].[dbo].[StepRevision] "
+            try {
+        String SQL_STEP_REVISION = "INSERT INTO "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[StepRevision] "
                 + "SELECT [Id] ,"
                 + "[NomeStep] ,"
                 + "[DescStep] ,"
@@ -214,11 +237,11 @@ public class StepDAO {
                 + "[Ordem] ,"
                 + " '"+IdTesteCaseTSBeanRevision+"' [IdTesteCaseTSBean] ,"
                 + " '"+idRevision+"' [IdRevision]"
-                + " FROM [CTCreatorDB].[dbo].[Step] WHERE IdTesteCaseTSBean = ?" ;
+                + " FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[Step] WHERE IdTesteCaseTSBean = ?" ;
         
         ConnectionFactory cf = new ConnectionFactory(MSSQL);       
         PreparedStatement ps = null;
-        try {
+        
             ps = cf.getConnection().prepareStatement(SQL_STEP_REVISION);
             ps.setInt(1, IdTesteCaseTSBean);
              int affectedRows = ps.executeUpdate();

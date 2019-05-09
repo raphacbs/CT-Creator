@@ -5,23 +5,40 @@
  */
 package com.accenture.ts.dao;
 
+import com.accenture.bean.SVNPropertiesVOBean;
 import java.util.List;
 import com.accenture.bean.SystemBean;
 import com.accenture.connection.ConnectionFactory;
 import static com.accenture.connection.EnumConnection.MSSQL;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Properties;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  *
  * @author automacao
  */
 public class SystemDAO {
-    private static final String SQL_SELECT_ALL = "SELECT [Id],[Descricao] FROM [CTCreatorDB].[dbo].[System]  ORDER BY [Descricao] ASC";
+     private final static Logger logger = Logger.getLogger(SystemDAO.class);
+     
+    private static String SQL_SELECT_ALL = "";
 
     public SystemDAO() {
+        try{
+            SQL_SELECT_ALL = "SELECT [Id],[Descricao] FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[System]  ORDER BY [Descricao] ASC";
+         Properties props = new Properties();
+            props.load(new FileInputStream("log4j.properties"));
+            PropertyConfigurator.configure(props);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            System.err.println(ex.getMessage());
+        }
     }
     
     public List<SystemBean> getAll(){
