@@ -179,12 +179,12 @@ public class MainScreenView extends javax.swing.JFrame {
         menuMatrizRastreabilidade = new javax.swing.JMenu();
         itemMenuComponentes = new javax.swing.JMenuItem();
         itemMenuScripts = new javax.swing.JMenuItem();
+        menuConfiguracoes = new javax.swing.JMenu();
+        itemMenuConfiguracoes = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuItemCT = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
-        menuConfiguracoes = new javax.swing.JMenu();
-        itemMenuConfiguracoes = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -200,6 +200,7 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.setBackground(java.awt.Color.white);
         jMenuBar1.setForeground(java.awt.Color.darkGray);
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(440, 55));
         jMenuBar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenuBar1MouseClicked(evt);
@@ -207,16 +208,26 @@ public class MainScreenView extends javax.swing.JFrame {
         });
 
         menuCT.setBackground(java.awt.Color.white);
+        menuCT.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\package_editors.png")); // NOI18N
         menuCT.setText("Casos de Teste");
+        menuCT.setAutoscrolls(true);
+        menuCT.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        menuCT.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        menuCT.setMaximumSize(new java.awt.Dimension(153, 32767));
+        menuCT.setPreferredSize(new java.awt.Dimension(153, 5));
         menuCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuCTActionPerformed(evt);
             }
         });
 
+        jMenu1.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\folder_new.png")); // NOI18N
         jMenu1.setText("Novo");
+        jMenu1.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenu1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         itemMenuNovoCT.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuNovoCT.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         itemMenuNovoCT.setText("TI");
         itemMenuNovoCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,6 +236,7 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu1.add(itemMenuNovoCT);
 
+        jMenuItem2.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenuItem2.setText("TS");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,9 +257,12 @@ public class MainScreenView extends javax.swing.JFrame {
 
         menuCT.add(jMenu1);
 
+        jMenu2.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\editcopy.png")); // NOI18N
         jMenu2.setText("Novo a partir de existente");
+        jMenu2.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
         itemMenuCTExistente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuCTExistente.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         itemMenuCTExistente.setText("TI");
         itemMenuCTExistente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -256,6 +271,7 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu2.add(itemMenuCTExistente);
 
+        jMenuItem3.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenuItem3.setText("TS");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -284,9 +300,12 @@ public class MainScreenView extends javax.swing.JFrame {
 
         menuCT.add(jMenu2);
 
+        jMenu3.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\blue_edit.png")); // NOI18N
         jMenu3.setText("Pesquisar/Editar");
+        jMenu3.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
         itemMenuPesquisaCT.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuPesquisaCT.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         itemMenuPesquisaCT.setText("TI");
         itemMenuPesquisaCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,6 +314,7 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         jMenu3.add(itemMenuPesquisaCT);
 
+        jMenuItem4.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenuItem4.setText("TS");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,9 +346,13 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuBar1.add(menuCT);
 
         menuImportarExportar.setBackground(java.awt.Color.white);
+        menuImportarExportar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\folder_open.png")); // NOI18N
         menuImportarExportar.setText("Importar/Exportar");
+        menuImportarExportar.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
         itemMenuImportaStepPadrao.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuImportaStepPadrao.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        itemMenuImportaStepPadrao.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\folder_font.png")); // NOI18N
         itemMenuImportaStepPadrao.setText("Importar Steps Padrão");
         itemMenuImportaStepPadrao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,6 +362,8 @@ public class MainScreenView extends javax.swing.JFrame {
         menuImportarExportar.add(itemMenuImportaStepPadrao);
 
         itemMenuImportaCT.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuImportaCT.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        itemMenuImportaCT.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\folder_download.png")); // NOI18N
         itemMenuImportaCT.setText("Importar CTs / Configurações");
         itemMenuImportaCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -347,6 +373,8 @@ public class MainScreenView extends javax.swing.JFrame {
         menuImportarExportar.add(itemMenuImportaCT);
 
         itemMenuExportarPlanilhaTI.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuExportarPlanilhaTI.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        itemMenuExportarPlanilhaTI.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\excel.jpg")); // NOI18N
         itemMenuExportarPlanilhaTI.setText("Exportar para planilha de carga TI");
         itemMenuExportarPlanilhaTI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,6 +383,8 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         menuImportarExportar.add(itemMenuExportarPlanilhaTI);
 
+        jMenuItem5.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenuItem5.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\spreadsheet.png")); // NOI18N
         jMenuItem5.setText("Instânciar CTs e exportar planilha TS");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -375,9 +405,12 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuBar1.add(menuImportarExportar);
 
         jMenu4.setBackground(java.awt.Color.white);
+        jMenu4.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\view_tree.png")); // NOI18N
         jMenu4.setText("Fluxos");
+        jMenu4.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
         jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItemFuncionalidade.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenuItemFuncionalidade.setText("Gerenciar Fluxos");
         jMenuItemFuncionalidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,8 +422,12 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu4);
 
         menuMatrizRastreabilidade.setBackground(java.awt.Color.white);
+        menuMatrizRastreabilidade.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\kcmsystem.png")); // NOI18N
         menuMatrizRastreabilidade.setText("Automação");
+        menuMatrizRastreabilidade.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
+        itemMenuComponentes.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        itemMenuComponentes.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\script.png")); // NOI18N
         itemMenuComponentes.setText("Componentes");
         itemMenuComponentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -399,6 +436,8 @@ public class MainScreenView extends javax.swing.JFrame {
         });
         menuMatrizRastreabilidade.add(itemMenuComponentes);
 
+        itemMenuScripts.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        itemMenuScripts.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\script.png")); // NOI18N
         itemMenuScripts.setText("Scripts(Cenários)");
         itemMenuScripts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,37 +448,10 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(menuMatrizRastreabilidade);
 
-        jMenu5.setBackground(java.awt.Color.white);
-        jMenu5.setText("Relatórios");
-        jMenu5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu5ActionPerformed(evt);
-            }
-        });
-
-        menuItemCT.setText("Caso de Testes");
-        menuItemCT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemCTActionPerformed(evt);
-            }
-        });
-        jMenu5.add(menuItemCT);
-
-        jMenuItem6.setText("De x Para");
-        jMenu5.add(jMenuItem6);
-
-        jMenuItem7.setText("Log");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu5.add(jMenuItem7);
-
-        jMenuBar1.add(jMenu5);
-
         menuConfiguracoes.setBackground(java.awt.Color.white);
+        menuConfiguracoes.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\kcontrol.png")); // NOI18N
         menuConfiguracoes.setText("Configurações");
+        menuConfiguracoes.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         menuConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuConfiguracoesActionPerformed(evt);
@@ -447,6 +459,7 @@ public class MainScreenView extends javax.swing.JFrame {
         });
 
         itemMenuConfiguracoes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
+        itemMenuConfiguracoes.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         itemMenuConfiguracoes.setText("Opções");
         itemMenuConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -456,6 +469,43 @@ public class MainScreenView extends javax.swing.JFrame {
         menuConfiguracoes.add(itemMenuConfiguracoes);
 
         jMenuBar1.add(menuConfiguracoes);
+
+        jMenu5.setBackground(java.awt.Color.white);
+        jMenu5.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Pie Chart.png")); // NOI18N
+        jMenu5.setText("Relatórios");
+        jMenu5.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
+
+        menuItemCT.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        menuItemCT.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Line Chart.png")); // NOI18N
+        menuItemCT.setText("Caso de Testes");
+        menuItemCT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemCTActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuItemCT);
+
+        jMenuItem6.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenuItem6.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Bar Chart.png")); // NOI18N
+        jMenuItem6.setText("De x Para");
+        jMenu5.add(jMenuItem6);
+
+        jMenuItem7.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenuItem7.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\log.png")); // NOI18N
+        jMenuItem7.setText("Log");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem7);
+
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -467,7 +517,7 @@ public class MainScreenView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 361, Short.MAX_VALUE)
         );
 
         pack();
