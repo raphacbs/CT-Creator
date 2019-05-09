@@ -3099,8 +3099,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         tc.setCreatedBy(list.get(j).getCreatedBy());
                         tc.setModifiedBy(list.get(j).getModifiedBy());
                         tc.setModifyDate(list.get(j).getModifyDate());
-                        tc.setParameters(getParameters(tc));
-                        
+                        //tc.setParameters(getParameters(tc));
+                        tc.setParameters(addParameter(tc));
                         row = model.getRowCount()+1;
                         tc.setOrder(row);
                         //  tc.setParameters(addParameter(tc));
