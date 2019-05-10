@@ -36,7 +36,7 @@ public class TesteCaseTSBean implements Serializable {
     private String complexidade;
     private boolean automatizado;
     private String cenario;
-    private static final long serialVersionUID = 8449377741076660063L;//-1432622747367978334L; 
+    private static final long serialVersionUID =8449377741076660063L;//-1432622747367978334L; 
     private boolean rework;
     private boolean priority;
     private boolean regression;

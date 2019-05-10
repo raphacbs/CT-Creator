@@ -22,12 +22,20 @@ import com.accenture.ts.dao.SystemDAO;
 import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.dao.TesteCaseTSDAO;
 import com.accenture.ts.dao.TesteCaseTSInstanceDAO;
+import com.accenture.util.ProjectSettings;
 import com.accenture.view.RegisterScreenTIView;
 import com.accenture.view.RegisterScreenTSView;
+import com.google.gson.Gson;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import com.sun.jna.platform.FileUtils;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
@@ -68,6 +76,8 @@ public class TestPlanTSRN {
             String user = SVNPropertiesVOBean.getInstance().getUser();
             plano.setModifyDate(currentDate);
             plano.setModifiedBy(user);
+            
+            saveJsonFile(plano);
             // List<TesteCaseTSBean> testCaseList = plano.getTestCase();
             //   List<Step>
             if (plano.getId() == 0) {
@@ -273,6 +283,51 @@ public class TestPlanTSRN {
         return plan;
 
     }
+     
+     public void saveJsonFile(TestPlanTSBean plan){
+        try {
+            
+            Date data = new Date();
+            SimpleDateFormat sdf  = new SimpleDateFormat("ddMMyyyyHHmmss");
+            String filePath = ProjectSettings.PATH_FILE_SAVE + "/"+plan.getName()+"-"+ sdf.format(data)+".json";
+            File file = new File(filePath);
+            Gson gson = new Gson();            
+            String planoJson = gson.toJson(plan);
+            
+            //gson.toJson(plan, new FileWriter(file));
+            Thread.sleep(3000);
+            PrintStream out = new PrintStream(new FileOutputStream(filePath)); 
+            out.print(planoJson);
+
+            
+        } catch (Exception ex) {
+            Logger.getLogger(TestPlanTSRN.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+     }
+     
+     public TestPlanTSBean readFileJson(String path){
+         
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+            Gson gson = new Gson();
+            TestPlanTSBean plan = (TestPlanTSBean) gson.fromJson(bufferedReader, TestPlanTSBean.class);
+            return plan;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TestPlanTSRN.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TestPlanTSRN.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+            }
+        }
+        
+        return null;
+     }
      
    
 }

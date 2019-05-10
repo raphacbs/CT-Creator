@@ -22,6 +22,7 @@ public class Step implements Serializable {
     private int IdTesteCaseTSBeaninstance;
     private int Ordem;
     private int IdRevision;
+     private static final long serialVersionUID =6352694875220481746L; 
     
     private List<ParameterBean> parameters;
 

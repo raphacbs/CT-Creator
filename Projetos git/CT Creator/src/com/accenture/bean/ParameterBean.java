@@ -20,6 +20,7 @@ public class ParameterBean implements Serializable {
     private int Id;
     private int IdStep;
     private int idTestCaseInstance;
+     private static final long serialVersionUID =-4739330979300626051L; 
     
     
     public ParameterBean(){

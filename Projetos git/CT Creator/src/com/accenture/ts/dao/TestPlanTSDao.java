@@ -30,6 +30,7 @@ public class TestPlanTSDao implements Serializable {
     private TestPlanTSBean testPlan;
     private List<TesteCaseTSBean> listTc;
     private final static Logger logger = Logger.getLogger(TestPlanTSDao.class);
+    private static final long serialVersionUID =8816035183481948888L; 
 
     public TestPlanTSDao() {
         testPlan = new TestPlanTSBean();

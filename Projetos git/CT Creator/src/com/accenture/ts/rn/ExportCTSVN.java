@@ -20,8 +20,14 @@ import org.tmatesoft.svn.core.SVNException;
  * @author automacao
  */
 public class ExportCTSVN {
+    
+    private static String [] system = new String [] {"ARBOR", "BLL"};
+    
     public static void main(String[] agrs) throws Exception{
-        convertSheetInObject(new File("C:\\Users\\automacao\\Documents\\CTs\\Siebel 6.3"));
+        for(String s : system){
+             convertSheetInObject(new File("C:\\Users\\automacao\\Desktop\\CTs\\TS\\"+s));
+        }
+       
     }
     
     

@@ -187,8 +187,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             loadComboTS();
             
             bntAddFluxosInPlan.setVisible(false);
-            btnCheckout.setVisible(false);
-
+           
             radioGrupo.add(radioAntiga);
             radioGrupo.add(radioNova);
             radioGrupo.setSelected(radioNova.getModel(), true);
@@ -306,11 +305,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         bntAddFluxosInPlan = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
         btnPublicarPlano = new javax.swing.JButton();
-        btnCheckout = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         menuItemSalvarPlano = new javax.swing.JMenuItem();
+        jMenuImportarJson = new javax.swing.JMenuItem();
         menuItemExportarPlano = new javax.swing.JMenuItem();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -786,14 +786,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
-        btnCheckout.setText("Checkout Plano");
-        btnCheckout.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Salvar Plano");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCheckoutActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
-        jMenu1.setText("Plano");
+        jMenu1.setText("Arquivo");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu1ActionPerformed(evt);
@@ -817,6 +817,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
         jMenu1.add(menuItemSalvarPlano);
+
+        jMenuImportarJson.setText("Importar Plano (JSON, PLAN)");
+        jMenuImportarJson.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuImportarJsonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuImportarJson);
 
         menuItemExportarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemExportarPlano.setText("Exportar Plano");
@@ -945,7 +953,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(btnPublicarPlano)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCheckout)))
+                        .addComponent(btnSave)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1008,7 +1016,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                         .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnPublicarPlano)
-                            .addComponent(btnCheckout))
+                            .addComponent(btnSave))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1126,8 +1134,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
         try {
 
-            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
-            testCaseRN.deleteDir(this.hashCode() + "");
+//            TestCaseTSRN testCaseRN = new TestCaseTSRN(this.fase);
+//            testCaseRN.deleteDir(this.hashCode() + "");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -1864,7 +1872,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnPublicarPlanoActionPerformed
 
-    private void btnCheckoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckoutActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 //        try {
 //            ChoosePlanTsScreenView view = new ChoosePlanTsScreenView(this, null, true, this.fase);
 ////            view.centralizaJanela();            
@@ -1874,7 +1882,70 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //        } catch (ClassNotFoundException ex) {
 //            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 //        }
-    }//GEN-LAST:event_btnCheckoutActionPerformed
+        
+         try {
+            final java.awt.Frame GUIPrincipal = new MainScreenView();
+            final JInternalFrame ji = this;
+
+            new SwingWorker() {
+                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
+
+                @Override
+                protected Object doInBackground() throws Exception, SVNException, IOException {
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    aguarde.setLocationRelativeTo(GUIPrincipal);
+                    aguarde.setVisible(true);
+                    ProgressAguarde.setIndeterminate(true);
+                    filterHeader.resetFilter();
+                    testPlan.getTestPlan().setName(testPlanName.getText());
+                    testPlan.getTestPlan().setSti(testPlanSTI.getText());
+                    testPlan.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
+                    testPlan.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
+                    testPlan.getTestPlan().setProduct(testPlanSystem.getText());
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+
+                    testPlan.getTestPlan().setRelease(sdf.format(jDateChooserRelease.getDate()));
+                    TestPlanTSRN testcasern = new TestPlanTSRN();
+                    addTextLabelStatus("Salvando o plano aguarde...");
+                    TestPlanTSBean plano = testcasern.savePlanDB(testPlan.getTestPlan());
+                    if (plano != null) {
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        loadPlan(plano);
+                        getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        addTextLabelStatus("O plano foi salvo com sucesso.");
+                        JOptionPane.showMessageDialog(null, "Plano salvo com sucesso! Id:" + plano.getId(), "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    aguarde.dispose();
+                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+
+            }.execute();
+
+            ProgressAguarde.setIndeterminate(false);
+//        testPlan.getTestPlan().setSti(testPlanSystem.getText());
+//            if (salvaPlanoFile(testPlan, false)) {
+//                savePlan = true;
+//                JOptionPane.showMessageDialog(null, "Plano salvo com sucesso!", "Mensagem ao usuário", JOptionPane.INFORMATION_MESSAGE);
+//                ProgressAguarde.setIndeterminate(false);
+//            }
+
+        } catch (Exception ex) {
+            Log.log(Level.SEVERE, "ERROR", ex);
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            addExceptionTextArea(ex);
+            logger.error("Erro ao abrir o arquivo: ", ex);
+            ex.printStackTrace();
+            ProgressAguarde.setIndeterminate(false);
+
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
          
@@ -1903,9 +1974,46 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuImportarJsonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuImportarJsonActionPerformed
+         TestPlanTSBean plano = null;
+        try {
+            File plan = getFileJsonOrPlan();
+            
+            if(plan.getName().endsWith(".plan")){
+                plano = openPlanFile(plan.getAbsolutePath());
+            }else{
+               TestPlanTSRN planRN = new TestPlanTSRN();
+                plano = planRN.readFileJson(plan.getAbsolutePath());
+            }
+            if(plano != null){
+                loadPlan(plano);
+            }else{
+                messageError("Não possível carregar o arquivo.");
+            }
+            
+            
+        } catch (Exception ex) {
+            messageError("Erro ao ler o arquivo JSON. "+ex.getMessage());
+            ex.printStackTrace();
+            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuImportarJsonActionPerformed
+
     public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void messageError(String error) {
+        JOptionPane.showMessageDialog(null, error, "Erro", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void messageInfo(String info) {
+        JOptionPane.showMessageDialog(null, info, "Informação", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void messageWarnnig(String warnning) {
+        JOptionPane.showMessageDialog(null, warnning, "Alerta", JOptionPane.WARNING_MESSAGE);
     }
 
     public void loadComboTS() {
@@ -1965,7 +2073,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         return diretorio;
     }
 
-    public File getFilePlan() {
+    public File getFileJsonOrPlan() {
         FileFilter extensao = new FileNameExtensionFilter(" (*.plan)", "plan");
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -1980,7 +2088,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         File diretorio = null;
 
-        fileChooser.setFileFilter(extensao);
+//        fileChooser.setFileFilter(extensao);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Planos", "plan", "json"));
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
 
@@ -2751,7 +2860,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         int[] qtdRowsSelects = tabelaInstancia.getSelectedRows();
         for (int i = 0; i < tabelaInstancia.getRowCount(); i++) {
             for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
-                if (Integer.parseInt(tabelaInstancia.getValueAt(i, 3).toString()) == testPlan.getTestPlan().getTestCase().get(j).getHashCode()) {
+                if (Integer.parseInt(tabelaInstancia.getValueAt(i, 9).toString()) == testPlan.getTestPlan().getTestCase().get(j).getOrder()) {
                     listTc.add(testPlan.getTestPlan().getTestCase().get(j));
                 }
             }
@@ -3439,7 +3548,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
     }
 
-    private TestPlanTSDao openPlanFile(String dirFile) throws FileNotFoundException, IOException, ClassNotFoundException {
+    private TestPlanTSBean openPlanFile(String dirFile) throws FileNotFoundException, IOException, ClassNotFoundException {
         TestPlanTSDao plan = null;
         Object objeto = null;
         if (dirFile != null) {
@@ -3452,7 +3561,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             plan = (TestPlanTSDao) objeto;
             stream.close();
 
-            return plan;
+            return plan.getTestPlan();
         } else {
             return null;
         }
@@ -3460,43 +3569,44 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }
 
     private void loadFilePlan() throws IOException, IOException, ClassNotFoundException {
-        TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());
+       // TestPlanTSDao temp = openPlanFile(getFilePlan().getPath());
 
-        if (temp != null) {
+       // if (temp != null) {
+           
 
-            this.testPlan = temp;
-
-            testPlanName.setText(this.testPlan.getTestPlan().getName());
-            testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
-            testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
-            jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
-            jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
-            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
-            DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
-            while (modelInstancia.getRowCount() > 0) {
-                modelInstancia.removeRow(0);
-            }
-
-            for (int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++) {
-
-                String name = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
-
-                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(name);
-
-                String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
-                if (!desc.contains("<<<pre_requisito>>>")) {
-                    desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
-                    desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
-                    desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
-                    this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
-                }
-
-                modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
+//            this.testPlan = temp;
+//
+//            testPlanName.setText(this.testPlan.getTestPlan().getName());
+//            testPlanSystem.setText(this.testPlan.getTestPlan().getTestCase().get(0).getProduct());
+//            testPlanSTI.setText(this.testPlan.getTestPlan().getSti());
+//            jComboBoxCR.setSelectedItem(this.testPlan.getTestPlan().getCrFase());
+//            jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
+//            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
+//            DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
+//            while (modelInstancia.getRowCount() > 0) {
+//                modelInstancia.removeRow(0);
+//            }
+//
+//            for (int i = 0; i < this.testPlan.getTestPlan().getTestCase().size(); i++) {
+//
+//                String name = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName().replaceAll("\\d{2}\\.\\d{2}-", "");
+//
+//                this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptName(name);
+//
+//                String desc = this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptDescription();
+//                if (!desc.contains("<<<pre_requisito>>>")) {
+//                    desc = desc.replace("Pré-Requisito:", "Pré-Requisito: <<<pre_requisito>>>");
+//                    desc = desc.replace("Pós-Requisito:", "Pré-Requisito: <<<pos_requisito>>>");
+//                    desc = desc.replace("Observações:", "Observações: <<<observacoes>>>");
+//                    this.testPlan.getTestPlan().getTestCase().get(i).setTestScriptDescription(desc);
+//                }
+//
+//                modelInstancia.addRow(new Object[]{this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCenario(), this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), this.testPlan.getTestPlan().getTestCase().get(i).getDataPlanejada(), this.testPlan.getTestPlan().getTestCase().get(i).isPriority(), this.testPlan.getTestPlan().getTestCase().get(i).isData(), this.testPlan.getTestPlan().getTestCase().get(i).isRework(), this.testPlan.getTestPlan().getTestCase().get(i).isRegression()});
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getNumeroCt(), i, 1);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getTestScriptName(), i, 2);
 //            modelInstancia.setValueAt(this.testPlan.getTestPlan().getTestCase().get(i).getHashCode(), i, 3);
-            }
-        }
+//            }
+      //  }
 
     }
 
@@ -3512,9 +3622,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jComboBoxTestFase.setSelectedItem(this.testPlan.getTestPlan().getTestPhase());
 
         String date = this.testPlan.getTestPlan().getRelease();
+        if(date != null){
         Date release = new SimpleDateFormat("MM/yyyy").parse(date);
         jDateChooserRelease.setDate(release);
-            
+        }
 //            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
             DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
             while (modelInstancia.getRowCount() > 0) {
@@ -3574,6 +3685,21 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
         dialogFiltro.centralizaJanelaDialogo(this);
         dialogFiltro.setVisible(true);
+    }
+
+    private void chooserFileJson() throws ParseException {
+        JFileChooser arquivo = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Plano", "json");
+        arquivo.addChoosableFileFilter(filtro);
+        arquivo.setAcceptAllFileFilterUsed(false);
+        if (arquivo.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if(JOptionPane.showConfirmDialog(null, "Todas as sua alterações não salvas serão perdidas, deseja continuar?", "Mensagem ao usuário", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+               TestPlanTSRN planRN = new TestPlanTSRN();
+               TestPlanTSBean plano = planRN.readFileJson(arquivo.getSelectedFile().getAbsolutePath());
+                loadPlan(plano);
+            }
+            
+        }
     }
 
     public class ColumnSorter implements Comparator {
@@ -4654,8 +4780,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JButton bntReplace;
     private javax.swing.JButton bntResetFiltro;
     private javax.swing.JButton bntStatus;
-    private javax.swing.JButton btnCheckout;
     private javax.swing.JButton btnPublicarPlano;
+    private javax.swing.JButton btnSave;
     private javax.swing.JDialog dialogLog;
     private javax.swing.JComboBox jComboBoxCR;
     private javax.swing.JComboBox jComboBoxTestFase;
@@ -4678,6 +4804,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuImportarJson;
     private javax.swing.JMenuItem jMenuItem1;
     private com.toedter.calendar.JMonthChooser jMonthChooser1;
     private javax.swing.JPopupMenu jPopupTabelaStep;
