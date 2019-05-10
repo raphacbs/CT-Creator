@@ -185,32 +185,32 @@ public class SplashScreen extends JWindow {
             Thread.sleep(3000);
 //            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
 
-            try {
-                filePropertiesLocal = SVNPropertiesVOBean.getInstance();
-                copyrt.setText("Verificando usuário e senha svn...");
-                if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
-                    criaJanelaLoginSvn();
-                }
-                connection = new SvnConnectionDao(this.fase);
-            } catch (SVNException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                if (ex.getMessage().contains("E170001")) {
-                    JOptionPane.showMessageDialog(null, "Verifique o usuário e senha", "Usuário e/ou senha incorretos", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-
-                erroSVN = true;
-            } catch (IOException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } catch (ClassNotFoundException ex) {
-                Log.log(Level.SEVERE, "ERROR", ex);
-                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+//            try {
+//                filePropertiesLocal = SVNPropertiesVOBean.getInstance();
+//                copyrt.setText("Verificando usuário e senha svn...");
+//                if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
+//                    criaJanelaLoginSvn();
+//                }
+//                connection = new SvnConnectionDao(this.fase);
+//            } catch (SVNException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                if (ex.getMessage().contains("E170001")) {
+//                    JOptionPane.showMessageDialog(null, "Verifique o usuário e senha", "Usuário e/ou senha incorretos", JOptionPane.ERROR_MESSAGE);
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//                }
+//
+//                erroSVN = true;
+//            } catch (IOException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            } catch (SQLException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            } catch (ClassNotFoundException ex) {
+//                Log.log(Level.SEVERE, "ERROR", ex);
+//                JOptionPane.showMessageDialog(null, "Ocorreu o seguinte erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            }
 
             try {
                 copyrt.setText("Iniciando Banco de Dados...");
@@ -231,10 +231,10 @@ public class SplashScreen extends JWindow {
                     bd.insertStepPadrao(stepPadrao);
                 }
                 //verifica nova versão
-                copyrt.setText("Verificando atualizações...");
-                if (erroSVN == false) {
-                    verifyUpdate();
-                }
+//                copyrt.setText("Verificando atualizações...");
+//                if (erroSVN == false) {
+//                    verifyUpdate();
+//                }
 
                 //setar campo CASO_TESTE como obrigatório
                 bd.atualizaCamposObrigatorios("CASO_TESTE", 1);

@@ -7,6 +7,11 @@ package com.accenture.view;
 
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.ts.dao.TesteCaseTSDAO;
+import com.accenture.ts.rn.MainRN;
+import static com.accenture.ts.rn.MainRN.THEME_NAME_MOTIF;
+import static com.accenture.ts.rn.MainRN.THEME_NAME_NIMBUS;
+import static com.accenture.ts.rn.MainRN.THEME_NAME_WINDOWS;
+import static com.accenture.ts.rn.MainRN.THEME_NAME_WINDOWS_CLASSIC;
 import com.accenture.ts.rn.TestCaseTSRN;
 import com.accenture.util.ProjectSettings;
 import java.awt.Color;
@@ -30,6 +35,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -38,7 +44,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import org.tmatesoft.svn.core.SVNException;
 
 class Background extends JPanel {
@@ -46,7 +54,6 @@ class Background extends JPanel {
     private BufferedImage img = null;
     private final int x = 0;
     private final int y = 0;
-   
 
     public Background(String urlImg) throws IOException {
         this.img = ImageIO.read(new File(urlImg));
@@ -77,6 +84,54 @@ public class MainScreenView extends javax.swing.JFrame {
         try {
             setTitle("CT Creator - Versão: " + SVNPropertiesVOBean.getInstance().getVersion());
             initComponents();
+            //add menu tema
+            ButtonGroup groupTema = new ButtonGroup();
+            JRadioButtonMenuItem temaWindows = new JRadioButtonMenuItem("Windows");
+            JRadioButtonMenuItem temaNimbus = new JRadioButtonMenuItem("Nimbus");
+            JRadioButtonMenuItem temaMotif = new JRadioButtonMenuItem("Motif");
+            MainRN mainRN = new MainRN();
+
+            //clique no radio button
+            temaNimbus.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    mainRN.setThemeNimbus();
+                }
+            });
+
+            temaWindows.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    mainRN.setThemeWindows();
+                }
+            });
+
+            temaMotif.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    mainRN.setThemeMotif();
+                }
+            });
+
+            groupTema.add(temaNimbus);
+            groupTema.add(temaMotif);
+            groupTema.add(temaWindows);
+            jMenuTema.add(temaNimbus);
+            jMenuTema.add(temaWindows);
+            jMenuTema.add(temaMotif);
+
+            String theme = mainRN.loadTheme();
+            
+             switch (theme) {
+                case THEME_NAME_MOTIF:
+                    temaMotif.setSelected(true);
+                    break;
+                case THEME_NAME_NIMBUS:
+                    temaNimbus.setSelected(true);
+                case THEME_NAME_WINDOWS:
+                    temaWindows.setSelected(true);
+                default:
+                    temaWindows.setSelected(true);
+            }
+             
+          
 
             List<String> users = new ArrayList<String>();
             try {
@@ -185,6 +240,7 @@ public class MainScreenView extends javax.swing.JFrame {
         menuItemCT = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuTema = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -507,13 +563,24 @@ public class MainScreenView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu5);
 
+        jMenuTema.setBackground(java.awt.Color.white);
+        jMenuTema.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Pie Chart.png")); // NOI18N
+        jMenuTema.setText("Temas");
+        jMenuTema.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        jMenuTema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuTemaActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(jMenuTema);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 637, Short.MAX_VALUE)
+            .addGap(0, 643, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -920,6 +987,10 @@ public class MainScreenView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
+    private void jMenuTemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuTemaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuTemaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -993,6 +1064,7 @@ public class MainScreenView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenuItem jMenuItemFuncionalidade;
+    private javax.swing.JMenu jMenuTema;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuCT;
     private javax.swing.JMenu menuConfiguracoes;
@@ -1223,18 +1295,18 @@ public class MainScreenView extends javax.swing.JFrame {
     }
 
     /*
-    @Override
-    public synchronized void addWindowListener(WindowListener wl) {
-       // super.addWindowListener(wl); //To change body of generated methods, choose Tools | Templates.
-        JInternalFrame [] j = desktop.getAllFrames();
+     @Override
+     public synchronized void addWindowListener(WindowListener wl) {
+     // super.addWindowListener(wl); //To change body of generated methods, choose Tools | Templates.
+     JInternalFrame [] j = desktop.getAllFrames();
            
-           if(j.length > 0 ){
-               JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
-           }else{
-               System.out.println(".windowClosing()");
-               dispose();
-               System.exit(0); //calling the method is a must
-           }
-    }
+     if(j.length > 0 ){
+     JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
+     }else{
+     System.out.println(".windowClosing()");
+     dispose();
+     System.exit(0); //calling the method is a must
+     }
+     }
      */
 }
