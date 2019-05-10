@@ -595,7 +595,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
     public void loadComboTSBanco() {
         try {
             getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            testCaseRN = new TestCaseTSRN(this.faseDe);
+            testCaseRN = new TestCaseTSRN();
             List<SystemBean> systems = testCaseRN.getSystemsBD();
 
             for (int i = 0; i < systems.size(); i++) {

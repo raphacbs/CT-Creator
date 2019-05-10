@@ -48,6 +48,8 @@ public class SVNPropertiesVOBean {
     private String databaseNameBD;
     private String userBD;
     private String passwordBD;
+    
+    private String theme;
 
     public SVNPropertiesVOBean() throws IOException {
         loadFileProperties();
@@ -280,5 +282,21 @@ public class SVNPropertiesVOBean {
         return new File(ProjectSettings.PATH_FILE_SVN_UPDATE_PROPERTIES);
 
     }
+
+    public String getTheme() {
+        this.theme = fileProperties.getProperty("theme");
+        return this.theme;
+        
+    }
+
+    public void setTheme(String theme) throws FileNotFoundException, IOException {
+        fileOut = new FileOutputStream(fileSVNProperties);
+        fileProperties.setProperty("theme", theme.toString());
+        fileProperties.store(fileOut, null);
+        fileOut.close();
+        
+    }
+    
+    
 
 }

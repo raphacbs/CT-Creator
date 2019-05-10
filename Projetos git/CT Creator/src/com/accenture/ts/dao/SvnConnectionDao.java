@@ -53,6 +53,11 @@ public class SvnConnectionDao {
 
     }
 
+    public SvnConnectionDao() {
+    }
+    
+    
+
     public SVNURL getUrlFileSvn() {
         return urlFileSvn;
     }
