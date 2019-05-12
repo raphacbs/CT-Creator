@@ -113,7 +113,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         jLabel33 = new javax.swing.JLabel();
         bntPesquisar = new javax.swing.JButton();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jLabel1.setText("Selecione o CT que deseja copiar");
 
         tabelaSelecioneCT.addMouseMotionListener(new MouseMotionAdapter(){
@@ -124,6 +124,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                 tabelaSelecioneCT.setToolTipText(String.valueOf(tabelaSelecioneCT.getValueAt(row,column)));
             }//end MouseMoved
         });
+        tabelaSelecioneCT.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         tabelaSelecioneCT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -151,8 +152,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tabelaSelecioneCT);
         if (tabelaSelecioneCT.getColumnModel().getColumnCount() > 0) {
             tabelaSelecioneCT.getColumnModel().getColumn(0).setPreferredWidth(60);
-            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(170);
-            tabelaSelecioneCT.getColumnModel().getColumn(2).setPreferredWidth(90);
+            tabelaSelecioneCT.getColumnModel().getColumn(1).setPreferredWidth(295);
+            tabelaSelecioneCT.getColumnModel().getColumn(2).setPreferredWidth(140);
             tabelaSelecioneCT.getColumnModel().getColumn(3).setMinWidth(120);
             tabelaSelecioneCT.getColumnModel().getColumn(3).setPreferredWidth(130);
             tabelaSelecioneCT.getColumnModel().getColumn(4).setMinWidth(0);
@@ -166,7 +167,9 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         filterHeader = new TableFilterHeader(tabelaSelecioneCT, AutoChoices.ENABLED);
         filterHeader.setPosition(Position.TOP);
 
-        bntCopiar.setText("Copiar");
+        bntCopiar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCopiar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\button_accept.png")); // NOI18N
+        bntCopiar.setText("Selecionar");
         bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntCopiarMouseClicked(evt);
@@ -178,6 +181,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntCancelar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCancelar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\cancel.png")); // NOI18N
         bntCancelar.setText("Cancelar");
         bntCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,16 +190,23 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
+        textPesquisaCT.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         textPesquisaCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textPesquisaCTActionPerformed(evt);
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel2.setText("Nome CT:");
 
+        jComboSistemasTS.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel33.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel33.setText("Sistema:");
 
+        bntPesquisar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntPesquisar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         bntPesquisar.setText("Pesquisar");
         bntPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,58 +218,50 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(219, 219, 219)
+                .addComponent(jLabel1)
+                .addGap(196, 196, 196))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel33))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(textPesquisaCT)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel33)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(196, 196, 196))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(bntCopiar)
-                                .addGap(42, 42, 42)
-                                .addComponent(bntCancelar)
-                                .addGap(232, 232, 232))))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(212, 212, 212)
-                .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jComboSistemasTS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textPesquisaCT)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel33))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel33)
+                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(textPesquisaCT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textPesquisaCT, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bntPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(bntCopiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntCopiar)
-                    .addComponent(bntCancelar))
-                .addContainerGap())
+                .addGap(48, 48, 48))
         );
 
         pack();

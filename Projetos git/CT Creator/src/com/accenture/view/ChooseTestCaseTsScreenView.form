@@ -19,47 +19,35 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="219" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="196" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jComboSistemasTS" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="textPesquisaCT" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Component id="jScrollPane1" alignment="1" pref="617" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="bntPesquisar" min="-2" pref="211" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bntCopiar" min="-2" pref="191" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bntCancelar" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="196" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="bntCopiar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                              <Component id="bntCancelar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jComboSistemasTS" max="32767" attributes="0"/>
+                          <Component id="textPesquisaCT" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
               </Group>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
-              <Component id="bntPesquisar" min="-2" pref="201" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -68,25 +56,24 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jComboSistemasTS" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel33" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboSistemasTS" min="-2" pref="24" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textPesquisaCT" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="textPesquisaCT" pref="25" max="32767" attributes="0"/>
+                  <Component id="jLabel2" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="bntPesquisar" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="bntPesquisar" pref="35" max="32767" attributes="0"/>
+                  <Component id="bntCopiar" max="32767" attributes="0"/>
+                  <Component id="bntCancelar" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="181" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bntCopiar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bntCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -95,7 +82,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
+          <Font name="Graphik" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Selecione o CT que deseja copiar"/>
       </Properties>
@@ -109,6 +96,9 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="tabelaSelecioneCT">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Graphik" size="12" style="0"/>
+            </Property>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="5" rowCount="0">
                 <Column editable="false" title="ID" type="java.lang.String"/>
@@ -125,12 +115,12 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="170" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="295" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="90" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="140" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -159,7 +149,13 @@
     </Container>
     <Component class="javax.swing.JButton" name="bntCopiar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Copiar"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="2" name="C:\FastPlan\res\Icones 2.0\22x22\button_accept.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Selecionar"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bntCopiarMouseClicked"/>
@@ -168,6 +164,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="bntCancelar">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="2" name="C:\FastPlan\res\Icones 2.0\22x22\cancel.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
       <Events>
@@ -175,17 +177,28 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="textPesquisaCT">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textPesquisaCTActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Nome CT:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboSistemasTS">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
@@ -197,11 +210,20 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel33">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Sistema:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bntPesquisar">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Graphik" size="12" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="2" name="C:\FastPlan\res\Icones 2.0\24x24\Search.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Pesquisar"/>
       </Properties>
       <Events>

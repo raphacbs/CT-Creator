@@ -160,7 +160,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextNameTS = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboFaseCR = new javax.swing.JComboBox<String>();
+        jComboFaseCR = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDescriptionTS = new javax.swing.JTextArea();
@@ -175,7 +175,7 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         bntColar = new javax.swing.JButton();
         bntCopiar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboComplexidade = new javax.swing.JComboBox<String>();
+        jComboComplexidade = new javax.swing.JComboBox<>();
         jCheckBoxAutomatizado = new javax.swing.JCheckBox();
 
         JMenuItem menuItemCopyAll = new JMenuItem("Copiar para clipboard");
@@ -196,12 +196,18 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Cadastro de CT");
+        setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         setPreferredSize(new java.awt.Dimension(1200, 650));
 
+        jComboSistemasTS.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel1.setText("Sistema:");
 
+        jLabel2.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel2.setText("Nome CT: ");
 
+        jTextNameTS.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jTextNameTS.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextNameTSFocusLost(evt);
@@ -216,42 +222,55 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel3.setText("Fase:");
 
+        jComboFaseCR.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel4.setText("Descrição:");
 
         jTextAreaDescriptionTS.setColumns(20);
         jTextAreaDescriptionTS.setRows(5);
         jScrollPane1.setViewportView(jTextAreaDescriptionTS);
 
-        bntAddStep.setText("Add Step");
+        bntAddStep.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntAddStep.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\edit_add.png")); // NOI18N
+        bntAddStep.setText("Add");
         bntAddStep.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntAddStepMouseClicked(evt);
             }
         });
 
-        bntDeleteStep.setText("Deletar Step");
+        bntDeleteStep.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntDeleteStep.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\black_delete.png")); // NOI18N
+        bntDeleteStep.setText("Deletar");
         bntDeleteStep.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntDeleteStepMouseClicked(evt);
             }
         });
 
-        bntMudaStepSubir.setText("Move UP");
+        bntMudaStepSubir.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntMudaStepSubir.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\up.png")); // NOI18N
+        bntMudaStepSubir.setText("Subir");
         bntMudaStepSubir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntMudaStepSubirMouseClicked(evt);
             }
         });
 
-        bntMudaStepDescer.setText("Move Down");
+        bntMudaStepDescer.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntMudaStepDescer.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\down.png")); // NOI18N
+        bntMudaStepDescer.setText("Descer");
         bntMudaStepDescer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntMudaStepDescerMouseClicked(evt);
             }
         });
 
+        tabelaSteps.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         tabelaSteps.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -298,7 +317,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         tabelaSteps.getColumnModel().getColumn(1).setCellEditor(new TextAreaCellEditor());
         tabelaSteps.getColumnModel().getColumn(2).setCellEditor(new TextAreaCellEditor());
 
-        bntSalvar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        bntSalvar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntSalvar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\save_all.png")); // NOI18N
         bntSalvar.setText("Salvar");
         bntSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -311,7 +331,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
-        bntCancelar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        bntCancelar.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        bntCancelar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\cancel.png")); // NOI18N
         bntCancelar.setText("Cancelar");
         bntCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -319,6 +340,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntColar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntColar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\page_paste.png")); // NOI18N
         bntColar.setText("Colar");
         bntColar.setEnabled(false);
         bntColar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -327,6 +350,8 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntCopiar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCopiar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\page_copy.png")); // NOI18N
         bntCopiar.setText("Copiar");
         bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -339,8 +364,12 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel5.setText("Complexidade:");
 
+        jComboComplexidade.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jCheckBoxAutomatizado.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jCheckBoxAutomatizado.setText("Automatizado?");
         jCheckBoxAutomatizado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,88 +382,87 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.CENTER)
-                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
-                        .addComponent(bntSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 372, Short.MAX_VALUE)
-                                .addComponent(jLabel4))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTextNameTS, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jComboComplexidade, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jCheckBoxAutomatizado)
-                                    .addGap(35, 35, 35)
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jComboFaseCR, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jComboComplexidade, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboFaseCR, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jCheckBoxAutomatizado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jTextNameTS)
+                                    .addComponent(jComboSistemasTS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bntAddStep)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntDeleteStep)
+                                .addComponent(bntDeleteStep, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntMudaStepSubir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bntMudaStepDescer)
-                                .addGap(12, 12, 12)
-                                .addComponent(bntCopiar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntColar)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(bntCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntColar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(7, 7, 7)
+                                .addComponent(bntSalvar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(bntCancelar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextNameTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextNameTS, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(jComboComplexidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBoxAutomatizado)
                             .addComponent(jLabel3)
-                            .addComponent(jComboFaseCR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bntAddStep)
-                            .addComponent(bntDeleteStep)
-                            .addComponent(bntMudaStepSubir)
-                            .addComponent(bntMudaStepDescer)
-                            .addComponent(bntColar)
-                            .addComponent(bntCopiar)))
+                            .addComponent(jComboFaseCR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxAutomatizado))
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bntSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(bntAddStep)
+                                .addComponent(bntDeleteStep)
+                                .addComponent(bntMudaStepDescer)
+                                .addComponent(bntColar)
+                                .addComponent(bntCopiar)
+                                .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jScrollPane1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1030,12 +1058,12 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
         ButtonIconBean iconBean = new ButtonIconBean();
 
 //        bntAddStepPadrao.setIcon(icoBntAddStepDefault);
-        bntAddStep.setIcon(iconBean.getIconBntAddNewStep());
-        bntDeleteStep.setIcon(iconBean.getIconBntRemoveStep());
-        bntMudaStepSubir.setIcon(iconBean.getIconBntMoveStepTop());
-        bntMudaStepDescer.setIcon(iconBean.getIconBntMoveStepBottom());
-        bntCancelar.setIcon(iconBean.getIconBntCacelAction());
-        bntSalvar.setIcon(iconBean.getIconBntConfirmAction());
+//        bntAddStep.setIcon(iconBean.getIconBntAddNewStep());
+//        bntDeleteStep.setIcon(iconBean.getIconBntRemoveStep());
+//        bntMudaStepSubir.setIcon(iconBean.getIconBntMoveStepTop());
+//        bntMudaStepDescer.setIcon(iconBean.getIconBntMoveStepBottom());
+//        bntCancelar.setIcon(iconBean.getIconBntCacelAction());
+//        bntSalvar.setIcon(iconBean.getIconBntConfirmAction());
     }
 
     public void blockedFieldBnt(boolean b) {

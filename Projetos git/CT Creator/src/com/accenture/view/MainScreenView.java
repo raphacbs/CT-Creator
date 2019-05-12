@@ -564,7 +564,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu5);
 
         jMenuTema.setBackground(java.awt.Color.white);
-        jMenuTema.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Pie Chart.png")); // NOI18N
+        jMenuTema.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\themes-32.png")); // NOI18N
         jMenuTema.setText("Temas");
         jMenuTema.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenuTema.addActionListener(new java.awt.event.ActionListener() {

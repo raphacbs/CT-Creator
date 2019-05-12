@@ -115,11 +115,13 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(380, 300));
+        jPanel1.setPreferredSize(new java.awt.Dimension(415, 300));
 
+        jLabel50.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel50.setForeground(new java.awt.Color(51, 51, 51));
         jLabel50.setText("NOME CT:");
 
+        textNomeCT.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         textNomeCT.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         textNomeCT.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -132,10 +134,20 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             }
         });
 
+        jLabel33.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel33.setText("SISTEMA:");
 
+        jComboSistemasTS.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        jComboSistemasTS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboSistemasTSActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel34.setText("ID:");
 
+        textId.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         textId.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 textIdFocusLost(evt);
@@ -147,7 +159,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             }
         });
 
-        bntCancelar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        bntCancelar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCancelar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\cancel.png")); // NOI18N
         bntCancelar.setText("Cancelar");
         bntCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -155,7 +168,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             }
         });
 
-        bntPesquisar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        bntPesquisar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntPesquisar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         bntPesquisar.setText("Pesquisar");
         bntPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,48 +181,46 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel50)
                     .addComponent(jLabel1)
                     .addComponent(jLabel33)
                     .addComponent(jLabel34))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textNomeCT)
-                    .addComponent(jComboSistemasTS, 0, 307, Short.MAX_VALUE)
-                    .addComponent(textId))
-                .addGap(19, 19, 19))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(115, 115, 115)
-                .addComponent(bntPesquisar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bntCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bntCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                    .addComponent(textNomeCT, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textId, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(25, 25, 25))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel50)
-                    .addComponent(textNomeCT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textNomeCT, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel34)
-                    .addComponent(textId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel33)
+                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel33))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntCancelar)
+                    .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bntPesquisar))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(195, 195, 195))
         );
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -224,25 +236,12 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         dispose();
     }//GEN-LAST:event_closeDialog
 
-    private void textNomeCTFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNomeCTFocusLost
-
-    }//GEN-LAST:event_textNomeCTFocusLost
-
-    private void textIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textIdFocusLost
-
-
-    }//GEN-LAST:event_textIdFocusLost
-
-    private void bntCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCancelarMouseClicked
-        this.dispose();
-    }//GEN-LAST:event_bntCancelarMouseClicked
-
     private void bntPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntPesquisarActionPerformed
         // TODO add your handling code here:
         SwingWorker sw = new SwingWorker() {
             JDialog aguarde;
             final Frame GUIPrincipal = new MainScreenView();
-            
+
             {
                 this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
             }
@@ -253,10 +252,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-                
-                
-                
-               //searchCT(textId.getText(), textNomeCT.getText());
+
+                //searchCT(textId.getText(), textNomeCT.getText());
                 searchCTDB(textId.getText(), textNomeCT.getText());
 
                 return null;
@@ -270,38 +267,11 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         };
         sw.execute();
         this.dispose();
-
     }//GEN-LAST:event_bntPesquisarActionPerformed
 
-    private void textNomeCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNomeCTActionPerformed
-        SwingWorker sw = new SwingWorker() {
-            JDialog aguarde;
-            final Frame GUIPrincipal = new MainScreenView();
-
-            {
-                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
-            }
-
-            boolean filtro = false;
-
-            @Override
-            protected Object doInBackground() throws Exception {
-                aguarde.setLocationRelativeTo(GUIPrincipal);
-                aguarde.setVisible(true);
-                searchCT(textId.getText(), textNomeCT.getText());
-
-                return null;
-
-            }
-
-            @Override
-            protected void done() {
-                aguarde.dispose();
-            }
-        };
-        sw.execute();
+    private void bntCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bntCancelarMouseClicked
         this.dispose();
-    }//GEN-LAST:event_textNomeCTActionPerformed
+    }//GEN-LAST:event_bntCancelarMouseClicked
 
     private void textIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIdActionPerformed
         // TODO add your handling code here:
@@ -333,6 +303,48 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         sw.execute();
         this.dispose();
     }//GEN-LAST:event_textIdActionPerformed
+
+    private void textIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textIdFocusLost
+
+    }//GEN-LAST:event_textIdFocusLost
+
+    private void jComboSistemasTSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboSistemasTSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboSistemasTSActionPerformed
+
+    private void textNomeCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNomeCTActionPerformed
+        SwingWorker sw = new SwingWorker() {
+            JDialog aguarde;
+            final Frame GUIPrincipal = new MainScreenView();
+
+            {
+                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
+            }
+
+            boolean filtro = false;
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                aguarde.setLocationRelativeTo(GUIPrincipal);
+                aguarde.setVisible(true);
+                searchCT(textId.getText(), textNomeCT.getText());
+
+                return null;
+
+            }
+
+            @Override
+            protected void done() {
+                aguarde.dispose();
+            }
+        };
+        sw.execute();
+        this.dispose();
+    }//GEN-LAST:event_textNomeCTActionPerformed
+
+    private void textNomeCTFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textNomeCTFocusLost
+
+    }//GEN-LAST:event_textNomeCTFocusLost
 
     /**
      * @param args the command line arguments
@@ -379,8 +391,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
 
     public void addIconInButton() {
 
-        bntCancelar.setIcon(icon.getIconBntCacelAction());
-        bntPesquisar.setIcon(icon.getIconBntSearchCt());
+//        bntCancelar.setIcon(icon.getIconBntCacelAction());
+//        bntPesquisar.setIcon(icon.getIconBntSearchCt());
     }
 
     public void loadComboTS() {

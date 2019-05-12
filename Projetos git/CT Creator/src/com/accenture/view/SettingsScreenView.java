@@ -112,6 +112,7 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Configurações");
+        setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(1200, 650));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -132,12 +133,15 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel1.setText("Os campos marcados serão obrigatórios na tela de cadastro e edição de CTs");
 
+        checkNomeCT.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         checkNomeCT.setSelected(true);
         checkNomeCT.setText("NOME CT");
         checkNomeCT.setEnabled(false);
 
+        checkCenario.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         checkCenario.setText("CENÁRIO");
         checkCenario.setEnabled(false);
 
@@ -155,7 +159,13 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
 
         checkTipoRequisito.setText("TIPO REQUISITO");
         checkTipoRequisito.setEnabled(false);
+        checkTipoRequisito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkTipoRequisitoActionPerformed(evt);
+            }
+        });
 
+        jLabel2.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel2.setText("Campos Obrigatórios");
 
         checkRequisito.setText("REQUISITO");
@@ -167,6 +177,7 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         checkCadeia.setText("CADEIA");
         checkCadeia.setEnabled(false);
 
+        checkSegmento.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         checkSegmento.setText("SEGMENTO");
         checkSegmento.setEnabled(false);
         checkSegmento.addActionListener(new java.awt.event.ActionListener() {
@@ -200,6 +211,7 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         checkSubject.setText("SUBJECT");
         checkSubject.setEnabled(false);
 
+        checkDescricao.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         checkDescricao.setText("DESCRIÇÃO");
         checkDescricao.setEnabled(false);
 
@@ -209,8 +221,11 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         checkProduto.setText("PRODUTO");
         checkProduto.setEnabled(false);
 
+        jLabel3.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel3.setText("BANCO");
 
+        bntSalsar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntSalsar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\save_all.png")); // NOI18N
         bntSalsar.setText("Salvar Alterações");
         bntSalsar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -223,25 +238,41 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel4.setText("Usuário: ");
 
+        textUsuarioDB.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel5.setText("Senha:");
 
+        textSenhaDB.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel6.setText("SVN");
 
+        jLabel7.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel7.setText("Usuário: ");
 
+        textUsuarioSvn.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel8.setText("Senha:");
 
         textUrlSvn.setEditable(false);
+        textUrlSvn.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
 
+        jLabel9.setFont(new java.awt.Font("Graphik", 0, 10)); // NOI18N
         jLabel9.setText("Ex.: http://10.20.136.198:2402/svn/Oi.TSS");
 
-        jLabel10.setText("URL SVN:");
+        jLabel10.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        jLabel10.setText("Url Svn:");
 
+        jLabel11.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel11.setText("Diretório CTs");
 
         textDirSvn.setEditable(false);
+        textDirSvn.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
 
         jLabel12.setText("Ex.: branches/xxxxxxx");
 
@@ -250,10 +281,14 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         textAreaSistemaSvn.setRows(5);
         jScrollPane1.setViewportView(textAreaSistemaSvn);
 
+        jLabel13.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel13.setText("Sistemas:");
 
+        jLabel14.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel14.setText("Ex.: (BLL|ARBOR)");
 
+        bntUpdateSettings.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntUpdateSettings.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\reload.png")); // NOI18N
         bntUpdateSettings.setText("Atualizar Configurações");
         bntUpdateSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,40 +301,17 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(checkNomeCT)
-                                    .addComponent(checkFornecedor)
-                                    .addComponent(checkSistemaEnvolvidos)
-                                    .addComponent(checkSistemaMaster)
-                                    .addComponent(checkFuncionalidade))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(checkCenario)
-                                    .addComponent(checkTipoRequisito)
-                                    .addComponent(checkRequisito)
-                                    .addComponent(checkCriacao)
-                                    .addComponent(checkCadeia))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(checkType)
-                                    .addComponent(checkTrg)
-                                    .addComponent(checkSegmento)
-                                    .addComponent(checkCenarioIntegrado)
-                                    .addComponent(checkCenarioAuto))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(checkSubject)
-                                    .addComponent(checkDescricao)
-                                    .addComponent(checkQtdSistemas)
-                                    .addComponent(checkProduto)))
-                            .addComponent(jLabel3))
-                        .addContainerGap())
+                        .addGap(57, 57, 57)
+                        .addComponent(jSeparator2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator4)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,63 +321,95 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(bntUpdateSettings)
-                                .addGap(126, 126, 126))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(536, Short.MAX_VALUE)
-                .addComponent(bntSalsar)
-                .addGap(531, 531, 531))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jSeparator2)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bntSalsar, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(72, 72, 72))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jSeparator3)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator4)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(textUsuarioDB)
-                                .addComponent(textSenhaDB, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 1169, Short.MAX_VALUE))
+                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel12)
-                                        .addComponent(textDirSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel9)
-                                        .addComponent(textUrlSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textSenhaSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textUsuarioSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(checkNomeCT)
+                                        .addGap(42, 42, 42)
+                                        .addComponent(checkCenario))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(checkQtdSistemas)
+                                        .addGap(22, 22, 22)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkFornecedor)
+                                            .addComponent(checkSistemaMaster)))
+                                    .addComponent(checkCadeia))
+                                .addGap(22, 22, 22)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel14)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel4)))
-                .addGap(262, 262, 262))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkSegmento)
+                                            .addComponent(checkRequisito))
+                                        .addGap(27, 27, 27)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkSistemaEnvolvidos)
+                                            .addComponent(checkCenarioAuto))
+                                        .addGap(30, 30, 30)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkDescricao)
+                                            .addComponent(checkType))
+                                        .addGap(31, 31, 31)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkFuncionalidade)
+                                            .addComponent(checkProduto))
+                                        .addGap(33, 33, 33)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkSubject)
+                                            .addComponent(checkTipoRequisito))
+                                        .addGap(32, 32, 32)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(checkCriacao)
+                                            .addComponent(checkCenarioIntegrado)))
+                                    .addComponent(checkTrg)))
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(33, 33, 33)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(textSenhaDB, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                                                    .addComponent(textUsuarioDB)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(36, 36, 36)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(textDirSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(jLabel13))
+                                                    .addComponent(jLabel12))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel14)
+                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jLabel11))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(textUsuarioSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(textSenhaSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(textUrlSvn, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9))))))
+                        .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,55 +418,42 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(bntUpdateSettings)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bntUpdateSettings)
+                            .addComponent(bntSalsar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkNomeCT)
+                    .addComponent(checkCenario)
+                    .addComponent(checkSegmento)
+                    .addComponent(checkCenarioAuto)
+                    .addComponent(checkDescricao)
+                    .addComponent(checkFuncionalidade)
+                    .addComponent(checkTipoRequisito)
+                    .addComponent(checkCenarioIntegrado))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkNomeCT)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkFuncionalidade)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(46, 46, 46)
-                                .addComponent(checkFornecedor))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(checkSistemaMaster)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(checkSistemaEnvolvidos))))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(checkQtdSistemas)
+                            .addComponent(checkSistemaMaster)
+                            .addComponent(checkRequisito)
+                            .addComponent(checkSistemaEnvolvidos)
+                            .addComponent(checkType)
+                            .addComponent(checkProduto)
+                            .addComponent(checkSubject))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(checkCadeia)
+                            .addComponent(checkFornecedor)
+                            .addComponent(checkTrg)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkCenario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkTipoRequisito)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkRequisito)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkCriacao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkCadeia))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkSegmento)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkCenarioIntegrado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkCenarioAuto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkTrg))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkDescricao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkQtdSistemas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkProduto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkSubject)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(checkCriacao)))
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -441,14 +472,17 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(textUsuarioSvn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(textUsuarioSvn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(textSenhaSvn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -456,25 +490,19 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textUrlSvn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10))
-                        .addGap(2, 2, 2)
+                        .addGap(4, 4, 4)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textDirSvn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(33, 33, 33)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(bntSalsar)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel3.getAccessibleContext().setAccessibleName("BANCO");
         jLabel3.getAccessibleContext().setAccessibleDescription("");
 
         pack();
@@ -564,6 +592,10 @@ public class SettingsScreenView extends javax.swing.JInternalFrame {
     private void bntSalsarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalsarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bntSalsarActionPerformed
+
+    private void checkTipoRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkTipoRequisitoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkTipoRequisitoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
