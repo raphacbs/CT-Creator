@@ -91,7 +91,7 @@ public class SplashScreen extends JWindow {
 
             ManipulaDadosSQLite bd;
             JPanel content = (JPanel) getContentPane();
-            content.setBackground(Color.lightGray);
+            content.setBackground(new Color(237,237,237));
             StepPadrao stepPadrao = new StepPadrao();
             stepPadrao.setVersao(0.0);
             stepPadrao.setDescStep("exemplo");

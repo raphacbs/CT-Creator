@@ -155,11 +155,14 @@ public class SearchPlanView extends java.awt.Dialog {
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(600, 600));
+        jPanel1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(600, 480));
 
+        jLabel50.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel50.setForeground(new java.awt.Color(51, 51, 51));
         jLabel50.setText("Nome Plano:");
 
+        textNomeCT.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         textNomeCT.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         textNomeCT.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -167,10 +170,16 @@ public class SearchPlanView extends java.awt.Dialog {
             }
         });
 
+        jLabel33.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel33.setText("Sistema");
 
-        jLabel34.setText("Id:");
+        jComboSistemasTS.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        jComboSistemasTS.setPreferredSize(new java.awt.Dimension(31, 23));
 
+        jLabel34.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        jLabel34.setText("ID:");
+
+        textId.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         textId.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 textIdFocusLost(evt);
@@ -182,7 +191,8 @@ public class SearchPlanView extends java.awt.Dialog {
             }
         });
 
-        bntCancelar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        bntCancelar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCancelar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\cancel.png")); // NOI18N
         bntCancelar.setText("Cancelar");
         bntCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -190,7 +200,8 @@ public class SearchPlanView extends java.awt.Dialog {
             }
         });
 
-        bntPesquisar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        bntPesquisar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntPesquisar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         bntPesquisar.setText("Pesquisar");
         bntPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -212,6 +223,7 @@ public class SearchPlanView extends java.awt.Dialog {
             }//end MouseMoved
         });
         tabelaSelecionePlano.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabelaSelecionePlano.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         loadTablePlano(new ArrayList<TestPlanTSBean>());
         tabelaSelecionePlano.getTableHeader().setReorderingAllowed(false);
         tabelaSelecionePlano.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -221,8 +233,9 @@ public class SearchPlanView extends java.awt.Dialog {
         });
         jScrollPane1.setViewportView(tabelaSelecionePlano);
 
-        bntAbrir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        bntAbrir.setText("Abrir Plano");
+        bntAbrir.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntAbrir.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\button_accept.png")); // NOI18N
+        bntAbrir.setText("Selecionar");
         bntAbrir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntAbrirMouseClicked(evt);
@@ -242,54 +255,50 @@ public class SearchPlanView extends java.awt.Dialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(bntPesquisar)
-                        .addGap(18, 18, 18)
-                        .addComponent(bntCancelar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel33)
-                            .addComponent(jLabel34))
+                            .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textNomeCT)
-                            .addComponent(jComboSistemasTS, 0, 382, Short.MAX_VALUE)
+                            .addComponent(jComboSistemasTS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textId))))
-                .addGap(19, 19, 19))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(179, 179, 179)
-                .addComponent(bntAbrir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel50)
-                    .addComponent(textNomeCT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(textNomeCT, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                    .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(textId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel33))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntCancelar)
-                    .addComponent(bntPesquisar))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textId, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bntAbrir)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboSistemasTS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bntAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(167, 167, 167))
         );
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -469,8 +478,8 @@ public class SearchPlanView extends java.awt.Dialog {
 //    }
     public void addIconInButton() {
 
-        bntCancelar.setIcon(icon.getIconBntCacelAction());
-        bntPesquisar.setIcon(icon.getIconBntSearchCt());
+//        bntCancelar.setIcon(icon.getIconBntCacelAction());
+//        bntPesquisar.setIcon(icon.getIconBntSearchCt());
     }
 
     public void loadComboTS() {
