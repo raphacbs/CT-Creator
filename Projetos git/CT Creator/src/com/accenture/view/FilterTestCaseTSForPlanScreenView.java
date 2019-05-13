@@ -378,8 +378,8 @@ this.fase = fase;
 
     public void addIconInButton() {
 
-        bntCancelar.setIcon(icon.getIconBntCacelAction());
-        bntPesquisar.setIcon(icon.getIconBntSearchCt());
+//        bntCancelar.setIcon(icon.getIconBntCacelAction());
+//        bntPesquisar.setIcon(icon.getIconBntSearchCt());
     }
 
     public void loadComboTS() {
