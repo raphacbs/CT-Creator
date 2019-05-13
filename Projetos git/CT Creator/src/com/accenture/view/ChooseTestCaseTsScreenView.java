@@ -168,6 +168,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         filterHeader.setPosition(Position.TOP);
 
         bntCopiar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntCopiar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\button_accept.png")); // NOI18N
         bntCopiar.setText("Selecionar");
         bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -205,6 +206,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         jLabel33.setText("Sistema:");
 
         bntPesquisar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntPesquisar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         bntPesquisar.setText("Pesquisar");
         bntPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,8 +252,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                     .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textPesquisaCT)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textPesquisaCT, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(bntPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)

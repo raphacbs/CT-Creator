@@ -361,6 +361,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Edição de Plano de Teste");
+        setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         setMinimumSize(new java.awt.Dimension(1150, 33));
         setPreferredSize(new java.awt.Dimension(1200, 650));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -381,6 +382,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntAddCTInPlan.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntAddCTInPlan.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\edit_add.png")); // NOI18N
+        bntAddCTInPlan.setText("Adicionar CT");
         bntAddCTInPlan.setEnabled(false);
         bntAddCTInPlan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -388,6 +392,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntDeleteCt.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntDeleteCt.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\black_delete.png")); // NOI18N
+        bntDeleteCt.setText("Remover CT");
         bntDeleteCt.setEnabled(false);
         bntDeleteCt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -395,19 +402,26 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntMudaStepSubir.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntMudaStepSubir.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\up.png")); // NOI18N
+        bntMudaStepSubir.setText("Up");
         bntMudaStepSubir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntMudaStepSubirActionPerformed(evt);
             }
         });
 
+        bntMudaStepDescer.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntMudaStepDescer.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\down.png")); // NOI18N
+        bntMudaStepDescer.setText("Down");
         bntMudaStepDescer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntMudaStepDescerActionPerformed(evt);
             }
         });
 
-        bntExportar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        bntExportar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntExportar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Save.png")); // NOI18N
         bntExportar.setText("Salvar e Exportar");
         bntExportar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -420,7 +434,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
-        bntCancelar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        bntCancelar.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
+        bntCancelar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\cancel.png")); // NOI18N
         bntCancelar.setText("Cancelar");
         bntCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -433,6 +448,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntOrdenar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntOrdenar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\2downarrow.png")); // NOI18N
+        bntOrdenar.setText("Sort");
         bntOrdenar.setEnabled(false);
         bntOrdenar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -440,6 +458,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        bntDuplicate.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntDuplicate.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\page_copy.png")); // NOI18N
+        bntDuplicate.setText("Copy");
         bntDuplicate.setEnabled(false);
         bntDuplicate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,6 +468,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        tabelaCt.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         tabelaCt.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -490,13 +512,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             tabelaCt.getColumnModel().getColumn(0).setMaxWidth(60);
             tabelaCt.getColumnModel().getColumn(1).setMinWidth(50);
             tabelaCt.getColumnModel().getColumn(1).setPreferredWidth(200);
-            tabelaCt.getColumnModel().getColumn(1).setMaxWidth(280);
+            tabelaCt.getColumnModel().getColumn(1).setMaxWidth(800);
             tabelaCt.getColumnModel().getColumn(2).setMinWidth(60);
             tabelaCt.getColumnModel().getColumn(2).setPreferredWidth(100);
             tabelaCt.getColumnModel().getColumn(2).setMaxWidth(120);
             tabelaCt.getColumnModel().getColumn(3).setMinWidth(102);
             tabelaCt.getColumnModel().getColumn(3).setPreferredWidth(102);
-            tabelaCt.getColumnModel().getColumn(3).setMaxWidth(120);
+            tabelaCt.getColumnModel().getColumn(3).setMaxWidth(200);
             tabelaCt.getColumnModel().getColumn(4).setMinWidth(80);
             tabelaCt.getColumnModel().getColumn(4).setPreferredWidth(80);
             tabelaCt.getColumnModel().getColumn(4).setMaxWidth(80);
@@ -511,6 +533,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }//end MouseMoved
         });
 
+        bntFiltrar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntFiltrar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\blue_view.png")); // NOI18N
+        bntFiltrar.setText("Pesquisar CT");
         bntFiltrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bntFiltrarMouseClicked(evt);
@@ -522,6 +547,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        tabelaInstancia.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         tabelaInstancia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -576,13 +602,13 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             tabelaInstancia.getColumnModel().getColumn(1).setMaxWidth(120);
             tabelaInstancia.getColumnModel().getColumn(2).setMinWidth(450);
             tabelaInstancia.getColumnModel().getColumn(2).setPreferredWidth(450);
-            tabelaInstancia.getColumnModel().getColumn(2).setMaxWidth(500);
+            tabelaInstancia.getColumnModel().getColumn(2).setMaxWidth(700);
             tabelaInstancia.getColumnModel().getColumn(3).setMinWidth(0);
             tabelaInstancia.getColumnModel().getColumn(3).setPreferredWidth(0);
             tabelaInstancia.getColumnModel().getColumn(3).setMaxWidth(0);
             tabelaInstancia.getColumnModel().getColumn(4).setMinWidth(100);
             tabelaInstancia.getColumnModel().getColumn(4).setPreferredWidth(100);
-            tabelaInstancia.getColumnModel().getColumn(4).setMaxWidth(100);
+            tabelaInstancia.getColumnModel().getColumn(4).setMaxWidth(200);
             tabelaInstancia.getColumnModel().getColumn(4).setCellEditor(new JDateChooserCellEditor());
             tabelaInstancia.getColumnModel().getColumn(4).setCellRenderer(new JDateChooserRenderer());
             tabelaInstancia.getColumnModel().getColumn(5).setMinWidth(30);
@@ -590,7 +616,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             tabelaInstancia.getColumnModel().getColumn(5).setMaxWidth(100);
             tabelaInstancia.getColumnModel().getColumn(6).setMinWidth(30);
             tabelaInstancia.getColumnModel().getColumn(6).setPreferredWidth(70);
-            tabelaInstancia.getColumnModel().getColumn(6).setMaxWidth(100);
+            tabelaInstancia.getColumnModel().getColumn(6).setMaxWidth(150);
             tabelaInstancia.getColumnModel().getColumn(7).setMinWidth(30);
             tabelaInstancia.getColumnModel().getColumn(7).setPreferredWidth(70);
             tabelaInstancia.getColumnModel().getColumn(7).setMaxWidth(100);
@@ -624,6 +650,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }//end MouseMoved
         });
 
+        testPlanName.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         testPlanName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 testPlanNameActionPerformed(evt);
@@ -635,26 +662,33 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel2.setText("Título");
 
+        jLabel3.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel3.setText("STI");
 
+        jLabel4.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel4.setText("Test/Fase");
 
+        jComboBoxTestFase.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jComboBoxTestFase.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxTestFaseItemStateChanged(evt);
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel5.setText("CR/Fase");
 
+        jComboBoxCR.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jComboBoxCR.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxCRItemStateChanged(evt);
             }
         });
 
+        testPlanSTI.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         testPlanSTI.setName(""); // NOI18N
         testPlanSTI.setPreferredSize(new java.awt.Dimension(6, 19));
         testPlanSTI.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -663,9 +697,11 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel6.setText("Product/Application");
 
         testPlanSystem.setEditable(false);
+        testPlanSystem.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         testPlanSystem.setName(""); // NOI18N
         testPlanSystem.setPreferredSize(new java.awt.Dimension(6, 19));
         testPlanSystem.addInputMethodListener(new java.awt.event.InputMethodListener() {
@@ -676,6 +712,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
+        tabelaSteps.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         tabelaSteps.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -696,15 +733,18 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         if (tabelaSteps.getColumnModel().getColumnCount() > 0) {
             tabelaSteps.getColumnModel().getColumn(0).setMinWidth(50);
             tabelaSteps.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tabelaSteps.getColumnModel().getColumn(0).setMaxWidth(60);
+            tabelaSteps.getColumnModel().getColumn(0).setMaxWidth(100);
             tabelaSteps.getColumnModel().getColumn(1).setMinWidth(200);
             tabelaSteps.getColumnModel().getColumn(1).setPreferredWidth(300);
-            tabelaSteps.getColumnModel().getColumn(1).setMaxWidth(400);
+            tabelaSteps.getColumnModel().getColumn(1).setMaxWidth(600);
             tabelaSteps.getColumnModel().getColumn(2).setMinWidth(100);
             tabelaSteps.getColumnModel().getColumn(2).setPreferredWidth(200);
-            tabelaSteps.getColumnModel().getColumn(2).setMaxWidth(250);
+            tabelaSteps.getColumnModel().getColumn(2).setMaxWidth(500);
         }
 
+        bntEditParameter.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntEditParameter.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\fonts.png")); // NOI18N
+        bntEditParameter.setToolTipText("");
         bntEditParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntEditParameterActionPerformed(evt);
@@ -723,43 +763,61 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jLabel9.setForeground(new java.awt.Color(255, 0, 51));
         jLabel9.setText("*");
 
+        labelQtdCTs.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         labelQtdCTs.setText("Qtd CTs: ");
 
+        labelQtdCTs1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         labelQtdCTs1.setText("Qtd CTs: ");
 
+        bntReplace.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\reload.png")); // NOI18N
         bntReplace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntReplaceActionPerformed(evt);
             }
         });
 
-        bntResetFiltro.setText("Reset Filtro");
+        bntResetFiltro.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        bntResetFiltro.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\undo.png")); // NOI18N
+        bntResetFiltro.setText("Reset");
         bntResetFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntResetFiltroActionPerformed(evt);
             }
         });
 
+        jLabel10.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel10.setText("Data Inicio:");
 
+        jDateChooserInicio.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel11.setText("Data Fim:");
 
+        jDateChooserFim.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+
+        bntGenereteDate.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\16x16\\calendar_view_month.png")); // NOI18N
         bntGenereteDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntGenereteDateActionPerformed(evt);
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel12.setText("Exportar para planilha :");
 
+        radioAntiga.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         radioAntiga.setText("Antiga");
 
+        radioNova.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         radioNova.setText("Nova");
 
         jDateChooserRelease.setDateFormatString("yyyy-MM");
+        jDateChooserRelease.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
 
+        jLabel13.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jLabel13.setText("Release:");
 
+        LabelStatus.setFont(new java.awt.Font("Graphik", 0, 11)); // NOI18N
         LabelStatus.setText("Status: ");
         LabelStatus.setToolTipText(LabelStatus.getText());
         LabelStatus.setAutoscrolls(true);
@@ -776,6 +834,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         ProgressAguarde.setEnabled(false);
         ProgressAguarde.setFocusTraversalPolicyProvider(true);
 
+        bntAddFluxosInPlan.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         bntAddFluxosInPlan.setText("Fluxos");
         bntAddFluxosInPlan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -786,6 +845,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jLabel15.setForeground(new java.awt.Color(255, 0, 51));
         jLabel15.setText("*");
 
+        btnPublicarPlano.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        btnPublicarPlano.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         btnPublicarPlano.setText("Pesquisar Plano");
         btnPublicarPlano.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -793,7 +854,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSave.setText("Salvar Plano");
+        btnSave.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\save_all.png")); // NOI18N
+        btnSave.setText("Salvar");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -801,6 +864,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
 
         jMenu1.setText("Arquivo");
+        jMenu1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu1ActionPerformed(evt);
@@ -808,6 +872,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jMenuItem1.setText("Pesquisar Plano");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -817,6 +882,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jMenu1.add(jMenuItem1);
 
         menuItemSalvarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSalvarPlano.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         menuItemSalvarPlano.setText("Salvar Plano");
         menuItemSalvarPlano.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -825,6 +891,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         });
         jMenu1.add(menuItemSalvarPlano);
 
+        jMenuImportarJson.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         jMenuImportarJson.setText("Importar Plano (JSON, PLAN)");
         jMenuImportarJson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -834,6 +901,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         jMenu1.add(jMenuImportarJson);
 
         menuItemExportarPlano.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemExportarPlano.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
         menuItemExportarPlano.setText("Exportar Plano");
         menuItemExportarPlano.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -851,43 +919,25 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(labelQtdCTs1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ProgressAguarde, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bntStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addComponent(bntExportar)
-                        .addGap(15, 15, 15)
-                        .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(44, 44, 44))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                    .addComponent(jLabel3)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                     .addComponent(jLabel7))
                                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                     .addComponent(jLabel2)
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(jLabel1)))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel4)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel8)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -896,121 +946,140 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jComboBoxTestFase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(testPlanSTI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGap(50, 50, 50)
-                                                        .addComponent(jLabel5)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(jLabel9))
                                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(jLabel6)))
-                                                .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                                    .addComponent(jComboBoxCR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                        .addComponent(jLabel5)
+                                                        .addGap(24, 24, 24))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel6)
+                                                        .addGap(10, 10, 10)))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(testPlanSystem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jComboBoxCR, 0, 186, Short.MAX_VALUE)))
                                             .addComponent(testPlanName)))
+                                    .addComponent(jScrollPane4)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel10)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel12)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(radioAntiga)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(radioNova)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(radioNova)
+                                                .addGap(0, 0, Short.MAX_VALUE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel13)
-                                                .addGap(2, 2, 2)
-                                                .addComponent(jLabel15))
-                                            .addComponent(jLabel11))
-                                        .addGap(10, 10, 10)
+                                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(jDateChooserInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGap(60, 60, 60)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(12, 12, 12)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jDateChooserFim, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                                             .addComponent(jDateChooserRelease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntGenereteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bntResetFiltro)))
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bntFiltrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnPublicarPlano, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntMudaStepSubir)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntDuplicate)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntOrdenar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntGenereteDate, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bntResetFiltro)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(bntExportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnPublicarPlano)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave)))
+                        .addComponent(labelQtdCTs1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(bntFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelQtdCTs)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jScrollPane3)))
-                .addContainerGap())
+                        .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(labelQtdCTs)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntCancelar))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(12, 12, 12))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(LabelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bntStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ProgressAguarde, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(122, 122, 122))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddCTInPlan, bntAddFluxosInPlan, bntDeleteCt, bntFiltrar});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelQtdCTs)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(testPlanName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(testPlanName, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(testPlanSTI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(testPlanSTI, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(testPlanSystem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(testPlanSystem, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jComboBoxTestFase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(jComboBoxCR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10)
-                            .addComponent(jDateChooserInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
-                            .addComponent(jDateChooserFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxTestFase, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBoxCR, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jDateChooserFim, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jDateChooserInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1019,55 +1088,49 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                                 .addComponent(radioNova)
                                 .addComponent(jLabel13)
                                 .addComponent(jLabel15))
-                            .addComponent(jDateChooserRelease, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)
+                            .addComponent(jDateChooserRelease, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnPublicarPlano)
-                            .addComponent(btnSave))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bntFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(bntDuplicate, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(bntOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(bntEditParameter, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(bntReplace, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(bntResetFiltro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bntGenereteDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntDeleteCt, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 245, Short.MAX_VALUE))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnPublicarPlano, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bntExportar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bntMudaStepDescer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntMudaStepSubir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntDuplicate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntOrdenar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntEditParameter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntReplace, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntGenereteDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(bntResetFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntAddCTInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntDeleteCt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ProgressAguarde, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bntCancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelQtdCTs1)
-                            .addComponent(ProgressAguarde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelQtdCTs))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(LabelStatus)
                             .addComponent(bntStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelStatus)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(bntExportar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                            .addComponent(bntAddFluxosInPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(29, 29, 29))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bntCancelar, bntExportar});
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bntAddCTInPlan, bntAddFluxosInPlan, bntDeleteCt, bntFiltrar});
 
         bntAddCTInPlan.setToolTipText("Instancia CTs selecionados");
         bntDeleteCt.setToolTipText("Delete CTs selecionados");
@@ -3584,17 +3647,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }
 
     public void addIconInButton() {
-        ButtonIconBean iconBean = new ButtonIconBean();
-        bntAddCTInPlan.setIcon(iconBean.getIconBntAddNewStep());
-        bntDeleteCt.setIcon(iconBean.getIconBntRemoveStep());
-        bntFiltrar.setIcon(iconBean.getIconBntFilter());
-        bntMudaStepDescer.setIcon(iconBean.getIconBntMoveStepBottom());
-        bntMudaStepSubir.setIcon(iconBean.getIconBntMoveStepTop());
-        bntEditParameter.setIcon(iconBean.getIconParameter());
-        bntOrdenar.setIcon(iconBean.getIconOrdem());
-        bntDuplicate.setIcon(iconBean.getIconDuplicate());
-        bntReplace.setIcon(iconBean.getIconReplace());
-        bntGenereteDate.setIcon(iconBean.getIconBntDate());
+//        ButtonIconBean iconBean = new ButtonIconBean();
+//        bntAddCTInPlan.setIcon(iconBean.getIconBntAddNewStep());
+//        bntDeleteCt.setIcon(iconBean.getIconBntRemoveStep());
+//        bntFiltrar.setIcon(iconBean.getIconBntFilter());
+//        bntMudaStepDescer.setIcon(iconBean.getIconBntMoveStepBottom());
+//        bntMudaStepSubir.setIcon(iconBean.getIconBntMoveStepTop());
+//        bntEditParameter.setIcon(iconBean.getIconParameter());
+//        bntOrdenar.setIcon(iconBean.getIconOrdem());
+//        bntDuplicate.setIcon(iconBean.getIconDuplicate());
+//        bntReplace.setIcon(iconBean.getIconReplace());
+//        bntGenereteDate.setIcon(iconBean.getIconBntDate());
     }
 
     public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
