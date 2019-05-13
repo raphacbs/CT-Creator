@@ -463,6 +463,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu4.setBackground(java.awt.Color.white);
         jMenu4.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\view_tree.png")); // NOI18N
         jMenu4.setText("Fluxos");
+        jMenu4.setEnabled(false);
         jMenu4.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
 
         jMenuItemFuncionalidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
