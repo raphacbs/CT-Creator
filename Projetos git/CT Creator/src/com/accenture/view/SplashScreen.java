@@ -91,7 +91,7 @@ public class SplashScreen extends JWindow {
 
             ManipulaDadosSQLite bd;
             JPanel content = (JPanel) getContentPane();
-            content.setBackground(Color.lightGray);
+            content.setBackground(Color.WHITE);
             StepPadrao stepPadrao = new StepPadrao();
             stepPadrao.setVersao(0.0);
             stepPadrao.setDescStep("exemplo");
@@ -186,11 +186,11 @@ public class SplashScreen extends JWindow {
 //            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
 
 //            try {
-//                filePropertiesLocal = SVNPropertiesVOBean.getInstance();
-//                copyrt.setText("Verificando usuário e senha svn...");
-//                if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
-//                    criaJanelaLoginSvn();
-//                }
+                filePropertiesLocal = SVNPropertiesVOBean.getInstance();
+                copyrt.setText("Verificando usuário e senha svn...");
+                if (filePropertiesLocal.getUser().equals("") || filePropertiesLocal.getPass().equals("")) {
+                    criaJanelaLoginSvn();
+                }
 //                connection = new SvnConnectionDao(this.fase);
 //            } catch (SVNException ex) {
 //                Log.log(Level.SEVERE, "ERROR", ex);
@@ -297,7 +297,7 @@ public class SplashScreen extends JWindow {
 
     LoginSvnView guiLoginSvn;
 
-    private void criaJanelaLoginSvn() throws SQLException, ClassNotFoundException, IOException {
+    private void criaJanelaLoginSvn(){
         guiLoginSvn = new LoginSvnView(this);
         guiLoginSvn.centralizaJanelaDialogo();
         guiLoginSvn.setVisible(true);
