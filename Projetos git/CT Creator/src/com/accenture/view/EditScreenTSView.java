@@ -99,6 +99,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     private TesteCaseTSBean testeCaseSelect;
     private int rowBefore;
     private int rowAfter;
+    private Filtro filter;
 
     /**
      * Creates new form guiCadTS
@@ -115,8 +116,11 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             props.load(new FileInputStream("log4j.properties"));
             PropertyConfigurator.configure(props);
             setTitle("Edição de CT " + fase);
+            this.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
 
             logger = org.apache.log4j.Logger.getLogger(EditScreenTSView.class);
+            
+            filter = new Filtro();
 
             listSteps = new ArrayList<Step>();
             //listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
@@ -136,7 +140,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 @Override
                 protected Object doInBackground() {
                     renderTableStep();
-                    callFilter();
+                    callFilter(true);
 //                    loadComboTS();
                     loadComboTSDB();
 
@@ -455,6 +459,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         });
 
         bntExcluirCT.setText("Excluir");
+        bntExcluirCT.setEnabled(false);
         bntExcluirCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntExcluirCTActionPerformed(evt);
@@ -668,7 +673,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntFiltrarMouseClicked
 
     private void bntFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntFiltrarActionPerformed
-        callFilter();
+        callFilter(false);
     }//GEN-LAST:event_bntFiltrarActionPerformed
 
     private void bntExcluirCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExcluirCTActionPerformed
@@ -683,33 +688,35 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 //            fileDeletedSvn = false;
 //            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 //        }
-        if (JOptionPane.showConfirmDialog(null, "Confirma a exclusão do CT " + testeCaseSelect.getTestScriptName() + "?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//        if (JOptionPane.showConfirmDialog(null, "Confirma a exclusão do CT " + testeCaseSelect.getTestScriptName() + "?", "Exclusão", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//
+//            final Frame GUIPrincipal = new MainScreenView();
+//            final JInternalFrame ji = this;
+//
+//            new SwingWorker() {
+//                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
+//
+//                @Override
+//                protected Object doInBackground() throws Exception, SVNException, IOException {
+//                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                    aguarde.setLocationRelativeTo(GUIPrincipal);
+//                    aguarde.setVisible(true);
+//                    blockedFieldBnt(false);
+//                    delete();
+//                    blockedFieldBnt(true);
+//                    return null;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    aguarde.dispose();
+//                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//                }
+//
+//            }.execute();
+//        }
 
-            final Frame GUIPrincipal = new MainScreenView();
-            final JInternalFrame ji = this;
-
-            new SwingWorker() {
-                JDialog aguarde = new WaitScreenView((JFrame) GUIPrincipal, true, ji);
-
-                @Override
-                protected Object doInBackground() throws Exception, SVNException, IOException {
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    aguarde.setLocationRelativeTo(GUIPrincipal);
-                    aguarde.setVisible(true);
-                    blockedFieldBnt(false);
-                    delete();
-                    blockedFieldBnt(true);
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    aguarde.dispose();
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-
-            }.execute();
-        }
+        messageInfo("Função desabilitada temporariamente");
 
 
     }//GEN-LAST:event_bntExcluirCTActionPerformed
@@ -755,24 +762,31 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tabelaCtKeyReleased
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-        try {
-            if (lineSelectTableCt != -1) {
-
-                svnRN = new SvnConnectionRN(this.fase);
-                svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
-
+//        try {
+//            if (lineSelectTableCt != -1) {
+//
+//                svnRN = new SvnConnectionRN(this.fase);
+//                svnRN.lockFile(false, listTestCaseTSPropertiesBean.get(lineSelectTableCt).getDirEntry().getURL());
+//
+//            }
+//            testCaseRN.deleteDir(this.hashCode() + "");
+//        } catch (SVNException ex) {
+//            Log.log(Level.SEVERE, "ERROR", ex);
+//            this.dispose();
+//            logger.error("Erro SVN ao fechar a janela: ", ex);
+//            exceptionSVN(ex.getMessage());
+//            this.dispose();
+//        } catch (IOException ex) {
+//            Log.log(Level.SEVERE, "ERROR", ex);
+//            logger.error("Erro ", ex);
+//            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//            this.dispose();
+//        }
+        if (tabelaCt.getSelectedRow() != -1 && isChangeTC()) {
+            if (JOptionPane.showConfirmDialog(this, "Suas alterações serão perdidas, deseja continuar assim mesmo?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                this.dispose();
             }
-            testCaseRN.deleteDir(this.hashCode() + "");
-        } catch (SVNException ex) {
-            Log.log(Level.SEVERE, "ERROR", ex);
-            this.dispose();
-            logger.error("Erro SVN ao fechar a janela: ", ex);
-            exceptionSVN(ex.getMessage());
-            this.dispose();
-        } catch (IOException ex) {
-            Log.log(Level.SEVERE, "ERROR", ex);
-            logger.error("Erro ", ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
             this.dispose();
         }
     }//GEN-LAST:event_formInternalFrameClosing
@@ -798,7 +812,8 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                     blockedFieldBnt(false);
                     //editCtSVN();
                     saveTestCaseBD(rowAfter);
-                    loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
+                   // loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
+                    loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemNameBD(filter.IdSystem, filter.name, filter.Id+""));
                     loadCTDB();
                     blockedFieldBnt(true);
                     return null;
@@ -861,7 +876,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
 //        }
         if (evt.getClickCount() == 1 && getContentPane().getCursor().getType() != Cursor.WAIT_CURSOR) {
-        final Frame GUIPrincipal = new MainScreenView();
+            final Frame GUIPrincipal = new MainScreenView();
             final JInternalFrame ji = this;
 
             new SwingWorker() {
@@ -885,11 +900,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                 }
 
             }.execute();
-        
-        
-        
-        
-           
+
         }
     }//GEN-LAST:event_tabelaCtMouseReleased
 
@@ -914,7 +925,14 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 //                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 //            }
 //        }
-        verifyChangeToClose();
+        //     verifyChangeToClose();
+        if (tabelaCt.getSelectedRow() != -1 && isChangeTC()) {
+            if (JOptionPane.showConfirmDialog(this, "Suas alterações serão perdidas, deseja continuar assim mesmo?", "Informação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                this.dispose();
+            }
+        } else {
+            this.dispose();
+        }
     }//GEN-LAST:event_bntCancelarActionPerformed
 
     private void bntAddStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddStepActionPerformed
@@ -1559,7 +1577,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
             this.listTesteCaseTSBean = listTesteCaseTSBean;
 
-             if (model.getRowCount() == 0) {
+            if (model.getRowCount() == 0) {
                 isFirst = true;
             }
 
@@ -1576,11 +1594,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                     modelStep.removeRow(0);
                 }
             }
-            
+
 //            if (model.getRowCount() == 0) {
 //                isFirst = true;
 //            }
-
             String nameCT = "";
             String id = "";
             String modifyBy = "";
@@ -1614,7 +1631,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             }
 
             model.setDataVector(data, header);
-            
+
             Thread.sleep(2000);
             TableColumnModel columnModel = tabelaCt.getColumnModel();
             Dimension tableSize = tabelaCt.getSize();
@@ -1622,7 +1639,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             columnModel.getColumn(1).setPreferredWidth((int) (tableSize.getWidth() * 0.70));
             columnModel.getColumn(2).setPreferredWidth((int) (tableSize.getWidth() * 0.50));
             columnModel.getColumn(3).setPreferredWidth((int) (tableSize.getWidth() * 0.50));
-            
+
             if (model.getRowCount() == 0) {
                 isFirst = true;
             }
@@ -1641,11 +1658,11 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
 
     }
 
-    public void callFilter() {
+    public void callFilter(boolean first) {
         FilterTestCaseScreenTSView1 dialogFiltro = null;
         try {
-         
-            dialogFiltro = new FilterTestCaseScreenTSView1(this, null, true, this.fase);
+
+            dialogFiltro = new FilterTestCaseScreenTSView1(this, null, true, this.fase,first);
         } catch (IOException ex) {
             logger.error("Erro ", ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -2139,6 +2156,10 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
     public String getFiltro() {
         return filtro;
     }
+    
+    public Filtro getFilter(){
+        return filter;
+    }
 
     public void setFiltro(String filtro) {
         this.filtro = filtro;
@@ -2153,7 +2174,7 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
             }
         }
     }
-    
+
     private void deleteCT(String folder, String fileName, String msn) {
 
         try {
@@ -2210,20 +2231,20 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
                     getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 //                        loadCTDB();
                 }
-                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
-
+               // loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
+                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemNameBD(filter.IdSystem, filter.name, filter.Id+""));
                 loadCTDB();
 //                    else{
 //                        tabelaCt.getSelectionModel().setSelectionInterval(rowBefore, rowBefore);
 //                    }
             } else {
-                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
-
+               // loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
+                loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemNameBD(filter.IdSystem, filter.name, filter.Id+""));
                 loadCTDB();
             }
         } else {
-            loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
-
+           // loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemBeanBD((SystemBean) jComboSistemasTS.getSelectedItem()));
+            loadTableCtDB(testCaseRN.getTesteCaseTSBeanBySystemNameBD(filter.IdSystem, filter.name, filter.Id+""));
             loadCTDB();
         }
     }
@@ -2415,6 +2436,57 @@ public class EditScreenTSView extends javax.swing.JInternalFrame {
         } else {
             messageError("Erro ao excluir o CT");
         }
+    }
+
+
+
+    public void setFilter(int id, int IdSystem, String name) {
+        this.filter.setId(id);
+        this.filter.setIdSystem(IdSystem);
+        this.filter.setName(name);
+    }
+
+    public class Filtro {
+
+        private int Id;
+        private int IdSystem;
+        private String name;
+
+        public Filtro() {
+        }
+        
+        
+
+        public Filtro(int Id, int IdSystem, String name) {
+            this.Id = Id;
+            this.IdSystem = IdSystem;
+            this.name = name;
+        }
+
+        public int getId() {
+            return Id;
+        }
+
+        public void setId(int Id) {
+            this.Id = Id;
+        }
+
+        public int getIdSystem() {
+            return IdSystem;
+        }
+
+        public void setIdSystem(int IdSystem) {
+            this.IdSystem = IdSystem;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
     }
 
 }

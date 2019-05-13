@@ -82,7 +82,7 @@ public class MainScreenView extends javax.swing.JFrame {
      */
     public MainScreenView() {
         try {
-            setTitle("CT Creator - Versão: " + SVNPropertiesVOBean.getInstance().getVersion());
+            setTitle("CT Creator - Versão: 2.0");
             initComponents();
             //add menu tema
             ButtonGroup groupTema = new ButtonGroup();
@@ -530,6 +530,7 @@ public class MainScreenView extends javax.swing.JFrame {
         jMenu5.setBackground(java.awt.Color.white);
         jMenu5.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\32x32\\Pie Chart.png")); // NOI18N
         jMenu5.setText("Relatórios");
+        jMenu5.setEnabled(false);
         jMenu5.setFont(new java.awt.Font("Graphik", 0, 14)); // NOI18N
         jMenu5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

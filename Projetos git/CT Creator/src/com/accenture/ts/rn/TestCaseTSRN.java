@@ -587,7 +587,15 @@ public class TestCaseTSRN {
     }
 
     public List<TesteCaseTSBean> getTesteCaseTSBeanBySystemNameBD(int IdSystem, String name, String id) {
-        String fieldId = id.isEmpty() ? "" : "AND [Id] =  " + id;
+        
+        String fieldId = "";
+        
+        if(id.isEmpty() || id.equals("0") ){
+            fieldId = "";
+        }else{
+            fieldId = " AND [Id] =  " + id;
+        }
+       
         List<TesteCaseTSBean> list = tsDao.getByFields("IdSystem = " + IdSystem + " AND [TestScriptName] LIKE '%" + name + "%' " + fieldId);
 
         return list;

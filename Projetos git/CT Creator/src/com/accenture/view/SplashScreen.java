@@ -184,6 +184,15 @@ public class SplashScreen extends JWindow {
             // Espera ate que os recursos estejam carregados
             Thread.sleep(3000);
 //            File folderRes = new File("C:\\FastPlan\\res\\svn1.properties");
+            
+            try{
+                File folderSaves = new File("C:\\FastPlan\\saves");
+                if(!folderSaves.exists()){
+                    folderSaves.mkdir();
+                }
+            }catch(Exception ex){
+                
+            }
 
 //            try {
                 filePropertiesLocal = SVNPropertiesVOBean.getInstance();

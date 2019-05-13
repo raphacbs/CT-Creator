@@ -13,6 +13,7 @@ import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TesteCaseTSBean;
 import com.accenture.ts.rn.SvnConnectionRN;
 import com.accenture.ts.rn.TestCaseTSRN;
+import com.accenture.view.EditScreenTSView;
 import com.inet.jortho.FileUserDictionary;
 import com.inet.jortho.SpellChecker;
 import java.awt.Dimension;
@@ -51,13 +52,16 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
 
     }
 
-    public FilterTestCaseScreenTSView1(final EditScreenTSView guiEditCt, java.awt.Frame parent, boolean modal,String fase) throws IOException, ClassNotFoundException, SQLException {
+    public FilterTestCaseScreenTSView1(final EditScreenTSView guiEditCt, java.awt.Frame parent, boolean modal,String fase, boolean first) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
             this.fase = fase;
         this.setResizable(false);
         initComponents();
         //loadComboTS();
-        loadComboTSDB();
+        if(first)
+            loadFieldsTSDB("","",0);
+        else
+            loadFieldsTSDB(guiEditCt.getFilter().getId()+"", guiEditCt.getFilter().getName(), guiEditCt.getFilter().getIdSystem());
         this.guiEditCt = guiEditCt;
         new SwingWorker() {
             JDialog aguarde;
@@ -252,7 +256,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             protected Object doInBackground() throws Exception {
                 aguarde.setLocationRelativeTo(GUIPrincipal);
                 aguarde.setVisible(true);
-
+                
                 //searchCT(textId.getText(), textNomeCT.getText());
                 searchCTDB(textId.getText(), textNomeCT.getText());
 
@@ -413,7 +417,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
     }
     
     
-        public void loadComboTSDB() {
+        public void loadFieldsTSDB(String id, String name, int IdSystem) {
 
         try {
             TestCaseTSRN testCaseRN = new TestCaseTSRN();
@@ -421,7 +425,13 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
 
             for (int i = 0; i < systems.size(); i++) {
                 jComboSistemasTS.addItem(systems.get(i));
+                if(IdSystem == systems.get(i).getId()){
+                    jComboSistemasTS.setSelectedIndex(i);
+                }
             }
+            
+            textId.setText(id.equals("0")?"":id);
+            textNomeCT.setText(name);
        
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Ocorreu o erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -483,6 +493,8 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             guiEditCt.setRowBefore(0);
             guiEditCt.loadTableCtDB(listTestCaseTSPropertiesBean);
             guiEditCt.setIdSistema(IdSystem);
+            int idCT = id.equals("") ? 0 : Integer.parseInt(id);
+            guiEditCt.setFilter(idCT, IdSystem, nameTC);
             
             //guiEditCt.setFiltro(text);
        
@@ -491,4 +503,6 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
         }
 
     }
+    
+    
 }
