@@ -21,35 +21,39 @@ import org.tmatesoft.svn.core.SVNException;
  */
 public class ExportCTSVN {
     
-    private static String [] system = new String [] {"ARBOR", "BLL"};
+    private static String [] system = new String [] {"Importar"};
     
     public static void main(String[] agrs) throws Exception{
         for(String s : system){
-             convertSheetInObject(new File("C:\\Users\\automacao\\Desktop\\CTs\\TS\\"+s));
+             convertSheetInObject(new File("C:\\Users\\automacao\\Desktop\\CTs\\"+s));
         }
        
     }
     
     
     private static void convertSheetInObject(File dir) throws SVNException, Exception {
-		try {
-			File[] files = dir.listFiles();
-			for (File file : files) {
-				if (!file.isDirectory() && file.getName().endsWith("xlsx")) {
-					System.out.println("file:" + file.getCanonicalPath());
-                                        TestCaseTSRN tcRN = new TestCaseTSRN();
-                                        TesteCaseTSBean tc = tcRN.readSheet(file.getAbsolutePath()).get(0);                                        
-					tc.setIdSystem(getIdSystem(tc.getProduct()));
-                                        tcRN.saveTestCaseTSBD(tc);
-				} else {
-					System.out.println("directory:" + file.getCanonicalPath());
-                                        convertSheetInObject(file);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            File[] files = dir.listFiles();
+            for (File file : files) {
+                if (!file.isDirectory() && file.getName().endsWith("xlsx")) {
+                    System.out.println("file:" + file.getCanonicalPath());
+                    TestCaseTSRN tcRN = new TestCaseTSRN();
+                    try{
+                        TesteCaseTSBean tc = tcRN.readSheet(file.getAbsolutePath()).get(0);
+                        tc.setIdSystem(getIdSystem(tc.getProduct()));
+                        tcRN.saveTestCaseTSBD(tc);
+                    }catch(Exception e){
+                        System.err.println("Não foi possível importar o CT: "+file.getAbsolutePath());
+                    }
+                } else {
+                    System.out.println("directory:" + file.getCanonicalPath());
+                    convertSheetInObject(file);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     private static int getIdSystem(String system) throws Exception{
         TestCaseTSRN tcRN = new TestCaseTSRN();

@@ -78,7 +78,7 @@ public class ParameterDAO {
             return parameters;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -127,7 +127,7 @@ public class ParameterDAO {
             return parameters;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -166,7 +166,7 @@ public class ParameterDAO {
             return pb;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -204,7 +204,7 @@ public class ParameterDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao inserir o parametro "+ex.getMessage(),ex);
             return null;
         }
 
@@ -229,7 +229,7 @@ public class ParameterDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao excluir parametro "+ex.getMessage(),ex);
             return false;
         }
 
@@ -259,7 +259,7 @@ public class ParameterDAO {
          
          }catch(Exception ex){
              ex.printStackTrace();
-             logger.error(ex);
+             logger.error("Erro ao atualizar parametro "+ex.getMessage(),ex);
              return null;
          }
          

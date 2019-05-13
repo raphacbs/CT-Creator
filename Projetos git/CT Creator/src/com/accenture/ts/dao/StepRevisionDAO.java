@@ -82,6 +82,7 @@ public class StepRevisionDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.error("Erro ao selecionar step revision "+ex.getMessage(),ex);
             return null;
         }
 

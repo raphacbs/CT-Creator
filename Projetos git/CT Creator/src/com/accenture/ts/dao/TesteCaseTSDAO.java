@@ -17,6 +17,7 @@ import com.accenture.connection.EnumConnection;
 import static com.accenture.connection.EnumConnection.MSSQL;
 import com.accenture.control.ExtraiPlanilha;
 import com.accenture.util.FunctiosDates;
+import com.accenture.view.InstanceScreenTSView;
 
 //import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
@@ -316,6 +317,9 @@ public class TesteCaseTSDAO {
         release.setCellValue(testPlan.getRelease());
 
         for (int i = 0; i < testPlan.getTestCase().size(); i++) {
+            
+            InstanceScreenTSView.addTextLabelStatus("Gravando CT "+testPlan.getTestCase().get(i).getTestScriptName()+"-"+testPlan.getTestCase().get(i).getOrder()+" na planinha...");
+            
             row = sheetTS.getRow(linha);
 
             descriptionPlan = row.getCell(0);
@@ -435,6 +439,7 @@ public class TesteCaseTSDAO {
 //        extraiPlanilha.exportTStoTI(testCasesAutomatizados, sheetTI);
 //        }
         logger.info("Preparando para salvar planilha");
+        InstanceScreenTSView.addTextLabelStatus("Criando arquivo do plano...");
         FileOutputStream fileOut = new FileOutputStream(destinationSheet);
         logger.info("Fim método - new FileOutputStream(destinationSheet) ");
         logger.info("Tentando gravar na planilha.");
@@ -444,6 +449,7 @@ public class TesteCaseTSDAO {
         fileSheet.close();
         sucess = true;
         logger.info("Planilha gerada.");
+        InstanceScreenTSView.addTextLabelStatus("Planilha gerada.");
         return sucess;
 
     }
@@ -838,7 +844,7 @@ public class TesteCaseTSDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -923,7 +929,7 @@ public class TesteCaseTSDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -1006,7 +1012,7 @@ public class TesteCaseTSDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
     }
@@ -1088,7 +1094,7 @@ public class TesteCaseTSDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage() , ex);
             return null;
         }
 
@@ -1179,7 +1185,7 @@ public class TesteCaseTSDAO {
             
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
             return null;
        }finally{
             ps.close();
@@ -1268,7 +1274,7 @@ public class TesteCaseTSDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao atualizar CT "+ex.getMessage(), ex);
             return null;
        }
     }
@@ -1294,7 +1300,7 @@ public class TesteCaseTSDAO {
         }catch(Exception ex){
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao excluir CT "+ex.getMessage(), ex);
             return false;
         }
     }
@@ -1397,7 +1403,7 @@ public class TesteCaseTSDAO {
             } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao gerar revisão do CT", ex);
+            logger.error("Erro ao gerar revisão do CT "+ex.getMessage(), ex);
             return 0;
         
         }

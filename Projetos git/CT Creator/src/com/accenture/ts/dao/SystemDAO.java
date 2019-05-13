@@ -12,6 +12,7 @@ import com.accenture.connection.ConnectionFactory;
 import static com.accenture.connection.EnumConnection.MSSQL;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.FileInputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -28,15 +29,19 @@ public class SystemDAO {
      private final static Logger logger = Logger.getLogger(SystemDAO.class);
      
     private static String SQL_SELECT_ALL = "";
+     
+    private static String SQL_SELECT_BY_NAME = "";
 
     public SystemDAO() {
         try{
             SQL_SELECT_ALL = "SELECT [Id],[Descricao] FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[System]  ORDER BY [Descricao] ASC";
+            SQL_SELECT_BY_NAME = "SELECT [Id],[Descricao] FROM "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[System] WHERE Descricao = ?  ORDER BY [Descricao] ASC";
          Properties props = new Properties();
             props.load(new FileInputStream("log4j.properties"));
             PropertyConfigurator.configure(props);
         }catch(Exception ex){
             ex.printStackTrace();
+            logger.error("Erro ao selecionar system "+ex.getMessage(),ex);
             System.err.println(ex.getMessage());
         }
     }
@@ -63,6 +68,32 @@ public class SystemDAO {
             
         }catch(Exception ex){
             ex.printStackTrace();
+            logger.error("Erro ao executar a query "+SQL_SELECT_ALL+" "+ex.getMessage(),ex);
+        }
+        return null;
+    }
+    
+    public SystemBean getByName(String system) {
+        ConnectionFactory cf = new ConnectionFactory(MSSQL);
+        try {
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_SELECT_BY_NAME);
+            ps.setString(1, system);
+            ResultSet rs = ps.executeQuery();
+
+            List<SystemBean> systems = new ArrayList<SystemBean>();
+            SystemBean sys = new SystemBean();
+            while (rs.next()) {
+
+                sys.setId(rs.getInt("Id"));
+                sys.setDescricao(rs.getString("Descricao"));
+
+            }
+
+            return sys;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error("Erro ao executar a query "+SQL_SELECT_BY_NAME+" "+ex.getMessage(),ex);
         }
         return null;
     }

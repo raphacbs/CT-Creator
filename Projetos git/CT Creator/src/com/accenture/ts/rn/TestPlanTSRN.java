@@ -23,6 +23,7 @@ import com.accenture.ts.dao.TestPlanTSDao;
 import com.accenture.ts.dao.TesteCaseTSDAO;
 import com.accenture.ts.dao.TesteCaseTSInstanceDAO;
 import com.accenture.util.ProjectSettings;
+import com.accenture.view.InstanceScreenTSView;
 import com.accenture.view.RegisterScreenTIView;
 import com.accenture.view.RegisterScreenTSView;
 import com.google.gson.Gson;
@@ -100,6 +101,8 @@ public class TestPlanTSRN {
                     final int id = Integer.parseInt(idplano + "" + tc.getIdRevision()+ "" + tc.getOrder());
                     tc.setIdTesteCaseTSBeanInstance(id);                    
                     tc.setIdTestPlanTS(idplano);
+                    tc.setModifiedBy(user);
+                    tc.setModifyDate(currentDate);
                    // tc = tcInstanceDao.insert(tc);
                 });
 
@@ -116,6 +119,7 @@ public class TestPlanTSRN {
                 AtomicInteger count = new AtomicInteger(1);
 
                 for (TesteCaseTSBean tc : plano.getTestCase()) {
+                    InstanceScreenTSView.addTextLabelStatus("Salvando CT - "+count.get()+"/"+plano.getTestCase().size());
                     final int idTc = tc.getIdTesteCaseTSBeanInstance();
                    // parameterNames.addAll(tc.getParameters().stream().map(ParameterBean::getParameterName).collect(Collectors.toList()));
 //                    if (tc.getParameters().stream().anyMatch(p -> !parameterNames.contains(p.getParameterName()))) {
@@ -152,7 +156,7 @@ public class TestPlanTSRN {
                 
                 parameterDAO = new ParameterInstanceDAO();
                 testPlanTSDao.update(plano);
-                               
+                InstanceScreenTSView.addTextLabelStatus("Atualizando plano...");               
                 List<TesteCaseTSBean> updateStep = new ArrayList<>();
                 List<TesteCaseTSBean> insertStep = new ArrayList<>();
                 List<TesteCaseTSBean> deleteStep = new ArrayList<>();

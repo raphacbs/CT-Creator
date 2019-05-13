@@ -72,7 +72,7 @@ public class TestCaseTSRN {
 
     public TestCaseTSRN(String fase) throws SVNException, IOException {
         tsDao = new TesteCaseTSDAO();
-        svnDao = new SvnConnectionDao(fase);
+        svnDao = new SvnConnectionDao();
     }
 
     public TestCaseTSRN() {
@@ -572,6 +572,11 @@ public class TestCaseTSRN {
 
         return new SystemDAO().getAll();
     }
+    
+    public SystemBean getSystemsByName(String product) {
+
+        return new SystemDAO().getByName(product);
+    }
 
     public List<TesteCaseTSBean> getTesteCaseTSBeanBD() {
         return tsDao.getAll();
@@ -588,6 +593,27 @@ public class TestCaseTSRN {
         return list;
 
     }
+    
+    public TesteCaseTSBean saveOrGetTesteCase(TesteCaseTSBean tc) {
+        
+        List<TesteCaseTSBean> list = tsDao.getByFields("IdSystem = " + tc.getIdSystem() + " AND [TestScriptName] LIKE '%" + tc.getTestScriptName() + "%' " );
+        TesteCaseTSBean temp = null;
+        
+        if(list.size() == 0){
+            
+            temp = saveTestCaseTSBD(tc);
+            return temp;
+        }else{
+            StepDAO stepDAO = new StepDAO();
+            temp = list.get(0);
+            temp.setListStep(stepDAO.getByTestCaseBean(temp.getId()));
+        }
+        
+        return temp;
+
+    }
+    
+    
     
     public List<TesteCaseTSBean> getTesteCaseTSBeanById(int... id) {
         StringBuilder sbids = new StringBuilder();

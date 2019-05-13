@@ -78,6 +78,7 @@ public class StepDAO {
             return step;
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.error("Erro ao selecionar step "+ex.getMessage(),ex);
             return null;
         }
 
@@ -118,6 +119,7 @@ public class StepDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.error("Erro ao selecionar step "+ex.getMessage(),ex);
             return null;
         }
 
@@ -156,7 +158,7 @@ public class StepDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao atualizar step "+ex.getMessage(),ex);logger.error(ex);
             return null;
         }
 
@@ -197,7 +199,7 @@ public class StepDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao inserir step "+ex.getMessage(),ex);
             return null;
         }
 
@@ -221,7 +223,7 @@ public class StepDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao excluir step "+ex.getMessage(),ex);
             return false;
         }
 
@@ -255,7 +257,7 @@ public class StepDAO {
             } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao gerar revisão do Step", ex);
+            logger.error("Erro ao gerar revisão do Step "+ex.getMessage(), ex);
             return false;
         
         }

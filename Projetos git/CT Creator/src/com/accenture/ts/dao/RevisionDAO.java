@@ -58,7 +58,7 @@ public class RevisionDAO {
         } catch (Exception ex) {
             cf.getConnection().rollback();
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao criar revisão "+ex.getMessage(),ex);
         } finally {          
             ps.close();
             cf.getConnection().close();

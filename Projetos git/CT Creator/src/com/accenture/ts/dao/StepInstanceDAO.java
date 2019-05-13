@@ -75,6 +75,7 @@ public class StepInstanceDAO {
             return step;
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.error("Erro ao selecionar step instance "+ex.getMessage(),ex);
             return null;
         }
 
@@ -113,6 +114,7 @@ public class StepInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.error("Erro ao selecionar step instance "+ex.getMessage(),ex);
             return null;
         }
 
@@ -149,7 +151,7 @@ public class StepInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao atualizar step instance "+ex.getMessage(),ex);
             return null;
         }
 
@@ -189,7 +191,7 @@ public class StepInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao inserir step instance "+ex.getMessage(),ex);
             return null;
         }
 
@@ -214,7 +216,7 @@ public class StepInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao deletar step instance "+ex.getMessage(),ex);
             return false;
         }
 

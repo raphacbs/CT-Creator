@@ -841,7 +841,7 @@ public class TesteCaseTSInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -925,7 +925,7 @@ public class TesteCaseTSInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -1008,7 +1008,7 @@ public class TesteCaseTSInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
     }
@@ -1093,7 +1093,7 @@ public class TesteCaseTSInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -1185,7 +1185,7 @@ try{
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
             return null;
         }
 
@@ -1292,7 +1292,7 @@ try{
                 cf.getConnection().close();
                 ex.printStackTrace();
                 System.out.print(ex.getMessage());
-                logger.error("Erro ao salvar CT", ex);
+                logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
                 return null;
             } catch (SQLException ex1) {
                  ex1.printStackTrace();
@@ -1377,7 +1377,7 @@ try{
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
             return null;
         }
     }
@@ -1402,7 +1402,7 @@ try{
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
             return false;
         }
     }

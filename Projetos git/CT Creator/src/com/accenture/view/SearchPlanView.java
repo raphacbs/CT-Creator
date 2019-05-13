@@ -333,7 +333,7 @@ public class SearchPlanView extends java.awt.Dialog {
             @Override
             protected Object doInBackground() throws Exception {
                    
-                guiInstanceCT.setMouseCursorWait(true);
+                
                 searchCTDB(textNomeCT.getText(), textId.getText());
                 return null;
 
@@ -342,9 +342,12 @@ public class SearchPlanView extends java.awt.Dialog {
             @Override
             protected void done() {
                 guiInstanceCT.setMouseCursorWait(false);
+                InstanceScreenTSView.addTextLabelStatus("Pesquisa concluída");
             }
         };
         sw.execute();
+        guiInstanceCT.setMouseCursorWait(true);
+        InstanceScreenTSView.addTextLabelStatus("Pesquisando planos, favor aguarde...");
 
     }//GEN-LAST:event_bntPesquisarActionPerformed
 
@@ -385,14 +388,30 @@ public class SearchPlanView extends java.awt.Dialog {
     private void bntAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAbrirActionPerformed
           
         
+             SwingWorker sw = new SwingWorker() {
             
+            @Override
+            protected Object doInBackground() throws Exception {
+                   
+                
+                abrirPlano();
+                return null;
+
+            }
+
+            @Override
+            protected void done() {
+                blockedFilds(false);
+                guiInstanceCT.setMouseCursorWait(false);
+                InstanceScreenTSView.addTextLabelStatus("concluído");
+            }
+        };
+        sw.execute();
+        blockedFilds(true);
+        guiInstanceCT.setMouseCursorWait(true);
+        InstanceScreenTSView.addTextLabelStatus("Carregando plano, favor aguarde...");
             
-                     
-        try {
-            abrirPlano();
-        } catch (ParseException ex) {
-            Logger.getLogger(SearchPlanView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      
                
         
        
@@ -591,6 +610,15 @@ public class SearchPlanView extends java.awt.Dialog {
         TestPlanTSRN planTSRN = new TestPlanTSRN();
         planTSRN.getById(id);
 
+    }
+    
+    private void blockedFilds(boolean b){
+        textId.setEnabled(b);
+        textId.setEditable(b);
+        bntCancelar.setEnabled(b);
+        bntPesquisar.setEnabled(b);
+        tabelaSelecionePlano.setEnabled(b);
+        bntAbrir.setEnabled(b);
     }
 
 }

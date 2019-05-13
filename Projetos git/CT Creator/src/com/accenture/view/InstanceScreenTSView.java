@@ -9,6 +9,7 @@ import com.accenture.bean.ButtonIconBean;
 import com.accenture.bean.ParameterBean;
 import com.accenture.bean.SVNPropertiesVOBean;
 import com.accenture.bean.Step;
+import com.accenture.bean.SystemBean;
 import com.accenture.bean.TestCaseTSPropertiesBean;
 import com.accenture.bean.TestPlanTSBean;
 import com.accenture.bean.TesteCaseTSBean;
@@ -89,6 +90,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.accenture.util.JDateChooserCellEditor;
 import com.accenture.util.ProjectSettings;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.MouseMotionAdapter;
 import java.io.FileNotFoundException;
@@ -96,10 +98,15 @@ import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import org.apache.poi.hdf.extractor.TC;
 
 import org.tmatesoft.svn.core.SVNLock;
 
@@ -139,6 +146,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     public static String NAME_PLAN_SVN = "";
     public static InstanceScreenTSView screen;
     private String fase;
+    private boolean importacao = false;
+    
 
     /**
      * Creates new form guiCadTS
@@ -170,7 +179,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             listTestCaseTSPropertiesBean = new ArrayList<TestCaseTSPropertiesBean>();
             listTestCase = new ArrayList<TesteCaseTSBean>();
             ctBaixados = new ArrayList<String>();
-            svnRN = new SvnConnectionRN(this.fase);
+            svnRN = new SvnConnectionRN();
             listTestCasePlan = new ArrayList<TesteCaseTSBean>();
             listcodeObject = new ArrayList<Integer>();
 
@@ -210,11 +219,9 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
 
             }.execute();
-        } catch (SVNException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
         testPlan = new TestPlanTSDao();
         addIconInButton();
@@ -1166,6 +1173,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             progress(true);
             if (tabelaInstancia.getSelectedRows().length > 0) {
                 tabelaInstancia.editingStopped(null);
+                filterHeader.resetFilter();
                 moveUp();
 
             }
@@ -1398,6 +1406,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
             progress(true);
             if (tabelaInstancia.getSelectedRows().length > 0) {
                 tabelaInstancia.editingStopped(null);
+                filterHeader.resetFilter();
                 moveDown();
                 progress(false);
 
@@ -1477,6 +1486,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bntOrdenarActionPerformed
 
     private void bntDuplicateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntDuplicateActionPerformed
+       
         boolean numeroValido = false;
         int qtdLoop = 0;
         while (!numeroValido) {
@@ -1497,46 +1507,55 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
                     DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
                     int[] countRow = tabelaInstancia.getSelectedRows();
-
+                    
+                    int[] orders = new int[countRow.length];
+                    
+                    
+                    for(int x =0; x<orders.length; x++){
+                        int rowsel = Integer.parseInt(tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 9).toString()) - 1;
+                        orders[x] = rowsel;
+                    }
+                                                      
+          
                     tabelaInstancia.editingStopped(null);
 
                     for (int i = 0; i < countRow.length; i++) {
                         TesteCaseTSBean tc = new TesteCaseTSBean();
 
-                        tc.setExpectedResults(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getExpectedResults());
-                        tc.setStepDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getStepDescription());
-                        tc.setDataPlanejada(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getDataPlanejada());
-                        tc.setFase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getFase());
-                        tc.setListStep(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getListStep());
-                        tc.setProduct(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getProduct());
-                        tc.setSTIPRJ(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getSTIPRJ());
-                        tc.setTestCaseProperties(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestCaseProperties());
-                        tc.setTestPhase(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPhase());
-                        tc.setTestPlan(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestPlan());
-                        tc.setTestScriptDescription(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptDescription());
-                        tc.setTestScriptName(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getTestScriptName());
-                        tc.setNumeroCenario(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCenario());
-                        tc.setNumeroCt(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getNumeroCt());
+                        tc.setExpectedResults(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getExpectedResults());
+                        tc.setStepDescription(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getStepDescription());
+                        tc.setDataPlanejada(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getDataPlanejada());
+                        tc.setFase(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getFase());
+                        tc.setListStep(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getListStep());
+                        tc.setProduct(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getProduct());
+                        tc.setSTIPRJ(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getSTIPRJ());
+                        tc.setTestCaseProperties(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getTestCaseProperties());
+                        tc.setTestPhase(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getTestPhase());
+                        tc.setTestPlan(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getTestPlan());
+                        tc.setTestScriptDescription(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getTestScriptDescription());
+                        tc.setTestScriptName(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getTestScriptName());
+                        tc.setNumeroCenario(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getNumeroCenario());
+                        tc.setNumeroCt(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getNumeroCt());
                         tc.setHashCode(tc.hashCode());
-                        tc.setComplexidade(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getComplexidade());
+                        tc.setComplexidade(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getComplexidade());
                         //tc.setParameters(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getParameters());
-                        tc.setAutomatizado(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isAutomatizado());
+                        tc.setAutomatizado(this.testPlan.getTestPlan().getTestCase().get(orders[i]).isAutomatizado());
                         tc.setHashCode(tc.hashCode());
-                        tc.setData(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isData());
-                        tc.setPriority(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isPriority());
-                        tc.setRegression(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRegression());
-                        tc.setRework(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).isRework());
+                        tc.setData(this.testPlan.getTestPlan().getTestCase().get(orders[i]).isData());
+                        tc.setPriority(this.testPlan.getTestPlan().getTestCase().get(orders[i]).isPriority());
+                        tc.setRegression(this.testPlan.getTestPlan().getTestCase().get(orders[i]).isRegression());
+                        tc.setRework(this.testPlan.getTestPlan().getTestCase().get(orders[i]).isRework());
                         tc.setIdTesteCaseTSBeanInstance(0);
-                        tc.setIdRevision(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getIdRevision());
-                        tc.setId(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getId());
-                        tc.setIdSystem(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getIdSystem());
-                        tc.setIdTestPlanTS(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getIdTestPlanTS());
+                        tc.setIdRevision(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getIdRevision());
+                        tc.setId(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getId());
+                        tc.setIdSystem(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getIdSystem());
+                        tc.setIdTestPlanTS(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getIdTestPlanTS());
                         tc.setParameters(new ArrayList<ParameterBean>());
-                        tc.setCreateDate(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getCreateDate());
-                        tc.setCreatedBy(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getCreatedBy());
-                        tc.setModifiedBy(this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getModifiedBy());
+                        tc.setCreateDate(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getCreateDate());
+                        tc.setCreatedBy(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getCreatedBy());
+                        tc.setModifiedBy(this.testPlan.getTestPlan().getTestCase().get(orders[i]).getModifiedBy());
                         tc.setModifyDate(new Date());
-                        for(ParameterBean p :  this.testPlan.getTestPlan().getTestCase().get(countRow[i]).getParameters()){
+                        for(ParameterBean p :  this.testPlan.getTestPlan().getTestCase().get(orders[i]).getParameters()){
 //                           
                             ParameterBean pb = new ParameterBean();
                             pb.setId(0);
@@ -1848,14 +1867,12 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //
 //        }
         
-         final java.awt.Frame GUIPrincipal = new MainScreenView();
-            final JInternalFrame ji = this;
-
+      
             new SwingWorker() {
               
                 @Override
                 protected Object doInBackground() throws Exception, SVNException, IOException {
-                    getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    
                     callGuiSearchPlan();
                    // getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     return null;
@@ -1868,7 +1885,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 }
 
             }.execute();
-
+            getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
     }//GEN-LAST:event_btnPublicarPlanoActionPerformed
 
@@ -1974,34 +1991,103 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+     
+    
     private void jMenuImportarJsonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuImportarJsonActionPerformed
-         TestPlanTSBean plano = null;
-        try {
-            File plan = getFileJsonOrPlan();
+    
+    
+
+    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+        @Override
+        protected String doInBackground() throws InterruptedException {
             
-            if(plan.getName().endsWith(".plan")){
-                plano = openPlanFile(plan.getAbsolutePath());
-            }else{
-               TestPlanTSRN planRN = new TestPlanTSRN();
-                plano = planRN.readFileJson(plan.getAbsolutePath());
-            }
-            if(plano != null){
-                loadPlan(plano);
-            }else{
-                messageError("Não possível carregar o arquivo.");
-            }
-            
-            
-        } catch (Exception ex) {
-            messageError("Erro ao ler o arquivo JSON. "+ex.getMessage());
-            ex.printStackTrace();
-            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+         
+            importPlan(); 
+           
+            return null;
         }
+        @Override
+        protected void done() {
+          getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+    };
+    worker.execute();
+         getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+        
     }//GEN-LAST:event_jMenuImportarJsonActionPerformed
 
     public void centralizaJanela() {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
+    }
+    
+    public void importPlan() {
+        TestPlanTSBean plano = null;
+        try {
+            File plan = getFileJsonOrPlan();
+
+            if (plan != null) {
+
+                if (plan.getName().endsWith(".plan")) {
+                    TestCaseTSRN caseTSRN = new TestCaseTSRN();
+                    plano = openPlanFile(plan.getAbsolutePath());
+                    AtomicInteger cont = new AtomicInteger(1);
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date currentDate = new Date(System.currentTimeMillis());
+                    String user = SVNPropertiesVOBean.getInstance().getUser();
+                    SystemBean system = caseTSRN.getSystemsByName(plano.getProduct() == null ? plano.getTestCase().get(0).getProduct() : plano.getProduct());
+                    plano.getTestCase().stream().forEach(tc -> {
+                        tc.setOrder(cont.getAndIncrement());
+                        tc.setCreateDate(currentDate);
+                        tc.setCreatedBy(user);
+                        tc.setIdRevision(0);
+                        tc.setIdTestCaseType(0);
+                        tc.setIdTestPlanTS(0);
+                        tc.setIdTesteCaseTSBeanInstance(0);
+                        tc.setIdSystem(system.getId());
+                    });
+
+                    //verifica se plano e ct existe
+                    testCaseRN = new TestCaseTSRN();
+                    List<TesteCaseTSBean> tcs = new ArrayList<TesteCaseTSBean>();
+                    for (int i = 0; i < plano.getTestCase().size(); i++) {
+                        addTextLabelStatus("Importando "+(i+1)+"/"+plano.getTestCase().size()+"-CT: "+plano.getTestCase().get(i).getTestScriptName());
+                        List<ParameterBean> parameters = plano.getTestCase().get(i).getParameters();
+                        TesteCaseTSBean tc = testCaseRN.saveOrGetTesteCase(plano.getTestCase().get(i));
+                        tc.setParameters(parameters);
+                        tc.setOrder(i + 1);
+                        if(tc.getParameters() == null || tc.getParameters().size() == 0)
+                            tc.setParameters(getParameters(tc));
+                        
+                        tcs.add(tc);
+                    }
+
+                    plano.setTestCase(tcs);
+
+                    testPlanSystem.setText(system.getDescricao());
+
+                } else {
+                    TestPlanTSRN planRN = new TestPlanTSRN();
+                    plano = planRN.readFileJson(plan.getAbsolutePath());
+                    plano.setId(0);
+
+                }
+                if (plano != null) {
+                    addTextLabelStatus("Carregando plano importado");
+                    loadPlan(plano);
+                    addTextLabelStatus("Importação concluída");
+                } else {
+                    messageError("Não possível carregar o arquivo.");
+                    addTextLabelStatus("Não foi possível concluir a importação");
+                }
+            }
+
+        } catch (Exception ex) {
+            messageError("Erro ao ler o arquivo. " + ex.getMessage());
+            ex.printStackTrace();
+            Logger.getLogger(InstanceScreenTSView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void messageError(String error) {
@@ -2096,7 +2182,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         int i = fileChooser.showOpenDialog(this);
 
         if (i == 1) {
-            JOptionPane.showMessageDialog(null, "Nenhum arquivo foi selecionado! ", "Mensagem ao usuário", JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Nenhum arquivo foi selecionado! ", "Mensagem ao usuário", JOptionPane.WARNING_MESSAGE);
             return null;
         } else {
 
@@ -2858,6 +2944,17 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         List<TesteCaseTSBean> listTc = new ArrayList<TesteCaseTSBean>();
 
         int[] qtdRowsSelects = tabelaInstancia.getSelectedRows();
+
+//        int[] orders = new int[qtdRowsSelects.length];
+//
+//        for (int x = 0; x < orders.length; x++) {
+//            int rowsel = Integer.parseInt(tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 9).toString()) - 1;
+//            orders[x] = rowsel;
+//        }
+
+
+        
+        
         for (int i = 0; i < tabelaInstancia.getRowCount(); i++) {
             for (int j = 0; j < testPlan.getTestPlan().getTestCase().size(); j++) {
                 if (Integer.parseInt(tabelaInstancia.getValueAt(i, 9).toString()) == testPlan.getTestPlan().getTestCase().get(j).getOrder()) {
@@ -2897,7 +2994,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 //                dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
 //            }
         //dialogParameter.loadParameterTable(testPlan, tabelaInstancia.getSelectedRow());
-        dialogParameter.loadParameterTableDB(testPlan, tabelaInstancia.getSelectedRow());
+        int rowsel = Integer.parseInt(tabelaInstancia.getValueAt(tabelaInstancia.getSelectedRow(), 9).toString()) - 1;
+ 
+        
+        dialogParameter.loadParameterTableDB(testPlan, rowsel);
 
         dialogParameter.setVisible(true);
 
@@ -3623,8 +3723,14 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 
         String date = this.testPlan.getTestPlan().getRelease();
         if(date != null){
-        Date release = new SimpleDateFormat("MM/yyyy").parse(date);
-        jDateChooserRelease.setDate(release);
+            try{
+                Date release = new SimpleDateFormat("MM/yyyy").parse(date);
+                jDateChooserRelease.setDate(release);
+            }catch(Exception e){
+                
+                jDateChooserRelease.setDate(new Date());
+            }
+        
         }
 //            System.out.println("Valor p " + this.testPlan.getTestPlan().getTestCase().get(0).getParameters().get(0).getParameterValue());
             DefaultTableModel modelInstancia = (DefaultTableModel) tabelaInstancia.getModel();
@@ -4248,6 +4354,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     public void ordenarCTs() {
         if (tabelaInstancia.getRowCount() > 0) {
             tabelaInstancia.editingStopped(new ChangeEvent(tabelaInstancia));
+            filterHeader.resetFilter();
             DefaultTableModel model = (DefaultTableModel) tabelaInstancia.getModel();
             int num1 = 0; //alterado de double para int para solução da CR 15112
             int num2 = 0; //alterado de double para int para solução da CR 15112
@@ -4282,7 +4389,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
         }
     }
 
-    private void addTextLabelStatus(String status) {
+    public static void  addTextLabelStatus(String status) {
 
         new SwingWorker() {
 
@@ -4316,7 +4423,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 planTemp.getTestPlan().setCrFase(jComboBoxCR.getSelectedItem().toString());
                 planTemp.getTestPlan().setTestPhase(jComboBoxTestFase.getSelectedItem().toString());
                 planTemp.getTestPlan().setRelease(FunctiosDates.dateToString(jDateChooserRelease.getDate(), "yyyy-MM"));
-                addTextLabelStatus("Setando valores do plano");
+                addTextLabelStatus("Atribuindo valores dos parametros...");
 //            String scriptName = "";
                 
                 
@@ -4333,6 +4440,8 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                              String descStep =  planTemp.getTestPlan().getTestCase().get(i).getListStep().get(x).getDescStep();
                              String resultStep =  planTemp.getTestPlan().getTestCase().get(i).getListStep().get(x).getResultadoStep();
                              
+                             parameterName = parameterName.replace("<<<"+parameterName+">>>", parameterName);
+                             
                              descStep = descStep.replace("<<<"+parameterName+">>>", parameterValue.isEmpty() ? "" : "<"+parameterValue+">");
                              resultStep = resultStep.replace("<<<"+parameterName+">>>", parameterValue.isEmpty() ? "" : "<"+parameterValue+">");
                              
@@ -4346,7 +4455,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                          testcaseDesc = testcaseDesc.replace("<<<"+parameterName+">>>", parameterValue.isEmpty() ? "" : "<"+parameterValue+">");
                      }
                     
-                    
+                    addTextLabelStatus("Parâmetros setados...");
 //                    for (int j = 0; j < planTemp.getTestPlan().getTestCase().get(i).getParameters().size(); j++) {
 //                        //verifica se o valor do parâmetro está null; 
 //                        addTextLabelStatus("Setando valores dos parâmetros " + j);
@@ -4377,7 +4486,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
 ////                        }
 //                    }
                 }
-                addTextLabelStatus("Parâmetros setados");
+                
 
                 for (int i = 0; i < modelPlan.getRowCount(); i++) {
                     String scriptName = "";
@@ -4419,10 +4528,10 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
                 if (radioAntiga.isSelected()) {
-                    addTextLabelStatus("Gerando planilha antiga");
+                    addTextLabelStatus("Gerando planilha antiga...");
                     testCaseRN.createSheetExport(destino.getPath(), nomePlanilha, planTemp.getTestPlan());
                 } else {
-                    addTextLabelStatus("Gerando planilha nova");
+                    addTextLabelStatus("Gerando planilha nova...");
                     testCaseRN.createSpreadsheetTSNew(destino.getPath(), nomePlanilha, planTemp.getTestPlan());
 
                 }
@@ -4497,15 +4606,15 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Plano criado com sucesso!", "CT Creator", JOptionPane.INFORMATION_MESSAGE);
 //            testPlan.getTestPlan().getTestCase().clear();
 
-                Map<String, Object> parametros = new HashMap<String, Object>();
-                parametros.put("NOME_PLANO", planTemp.getTestPlan().getName());
-                parametros.put("STI_PLANO", testPlanSTI.getText());
-                parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
-                if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    addTextLabelStatus("Gerando relatório");
-                    BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(), parametros, ProjectSettings.FILE_NAME_REPORT_PLANO);
-                    addTextLabelStatus("Relatório gerado");
-                }
+//                Map<String, Object> parametros = new HashMap<String, Object>();
+//                parametros.put("NOME_PLANO", planTemp.getTestPlan().getName());
+//                parametros.put("STI_PLANO", testPlanSTI.getText());
+//                parametros.put("PLANO_SISTEMA", testPlanSystem.getText());
+//                if (JOptionPane.showConfirmDialog(this, "Gerar relatório do plano?", "CT Creator", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//                    addTextLabelStatus("Gerando relatório");
+//                    BuildReport.geraRelatorio(planTemp.getTestPlan().getTestCase(), parametros, ProjectSettings.FILE_NAME_REPORT_PLANO);
+//                    addTextLabelStatus("Relatório gerado");
+//                }
 
             } else {
                 JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "CT Creator", JOptionPane.INFORMATION_MESSAGE);
@@ -4763,7 +4872,7 @@ public class InstanceScreenTSView extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LabelStatus;
+    private static javax.swing.JLabel LabelStatus;
     private javax.swing.JProgressBar ProgressAguarde;
     private javax.swing.JButton bntAddCTInPlan;
     private javax.swing.JButton bntAddFluxosInPlan;

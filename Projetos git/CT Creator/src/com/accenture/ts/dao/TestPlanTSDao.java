@@ -114,7 +114,7 @@ public class TestPlanTSDao implements Serializable {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -171,7 +171,7 @@ public class TestPlanTSDao implements Serializable {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs "+ex.getMessage(), ex);
             return null;
         }
 
@@ -228,7 +228,7 @@ try {
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar plano", ex);
+            logger.error("Erro ao salvar plano " + ex.getMessage(), ex);
             return null;
        }
         
@@ -278,7 +278,7 @@ try {
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar plano", ex);
+            logger.error("Erro ao atualizar plano "+ex.getMessage(), ex);
             return null;
        }
     }
@@ -303,7 +303,7 @@ try {
         }catch(Exception ex){
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao excluir o plano", ex);
+            logger.error("Erro ao excluir o plano "+ex.getMessage(), ex);
             return false;
         }
     }

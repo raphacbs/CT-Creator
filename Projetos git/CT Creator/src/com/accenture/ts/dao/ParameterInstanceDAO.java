@@ -77,7 +77,7 @@ public class ParameterInstanceDAO {
             return parameters;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -126,7 +126,7 @@ public class ParameterInstanceDAO {
             return parameters;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -213,7 +213,7 @@ public class ParameterInstanceDAO {
             return pb;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao selecionar os parâmetros", ex);
+            logger.error("Erro ao selecionar os parâmetros "+ex.getMessage(), ex);
             return null;
 
         }
@@ -251,7 +251,7 @@ public class ParameterInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao inserir parametros "+ex.getMessage(),ex);
             return null;
         }
 
@@ -293,7 +293,7 @@ public class ParameterInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao inserir paarametros "+ex.getMessage(),ex);
             return false;
         }
 
@@ -319,7 +319,7 @@ public class ParameterInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro excluir parametro "+ex.getMessage(),ex);
             return false;
         }
     }
@@ -344,7 +344,7 @@ public class ParameterInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+            logger.error("Erro ao excluir parametro "+ex.getMessage(),ex);
             return false;
         }
     }
@@ -374,7 +374,7 @@ public class ParameterInstanceDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex);
+             logger.error("Erro ao excluir parametro "+ex.getMessage(),ex);
             return false;
         }
 
@@ -404,7 +404,7 @@ public class ParameterInstanceDAO {
          
          }catch(Exception ex){
              ex.printStackTrace();
-             logger.error(ex);
+              logger.error("Erro ao atualizar parametro "+ex.getMessage(),ex);
              return null;
          }
          
@@ -445,7 +445,7 @@ public class ParameterInstanceDAO {
          
          }catch(Exception ex){
              ex.printStackTrace();
-             logger.error(ex);
+             logger.error("Erro ao atualizar parametro "+ex.getMessage(),ex);
              return false;
          }
          

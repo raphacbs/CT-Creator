@@ -130,7 +130,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "CT", "Modificado por", "Data de moficação", "hashCode"
+                "ID", "CT", "Modificado por", "Data de moficação", "Order"
             }
         ) {
             Class[] types = new Class [] {
@@ -168,7 +168,6 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         filterHeader.setPosition(Position.TOP);
 
         bntCopiar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
-        bntCopiar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\22x22\\button_accept.png")); // NOI18N
         bntCopiar.setText("Selecionar");
         bntCopiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -206,7 +205,6 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
         jLabel33.setText("Sistema:");
 
         bntPesquisar.setFont(new java.awt.Font("Graphik", 0, 12)); // NOI18N
-        bntPesquisar.setIcon(new javax.swing.ImageIcon("C:\\FastPlan\\res\\Icones 2.0\\24x24\\Search.png")); // NOI18N
         bntPesquisar.setText("Pesquisar");
         bntPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,7 +250,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                     .addComponent(jComboSistemasTS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textPesquisaCT, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(textPesquisaCT)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -353,7 +351,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Favor selecione um CT", "Informação", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     DefaultTableModel model = (DefaultTableModel) tabelaSelecioneCT.getModel();
-                    String id  = (String) model.getValueAt(tabelaSelecioneCT.getSelectedRow(), 0);
+                    int rowsel = Integer.parseInt(tabelaSelecioneCT.getValueAt(tabelaSelecioneCT.getSelectedRow(), 4).toString()) - 1;
+                    String id  = (String) model.getValueAt(rowsel, 0);
 
                     //criaJanelaTelaCadCT(fasePara);
                     carregaTestCaseTS(Integer.parseInt(id));
@@ -482,7 +481,7 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
             String nameCT = "";
             String id = "";
             String modifyBy = "";
-            String hashCode = "";
+            String order = "";
             String data = "";
 
            List<TesteCaseTSBean> listTemp = testCaseRN.getTesteCaseTSBeanBySystemNameBD(((SystemBean)jComboSistemasTS.getSelectedItem()).getId(),textPesquisaCT.getText(),"");
@@ -495,8 +494,8 @@ public class ChooseTestCaseTsScreenView extends javax.swing.JInternalFrame {
                 nameCT = listTemp.get(i).getTestScriptName();
                 modifyBy = listTemp.get(i).getModifiedBy();
                 data = listTemp.get(i).getModifyDate() != null ? sdf.format(listTemp.get(i).getModifyDate()) : "";
-                hashCode = "";
-                model.addRow(new String[]{id, nameCT, modifyBy, data, hashCode});
+                order = i+1+ "";
+                model.addRow(new String[]{id, nameCT, modifyBy, data, order});
 //            System.out.println(listStep.get(i).getCasoTeste());
             }
 

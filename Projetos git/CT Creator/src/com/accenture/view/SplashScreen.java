@@ -240,6 +240,7 @@ public class SplashScreen extends JWindow {
                 bd.atualizaCamposObrigatorios("CASO_TESTE", 1);
                 SVNPropertiesVOBean.getInstance().setComplexidade("Muito Alto|Alto|Medio|Baixo|Muito Baixo");
 
+                
                 //verifica se arquivo svn.properties foi atualizado
                 copyrt.setText("Iniciando...");
                 guiPrincipal = new MainScreenView();

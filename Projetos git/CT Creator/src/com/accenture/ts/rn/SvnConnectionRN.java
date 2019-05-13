@@ -34,6 +34,11 @@ public class SvnConnectionRN {
 
     }
 
+    public SvnConnectionRN() {
+    }
+
+        
+
     /**
      * Adiciona um Test Case no SVN
      *

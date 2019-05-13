@@ -105,7 +105,7 @@ public class TestCaseTSRevisionDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs revision "+ex.getMessage(), ex);
             return null;
         }
 
@@ -188,7 +188,7 @@ public class TestCaseTSRevisionDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs revision "+ex.getMessage(), ex);
             return null;
         }
     }
@@ -269,7 +269,7 @@ public class TestCaseTSRevisionDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs", ex);
+            logger.error("Erro ao recuperar os CTs revision "+ex.getMessage(), ex);
             return null;
         }
 
@@ -360,7 +360,7 @@ public class TestCaseTSRevisionDAO {
             
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao salvar os CTs revision "+ex.getMessage(), ex);
             return null;
        }finally{
             ps.close();
@@ -449,7 +449,7 @@ public class TestCaseTSRevisionDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao atualizar os CTs revision "+ex.getMessage(), ex);
             return null;
        }
     }
@@ -475,7 +475,7 @@ public class TestCaseTSRevisionDAO {
         }catch(Exception ex){
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT", ex);
+            logger.error("Erro ao excluir os CTs revision "+ex.getMessage(), ex);
             return false;
         }
     }
