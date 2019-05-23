@@ -120,6 +120,7 @@ public class TestPlanTSRN {
 
                 for (TesteCaseTSBean tc : plano.getTestCase()) {
                     InstanceScreenTSView.addTextLabelStatus("Salvando CT - "+count.get()+"/"+plano.getTestCase().size());
+                    //InstanceScreenTSView.setProgress(count.get(), plano.getTestCase().size());
                     final int idTc = tc.getIdTesteCaseTSBeanInstance();
                    // parameterNames.addAll(tc.getParameters().stream().map(ParameterBean::getParameterName).collect(Collectors.toList()));
 //                    if (tc.getParameters().stream().anyMatch(p -> !parameterNames.contains(p.getParameterName()))) {
@@ -129,14 +130,22 @@ public class TestPlanTSRN {
 //                    }
 
                     for (ParameterBean pb : tc.getParameters()) {
-                        pb.setIdTestCaseInstance(idTc);
-                        Predicate<ParameterBean> contains = p -> p.getParameterName().equals(pb.getParameterName()) && p.getIdTestCaseInstance() == pb.getIdTestCaseInstance();
+                        ParameterBean parameterBean = new ParameterBean();
+                        parameterBean.setApllyToAll(pb.isApllyToAll());
+                        parameterBean.setId(pb.getId());
+                        parameterBean.setIdStep(pb.getIdStep());
+                        parameterBean.setIdTestCaseInstance(pb.getIdTestCaseInstance());
+                        parameterBean.setParameterName(pb.getParameterName());
+                        parameterBean.setParameterValue(pb.getParameterValue());                        
+                        parameterBean.setIdTestCaseInstance(idTc);
+                        
+                        Predicate<ParameterBean> contains = p -> p.getParameterName().equals(parameterBean.getParameterName()) && p.getIdTestCaseInstance() == parameterBean.getIdTestCaseInstance();
                         boolean noExist = !parameters.stream().anyMatch(contains);
 
 //                        boolean condition1 = parameters.stream().anyMatch(p-> p.getParameterName().equals(pb.getParameterName()));
 //                        boolean condition2 = parameters.stream().anyMatch(p-> p.getIdTestCaseInstance() == pb.getIdTestCaseInstance());
                         if (noExist || count.getAndIncrement() == 0) {
-                            parameters.add(pb);
+                            parameters.add(parameterBean);
                         }
                     }
 
@@ -153,6 +162,8 @@ public class TestPlanTSRN {
                 return plano;
 
             } else {
+                
+             //   InstanceScreenTSView.setProgress(0,100);
                 
                 parameterDAO = new ParameterInstanceDAO();
                 testPlanTSDao.update(plano);
@@ -181,12 +192,13 @@ public class TestPlanTSRN {
                  List<Integer> idsBD = tcBD.stream().map(TesteCaseTSBean::getIdTesteCaseTSBeanInstance).collect(Collectors.toList());
                  List<Integer> ids = plano.getTestCase().stream().map(TesteCaseTSBean::getIdTesteCaseTSBeanInstance).collect(Collectors.toList());
                  
-                 
+              //   InstanceScreenTSView.setProgress(10,100);
                  update = plano.getTestCase().stream().filter(tc -> idsBD.contains(tc.getIdTesteCaseTSBeanInstance())).collect(Collectors.toList());
                  delete = tcBD.stream().filter(tc -> !ids.contains(tc.getIdTesteCaseTSBeanInstance())).collect(Collectors.toList());
                  insert = plano.getTestCase().stream().filter(tc -> tc.getIdTesteCaseTSBeanInstance() == 0).collect(Collectors.toList());
 
-                 update.stream().forEach(tc -> instanceDAO.update(tc));
+                 //update.stream().forEach(tc -> instanceDAO.update(tc));
+                 instanceDAO.update(update);
                  
                  //deletando os parametros
                  List<Integer> parametersDelete = new ArrayList<>();
@@ -195,6 +207,7 @@ public class TestPlanTSRN {
                     parameterDAO.deleteByTestCaseInstanceBean(tc.getIdTesteCaseTSBeanInstance());
                  }
                  
+              //   InstanceScreenTSView.setProgress(15,100);
                  
                  //deletando os TCS
                  delete.stream().forEach(tc -> instanceDAO.delete(tc.getIdTesteCaseTSBeanInstance()));
@@ -209,10 +222,10 @@ public class TestPlanTSRN {
                 
                 
                 List<ParameterBean> parametersUpdate = new ArrayList<>();
-                update.stream().forEach(tc-> {parametersUpdate.addAll(tc.getParameters());});
+                update.stream().forEach(tc-> {System.out.println("ID_INSTANCE: "+ tc.getIdTesteCaseTSBeanInstance()+" - ID: "+ tc.getId()+" - Order: "+tc.getOrder());parametersUpdate.addAll(tc.getParameters());});
                 parameterDAO.update(parametersUpdate);
                 
-                
+              //  InstanceScreenTSView.setProgress(50,100);
                  //add parametros
                 List<ParameterBean> parameters = new ArrayList<>();
                 List<String> parameterNames = new ArrayList<String>();
@@ -238,7 +251,7 @@ public class TestPlanTSRN {
                 
                 insert.addAll(update);
                 plano.setTestCase(insert);
-               
+             //  InstanceScreenTSView.setProgress(65,100);
                 for (int i = 0; i < plano.getTestCase().size(); i++) {
                     List<ParameterBean> pb = parameterDAO.getByIdTestCaseInstance(plano.getTestCase().get(i).getIdTesteCaseTSBeanInstance());
                     plano.getTestCase().get(i).setParameters(pb);
@@ -246,10 +259,11 @@ public class TestPlanTSRN {
                 
                 plano.getTestCase().stream().sorted(Comparator.comparingInt(TesteCaseTSBean::getOrder)).collect(Collectors.toList());
                 
+              //  InstanceScreenTSView.setProgress(100,100);
 
                 return plano;
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
 
             Logger.getLogger(TestPlanTSRN.class.getName()).log(Level.SEVERE, null, ex);
             return null;

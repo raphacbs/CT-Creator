@@ -412,7 +412,7 @@
                 <Column editable="false" title="Data modifica&#xe7;&#xe3;o" type="java.lang.String"/>
               </Table>
             </Property>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="jScrollPane3.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaCt.setAutoResizeMode (tabelaCt.AUTO_RESIZE_OFF);&#xa;tabelaCt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);&#xa;tabelaCt.getSelectionModel().addListSelectionListener(new ListSelectionListener() {&#xa;    public void valueChanged(ListSelectionEvent lse) {&#xa;        if (!lse.getValueIsAdjusting()) {         &#xa;          rowBefore = lse.getFirstIndex();&#xa;          rowAfter = lse.getLastIndex();&#xa;        }&#xa;    }&#xa;});">
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="jScrollPane3.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaCt.setAutoResizeMode (tabelaCt.AUTO_RESIZE_OFF);&#xa;tabelaCt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);&#xa;tabelaCt.getSelectionModel().addListSelectionListener(new ListSelectionListener() {&#xa;    public void valueChanged(ListSelectionEvent lse) {&#xa;        if (!lse.getValueIsAdjusting()) {&#xa;          &#xa;            firstIndex = lse.getFirstIndex();&#xa;            lastIndex = lse.getLastIndex();&#xa;         &#xa;        }&#xa;&#xa;     &#xa;    }&#xa;});">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="70" minWidth="70" prefWidth="70" resizable="true">
                   <Title/>
@@ -467,7 +467,6 @@
         <Property name="text" type="java.lang.String" value="Salvar"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bntSalvarCTMouseClicked"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bntSalvarCTActionPerformed"/>
       </Events>
     </Component>

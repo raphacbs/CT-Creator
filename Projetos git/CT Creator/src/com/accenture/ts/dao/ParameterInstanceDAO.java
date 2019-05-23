@@ -282,7 +282,8 @@ public class ParameterInstanceDAO {
                 cont.set(1);
                 
                 if (++count % batchSize == 0) {
-                    int[] row = ps.executeBatch();
+                    int[] row1 = ps.executeBatch();
+                    System.err.println(row1.length);
                 }
             
             }

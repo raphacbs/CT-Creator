@@ -177,6 +177,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -229,7 +230,6 @@
                                           <Component id="testPlanName" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Component id="jScrollPane4" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
@@ -265,12 +265,11 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="btnPublicarPlano" max="32767" attributes="0"/>
+                                      <Component id="btnPublicarPlano" pref="228" max="32767" attributes="0"/>
                                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnSave" max="32767" attributes="0"/>
+                                      <Component id="btnSave" pref="168" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="bntMudaStepDescer" min="-2" pref="87" max="-2" attributes="0"/>
@@ -292,48 +291,46 @@
                                       <Component id="bntGenereteDate" min="-2" pref="74" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="bntResetFiltro" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="bntExportar" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="progressBar" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="labelQtdCTs1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="jScrollPane4" alignment="1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="labelQtdCTs1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="bntFiltrar" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="bntAddCTInPlan" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="bntDeleteCt" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="labelQtdCTs" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="bntCancelar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jScrollPane3" alignment="0" pref="509" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="bntFiltrar" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="bntAddCTInPlan" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="bntDeleteCt" max="32767" attributes="0"/>
+                      <Component id="LabelStatus" min="-2" pref="367" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bntStatus" min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="bntAddFluxosInPlan" min="-2" pref="42" max="-2" attributes="0"/>
+                      <EmptySpace min="122" pref="705" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="labelQtdCTs" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="bntCancelar" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jScrollPane3" alignment="0" pref="507" max="32767" attributes="0"/>
-                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="LabelStatus" min="-2" pref="367" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="bntStatus" min="-2" pref="23" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-              <Component id="bntAddFluxosInPlan" min="-2" pref="42" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="ProgressAguarde" min="-2" pref="368" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -428,15 +425,12 @@
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="284" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="285" max="32767" attributes="0"/>
                   <Component id="jScrollPane4" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                      <Component id="ProgressAguarde" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="bntCancelar" alignment="1" min="-2" pref="36" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="bntCancelar" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="labelQtdCTs1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -450,7 +444,9 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Component id="progressBar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -701,7 +697,7 @@
                 <Column editable="true" title="Massa de Dados" type="java.lang.Boolean"/>
                 <Column editable="true" title="Pass&#xed;vel de Re-Trabalho" type="java.lang.Boolean"/>
                 <Column editable="true" title="Regress&#xe3;o" type="java.lang.Boolean"/>
-                <Column editable="false" title="order" type="java.lang.Integer"/>
+                <Column editable="false" title="Ordem" type="java.lang.Integer"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tabelaInstancia.setFocusable(false);&#xa;jScrollPane4.setHorizontalScrollBar(new JScrollBar(0)); &#xa;tabelaInstancia.setAutoResizeMode (tabelaInstancia.AUTO_RESIZE_OFF);&#xa;//tabelaInstancia.setDragEnabled(true);&#xa;//  tabelaInstancia.setDropMode(DropMode.INSERT_ROWS);&#xa;  tabelaInstancia.setTransferHandler(new TableRowTransferHandler(tabelaInstancia));&#xa;addTableListener();&#xa;validNumCenario();&#xa;filterHeader = new TableFilterHeader(tabelaInstancia, AutoChoices.ENABLED);&#xa;//filterHeader = new TableFilterHeader(tabelaInstancia);&#xa;filterHeader.setPosition(Position.TOP);&#xa;&#xa;JTableHeader header = tabelaInstancia.getTableHeader();&#xa;//header.addMouseListener(new ColumnHeaderListener());&#xa;tabelaInstancia.addMouseMotionListener(new MouseMotionAdapter(){&#xa;   public void mouseMoved(MouseEvent e){&#xa;        Point p = e.getPoint(); &#xa;        int row = tabelaInstancia.rowAtPoint(p);&#xa;        int column = tabelaInstancia.columnAtPoint(p);&#xa;        tabelaInstancia.setToolTipText(String.valueOf(tabelaInstancia.getValueAt(row,column)));&#xa;    }//end MouseMoved&#xa;});">
@@ -755,7 +751,7 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="30" minWidth="30" prefWidth="30" resizable="true">
+                <Column maxWidth="100" minWidth="30" prefWidth="50" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -1126,19 +1122,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bntStatusActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JProgressBar" name="ProgressAguarde">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;Processando&quot;" type="code"/>
-        </Property>
-        <Property name="borderPainted" type="boolean" value="false"/>
-        <Property name="enabled" type="boolean" value="false"/>
-        <Property name="focusTraversalPolicyProvider" type="boolean" value="true"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ProgressAguarde.setVisible(false);"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JButton" name="bntAddFluxosInPlan">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1188,6 +1171,12 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JProgressBar" name="progressBar">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="progressBar.setStringPainted(true);"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

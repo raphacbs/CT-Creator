@@ -1229,7 +1229,7 @@ try{
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         
             AtomicInteger index = new AtomicInteger(1);
-            cf.getConnection().setAutoCommit(false);
+//            cf.getConnection().setAutoCommit(false);
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_INSERT_TC);
 
             final int batchSize = 1000;
@@ -1281,7 +1281,7 @@ try{
            
             ps.close();
             
-            cf.getConnection().commit();
+//            cf.getConnection().commit();
             cf.getConnection().close();
             return testCases;
 
@@ -1302,39 +1302,142 @@ try{
         return null;
 
     }
+    
+      public boolean update(List<TesteCaseTSBean> testCases) {
+        ConnectionFactory cf = new ConnectionFactory(MSSQL);
+        try {
+            String SQL_UPDATE_TC = "UPDATE " + SVNPropertiesVOBean.getInstance().getDatabaseNameBD() + ".[dbo].[TesteCaseTSBeanInstance] SET "
+                    + "[TestPlan] = ?,"
+                    + "[STIPRJ] = ?,"
+                    + "[Fase] = ?,"
+                    + "[TestPhase] = ?,"
+                    + "[TestScriptName] = ?,"
+                    + "[TestScriptDescription] = ?,"
+                    + "[StepDescription] = ?,"
+                    + "[ExpectedResults] = ?,"
+                    + "[Product] = ?,"
+                    + "[DataPlanejada] = ?,"
+                    + "[NumeroCenario] = ?,"
+                    + "[NumeroCt] = ?,"
+                    + "[Complexidade] = ?,"
+                    + "[Automatizado] = ?,"
+                    + "[Cenario] = ?,"
+                    + "[Rework] = ?,"
+                    + "[Priority] = ?,"
+                    + "[Regression] = ?,"
+                    + "[Data] = ?,"
+                    + "[IdSystem] = ?,"
+                    + "[createdBy] = ?,"
+                    + "[modifiedBy] = ?,"
+                    + "[createDate] = ?,"
+                    + "[modifyDate] = ?, "
+                    + "[Order] = ?,"
+                    + "[IdTestPlanTS] = ?"
+                    + " WHERE [IdTesteCaseTSBeanInstance] = ?";
+            
+            
+             AtomicInteger index = new AtomicInteger(1);
+//            cf.getConnection().setAutoCommit(false);
+            PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
+
+            final int batchSize = 1000;
+            int count = 0;
+
+            for (TesteCaseTSBean testCase : testCases) {
+                 ps.setString(1, testCase.getTestPlan());
+            ps.setString(2, testCase.getSTIPRJ());
+            ps.setString(3, testCase.getFase());
+            ps.setString(4, testCase.getTestPhase());
+            ps.setString(5, testCase.getTestScriptName());
+            ps.setString(6, testCase.getTestScriptDescription());
+            ps.setString(7, testCase.getStepDescription());
+            ps.setString(8, testCase.getExpectedResults());
+            ps.setString(9, testCase.getProduct());
+            ps.setTimestamp(10, new java.sql.Timestamp(testCase.getDataPlanejada().getTime()));
+            ps.setString(11, testCase.getNumeroCenario());
+            ps.setString(12, testCase.getNumeroCt());
+            ps.setString(13, testCase.getComplexidade());
+            ps.setBoolean(14, testCase.isAutomatizado());
+            ps.setString(15, testCase.getCenario());
+            ps.setBoolean(16, testCase.isRework());
+            ps.setBoolean(17, testCase.isPriority());
+            ps.setBoolean(18, testCase.isRegression());
+            ps.setBoolean(19, testCase.isData());
+            ps.setInt(20, testCase.getIdSystem());
+            ps.setString(21, testCase.getCreatedBy());
+            ps.setString(22, testCase.getModifiedBy());
+            ps.setTimestamp(23, new java.sql.Timestamp(testCase.getModifyDate().getTime()));
+            ps.setTimestamp(24, new java.sql.Timestamp(testCase.getCreateDate().getTime()));
+            ps.setInt(25, testCase.getOrder());
+            ps.setInt(26, testCase.getIdTestPlanTS());
+            ps.setInt(27, testCase.getIdTesteCaseTSBeanInstance());
+            
+            
+             ps.addBatch();
+        
+                index.set(1);
+
+                if (++count % batchSize == 0) {
+                    int[] row = ps.executeBatch();
+                }
+            }
+
+            int[] row = ps.executeBatch();
+            
+            
+
+           
+            ps.close();            
+//            cf.getConnection().commit();
+            cf.getConnection().close();
+
+            if(row.length == testCases.size()){
+                return true;
+            }else{
+                return false;
+            }
+            
+          
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.print(ex.getMessage());
+            logger.error("Erro ao salvar CT " + ex.getMessage(), ex);
+            return false;
+        }
+    }
 
     public TesteCaseTSBean update(TesteCaseTSBean testCase) {
         ConnectionFactory cf = new ConnectionFactory(MSSQL);
-try{
-        String SQL_UPDATE_TC = "UPDATE "+SVNPropertiesVOBean.getInstance().getDatabaseNameBD()+".[dbo].[TesteCaseTSBeanInstance] SET "
-                + "[TestPlan] = ?,"
-                + "[STIPRJ] = ?,"
-                + "[Fase] = ?,"
-                + "[TestPhase] = ?,"
-                + "[TestScriptName] = ?,"
-                + "[TestScriptDescription] = ?,"
-                + "[StepDescription] = ?,"
-                + "[ExpectedResults] = ?,"
-                + "[Product] = ?,"
-                + "[DataPlanejada] = ?,"
-                + "[NumeroCenario] = ?,"
-                + "[NumeroCt] = ?,"
-                + "[Complexidade] = ?,"
-                + "[Automatizado] = ?,"
-                + "[Cenario] = ?,"
-                + "[Rework] = ?,"
-                + "[Priority] = ?,"
-                + "[Regression] = ?,"
-                + "[Data] = ?,"
-                + "[IdSystem] = ?,"
-                + "[createdBy] = ?,"
-                + "[modifiedBy] = ?,"
-                + "[createDate] = ?,"
-                + "[modifyDate] = ?, "
-                + "[Order] = ?,"
-                + "[IdTestPlanTS] = ?"
-                + " WHERE [IdTesteCaseTSBeanInstance] = ?";
-        
+        try {
+            String SQL_UPDATE_TC = "UPDATE " + SVNPropertiesVOBean.getInstance().getDatabaseNameBD() + ".[dbo].[TesteCaseTSBeanInstance] SET "
+                    + "[TestPlan] = ?,"
+                    + "[STIPRJ] = ?,"
+                    + "[Fase] = ?,"
+                    + "[TestPhase] = ?,"
+                    + "[TestScriptName] = ?,"
+                    + "[TestScriptDescription] = ?,"
+                    + "[StepDescription] = ?,"
+                    + "[ExpectedResults] = ?,"
+                    + "[Product] = ?,"
+                    + "[DataPlanejada] = ?,"
+                    + "[NumeroCenario] = ?,"
+                    + "[NumeroCt] = ?,"
+                    + "[Complexidade] = ?,"
+                    + "[Automatizado] = ?,"
+                    + "[Cenario] = ?,"
+                    + "[Rework] = ?,"
+                    + "[Priority] = ?,"
+                    + "[Regression] = ?,"
+                    + "[Data] = ?,"
+                    + "[IdSystem] = ?,"
+                    + "[createdBy] = ?,"
+                    + "[modifiedBy] = ?,"
+                    + "[createDate] = ?,"
+                    + "[modifyDate] = ?, "
+                    + "[Order] = ?,"
+                    + "[IdTestPlanTS] = ?"
+                    + " WHERE [IdTesteCaseTSBeanInstance] = ?";
 
             PreparedStatement ps = cf.getConnection().prepareStatement(SQL_UPDATE_TC);
 
@@ -1377,7 +1480,7 @@ try{
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.print(ex.getMessage());
-            logger.error("Erro ao salvar CT "+ex.getMessage(), ex);
+            logger.error("Erro ao salvar CT " + ex.getMessage(), ex);
             return null;
         }
     }

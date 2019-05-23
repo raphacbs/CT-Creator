@@ -258,7 +258,10 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
                 aguarde.setVisible(true);
                 
                 //searchCT(textId.getText(), textNomeCT.getText());
+                guiEditCt.cleanFields();
+                guiEditCt.isFirst = true;
                 searchCTDB(textId.getText(), textNomeCT.getText());
+                guiEditCt.loadComboTSDB();
 
                 return null;
 
@@ -495,7 +498,7 @@ public class FilterTestCaseScreenTSView1 extends java.awt.Dialog {
             guiEditCt.setIdSistema(IdSystem);
             int idCT = id.equals("") ? 0 : Integer.parseInt(id);
             guiEditCt.setFilter(idCT, IdSystem, nameTC);
-            
+              
             //guiEditCt.setFiltro(text);
        
         } catch (Exception ex) {

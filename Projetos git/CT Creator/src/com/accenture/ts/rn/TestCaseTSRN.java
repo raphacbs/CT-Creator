@@ -461,7 +461,7 @@ public class TestCaseTSRN {
             //salvando CT
             if (testCase.getId() == 0) {
                 ConnectionFactory cf = new ConnectionFactory(MSSQL);
-                cf.getConnection().setAutoCommit(false);
+//                cf.getConnection().setAutoCommit(false);
                 
                
                 
@@ -486,7 +486,7 @@ public class TestCaseTSRN {
                     return null;
                 }
                 
-                cf.getConnection().commit();
+//                cf.getConnection().commit();
                 
 //                //criando revision
 //                int testCaseRevisionId = tSDAO.createTestCaseRevision(testCase.getId());

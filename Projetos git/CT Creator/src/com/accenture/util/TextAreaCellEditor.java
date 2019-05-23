@@ -11,7 +11,6 @@ import com.inet.jortho.SpellChecker;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -74,10 +73,9 @@ public class TextAreaCellEditor implements TableCellEditor {
     private String regex;
     private EditScreenTSView internalFrame;
     //240, 255, 255)
-    Color corBrackground = new Color(255, 255, 255);
+    Color corBrackground = new Color(240, 255, 255);
     private final StyleContext cont = StyleContext.getDefaultStyleContext();
-    private final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, new Color(222, 222, 222));//200, 255, 255
-    private final AttributeSet atributeColorForeground = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(255, 255, 255));//200, 255, 255
+    private final AttributeSet atributeColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, Color.ORANGE);//200, 255, 255
     private final AttributeSet attributeBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
     private final AttributeSet attributeNoBold = cont.addAttribute(cont.getEmptySet(), StyleConstants.CharacterConstants.Bold, Boolean.FALSE);
     private final AttributeSet attributeNoParameterColor = cont.addAttribute(cont.getEmptySet(), StyleConstants.Background, corBrackground);
@@ -114,10 +112,6 @@ public class TextAreaCellEditor implements TableCellEditor {
                 System.out.println("Texto: " + text);
                 System.out.println("Parametros: " + getParametros(text));
 
-                //seting settings textAreaEditor
-                Font font = new Font("Graphik",1,12);
-                textArea.setFont(font);
-                
                 int ini = 0;
                 int fim = 0;
 
@@ -135,12 +129,10 @@ public class TextAreaCellEditor implements TableCellEditor {
                         setCharacterAttributes(ini, fim, atributeColor, false);
                         setCharacterAttributes(ini, fim, attributeBold, false);
                         setCharacterAttributes(ini, fim, attributeText, false);
-                        setCharacterAttributes(ini, fim, atributeColorForeground, false);
                     } else if (words[i].matches("<{3}\\w{1,20}>{3}.")) {
                         setCharacterAttributes(ini, fim - 1, atributeColor, false);
                         setCharacterAttributes(ini, fim - 1, attributeBold, false);
                         setCharacterAttributes(ini, fim - 1, attributeText, false);
-                        setCharacterAttributes(ini, fim, atributeColorForeground, false);
                     }
 
                     

@@ -303,7 +303,7 @@ public class ParameterEditView extends javax.swing.JDialog {
                                         .addComponent(jTextFieldSystem, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jLabel5))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(15, 15, 15))
             .addGroup(layout.createSequentialGroup()
                 .addGap(424, 424, 424)
                 .addComponent(bntSalvar)
@@ -339,11 +339,11 @@ public class ParameterEditView extends javax.swing.JDialog {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bntSalvar)
                     .addComponent(bntCancelar))
-                .addGap(9, 9, 9))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -639,7 +639,7 @@ public class ParameterEditView extends javax.swing.JDialog {
 //        this.plan.getTestPlan().getTestCase().get(lineSelect).getListStep().stream().forEach(s->{parameters.addAll(s.getParameters());});
         
         for (int i = 0; i < this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().size(); i++) {
-            model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
+            model.addRow(new String[]{this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterName(), this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue() == null ? "": this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).getParameterValue()});
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelect).getParameters().get(i).isApllyToAll(), i, 2);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).isApllyToAll(), i, 2);
             model.setValueAt(this.plan.getTestPlan().getTestCase().get(lineSelectTableInstance).getParameters().get(i).getIdTestCaseInstance(), i, 3);

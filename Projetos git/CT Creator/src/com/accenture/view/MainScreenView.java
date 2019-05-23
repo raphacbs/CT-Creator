@@ -82,7 +82,7 @@ public class MainScreenView extends javax.swing.JFrame {
      */
     public MainScreenView() {
         try {
-            setTitle("CT Creator - Versão: 2.0");
+            setTitle("CT Creator - Versão: 2.2");
             initComponents();
             //add menu tema
             ButtonGroup groupTema = new ButtonGroup();
@@ -789,26 +789,39 @@ public class MainScreenView extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         JInternalFrame[] j = desktop.getAllFrames();
-
-        if (j.length > 0) {
-            JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
-            repaint();
-
-        } else {
-            try {
-                new TestCaseTSRN(ProjectSettings.FASE_TS).deleteDir();
-            } catch (IOException ex) {
-                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
-                dispose();
-                System.exit(0); //calling the method is a must
-            } catch (SVNException ex) {
-                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
-                dispose();
-                System.exit(0); //calling the method is a must
-            }
-            dispose();
+        
+         if (j.length > 0) {
+             if(JOptionPane.showConfirmDialog(null, "Existem janelas abertas, mesmo assim deseja sair?  ", "Alerta",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+                  dispose();
+                  System.exit(0); //calling the method is a must
+             }else{
+                  repaint();
+             }
+           
+         }else{
+              dispose();
             System.exit(0); //calling the method is a must
-        }
+         }
+
+//        if (j.length > 0) {
+//            JOptionPane.showMessageDialog(null, "Favor fechar todas as janelas internas. ", "Alerta", JOptionPane.WARNING_MESSAGE);
+//            repaint();
+//
+//        } else {
+//            try {
+//                new TestCaseTSRN(ProjectSettings.FASE_TS).deleteDir();
+//            } catch (IOException ex) {
+//                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
+//                dispose();
+//                System.exit(0); //calling the method is a must
+//            } catch (SVNException ex) {
+//                System.out.println("com.accenture.view.MainScreenView.formWindowClosing() - " + ex.toString());
+//                dispose();
+//                System.exit(0); //calling the method is a must
+//            }
+//            dispose();
+//            System.exit(0); //calling the method is a must
+//        }
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemFuncionalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFuncionalidadeActionPerformed

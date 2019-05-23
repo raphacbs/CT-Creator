@@ -319,7 +319,7 @@ public class TesteCaseTSDAO {
         for (int i = 0; i < testPlan.getTestCase().size(); i++) {
             
             InstanceScreenTSView.addTextLabelStatus("Gravando CT "+testPlan.getTestCase().get(i).getTestScriptName()+"-"+testPlan.getTestCase().get(i).getOrder()+" na planinha...");
-            
+            InstanceScreenTSView.setProgress(i,testPlan.getTestCase().size());
             row = sheetTS.getRow(linha);
 
             descriptionPlan = row.getCell(0);
@@ -1018,9 +1018,10 @@ public class TesteCaseTSDAO {
     }
 
     public List<TesteCaseTSBean> getByFields(String fields) {
+        String SQL_SELECT_TC="";
         try {
             List<TesteCaseTSBean> caseTSBeans = new ArrayList<TesteCaseTSBean>();
-            String SQL_SELECT_TC = "SELECT "
+            SQL_SELECT_TC = "SELECT "
                     + "[Id],"
                     + "[TestPlan],"
                     + "[STIPRJ],"
@@ -1094,7 +1095,7 @@ public class TesteCaseTSDAO {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error("Erro ao recuperar os CTs "+ex.getMessage() , ex);
+            logger.error("Erro ao recuperar os CTs ("+SQL_SELECT_TC+")"+ex.getMessage() , ex);
             return null;
         }
 

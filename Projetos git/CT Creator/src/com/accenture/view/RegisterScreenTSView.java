@@ -901,6 +901,11 @@ public class RegisterScreenTSView extends javax.swing.JInternalFrame {
             ct.setListStep(listStep);
             ct.setIdSystem(((SystemBean) jComboSistemasTS.getSelectedItem()).getId());
             ct.setFase(jComboFaseCR.getSelectedItem().toString());
+            ct.setTestPlan("");
+            ct.setSTIPRJ("");
+            ct.setTestPhase("");
+            ct.setStepDescription("");
+            ct.setExpectedResults("");
 
             TesteCaseTSBean tc = testCaseRN.saveTestCaseTSBD(ct);
             

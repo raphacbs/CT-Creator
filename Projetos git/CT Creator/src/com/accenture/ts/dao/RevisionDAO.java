@@ -39,9 +39,9 @@ public class RevisionDAO {
             ps = cf.getConnection().prepareStatement(INSERT_REVISION, Statement.RETURN_GENERATED_KEYS);
             ps.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()));
             ps.setString(2, obj.getClass().getName());
-            cf.getConnection().setAutoCommit(false);
+//            cf.getConnection().setAutoCommit(false);
             int row = ps.executeUpdate();
-            cf.getConnection().commit();
+//            cf.getConnection().commit();
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int revision = generatedKeys.getInt(1);                

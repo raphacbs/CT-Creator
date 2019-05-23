@@ -70,18 +70,18 @@ public class SearchPlanView extends java.awt.Dialog {
         initComponents();
         loadComboTSBanco();
         this.guiInstanceCT = guiInstanceCT;
-        new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                
-                return null;
-            }
-
-            @Override
-            protected void done() {
-            }
-
-        }.execute();
+//        new SwingWorker() {
+//            @Override
+//            protected Object doInBackground() throws Exception {
+//                
+//                return null;
+//            }
+//
+//            @Override
+//            protected void done() {
+//            }
+//
+//        }.execute();
 
         /*
          **Carregando os ícones dos botões:
@@ -147,6 +147,7 @@ public class SearchPlanView extends java.awt.Dialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaSelecionePlano = new javax.swing.JTable();
         bntAbrir = new javax.swing.JButton();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setTitle("Filtro - Caso de Teste");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -247,21 +248,27 @@ public class SearchPlanView extends java.awt.Dialog {
             }
         });
 
+        jProgressBar1.setIndeterminate(true);
+        jProgressBar1.setVisible(false);
+        jProgressBar1.setStringPainted(true);
+        jProgressBar1.setString("Carregando...");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(bntPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bntAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bntCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1)
@@ -271,7 +278,8 @@ public class SearchPlanView extends java.awt.Dialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textNomeCT)
                             .addComponent(jComboSistemasTS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(textId))))
+                            .addComponent(textId)))
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -292,13 +300,15 @@ public class SearchPlanView extends java.awt.Dialog {
                     .addComponent(jComboSistemasTS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bntAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bntCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bntPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bntCancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bntPesquisar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(167, 167, 167))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(156, 156, 156))
         );
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -334,27 +344,35 @@ public class SearchPlanView extends java.awt.Dialog {
 
     private void bntPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntPesquisarActionPerformed
         // TODO add your handling code here:
-       
+//       
         SwingWorker sw = new SwingWorker() {
             
             boolean filtro = false;
+            JDialog aguarde;
+             final Frame GUIPrincipal = new MainScreenView();
+
+            {
+                this.aguarde = new WaitScreenView((JFrame) GUIPrincipal, true);
+            }
            
             @Override
             protected Object doInBackground() throws Exception {
-                   
-                
+                aguarde.setLocationRelativeTo(GUIPrincipal);
+                aguarde.setVisible(true);
                 searchCTDB(textNomeCT.getText(), textId.getText());
                 return null;
-
             }
 
             @Override
             protected void done() {
+                jProgressBar1.setVisible(false);
+                aguarde.dispose();
                 guiInstanceCT.setMouseCursorWait(false);
                 InstanceScreenTSView.addTextLabelStatus("Pesquisa concluída");
             }
         };
         sw.execute();
+        jProgressBar1.setVisible(true);
         guiInstanceCT.setMouseCursorWait(true);
         InstanceScreenTSView.addTextLabelStatus("Pesquisando planos, favor aguarde...");
 
@@ -384,25 +402,23 @@ public class SearchPlanView extends java.awt.Dialog {
     private void abrirPlano() throws ParseException{
         TestPlanTSRN planTSRN = new TestPlanTSRN();
 
-                        String id = tabelaSelecionePlano.getValueAt(tabelaSelecionePlano.getSelectedRow(), 0).toString();
+        String id = tabelaSelecionePlano.getValueAt(tabelaSelecionePlano.getSelectedRow(), 0).toString();
 
-                        TestPlanTSBean plan = planTSRN.getById(Integer.parseInt(id));
-                        guiInstanceCT.setMouseCursorWait(true);
-                        guiInstanceCT.loadPlan(plan);
+        TestPlanTSBean plan = planTSRN.getById(Integer.parseInt(id));
+        guiInstanceCT.setMouseCursorWait(true);
+        guiInstanceCT.loadPlan(plan);
 
-                        dispose();
-                        guiInstanceCT.setMouseCursorWait(false);
+        dispose();
+        guiInstanceCT.setMouseCursorWait(false);
     }
 
     private void bntAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAbrirActionPerformed
-          
         
-             SwingWorker sw = new SwingWorker() {
-            
+        SwingWorker sw = new SwingWorker() {
+
             @Override
             protected Object doInBackground() throws Exception {
-                   
-                
+
                 abrirPlano();
                 return null;
 
@@ -410,13 +426,15 @@ public class SearchPlanView extends java.awt.Dialog {
 
             @Override
             protected void done() {
-                blockedFilds(false);
-                guiInstanceCT.setMouseCursorWait(false);
-                InstanceScreenTSView.addTextLabelStatus("concluído");
+                jProgressBar1.setVisible(false);
+                blockedFilds(true);
+                guiInstanceCT.setMouseCursorWait(true);
+                InstanceScreenTSView.addTextLabelStatus("Concluído");
             }
         };
         sw.execute();
-        blockedFilds(true);
+        jProgressBar1.setVisible(true);
+        blockedFilds(false);
         guiInstanceCT.setMouseCursorWait(true);
         InstanceScreenTSView.addTextLabelStatus("Carregando plano, favor aguarde...");
             
@@ -461,6 +479,7 @@ public class SearchPlanView extends java.awt.Dialog {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaSelecionePlano;
     private javax.swing.JTextField textId;
